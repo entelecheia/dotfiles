@@ -1,0 +1,42 @@
+[user]
+	name = {{ .name }}
+    email = {{ .email }}
+    {{- if .gpgkey.sign }}
+    signingkey = {{ .gpgkey.sign }}
+    {{- end }}
+[commit]
+    {{- if .gpgkey.sign }}
+    gpgsign = {{ .gpgkey.sign }}
+    {{- end }}
+[core]
+    autocrlf = input
+    safecrlf = false
+    eol = lf
+    editor = {{ .editor }}
+[init]
+    defaultBranch = main
+[hub]
+	protocol = https
+[alias]
+    s = status
+    c = commit
+    ca = commit --amend
+    caa = ca -a
+    cane = ca --no-edit
+    caane = cane -a
+    co = checkout
+    cob = checkout -b
+    cp = cherry-pick
+    fully-clean = "!f() { set -v; branch="$(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)"; git checkout $branch; git fetch origin $branch; git clean -fd; }; f"
+    get-current-branch = "!git branch --show-current | grep ."
+    rr = "!f() { set -ex; branch="${1:-"$(git get-current-branch)"}"; git reset --hard "origin/$branch"; }; f"
+    pfor = "!f() { set -ex; branch="${1:-"$(git get-current-branch)"}"; git push origin "HEAD:refs/for/$branch"; }; f"
+    psfor = "!f() { set -ex; git caane; git pfor "$@"; }; f"
+    pdraft = "!f() { set -ex; branch="${1:-"$(git get-current-branch)"}"; git push origin "HEAD:refs/drafts/$branch"; }; f"
+    psdraft = "!f() { set -ex; git caane; git pdraft "$@"; }; f"
+    plr = pull --rebase
+    plro = pull --rebase origin
+    prune-refs = fetch --prune --prune-tags
+    hist = log --pretty=format:'%C(yellow)%h%Creset %ad | %s%d %Cgreen[%an]%Creset' --graph --date=short
+    apply-gitignore = "!set -ex; git rm -r --cached . >/dev/null; git add ."
+    

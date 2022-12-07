@@ -1,0 +1,8 @@
+.oh-my-zsh/cache/**
+
+README.md
+chezmoi.code-workspace
+
+dotdrop
+config.yaml
+.gitmodules

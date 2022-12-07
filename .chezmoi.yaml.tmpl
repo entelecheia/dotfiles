@@ -1,12 +1,178 @@
-{{ $email := promptString "email" -}}
+{{- $name := "entelecheia" -}}
+{{- $email := "entelecheia@hotmail.com" -}}
+{{- $hostname := .chezmoi.hostname }}
+{{- $github_username := "entelecheia" -}}
 
+{{- $chezmoiForce := or (has "--force" .chezmoi.args) (has "--force=true" .chezmoi.args) -}}
+{{- $interactive := and stdinIsATTY (not $chezmoiForce) -}}
+
+{{- $ubuntu := hasKey .chezmoi.osRelease "ubuntuCodename" -}}
+{{- $wsl := or (env "WSL_DISTRO_NAME") (env "IS_WSL") | not | not -}}
+{{- $devcontainer := or (env "REMOTE_CONTAINERS") (env "CODESPACES") (env "VSCODE_REMOTE_CONTAINERS_SESSION") (env "GITPOD_HOST") | not | not -}}
+{{- $gnome := lookPath "gnome-shell" | not | not -}}
+
+{{- $cpuCores := 1 }}
+{{- $cpuThreads := 1 }}
+{{- if eq .chezmoi.os "darwin" }}
+{{-   $cpuCores = (output "sysctl" "-n" "hw.physicalcpu_max") | trim | atoi }}
+{{-   $cpuThreads = (output "sysctl" "-n" "hw.logicalcpu_max") | trim | atoi }}
+{{- else if eq .chezmoi.os "linux" }}
+{{-   $cpuCores = (output "sh" "-c" "lscpu --online --parse | grep --invert-match '^#' | sort --field-separator=',' --key='2,4' --unique | wc --lines") | trim | atoi }}
+{{-   $cpuThreads = (output "sh" "-c" "lscpu --online --parse | grep --invert-match '^#' | wc --lines") | trim | atoi }}
+{{- else if eq .chezmoi.os "windows" }}
+{{-   $cpuCores = (output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "(Get-CimInstance -ClassName 'Win32_Processor').NumberOfCores") | trim | atoi }}
+{{-   $cpuThreads = (output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "(Get-CimInstance -ClassName 'Win32_Processor').NumberOfLogicalProcessors") | trim | atoi }}
+{{- end }}
+
+
+{{- $minimum := or $devcontainer (not $ubuntu) -}}
+
+{{/* GPG, ID for key [C] [S] [E] */}}
+{{- $key_recipient := false -}}
+{{- $key_sign := false -}}
+{{- $key_encrypt := false -}}
+
+{{- if hasKey . "name" -}}
+{{-   $name = .name -}}
+{{- end -}}
+{{- if $interactive -}}
+{{-   range $i := until 99 -}}
+{{-     $question := "❔ What is your full name" -}}
+{{-     $answer := "" -}}
+{{-     if $name -}}
+{{-       $answer = promptString $question $name -}}
+{{-     else -}}
+{{-       $answer = promptString $question -}}
+{{-     end -}}
+{{-     if regexMatch "^[A-Z][-' a-zA-Z]+$" $answer -}}
+{{-       $name = $answer -}}
+{{-       writeToStdout (printf "✅ Name set as '%s'\n" $name) -}}
+{{-       break -}}
+{{-     end -}}
+{{-     writeToStdout (printf "❌ '%s' is an invalid name\n" $answer) -}}
+{{-     if eq $i 98 -}}
+{{-       writeToStdout "❌ ERROR: maximum tries exceeded\n" -}}
+{{-       exit 1 -}}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+
+{{- if hasKey . "email" -}}
+{{-   $email = .email -}}
+{{- end -}}
+{{- if $interactive -}}
+{{-   range $i := until 99 -}}
+{{-     $question := "❔ What is your email" -}}
+{{-     $answer := "" -}}
+{{-     if $email -}}
+{{-       $answer = promptString $question $email -}}
+{{-     else -}}
+{{-       $answer = promptString $question -}}
+{{-     end -}}
+{{-     $answer = lower $answer -}}
+{{-     if regexMatch "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$" $answer -}}
+{{-       $email = $answer -}}
+{{-       writeToStdout (printf "✅ Email set as '%s'\n" $email) -}}
+{{-       break -}}
+{{-     end -}}
+{{-     writeToStdout (printf "❌ '%s' is an invalid email\n" $answer) -}}
+{{-     if eq $i 98 -}}
+{{-       writeToStdout "❌ ERROR: maximum tries exceeded\n" -}}
+{{-       exit 1 -}}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+
+{{- if hasKey . "hostname" -}}
+{{-   $hostname = .hostname -}}
+{{- end -}}
+{{- if $interactive -}}
+{{-   range $i := until 99 -}}
+{{-     $question := "❔ What is hostname" -}}
+{{-     $answer := "" -}}
+{{-     if $hostname -}}
+{{-       $answer = promptString $question $hostname -}}
+{{-     else -}}
+{{-       $answer = promptString $question -}}
+{{-     end -}}
+{{-     if regexMatch "^[A-Za-z0-9._-]+$" $answer -}}
+{{-       $hostname = $answer -}}
+{{-       writeToStdout (printf "✅ Hostname set as '%s'\n" $hostname) -}}
+{{-       break -}}
+{{-     end -}}
+{{-     writeToStdout (printf "❌ '%s' is an invalid hostname\n" $answer) -}}
+{{-     if eq $i 98 -}}
+{{-       writeToStdout "❌ ERROR: maximum tries exceeded\n" -}}
+{{-       exit 1 -}}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+
+{{- if $interactive -}}
+{{-   $github_username := promptString "❔ GitHub username" $github_username -}}
+{{-   writeToStdout (printf "✅ GitHub username : '%s'\n" $github_username) -}}
+{{- end -}}
+
+{{- $ssh_algorithm := "ed25519" -}}
+{{- if $interactive -}}
+{{-   $ssh_algorithm := promptString "❔ SSH algorithm" $ssh_algorithm -}}
+{{-   writeToStdout (printf "✅ SSH algorithm : '%s'\n" $ssh_algorithm) -}}
+{{- end -}}
+
+{{- $ssh_keyfile := printf "id_%s_%s" $ssh_algorithm $hostname -}}
+{{- if $interactive -}}
+{{-   $ssh_keyfile := promptString "❔ SSH key filename" $ssh_keyfile -}}
+{{-   writeToStdout (printf "✅ SSH key filename : '%s'\n" $ssh_keyfile) -}}
+{{- end -}}
+
+{{- if hasKey . "is_devcontainer" -}}
+{{-   $minimum = .is_devcontainer -}}
+{{- end -}}
+{{- if $interactive -}}
+{{-   $question := "❔ Should install in minimum mode (see README)" -}}
+{{-   $minimum = promptBool $question $minimum -}}
+{{-   if $minimum -}}
+{{-     writeToStdout "✅ Minimum mode enabled\n" -}}
+{{-   else -}}
+{{-     writeToStdout "✅ Minimum mode disabled\n" -}}
+{{-   end -}}
+{{- end -}}
+
+{{- if $interactive -}}
+{{-   writeToStdout "\n💡 Tip: you can always make chezmoi ask this again by running `chezmoi init` without `--force`.\n" -}}
+{{- end -}}
+
+{{- /* This retains the value passed with --source on chezmoi init, which is used in the ../install.sh script */ -}}
+sourceDir: "{{ .chezmoi.workingTree }}"
+
+verbose: true
+
+diff:
+    exclude:
+        - always
+status:
+    exclude:
+        - always
+
+{{/* Here we "export" the variables, so we can access them outside this file */ -}}
 data:
-    email: {{ $email | quote }}
-
-edit:
-    command: code
-    args: "--wait"
-
-git:
-    autoCommit: true
-    autoPush: true
+    name: "{{ $name }}"
+    email: "{{ $email }}"
+    editor: "code --wait"
+    gpgkey:
+        sign: "{{ $key_sign }}"
+        encrypt: "{{ $key_sign }}"
+    system:
+        hostname: {{ $hostname }}
+        is_wsl: {{ $wsl }}
+        is_devcontainer: {{ $minimum }}
+        is_gnome: {{ $gnome }}
+        uname_arch: "{{ output "uname" "-m" | trim }}"
+        cpu:
+            cores: {{ $cpuCores }}
+            threads: {{ $cpuThreads }}
+    ssh:
+        algorithm: {{ $ssh_algorithm }}
+        key_filename: {{ $ssh_keyfile }}
+    github:
+        username: {{ $github_username }}
