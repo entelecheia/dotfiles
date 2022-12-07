@@ -2,6 +2,8 @@
 
 README.md
 chezmoi.code-workspace
+.gitignore
+refs
 
 dotdrop
 config.yaml
