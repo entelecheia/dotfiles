@@ -13,7 +13,7 @@ Before installing chezmoi, make sure that you have installed Git, curl, and a re
 One-line binary install
 
 ```sh
-sh -c "$(curl -fsLS get.chezmoi.io)"
+sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin
 ```
 
 Chezmoi will be installed in $HOME/bin, so make sure that $HOME/bin is in your $PATH.
