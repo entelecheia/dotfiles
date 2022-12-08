@@ -2,6 +2,7 @@
 {{- $email := "entelecheia@hotmail.com" -}}
 {{- $hostname := .chezmoi.hostname }}
 {{- $github_username := "entelecheia" -}}
+{{- $dotdrop_profile := .chezmoi.hostname }}
 
 {{- $chezmoiForce := or (has "--force" .chezmoi.args) (has "--force=true" .chezmoi.args) -}}
 {{- $interactive := and stdinIsATTY (not $chezmoiForce) -}}
@@ -109,6 +110,18 @@
 {{- end -}}
 
 {{- if $interactive -}}
+{{-   $question := "❔ What is dotdrop profile name" -}}
+{{-   $answer := "" -}}
+{{-   if $dotdrop_profile -}}
+{{-     $answer = promptString $question $dotdrop_profile -}}
+{{-   else -}}
+{{-     $answer = promptString $question -}}
+{{-   end -}}
+{{-   $dotdrop_profile = $answer -}}
+{{-   writeToStdout (printf "✅ dotdrop profile set as '%s'\n" $dotdrop_profile) -}}
+{{- end -}}
+
+{{- if $interactive -}}
 {{-   $question := "❔ What is GitHub username" -}}
 {{-   $answer := "" -}}
 {{-   if $github_username -}}
@@ -196,3 +209,5 @@ data:
     github:
         username: {{ $github_username }}
         token: {{ $github_token }}
+    dotdrop:
+        profile: {{ $dotdrop_profile }}
