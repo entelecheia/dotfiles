@@ -17,10 +17,6 @@
     defaultBranch = main
 [hub]
 	protocol = https
-[credential "https://github.com"]
-	helper = !/usr/bin/gh auth git-credential
-[credential "https://gist.github.com"]
-	helper = !/usr/bin/gh auth git-credential
 [alias]
     s = status
     c = commit
@@ -43,4 +39,10 @@
     prune-refs = fetch --prune --prune-tags
     hist = log --pretty=format:'%C(yellow)%h%Creset %ad | %s%d %Cgreen[%an]%Creset' --graph --date=short
     apply-gitignore = "!set -ex; git rm -r --cached . >/dev/null; git add ."
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
     
