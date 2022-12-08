@@ -1,0 +1,46 @@
+#!/bin/sh
+export LANG='en_US.UTF-8'
+export LANGUAGE='en_US:en'
+export LC_ALL='en_US.UTF-8'
+export TERM=xterm-256color
+export GITHUB_USERNAME={{ .github.username }}
+
+# {{ if .system.is_wsl }}
+# The boot.systemd in /etc/wsl.conf is only for Windows 11, so this workaround is needed
+if service docker status 2>&1 | grep -q "is not running"; then
+  wsl.exe -d "${WSL_DISTRO_NAME?}" -u root -e /usr/sbin/service docker start >/dev/null 2>&1
+fi
+# {{ end }}
+
+if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+  # shellcheck disable=SC2312
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+elif [ -x "${HOME}/.linuxbrew/bin/brew" ]; then
+  # shellcheck disable=SC2312
+  eval "$("${HOME}/.linuxbrew/bin/brew" shellenv)"
+fi
+
+if [ -r "${HOME}/.sdkman/bin/sdkman-init.sh" ]; then
+  export SDKMAN_DIR="${HOME}/.sdkman"
+  # shellcheck disable=SC1091
+  . "${HOME}/.sdkman/bin/sdkman-init.sh"
+fi
+
+if [ -d "${HOME}/go/bin" ]; then
+  export PATH="${HOME}/go/bin:${PATH}"
+fi
+
+if [ -d "${HOME}/bin" ]; then
+  export PATH="${HOME}/bin:${PATH}"
+fi
+
+if [ -d "${HOME}/.local/bin" ]; then
+  export PATH="${HOME}/.local/bin:${PATH}"
+fi
+
+export VISUAL="{{ .editor }}"
+export EDITOR="{{ .editor }}"
+
+# {{ if .system.is_wsl }}
+export BROWSER="wslview"
+# {{ end }}

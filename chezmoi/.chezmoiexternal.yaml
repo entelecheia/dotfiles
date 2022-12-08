@@ -1,0 +1,54 @@
+{{- /* "chezmoi" is present as work around for https://github.com/twpayne/chezmoi/discussions/1724 */ -}}
+{{- $cache := dict "chezmoi" .chezmoi -}}
+
+{{- template "read-versions-and-revisions-cache" $cache -}}
+
+".oh-my-zsh":
+  type: archive
+  url: "https://github.com/ohmyzsh/ohmyzsh/archive/{{ template "get-github-head-revision" list "ohmyzsh/ohmyzsh" $cache }}.tar.gz"
+  stripComponents: 1
+  # refreshPeriod: 168h
+
+".oh-my-zsh/custom/themes/spaceship":
+  type: archive
+  url: "https://github.com/spaceship-prompt/spaceship-prompt/archive/{{ template "get-github-head-revision" list "spaceship-prompt/spaceship-prompt" $cache }}.tar.gz"
+  stripComponents: 1
+  exact: true
+
+".oh-my-zsh/custom/plugins/zsh-syntax-highlighting":
+  type: archive
+  url: "https://github.com/zsh-users/zsh-syntax-highlighting/archive/{{ template "get-github-head-revision" list "zsh-users/zsh-syntax-highlighting" $cache }}.tar.gz"
+  stripComponents: 1
+  exact: true
+
+".oh-my-zsh/custom/plugins/zsh-autosuggestions":
+  type: archive
+  url: "https://github.com/zsh-users/zsh-autosuggestions/archive/{{ template "get-github-head-revision" list "zsh-users/zsh-autosuggestions" $cache }}.tar.gz"
+  stripComponents: 1
+  exact: true
+
+".oh-my-zsh/custom/plugins/zsh-completions":
+  type: archive
+  url: "https://github.com/zsh-users/zsh-completions/archive/{{ template "get-github-head-revision" list "zsh-users/zsh-completions" $cache }}.tar.gz"
+  stripComponents: 1
+  exact: true
+
+".local/bin/direnv":
+  type: file
+  url: "https://github.com/direnv/direnv/releases/download/v{{ template "get-github-latest-version" list "direnv/direnv" $cache }}/direnv.linux-{{ .chezmoi.arch }}"
+  executable: true
+
+{{ if not .system.is_devcontainer -}}
+
+# Downloads all the variants of Fira Code Nerd Font
+{{-   range $_, $face := list "Regular" "Light" "Medium" "Bold" "Retina" "SemiBold" -}}
+{{-     range $_, $variant := list "" " Mono" }}
+".local/share/fonts/Fira Code {{ $face }} Nerd Font Complete{{ $variant }}.ttf":
+  type: file
+  url: "https://raw.githubusercontent.com/ryanoasis/nerd-fonts/{{ template "get-github-head-revision" list "ryanoasis/nerd-fonts" $cache }}/patched-fonts/FiraCode/{{ $face }}/complete/Fira%20Code%20{{ $face }}%20Nerd%20Font%20Complete{{ $variant | replace " " "%20" }}.ttf"
+{{      end -}}
+{{-   end -}}
+
+{{- template "save-versions-and-revisions-cache" $cache -}}
+
+{{- end -}}

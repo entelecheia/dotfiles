@@ -2,6 +2,26 @@
 
 Dotfiles are configuration files that are used to customize your shell and other applications. Dotfiles are a great way to standardize your development environment. You can use the same dotfiles in your local development environment, in your CI/CD pipeline, and in your production environment.
 
+## Getting started
+
+Before installing dotfiles, make sure that you have installed git.
+
+```bash
+sudo apt install git
+```
+
+You can use the [install dotfiles script](./scripts/install_dotfiles.sh) to install the dotfiles on any machine with a single command. Simply run the following command in your terminal:
+
+```bash
+sh -c "$(wget -qO- https://bit.ly/3W2JGyL)"
+```
+
+> 💡 For most Ubuntu-based distributions, `wget` is already installed. If you want to use `curl` instead:
+>
+> ```bash
+>  sh -c "$(curl -fsSL https://bit.ly/3W2JGyL)"
+> ```
+
 ## [chezmoi](https://chezmoi.io)
 
 Chezmoi is a tool for managing your dotfiles across multiple machines, securely. Chezmoi allows you to manage your dotfiles in a Git repository.
@@ -16,10 +36,10 @@ One-line binary install
 sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin
 ```
 
-Chezmoi will be installed in $HOME/bin, so make sure that $HOME/bin is in your $PATH.
+Chezmoi will be installed in `$HOME/.local/bin`, so make sure that `$HOME/.local/bin` is in your $PATH.
 
 ```sh
-export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 ```
 
 For more information, see [Install chezmoi](https://www.chezmoi.io/install/).
