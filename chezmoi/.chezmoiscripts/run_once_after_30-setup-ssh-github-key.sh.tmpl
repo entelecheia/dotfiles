@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# {{ if eq .chezmoi.os "linux" "darwin" -}}
+
+# Check if we have a GitHub SSH key
+# If not, generate one and add it to GitHub
+SSH_KEY_FILE="${HOME}/.ssh/{{ .ssh.key_filename }}"
+HOST="{{ .chezmoi.hostname }}"
+USER="{{ .chezmoi.username }}"
+ALGORITHM="{{ .ssh.algorithm }}"
+DATESTAMP=$(date +'%y.%m.%d')
+if [ ! -f "${SSH_KEY_FILE}" ]; then
+    ssh-keygen -t "${ALGORITHM}" -C "${USER}@${HOST}" -f "${SSH_KEY_FILE}" -N ""
+fi
+
+GITHUB_TOKEN="{{ .github.token }}"
+if [ -z "${GITHUB_TOKEN}" ]; then
+    echo
+    echo "GITHUB_TOKEN environment variable is not set."
+    echo "Log in manually, and add the SSH key to GitHub."
+    echo
+else
+    if command -v gh >/dev/null; then
+        gh config set -h github.com git_protocol ssh
+        echo "${GITHUB_TOKEN}" | gh auth login --with-token
+        gh ssh-key add "${SSH_KEY_FILE}.pub" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}"
+    else
+        echo "gh is not installed"
+    fi
+fi
+
+# {{ end -}}

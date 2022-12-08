@@ -109,8 +109,27 @@
 {{- end -}}
 
 {{- if $interactive -}}
-{{-   $github_username := promptString "❔ GitHub username" $github_username -}}
-{{-   writeToStdout (printf "✅ GitHub username : '%s'\n" $github_username) -}}
+{{-   $question := "❔ What is GitHub username" -}}
+{{-   $answer := "" -}}
+{{-   if $github_username -}}
+{{-     $answer = promptString $question $github_username -}}
+{{-   else -}}
+{{-     $answer = promptString $question -}}
+{{-   end -}}
+{{-   $github_username = $answer -}}
+{{-   writeToStdout (printf "✅ GitHub username set as '%s'\n" $github_username) -}}
+{{- end -}}
+
+{{- $github_token := "" -}}
+{{- if $interactive -}}
+{{-   $question := "❔ What is GitHub Token" -}}
+{{-   $answer := "" -}}
+{{-   if $github_token -}}
+{{-     $answer = promptString $question $github_token -}}
+{{-   else -}}
+{{-     $answer = promptString $question -}}
+{{-   end -}}
+{{-   $github_token = $answer -}}
 {{- end -}}
 
 {{- $ssh_algorithm := "ed25519" -}}
@@ -176,3 +195,4 @@ data:
         key_filename: {{ $ssh_keyfile }}
     github:
         username: {{ $github_username }}
+        token: {{ $github_token }}
