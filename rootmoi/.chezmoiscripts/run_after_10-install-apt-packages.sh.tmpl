@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# {{ template "scripts-library" }}
+
+# The following line is for ShellCheck to correctly identify the above included library
+true || source ../.chezmoitemplates/scripts-library
+
+readonly wanted_packages=(
+  apt-transport-https
+  ca-certificates
+  gnupg
+  lsb-release
+  build-essential
+  curl
+  zsh
+  wget
+  tree
+  parallel
+  file
+  procps
+  zip
+  git
+  gh
+  jq
+  docker-ce
+  docker-ce-cli
+  containerd.io
+  skopeo
+  openssh-server
+  # {{ if .system.is_wsl }}
+  wslu
+  # {{ else }}
+  # {{   if eq .chezmoi.osRelease.versionCodename "bionic" }}
+  linux-generic-hwe-18.04
+  # {{   else if eq .chezmoi.osRelease.versionCodename "focal" }}
+  linux-generic-hwe-20.04
+  # {{   end }}
+  # {{ end }}
+)
+missing_packages=()
+
+for package in "${wanted_packages[@]}"; do
+  if ! is_apt_package_installed "${package}"; then
+    missing_packages+=("${package}")
+  fi
+done
+
+if [[ ${#missing_packages[@]} -gt 0 ]]; then
+  log_task "Installing missing packages with APT: ${missing_packages[*]}"
+
+  c apt update --yes
+  c apt install --yes --install-recommends "${missing_packages[@]}"
+fi

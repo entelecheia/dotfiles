@@ -1,0 +1,12 @@
+{{ if semverCompare ">20.04" .chezmoi.osRelease.versionID }}
+etc/apt/sources.list.d/kubic.list
+{{ end }}
+
+{{ if .system.is_wsl }}
+etc/ssh
+.chezmoiscripts/*-reload-sshd.sh
+{{ else }}
+etc/wsl.conf
+.chezmoiscripts/*-fix-permissions.sh
+.chezmoiscripts/*-restore-permissions.sh
+{{ end }}

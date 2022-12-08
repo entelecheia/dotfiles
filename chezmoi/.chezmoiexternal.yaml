@@ -33,6 +33,12 @@
   stripComponents: 1
   exact: true
 
+".local/share/dotdrop":
+  type: archive
+  url: "https://github.com/deadc0de6/dotdrop/archive/{{ template "get-github-head-revision" list "deadc0de6/dotdrop" $cache }}.tar.gz"
+  stripComponents: 1
+  exact: true
+
 ".local/bin/direnv":
   type: file
   url: "https://github.com/direnv/direnv/releases/download/v{{ template "get-github-latest-version" list "direnv/direnv" $cache }}/direnv.linux-{{ .chezmoi.arch }}"
