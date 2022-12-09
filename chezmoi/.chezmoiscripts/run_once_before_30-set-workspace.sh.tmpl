@@ -14,7 +14,11 @@ COLAB_DRIVE="{{ .workspace.colab_drive }}"
 SYMLINK_COLAB="{{ .workspace.symlink_colab_workspace }}"
 
 log_task "Creating workspace directory: ${WORKSPACE_ROOT}"
-c mkdir -p "${WORKSPACE_ROOT}"
+if [[ ! -d "${WORKSPACE_ROOT}" ]]; then
+  c mkdir -p "${WORKSPACE_ROOT}"
+else
+  log_info "Workspace directory already exists: ${WORKSPACE_ROOT}"
+fi
 
 # get folder name from path
 WORKSPACE_NAME=$(basename "${WORKSPACE_ROOT}")
@@ -22,9 +26,16 @@ COLAB_WORKSPACE="${COLAB_DRIVE}/${WORKSPACE_NAME}"
 
 if [[ "${SYMLINK_COLAB}" == "true" ]]; then
   log_task "Symlinking colab workspace: ${COLAB_WORKSPACE}"
-  c sudo mkdir -p "${COLAB_DRIVE}"
-  c sudo chown "${USER}":"${USER}" "${COLAB_DRIVE}"
-  c ln -s "${WORKSPACE_ROOT}" "${COLAB_WORKSPACE}"
+  if [[ ! -d "${COLAB_DRIVE}" ]]; then
+    c sudo mkdir -p "${COLAB_DRIVE}"
+    c sudo chown "${USER}":"${USER}" "${COLAB_DRIVE}"
+  fi
+  # if synmlink already exists, remove it
+  if [[ ! -L "${COLAB_WORKSPACE}" ]]; then
+    c ln -s "${WORKSPACE_ROOT}" "${COLAB_WORKSPACE}"
+  else
+    log_info "Colab workspace already exists: ${COLAB_WORKSPACE}"
+  fi
 fi
 
 # {{ end -}}
