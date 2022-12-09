@@ -9,7 +9,8 @@
 {{- $workspace_name := "workspace" -}}
 {{- $workspace_root := joinPath .chezmoi.homeDir $workspace_name -}}
 {{- $symlink_colab_workspace := false -}}
-
+{{- $workspace_location := .chezmoi.homeDir -}}
+{{- $symlink_to_home := true -}}
 
 {{- $chezmoiForce := or (has "--force" .chezmoi.args) (has "--force=true" .chezmoi.args) -}}
 {{- $interactive := and stdinIsATTY (not $chezmoiForce) -}}
@@ -191,6 +192,36 @@
 {{-   writeToStdout (printf "✅ SSH key filename set as '%s'\n" $ssh_keyfile) -}}
 {{- end -}}
 
+{{- if and (hasKey . "workspace") (hasKey .workspace "location") -}}
+{{-   $workspace_location = .workspace.location -}}
+{{- end -}}
+{{- if $interactive -}}
+{{-   $question := "❔ Where do you want to put your workspace" -}}
+{{-   $answer := "" -}}
+{{-   if $workspace_location -}}
+{{-     $answer = promptString $question $workspace_location -}}
+{{-   else -}}
+{{-     $answer = promptString $question -}}
+{{-   end -}}
+{{-   $workspace_location = $answer -}}
+{{-   writeToStdout (printf "✅ Worksapce location set as '%s'\n" $workspace_location) -}}
+{{- end -}}
+
+{{- if ne .chezmoi.homeDir $workspace_location }}
+{{- if and (hasKey . "workspace") (hasKey .workspace "symlink_to_home") -}}
+{{-   $symlink_to_home = .workspace.symlink_to_home -}}
+{{- end -}}
+{{- if $interactive -}}
+{{-   $question := "❔ Should symlink workspace to home directory" -}}
+{{-   $symlink_to_home = promptBool $question $symlink_to_home -}}
+{{-   if $symlink_to_home -}}
+{{-     writeToStdout "✅ Workspace will be symlinked to home directory\n" -}}
+{{-   else -}}
+{{-     writeToStdout "✅ Workspace will not be symlinked to home directory\n" -}}
+{{-   end -}}
+{{- end -}}
+{{- end -}}
+
 {{- if and (hasKey . "workspace") (hasKey .workspace "name") -}}
 {{-   $workspace_name = .workspace.name -}}
 {{- end -}}
@@ -203,7 +234,11 @@
 {{-     $answer = promptString $question -}}
 {{-   end -}}
 {{-   $workspace_name = $answer -}}
-{{-   $workspace_root := joinPath .chezmoi.homeDir $workspace_name -}}
+{{-   if $symlink_to_home -}}
+{{-     $workspace_root := joinPath .chezmoi.homeDir $workspace_name -}}
+{{-   else -}}
+{{-     $workspace_root := joinPath $workspace_location $workspace_name -}}
+{{-   end -}}
 {{-   writeToStdout (printf "✅ Worksapce root set as '%s'\n" $workspace_root) -}}
 {{- end -}}
 
@@ -277,7 +312,10 @@ data:
         profile: {{ $dotdrop_profile }}
     workspace:
         name: {{ $workspace_name }}
+        location: {{ $workspace_location }}
         root: {{ $workspace_root }}
+        move_existing: true
+        symlink_to_home: {{ $symlink_to_home }}
         symlink_colab_workspace: {{ $symlink_colab_workspace }}
         colab_drive: "/content/drive/MyDrive"
     packages:

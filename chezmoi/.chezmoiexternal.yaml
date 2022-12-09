@@ -38,14 +38,6 @@
   url: "https://github.com/direnv/direnv/releases/download/v{{ template "get-github-latest-version" list "direnv/direnv" $cache }}/direnv.linux-{{ .chezmoi.arch }}"
   executable: true
 
-# clone git repos into workspace/projects
-{{ range .git_repos }}
-"{{- $.workspace.name -}}/projects/{{- .name -}}":
-  type: git-repo
-  url: {{ .url -}}
-{{ end }}
-
-
 {{ if not .system.is_devcontainer -}}
 
 # Downloads all the variants of Fira Code Nerd Font
