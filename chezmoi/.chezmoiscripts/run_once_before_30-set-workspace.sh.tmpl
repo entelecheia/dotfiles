@@ -77,7 +77,7 @@ log_task "Cloning git repo: {{ .name }}"
 if [[ -d "${WORKSPACE_DIR}/projects/{{- .name -}}" ]]; then
   log_info "Git repo already exists: {{ .name }}"
 else
-  c git clone {{ .url -}} " ${WORKSPACE_DIR}/projects/{{- .name -}}"
+  c git clone "{{ .url -}}" "${WORKSPACE_DIR}/projects/{{- .name -}}"
 fi
 {{ end }}
 
