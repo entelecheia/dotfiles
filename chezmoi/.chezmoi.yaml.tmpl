@@ -1,8 +1,14 @@
-{{- $name := "entelecheia" -}}
-{{- $email := "entelecheia@hotmail.com" -}}
+{{- $name := "name" -}}
+{{- $email := "email at domain" -}}
 {{- $hostname := .chezmoi.hostname }}
-{{- $github_username := "entelecheia" -}}
+{{- $github_username := "" -}}
+{{- $github_token := "" -}}
 {{- $dotdrop_profile := .chezmoi.hostname }}
+{{- $ssh_algorithm := "ed25519" -}}
+{{- $ssh_keyfile := printf "id_%s_%s" $ssh_algorithm $hostname -}}
+{{- $workspace_root := joinPath .chezmoi.homeDir "workspace" -}}
+{{- $symlink_colab_workspace := true -}}
+
 
 {{- $chezmoiForce := or (has "--force" .chezmoi.args) (has "--force=true" .chezmoi.args) -}}
 {{- $interactive := and stdinIsATTY (not $chezmoiForce) -}}
@@ -84,8 +90,8 @@
 {{-   end -}}
 {{- end -}}
 
-{{- if hasKey . "hostname" -}}
-{{-   $hostname = .hostname -}}
+{{- if and (hasKey . "system") (hasKey .system "hostname") -}}
+{{-   $hostname = .system.hostname -}}
 {{- end -}}
 {{- if $interactive -}}
 {{-   range $i := until 99 -}}
@@ -109,6 +115,9 @@
 {{-   end -}}
 {{- end -}}
 
+{{- if and (hasKey . "dotdrop") (hasKey .dotdrop "profile") -}}
+{{-   $dotdrop_profile = .dotdrop.profile -}}
+{{- end -}}
 {{- if $interactive -}}
 {{-   $question := "❔ What is dotdrop profile name" -}}
 {{-   $answer := "" -}}
@@ -121,6 +130,9 @@
 {{-   writeToStdout (printf "✅ dotdrop profile set as '%s'\n" $dotdrop_profile) -}}
 {{- end -}}
 
+{{- if and (hasKey . "github") (hasKey .github "username") -}}
+{{-   $github_username = .github.username -}}
+{{- end -}}
 {{- if $interactive -}}
 {{-   $question := "❔ What is GitHub username" -}}
 {{-   $answer := "" -}}
@@ -133,7 +145,9 @@
 {{-   writeToStdout (printf "✅ GitHub username set as '%s'\n" $github_username) -}}
 {{- end -}}
 
-{{- $github_token := "" -}}
+{{- if and (hasKey . "github") (hasKey .github "token") -}}
+{{-   $github_token = .github.token -}}
+{{- end -}}
 {{- if $interactive -}}
 {{-   $question := "❔ What is GitHub Token" -}}
 {{-   $answer := "" -}}
@@ -143,22 +157,69 @@
 {{-     $answer = promptString $question -}}
 {{-   end -}}
 {{-   $github_token = $answer -}}
+{{-   writeToStdout (printf "✅ GitHub Token set as '%s'\n" $github_token) -}}
 {{- end -}}
 
-{{- $ssh_algorithm := "ed25519" -}}
+{{- if and (hasKey . "ssh") (hasKey .ssh "algorithm") -}}
+{{-   $ssh_algorithm = .ssh.algorithm -}}
+{{- end -}}
 {{- if $interactive -}}
-{{-   $ssh_algorithm := promptString "❔ SSH algorithm" $ssh_algorithm -}}
-{{-   writeToStdout (printf "✅ SSH algorithm : '%s'\n" $ssh_algorithm) -}}
+{{-   $question := "❔ Which SSH algorithm do you want to use" -}}
+{{-   $answer := "" -}}
+{{-   if $ssh_algorithm -}}
+{{-     $answer = promptString $question $ssh_algorithm -}}
+{{-   else -}}
+{{-     $answer = promptString $question -}}
+{{-   end -}}
+{{-   $ssh_algorithm = $answer -}}
+{{-   writeToStdout (printf "✅ SSH algorithm set as '%s'\n" $ssh_algorithm) -}}
 {{- end -}}
 
-{{- $ssh_keyfile := printf "id_%s_%s" $ssh_algorithm $hostname -}}
+{{- if and (hasKey . "ssh") (hasKey .ssh "key_filename") -}}
+{{-   $ssh_keyfile = .ssh.key_filename -}}
+{{- end -}}
 {{- if $interactive -}}
-{{-   $ssh_keyfile := promptString "❔ SSH key filename" $ssh_keyfile -}}
-{{-   writeToStdout (printf "✅ SSH key filename : '%s'\n" $ssh_keyfile) -}}
+{{-   $question := "❔ What SSH key filename do you want to use" -}}
+{{-   $answer := "" -}}
+{{-   if $ssh_keyfile -}}
+{{-     $answer = promptString $question $ssh_keyfile -}}
+{{-   else -}}
+{{-     $answer = promptString $question -}}
+{{-   end -}}
+{{-   $ssh_keyfile = $answer -}}
+{{-   writeToStdout (printf "✅ SSH key filename set as '%s'\n" $ssh_keyfile) -}}
 {{- end -}}
 
-{{- if hasKey . "is_devcontainer" -}}
-{{-   $minimum = .is_devcontainer -}}
+{{- if and (hasKey . "workspace") (hasKey .workspace "root") -}}
+{{-   $workspace_root = .workspace.root -}}
+{{- end -}}
+{{- if $interactive -}}
+{{-   $question := "❔ Where do you want to use as workspace root" -}}
+{{-   $answer := "" -}}
+{{-   if $workspace_root -}}
+{{-     $answer = promptString $question $workspace_root -}}
+{{-   else -}}
+{{-     $answer = promptString $question -}}
+{{-   end -}}
+{{-   $workspace_root = $answer -}}
+{{-   writeToStdout (printf "✅ Worksapce root set as '%s'\n" $workspace_root) -}}
+{{- end -}}
+
+{{- if and (hasKey . "workspace") (hasKey .workspace "symlink_colab_workspace") -}}
+{{-   $symlink_colab_workspace = .workspace.symlink_colab_workspace -}}
+{{- end -}}
+{{- if $interactive -}}
+{{-   $question := "❔ Should symlink colab workspace" -}}
+{{-   $symlink_colab_workspace = promptBool $question $symlink_colab_workspace -}}
+{{-   if $symlink_colab_workspace -}}
+{{-     writeToStdout "✅ Colab workspace will be symlinked to workspace root\n" -}}
+{{-   else -}}
+{{-     writeToStdout "✅ Colab workspace will not be symlinked\n" -}}
+{{-   end -}}
+{{- end -}}
+
+{{- if and (hasKey . "system") (hasKey .system "is_devcontainer") -}}
+{{-   $minimum = .system.is_devcontainer -}}
 {{- end -}}
 {{- if $interactive -}}
 {{-   $question := "❔ Should install in minimum mode (see README)" -}}
@@ -192,8 +253,8 @@ data:
     email: "{{ $email }}"
     editor: "vi"
     gpgkey:
-        sign: "{{ $key_sign }}"
-        encrypt: "{{ $key_sign }}"
+        sign: {{ $key_sign }}
+        encrypt: {{ $key_sign }}
     system:
         hostname: {{ $hostname }}
         is_wsl: {{ $wsl }}
@@ -211,3 +272,7 @@ data:
         token: {{ $github_token }}
     dotdrop:
         profile: {{ $dotdrop_profile }}
+    workspace:
+        root: {{ $workspace_root }}
+        symlink_colab_workspace: {{ $symlink_colab_workspace }}
+        colab_drive: "/content/drive/MyDrive"

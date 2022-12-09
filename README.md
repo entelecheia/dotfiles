@@ -74,3 +74,40 @@ chezmoi apply -v
 
 Save your dotfiles once, deploy them everywhere
 
+[Dotdrop](https://github.com/deadc0de6/dotdrop) makes the management of dotfiles between different hosts easy.
+It allows you to store your dotfiles in Git and automagically deploy
+different versions of the same file on different setups.
+
+It also allows to manage different *sets* of dotfiles.
+For example, you can have a set of dotfiles for your home laptop and
+a different set for your office desktop. Those sets may overlap, and different
+versions of the same dotfiles can be deployed using different predefined *profiles*.
+Or you may have a main set of dotfiles for your
+everyday host and a subset you only need to deploy to temporary
+hosts (cloud VM etc.) that may be using
+a slightly different version of some of the dotfiles.
+
+Features:
+
+* Sync once every dotfile in Git for different usages
+* Allow dotfile templating
+* Dynamically generated dotfile contents with pre-defined variables
+* Comparison between deployed and stored dotfiles
+* Handling multiple profiles with different sets of dotfiles
+* Easily import and update dotfiles
+* Handle files and directories
+* Support symlinking of dotfiles
+* Associate actions to the deployment of specific dotfiles
+* Associate transformations for storing encrypted/compressed dotfiles
+* Provide solutions for handling dotfiles containing sensitive information
+
+Also check out the [blog post](https://deadc0de.re/articles/dotfiles.html),
+the [example](#getting-started), the [documentation](https://dotdrop.readthedocs.io/) or
+how [people are using dotdrop](https://dotdrop.readthedocs.io/en/latest/misc/people-using-dotdrop/)
+for more.
+
+
+## References
+
+- [chezmoi](https://chezmoi.io)
+- [dotdrop](https://github.com/deadc0de6/dotdrop)
