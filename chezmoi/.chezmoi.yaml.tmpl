@@ -6,7 +6,8 @@
 {{- $dotdrop_profile := .chezmoi.hostname }}
 {{- $ssh_algorithm := "ed25519" -}}
 {{- $ssh_keyfile := printf "id_%s_%s" $ssh_algorithm $hostname -}}
-{{- $workspace_root := joinPath .chezmoi.homeDir "workspace" -}}
+{{- $workspace_name := "workspace" -}}
+{{- $workspace_root := joinPath .chezmoi.homeDir $workspace_name -}}
 {{- $symlink_colab_workspace := false -}}
 
 
@@ -190,18 +191,19 @@
 {{-   writeToStdout (printf "✅ SSH key filename set as '%s'\n" $ssh_keyfile) -}}
 {{- end -}}
 
-{{- if and (hasKey . "workspace") (hasKey .workspace "root") -}}
-{{-   $workspace_root = .workspace.root -}}
+{{- if and (hasKey . "workspace") (hasKey .workspace "name") -}}
+{{-   $workspace_name = .workspace.name -}}
 {{- end -}}
 {{- if $interactive -}}
-{{-   $question := "❔ Where do you want to use as workspace root" -}}
+{{-   $question := "❔ What name do you want to use as workspace root" -}}
 {{-   $answer := "" -}}
-{{-   if $workspace_root -}}
-{{-     $answer = promptString $question $workspace_root -}}
+{{-   if $workspace_name -}}
+{{-     $answer = promptString $question $workspace_name -}}
 {{-   else -}}
 {{-     $answer = promptString $question -}}
 {{-   end -}}
-{{-   $workspace_root = $answer -}}
+{{-   $workspace_name = $answer -}}
+{{-   $workspace_root := joinPath .chezmoi.homeDir $workspace_name -}}
 {{-   writeToStdout (printf "✅ Worksapce root set as '%s'\n" $workspace_root) -}}
 {{- end -}}
 
@@ -274,6 +276,39 @@ data:
     dotdrop:
         profile: {{ $dotdrop_profile }}
     workspace:
+        name: {{ $workspace_name }}
         root: {{ $workspace_root }}
         symlink_colab_workspace: {{ $symlink_colab_workspace }}
         colab_drive: "/content/drive/MyDrive"
+    packages:
+        system:
+            - apt-transport-https
+            - ca-certificates
+            - gnupg
+            - lsb-release
+            - build-essential
+            - curl
+            - zsh
+            - wget
+            - tree
+            - parallel
+            - file
+            - procps
+            - zip
+            - git
+            - gh
+            - jq
+            - docker-ce
+            - docker-ce-cli
+            - containerd.io
+            - skopeo
+            - openssh-server
+            - python3-pip
+        prerequisites:
+            - jq
+            - zsh
+            - python3-pip
+            - gh
+    git_repos:
+        - name: ekorpkit
+          url: https://github.com/entelecheia/ekorpkit.git

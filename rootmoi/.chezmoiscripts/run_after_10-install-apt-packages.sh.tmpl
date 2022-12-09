@@ -6,28 +6,9 @@
 true || source ../.chezmoitemplates/scripts-library
 
 readonly wanted_packages=(
-  apt-transport-https
-  ca-certificates
-  gnupg
-  lsb-release
-  build-essential
-  curl
-  zsh
-  wget
-  tree
-  parallel
-  file
-  procps
-  zip
-  git
-  gh
-  jq
-  docker-ce
-  docker-ce-cli
-  containerd.io
-  skopeo
-  openssh-server
-  python3-pip
+  {{ range .packages.system -}}
+    {{ . }}
+  {{ end -}}
   # {{ if .system.is_wsl }}
   wslu
   # {{ else }}

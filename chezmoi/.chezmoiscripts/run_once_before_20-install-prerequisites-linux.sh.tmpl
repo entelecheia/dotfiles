@@ -8,11 +8,9 @@ true || source ../.chezmoitemplates/scripts-library
 
 
 readonly wanted_packages=(
-  jq   # used on modify_ scripts like docker daemon.json
-  zsh
-  python3-pip
-  gh
-  # openssh-server
+  {{ range .packages.prerequisites -}}
+    {{ . }}
+  {{ end -}}
   # {{   if not .system.is_devcontainer }}
   gpg # used to decrypt the gpg keys of the apt repositories
   # {{   end }}
