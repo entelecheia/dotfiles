@@ -1,0 +1,30 @@
+#!/bin/bash
+# {{ if eq .chezmoi.os "linux" -}}
+
+# {{ include (joinPath .chezmoi.sourceDir ".chezmoitemplates/scripts-library") }}
+
+# The following line is for ShellCheck to correctly identify the above included library
+true || source ../.chezmoitemplates/scripts-library
+
+# root: /home/yj.lee/workspace
+# symlink_colab_workspace: true
+# colab_drive: "/content/drive/MyDrive"
+WORKSPACE_ROOT="{{ .workspace.root }}"
+COLAB_DRIVE="{{ .workspace.colab_drive }}"
+SYMLINK_COLAB="{{ .workspace.symlink_colab_workspace }}"
+
+log_task "Creating workspace directory: ${WORKSPACE_ROOT}"
+c mkdir -p "${WORKSPACE_ROOT}"
+
+# get folder name from path
+WORKSPACE_NAME=$(basename "${WORKSPACE_ROOT}")
+COLAB_WORKSPACE="${COLAB_DRIVE}/${WORKSPACE_NAME}"
+
+if [[ "${SYMLINK_COLAB}" == "true" ]]; then
+  log_task "Symlinking colab workspace: ${COLAB_WORKSPACE}"
+  c sudo mkdir -p "${COLAB_DRIVE}"
+  c sudo chown "${USER}":"${USER}" "${COLAB_DRIVE}"
+  c ln -s "${WORKSPACE_ROOT}" "${COLAB_WORKSPACE}"
+fi
+
+# {{ end -}}

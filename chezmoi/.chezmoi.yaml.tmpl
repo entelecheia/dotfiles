@@ -7,7 +7,7 @@
 {{- $ssh_algorithm := "ed25519" -}}
 {{- $ssh_keyfile := printf "id_%s_%s" $ssh_algorithm $hostname -}}
 {{- $workspace_root := joinPath .chezmoi.homeDir "workspace" -}}
-{{- $symlink_colab_workspace := true -}}
+{{- $symlink_colab_workspace := false -}}
 
 
 {{- $chezmoiForce := or (has "--force" .chezmoi.args) (has "--force=true" .chezmoi.args) -}}
@@ -260,6 +260,7 @@ data:
         is_wsl: {{ $wsl }}
         is_devcontainer: {{ $minimum }}
         is_gnome: {{ $gnome }}
+        is_interactive: {{ $interactive }}
         uname_arch: "{{ output "uname" "-m" | trim }}"
         cpu:
             cores: {{ $cpuCores }}

@@ -8,12 +8,10 @@ true || source ../.chezmoitemplates/scripts-library
 
 
 readonly wanted_packages=(
-  git  # used to find the latest revisions of github repositories
-  curl # used to find the latest version of github repositories
   jq   # used on modify_ scripts like docker daemon.json
   zsh
   python3-pip
-  # gh
+  gh
   # openssh-server
   # {{   if not .system.is_devcontainer }}
   gpg # used to decrypt the gpg keys of the apt repositories
@@ -22,7 +20,7 @@ readonly wanted_packages=(
 missing_packages=()
 
 for package in "${wanted_packages[@]}"; do
-  if ! command -v "${package}" >/dev/null; then
+  if ! is_apt_package_installed "${package}"; then
     missing_packages+=("${package}")
   fi
 done
