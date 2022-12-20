@@ -146,6 +146,33 @@ chezmoi data
 EOF
 }
 
+run_test_macos() {
+  local -r os="$1"
+  local -r setup_script="$2"
+
+  set -euxo pipefail
+
+  ${_arg_pre_script}
+
+  ${setup_script}
+
+  if [[ "${debug}" == "on" ]]; then
+    export DOTFILES_DEBUG=true
+  fi
+
+  export DOTFILES_TEST=true
+  echo 'Defaults env_keep += "DOTFILES_TEST"' | sudo tee /etc/sudoers.d/env_keep
+
+  ~/.dotfiles/scripts/install_chezmoi.sh
+
+  set +xeu
+  source ~/.profile
+  set -xeu
+
+  chezmoi data
+  EOF
+}
+
 set -euo pipefail
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
@@ -206,7 +233,12 @@ EOF
       )"
       ;;
 
-    *)
+    macos)
+      run_test_macos "${os}" "${dotfiles_root}/scripts/install_brew.sh"
+      ;;
+
+    \
+      *)
       echo "Variant '${variant}' not supported." >&2
       exit 1
       ;;

@@ -8,17 +8,15 @@ on:
 
 jobs:
   test:
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         variant: [devcontainer, wsl, gnome]
-        os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04]
+        os: [ubuntu-18.04, ubuntu-20.04, ubuntu-latest]
         include:
           - variant: macos
             os: macos-latest
-          - variant: devcontainer
-            os: debian
-    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: |
