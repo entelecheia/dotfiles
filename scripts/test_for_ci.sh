@@ -148,13 +148,10 @@ EOF
 
 run_test_macos() {
   local -r os="$1"
-  local -r setup_script="$2"
 
   set -euxo pipefail
 
   ${_arg_pre_script}
-
-  ${setup_script}
 
   if [[ "${debug}" == "on" ]]; then
     export DOTFILES_DEBUG=true
@@ -234,17 +231,7 @@ EOF
       ;;
 
     macos)
-      run_test_macos "${os}" "$(
-        # shellcheck disable=SC2312
-        cat <<'EOF'
-if test ! "$(which brew)"; then
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-fi
-
-brew update
-brew install coreutils
-EOF
-      )"
+      run_test_macos "${os}"
       ;;
 
     \
