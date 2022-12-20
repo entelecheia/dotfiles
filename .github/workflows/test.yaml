@@ -1,4 +1,4 @@
-name: ci
+name: test
 
 on:
   push:
@@ -18,6 +18,14 @@ jobs:
           - variant: macos
             os: macos-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: |
-          scripts/test.sh --variant "${{ matrix.variant }}" --os "${{ matrix.os }}"
+      - name: Checkout source
+        uses: actions/checkout@v2
+
+      - name: install dependencies for MacOS
+        if: matrix.variant == 'macos'
+        run: |
+          scripts/install_brew.sh
+
+      - name: Run tests
+        run: |
+          scripts/test_for_ci.sh --variant "${{ matrix.variant }}" --os "${{ matrix.os }}"
