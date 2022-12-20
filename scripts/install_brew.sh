@@ -8,3 +8,4 @@ if test ! "$(which brew)"; then
 fi
 
 brew update
+brew install coreutils
