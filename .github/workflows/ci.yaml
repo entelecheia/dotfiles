@@ -14,8 +14,8 @@ jobs:
         variant: [devcontainer, wsl, gnome]
         os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04]
         include:
-          # - variant: devcontainer
-          #   os: alpine
+          - variant: macos
+            os: macos-latest
           - variant: devcontainer
             os: debian
     runs-on: ubuntu-latest
