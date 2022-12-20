@@ -24,7 +24,7 @@ jobs:
       - name: install dependencies for MacOS
         if: matrix.variant == 'macos'
         run: |
-          scripts/install_brew.sh
+          brew install coreutils
 
       - name: Run tests
         run: |
