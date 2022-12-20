@@ -136,7 +136,7 @@ fi
 export DOTFILES_TEST=true
 echo 'Defaults env_keep += "DOTFILES_TEST"' | sudo tee /etc/sudoers.d/env_keep
 
-~/.dotfiles/scripts/install.sh
+~/.dotfiles/scripts/install_chezmoi.sh
 
 set +xeu
 source ~/.profile
