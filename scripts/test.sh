@@ -234,7 +234,17 @@ EOF
       ;;
 
     macos)
-      run_test_macos "${os}" "${dotfiles_root}/scripts/install_brew.sh"
+      run_test_macos "${os}" "$(
+        # shellcheck disable=SC2312
+        cat <<'EOF'
+if test ! "$(which brew)"; then
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
+brew update
+brew install coreutils
+EOF
+      )"
       ;;
 
     \
