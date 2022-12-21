@@ -139,9 +139,7 @@ echo 'Defaults env_keep += "DOTFILES_TEST"' | sudo tee /etc/sudoers.d/env_keep
 ~/.dotfiles/scripts/install_chezmoi.sh
 
 set +xeu
-if [[ -r "~/.profile" ]]; then
-    source "~/.profile"
-fi
+source ~/.profile
 set -xeu
 
 chezmoi data
@@ -165,10 +163,7 @@ run_test_darwin() {
   ./scripts/install_chezmoi.sh
 
   set +xeu
-  if [[ -r "${HOME}/.profile" ]]; then
-      # shellcheck source=/dev/null
-      source "${HOME}/.profile"
-  fi
+  source ~/.profile
   set -xeu
 
   chezmoi data
