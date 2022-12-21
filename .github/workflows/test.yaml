@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: install dependencies for MacOS
-        if: matrix.variant == 'macos'
+        if: matrix.variant == 'darwin'
         run: |
           brew install coreutils
           echo "$PWD"
