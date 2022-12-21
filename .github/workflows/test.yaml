@@ -12,11 +12,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        variant: [devcontainer, wsl, gnome]
-        os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04]
+        # variant: [devcontainer, wsl, gnome]
+        # os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04]
         # include:
         #   - variant: darwin
         #     os: macos-latest
+        # For testing on devcontainer
+        include:
+          - variant: devcontainer
+            os: ubuntu-20.04
     steps:
       - name: Checkout source
         uses: actions/checkout@v2

@@ -1,9 +1,14 @@
 #!/bin/sh
-
 # {{ if eq .chezmoi.os "linux" "darwin" -}}
+
+# {{ template "scripts-library" }}
+
+# The following line is for ShellCheck to correctly identify the above include
+true || source ../.chezmoitemplates/scripts-library
 
 # Check if we have a GitHub SSH key
 # If not, generate one and add it to GitHub
+log_task "Generating SSH key if not present"
 SSH_KEY_FILE="${HOME}/.ssh/{{ .ssh.key_filename }}"
 HOST="{{ .system.hostname }}"
 USER="{{ .chezmoi.username }}"
@@ -13,9 +18,9 @@ if [ ! -f "${SSH_KEY_FILE}" ]; then
     ssh-keygen -t "${ALGORITHM}" -C "${USER}@${HOST}" -f "${SSH_KEY_FILE}" -N ""
 fi
 
+log_task "Adding SSH key to GitHub after login"
 GITHUB_TOKEN="{{ .github.token }}"
-IS_INTERATICE="{{ .system.is_interactive }}"
-# {{- if .github.username -}}
+# {{- if .github.token -}}
 if command -v gh >/dev/null; then
     gh config set -h github.com git_protocol ssh
     echo "${GITHUB_TOKEN}" | gh auth login --with-token
@@ -24,19 +29,19 @@ else
     echo "gh is not installed"
 fi
 # {{- else -}}
-if [ "${IS_INTERATICE}" = "true" ]; then
-    if command -v gh >/dev/null; then
-        gh auth login
-        gh ssh-key add "${SSH_KEY_FILE}.pub" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}"
-    else
-        echo "gh is not installed"
-    fi
+# {{- if .system.is_interactive -}}
+if command -v gh >/dev/null; then
+    gh auth login
+    gh ssh-key add "${SSH_KEY_FILE}.pub" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}"
 else
-    echo
-    echo "GITHUB_TOKEN environment variable is not set."
-    echo "Log in manually, and add the SSH key to GitHub."
-    echo
+    echo "gh is not installed"
 fi
+# {{- else -}}
+echo
+echo "GITHUB_TOKEN environment variable is not set."
+echo "Log in manually, and add the SSH key to GitHub."
+echo
+# {{ end -}}
 # {{ end -}}
 
 # {{ end -}}
