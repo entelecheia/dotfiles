@@ -9,10 +9,8 @@
 true || source ../.chezmoitemplates/scripts-library
 
 log_task "✅ Install dotfiles with dotdrop"
-# get dotdrop path
-DOTDROP_PATH=$(which dotdrop)
 # install dotfiles if dotdrop is installed
-if [ -n "${DOTDROP_PATH}" ]; then
+if test ! "$(which dotdrop)"; then
     log_c "dotdrop" "install --profile=\"{{ .dotdrop.profile }}\""
     dotdrop install --profile="{{ .dotdrop.profile }}"
 else
