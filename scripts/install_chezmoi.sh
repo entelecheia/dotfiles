@@ -50,8 +50,10 @@ fi
 # POSIX way to get script's dir: https://stackoverflow.com/a/29834779/12156188
 # shellcheck disable=SC2312
 script_dir="$(cd -P -- "$(dirname -- "$(command -v -- "$0")")" && pwd -P)"
+# set source_dir as the parent of script_dir
+source_dir="$(dirname -- "${script_dir}")"
 
-set -- init --source="${script_dir}"
+set -- init --source="${source_dir}"
 
 if [ -n "${DOTFILES_ONE_SHOT-}" ]; then
   set -- "$@" --one-shot
