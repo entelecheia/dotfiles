@@ -15,7 +15,7 @@ jobs:
         # variant: [devcontainer, wsl, gnome]
         # os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04]
         include:
-          - variant: macos
+          - variant: darwin
             os: macos-latest
     steps:
       - name: Checkout source
@@ -24,10 +24,8 @@ jobs:
       - name: install dependencies for MacOS
         if: matrix.variant == 'macos'
         run: |
-          brew update
           brew install coreutils
-          # make symlink of checkouted source to ~/.dotfiles
-          ln -s $PWD ~/.dotfiles
+          echo "$PWD"
 
       - name: Run tests
         run: |

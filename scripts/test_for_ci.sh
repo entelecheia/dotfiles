@@ -146,7 +146,7 @@ chezmoi data
 EOF
 }
 
-run_test_macos() {
+run_test_darwin() {
   local -r os="$1"
 
   set -euxo pipefail
@@ -160,7 +160,7 @@ run_test_macos() {
   export DOTFILES_TEST=true
   echo 'Defaults env_keep += "DOTFILES_TEST"' | sudo tee /etc/sudoers.d/env_keep
 
-  ~/.dotfiles/scripts/install_chezmoi.sh
+  ./scripts/install_chezmoi.sh
 
   set +xeu
   source ~/.profile
@@ -230,8 +230,8 @@ EOF
       )"
       ;;
 
-    macos)
-      run_test_macos "${os}"
+    darwin)
+      run_test_darwin "${os}"
       ;;
 
     \
