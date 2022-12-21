@@ -26,6 +26,8 @@ jobs:
         run: |
           brew update
           brew install coreutils
+          # make symlink of checkouted source to ~/.dotfiles
+          ln -s $PWD ~/.dotfiles
 
       - name: Run tests
         run: |
