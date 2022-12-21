@@ -15,28 +15,28 @@ fi
 
 GITHUB_TOKEN="{{ .github.token }}"
 IS_INTERATICE="{{ .system.is_interactive }}"
-if [ -z "${GITHUB_TOKEN}" ]; then
-    if [ "${IS_INTERATICE}" = "true" ]; then
-        if command -v gh >/dev/null; then
-            gh auth login
-            gh ssh-key add "${SSH_KEY_FILE}.pub" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}"
-        else
-            echo "gh is not installed"
-        fi
-    else
-        echo
-        echo "GITHUB_TOKEN environment variable is not set."
-        echo "Log in manually, and add the SSH key to GitHub."
-        echo
-    fi
+# {{- if .github.username -}}
+if command -v gh >/dev/null; then
+    gh config set -h github.com git_protocol ssh
+    echo "${GITHUB_TOKEN}" | gh auth login --with-token
+    gh ssh-key add "${SSH_KEY_FILE}.pub" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}"
 else
+    echo "gh is not installed"
+fi
+# {{- else -}}
+if [ "${IS_INTERATICE}" = "true" ]; then
     if command -v gh >/dev/null; then
-        gh config set -h github.com git_protocol ssh
-        echo "${GITHUB_TOKEN}" | gh auth login --with-token
+        gh auth login
         gh ssh-key add "${SSH_KEY_FILE}.pub" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}"
     else
         echo "gh is not installed"
     fi
+else
+    echo
+    echo "GITHUB_TOKEN environment variable is not set."
+    echo "Log in manually, and add the SSH key to GitHub."
+    echo
 fi
+# {{ end -}}
 
 # {{ end -}}
