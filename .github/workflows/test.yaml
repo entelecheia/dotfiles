@@ -17,8 +17,8 @@ jobs:
         include:
           - variant: darwin
             os: macos-latest
-          - variant: devcontainer
-            os: ubuntu-20.04
+          # - variant: devcontainer
+          #   os: ubuntu-20.04
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
