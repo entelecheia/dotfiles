@@ -167,7 +167,6 @@ run_test_darwin() {
   set -xeu
 
   chezmoi data
-  EOF
 }
 
 set -euo pipefail
