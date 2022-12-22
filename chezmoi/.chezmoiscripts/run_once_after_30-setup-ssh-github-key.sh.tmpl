@@ -31,7 +31,7 @@ fi
 # {{ else }}
 # {{   if .system.is_interactive }}
 if command -v gh >/dev/null; then
-    c gh auth login
+    c gh auth login -h github.com -s admin:public_key
     c gh ssh-key add "${SSH_KEY_FILE}.pub" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}"
 else
     log_info "gh is not installed"
