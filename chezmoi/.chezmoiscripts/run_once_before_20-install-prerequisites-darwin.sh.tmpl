@@ -21,12 +21,7 @@ done
 if [[ ${#missing_packages[@]} -gt 0 ]]; then
   log_task "Installing missing packages with brew: ${missing_packages[*]}"
 
-  # This script also gets called when running rootmoi
-  # {{   if eq .chezmoi.username "root" }}
   brew_command=(brew)
-  # {{   else }}
-  brew_command=(sudo brew)
-  # {{   end }}
 
   c "${brew_command[@]}" update
   c "${brew_command[@]}" install "${missing_packages[@]}"
