@@ -20,8 +20,9 @@ done
 
 if [[ ${#missing_packages[@]} -gt 0 ]]; then
   log_task "Installing missing packages with brew: ${missing_packages[*]}"
+  # HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1 is needed to avoid the error
 
-  brew_command=(brew)
+  brew_command=(HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1 brew)
 
   c "${brew_command[@]}" update
   c "${brew_command[@]}" install "${missing_packages[@]}"

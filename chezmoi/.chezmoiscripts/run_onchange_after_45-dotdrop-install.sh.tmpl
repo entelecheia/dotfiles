@@ -10,7 +10,11 @@ true || source ../.chezmoitemplates/scripts-library
 
 log_task "✅ Install dotfiles with dotdrop"
 # install dotfiles if dotdrop is installed
-if test "$(which dotdrop)"; then
+# check ${HOME}/.local/bin first
+if test -f "${HOME}/.local/bin/dotdrop"; then
+    log_c "${HOME}/.local/bin/dotdrop" "install --profile=\"{{ .dotdrop.profile }}\""
+    ~/.local/bin/dotdrop install --profile="{{ .dotdrop.profile }}"
+elif test "$(which dotdrop)"; then
     log_c "dotdrop" "install --profile=\"{{ .dotdrop.profile }}\""
     dotdrop install --profile="{{ .dotdrop.profile }}"
 else
