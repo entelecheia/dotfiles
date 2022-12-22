@@ -45,3 +45,15 @@ export EDITOR="{{ .editor }}"
 # {{ if .system.is_wsl }}
 export BROWSER="wslview"
 # {{ end }}
+
+# if ${HOME}/.pyenv exists and pyenv is installed, then initialize pyenv
+if [ -d "${HOME}/.pyenv" ] && command -v pyenv >/dev/null 2>&1; then
+  export PYENV_ROOT="${HOME}/.pyenv"
+  export PATH="${PYENV_ROOT}/bin:${PATH}"
+  eval "$(pyenv init --path)"
+  eval "$(pyenv init -)"
+  if which pyenv-virtualenv-init >/dev/null; then
+    eval "$(pyenv virtualenv-init -)"
+  fi
+  export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+fi

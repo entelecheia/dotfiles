@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# {{ template "scripts-library" }}
+# {{ template "homebrew-library" }}
+
+# The following line is for ShellCheck to correctly identify the above include
+true || source ../../.chezmoitemplates/scripts-library
+true || source ../../.chezmoitemplates/homebrew-library
+
+if brew --version &>/dev/null; then
+  log_task "Updating brew"
+  c brew update
+
+  log_task "Updating brew packages"
+  c brew upgrade
+fi
+
+if chezmoi --version &>/dev/null; then
+  log_task "Updating dotfiles"
+  # Pull latest changes from dotfiles repo
+  c chezmoi update --apply=false
+  # Apply changes to chezmoi config
+  c chezmoi init --force
+  # Apply the rest
+  c chezmoi apply --force
+fi
+
+if apt --version &>/dev/null; then
+  log_task "Updating apt packages"
+  c sudo apt update --yes
+  c sudo apt upgrade --yes
+  c sudo apt autoremove --yes
+fi
+
+if npm --version &>/dev/null; then
+  log_task "Updating npm packages"
+  c npm update --global
+fi
