@@ -12,6 +12,6 @@ dotfiles:
     src: dummy
     dst: ~/.dummy
 profiles:
-  {{ .dotdrop.profile }}:
+  root:
     dotfiles:
     - f_dummy

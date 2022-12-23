@@ -12,11 +12,11 @@ log_task "✅ Install dotfiles with dotdrop"
 # install dotfiles if dotdrop is installed
 # check ${HOME}/.local/bin first
 if test -f "${HOME}/.local/bin/dotdrop"; then
-    log_c "${HOME}/.local/bin/dotdrop" "install --profile=\"{{ .dotdrop.profile }}\""
-    ~/.local/bin/dotdrop install --profile="{{ .dotdrop.profile }}"
+    log_c "${HOME}/.local/bin/dotdrop" "install --profile={{ .dotdrop.user_profile }}"
+    ~/.local/bin/dotdrop install --cfg="${HOME}/.config/dotdrop/config-user.yaml" --profile="{{- .dotdrop.user_profile }}"
 elif test "$(which dotdrop)"; then
-    log_c "dotdrop" "install --profile=\"{{ .dotdrop.profile }}\""
-    dotdrop install --profile="{{ .dotdrop.profile }}"
+    log_c "dotdrop" "install --profile={{ .dotdrop.user_profile }}"
+    dotdrop install --cfg="${HOME}/.config/dotdrop/config-user.yaml" --profile="{{- .dotdrop.user_profile }}"
 else
     log_c "dotdrop" "not installed"
 fi

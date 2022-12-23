@@ -11,3 +11,26 @@ if ! command -v dotdrop >/dev/null; then
   # Add ~/.local/bin to PATH in order to use dotdrop before finishing the installation
   export PATH="$HOME/.local/bin:$PATH"
 fi
+
+# Clone or update the dotdrop repository
+DOTDROP_REPO="{{- .dotdrop.repo }}"
+DOTDROP_LOCAL_REPO="{{- .chezmoi.workingTree }}/dotdrop"
+DOTDROP_REPO_DIR="${HOME}/.config/dotdrop"
+if [ ! -d "$DOTDROP_REPO_DIR" ]; then
+  # if DOTDROP_REPO is "dotdrop", then it is a local repository
+  if [ "$DOTDROP_REPO" = "dotdrop" ]; then
+    # Copy the local dotdrop repository to ~/.config/dotdrop
+    log_task "Copy dotdrop repository"
+    cp -r "$DOTDROP_LOCAL_REPO" "$DOTDROP_REPO_DIR"
+  else
+    log_task "Clone dotdrop repository"
+    git clone "$DOTDROP_REPO" "$DOTDROP_REPO_DIR"
+  fi
+else
+  if [ "$DOTDROP_REPO" = "dotdrop" ]; then
+    log_info "dotdrop repository already exists"
+  else
+    log_task "Update dotdrop repository"
+    git -C "$DOTDROP_REPO_DIR" pull
+  fi
+fi

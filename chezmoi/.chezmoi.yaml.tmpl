@@ -3,7 +3,7 @@
 {{- $hostname := .chezmoi.hostname }}
 {{- $github_username := "" -}}
 {{- $github_token := "" -}}
-{{- $dotdrop_profile := .chezmoi.hostname }}
+{{- $dotdrop_repo := "dotdrop" -}}
 {{- $ssh_algorithm := "ed25519" -}}
 {{- $ssh_keyfile := printf "id_%s_%s" $ssh_algorithm $hostname -}}
 {{- $workspace_name := "workspace" -}}
@@ -117,19 +117,19 @@
 {{-   end -}}
 {{- end -}}
 
-{{- if and (hasKey . "dotdrop") (hasKey .dotdrop "profile") -}}
-{{-   $dotdrop_profile = .dotdrop.profile -}}
+{{- if and (hasKey . "dotdrop") (hasKey .dotdrop "repo") -}}
+{{-   $dotdrop_repo = .dotdrop.repo -}}
 {{- end -}}
 {{- if $interactive -}}
-{{-   $question := "❔ What is dotdrop profile name" -}}
+{{-   $question := "❔ What is dotdrop repository URL" -}}
 {{-   $answer := "" -}}
-{{-   if $dotdrop_profile -}}
-{{-     $answer = promptString $question $dotdrop_profile -}}
+{{-   if $dotdrop_repo -}}
+{{-     $answer = promptString $question $dotdrop_repo -}}
 {{-   else -}}
 {{-     $answer = promptString $question -}}
 {{-   end -}}
-{{-   $dotdrop_profile = $answer -}}
-{{-   writeToStdout (printf "✅ dotdrop profile set as '%s'\n" $dotdrop_profile) -}}
+{{-   $dotdrop_repo = $answer -}}
+{{-   writeToStdout (printf "✅ dotdrop repo set as '%s'\n" $dotdrop_repo) -}}
 {{- end -}}
 
 {{- if and (hasKey . "github") (hasKey .github "username") -}}
@@ -309,7 +309,9 @@ data:
         username: {{ $github_username }}
         token: {{ $github_token }}
     dotdrop:
-        profile: {{ $dotdrop_profile }}
+        repo: {{ $dotdrop_repo }}
+        user_profile: user
+        root_profile: root
     workspace:
         name: {{ $workspace_name }}
         location: {{ $workspace_location }}
