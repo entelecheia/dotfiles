@@ -1,5 +1,5 @@
 #!/bin/bash
-# {{ if eq .chezmoi.os "linux" -}}
+# {{ if eq .chezmoi.os "linux" "darwin" -}}
 
 # {{ include (joinPath .chezmoi.sourceDir ".chezmoitemplates/scripts-library") }}
 
@@ -72,13 +72,19 @@ fi
 
 # clone git repos into workspace/projects
 c mkdir -p "${WORKSPACE_DIR}/projects"
-{{ range .git_repos }}
+# {{ range .git_repos }}
 log_task "Cloning git repo: {{ .name }}"
 if [[ -d "${WORKSPACE_DIR}/projects/{{- .name -}}" ]]; then
   log_info "Git repo already exists: {{ .name }}"
 else
   c git clone "{{ .url -}}" "${WORKSPACE_DIR}/projects/{{- .name -}}"
 fi
-{{ end }}
+# {{ end }}
+log_task "Symlink dotfiles to workspace/projects/dotfiles"
+if [[ ! -L "${WORKSPACE_DIR}/projects/dotfiles" ]]; then
+  c ln -s "{{- .chezmoi.workingTree -}}" "${WORKSPACE_DIR}/projects/dotfiles"
+else
+  log_info "Dotfiles already symlinked to workspace"
+fi
 
 # {{ end -}}

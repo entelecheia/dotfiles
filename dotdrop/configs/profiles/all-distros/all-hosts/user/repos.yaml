@@ -1,0 +1,26 @@
+%YAML 1.2
+---
+# This dotdrop config file is meant for managing and bootstraping code
+# repositories and workspace setup
+
+dynvariables:
+  # This variable is used to differentiate between user and root configuration
+  # in some dotfiles.
+  #
+  # It needs to be defined here, rahter than in a shared variables files,
+  # because variables from external variables are not yet available when
+  # importing dotfiles.
+  user: '[ "$USER" = "root" ] && echo "root" || echo "user"'
+
+# dotfiles:
+#   f_secret_env:
+#     src: env/env.tar.{{@@ env['HOST'] @@}}
+#     dst:
+
+# profiles:
+#   # This profile groups myrepos config files to bootstrap a host's workspace
+#   repos:
+#     dotfiles:
+#     - s_dotfiles_repo
+#     import:
+#     - ../../../../dotfiles/all-distros/{{@@ env['HOST'] @@}}/{{@@ user @@}}/repos.yaml:optional

@@ -5,8 +5,9 @@
 # code here must be compatible with bash and zsh.
 
 alias cz="chezmoi"
-alias dotdrop="${HOME}/.local/bin/dotdrop --cfg=${HOME}/.config/dotdrop/config.yaml -p {{ .dotdrop.profile }}"
-alias rootdrop="${HOME}/.local/bin/dotdrop --cfg=${HOME}/.config/dotdrop/config-root.yaml -p {{ .dotdrop.profile }}"
+DOTDROP_PATH="$(which dotdrop)"
+alias dotdrop="${DOTDROP_PATH} --cfg=${HOME}/.config/dotdrop/config.yaml -p {{ .dotdrop.profile }}"
+alias rootdrop="${DOTDROP_PATH} --cfg=${HOME}/.config/dotdrop/config-root.yaml -p {{ .dotdrop.profile }}"
 
 refreshenv() {
   local shell
