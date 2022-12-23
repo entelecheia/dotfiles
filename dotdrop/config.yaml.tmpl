@@ -1,0 +1,17 @@
+config:
+  backup: true
+  banner: true
+  create: true
+  dotpath: dotfiles
+  keepdot: false
+  link_dotfile_default: nolink
+  link_on_import: nolink
+  longkey: false
+dotfiles:
+  f_dummy:
+    src: dummy
+    dst: ~/.dummy
+profiles:
+  {{ .dotdrop.profile }}:
+    dotfiles:
+    - f_dummy
