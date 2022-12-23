@@ -21,7 +21,7 @@ USER="{{ .chezmoi.username }}"
 log_task "Creating workspace directory: ${WORKSPACE_DIR}"
 if [[ ! -d "${WORKSPACE_DIR}" ]]; then
   c sudo mkdir -p "${WORKSPACE_DIR}"
-  c sudo chown "${USER}":"${USER}" "${WORKSPACE_DIR}"
+  c sudo chown "${USER}" "${WORKSPACE_DIR}"
 else
   log_info "Workspace directory already exists: ${WORKSPACE_DIR}"
 fi
@@ -60,7 +60,7 @@ if [[ "${SYMLINK_COLAB}" == "true" ]]; then
   log_task "Symlinking colab workspace: ${COLAB_WORKSPACE}"
   if [[ ! -d "${COLAB_DRIVE}" ]]; then
     c sudo mkdir -p "${COLAB_DRIVE}"
-    c sudo chown "${USER}":"${USER}" "${COLAB_DRIVE}"
+    c sudo chown "${USER}" "${COLAB_DRIVE}"
   fi
   # if synmlink already exists, remove it
   if [[ ! -L "${COLAB_WORKSPACE}" ]]; then
