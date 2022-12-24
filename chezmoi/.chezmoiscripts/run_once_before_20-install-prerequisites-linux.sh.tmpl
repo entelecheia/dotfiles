@@ -8,9 +8,12 @@ true || source ../.chezmoitemplates/scripts-library
 
 
 readonly wanted_packages=(
-  {{ range .packages.prerequisites -}}
-    {{ . }}
-  {{ end -}}
+  jq
+  zsh
+  python3-pip
+  python3-setuptools
+  gh
+  vim
   # {{   if not .system.is_devcontainer }}
   gpg # used to decrypt the gpg keys of the apt repositories
   # {{   end }}

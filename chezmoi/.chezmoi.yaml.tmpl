@@ -320,30 +320,6 @@ data:
         symlink_to_home: {{ $symlink_to_home }}
         symlink_colab_workspace: {{ $symlink_colab_workspace }}
         colab_drive: "/content/drive/MyDrive"
-    packages:
-        system:
-            - apt-transport-https
-            - ca-certificates
-            - gnupg
-            - lsb-release
-            - build-essential
-            - tree
-            - parallel
-            - file
-            - procps
-            - zip
-            - docker-ce
-            - docker-ce-cli
-            - containerd.io
-            - skopeo
-            - openssh-server
-        prerequisites:
-            - jq
-            - zsh
-            - python3-pip
-            - python3-setuptools
-            - gh
-            - vim
     git_repos:
         - name: ekorpkit
           url: https://github.com/entelecheia/ekorpkit.git
