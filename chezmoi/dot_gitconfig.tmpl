@@ -21,6 +21,7 @@
     s = status
     c = commit
     ca = commit --amend
+    cis = commit -S
     caa = ca -a
     cane = ca --no-edit
     caane = cane -a
@@ -29,6 +30,7 @@
     cp = cherry-pick
     fully-clean = "!f() { set -v; branch="$(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)"; git checkout $branch; git fetch origin $branch; git clean -fd; }; f"
     get-current-branch = "!git branch --show-current | grep ."
+    logs = log --show-signature
     rr = "!f() { set -ex; branch="${1:-"$(git get-current-branch)"}"; git reset --hard "origin/$branch"; }; f"
     pfor = "!f() { set -ex; branch="${1:-"$(git get-current-branch)"}"; git push origin "HEAD:refs/for/$branch"; }; f"
     psfor = "!f() { set -ex; git caane; git pfor "$@"; }; f"
