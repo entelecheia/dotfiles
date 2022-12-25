@@ -7,12 +7,6 @@ export GITHUB_USERNAME="{{ .github.username }}"
 export WORKSPACE_ROOT="{{ .workspace.root }}"
 export GNUPGHOME="${HOME}/.gnupg"
 
-# {{ if eq .chezmoi.os "darwin" }}
-if [ -d "/opt/homebrew/bin" ]; then
-  export PATH="/opt/homebrew/bin:${PATH}"
-fi
-# {{ end }}
-
 # {{ if .system.is_wsl }}
 # The boot.systemd in /etc/wsl.conf is only for Windows 11, so this workaround is needed
 if service docker status 2>&1 | grep -q "is not running"; then
@@ -20,6 +14,11 @@ if service docker status 2>&1 | grep -q "is not running"; then
 fi
 # {{ end }}
 
+# {{ if eq .chezmoi.os "darwin" }}
+if [ -d "/opt/homebrew/bin" ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+# {{ else if eq .chezmoi.os "linux" }}
 if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
   # shellcheck disable=SC2312
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
@@ -27,6 +26,7 @@ elif [ -x "${HOME}/.linuxbrew/bin/brew" ]; then
   # shellcheck disable=SC2312
   eval "$("${HOME}/.linuxbrew/bin/brew" shellenv)"
 fi
+# {{ end }}
 
 if [ -r "${HOME}/.sdkman/bin/sdkman-init.sh" ]; then
   export SDKMAN_DIR="${HOME}/.sdkman"
