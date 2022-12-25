@@ -38,11 +38,6 @@
 
 {{- $minimum := or $devcontainer (not $ubuntu) -}}
 
-{{/* GPG, ID for key [C] [S] [E] */}}
-{{- $key_recipient := false -}}
-{{- $key_sign := false -}}
-{{- $key_encrypt := false -}}
-
 {{- if hasKey . "name" -}}
 {{-   $name = .name -}}
 {{- end -}}
@@ -201,7 +196,7 @@
 {{-   $question := "❔ What is your GPG key ID" -}}
 {{-   $answer := "" -}}
 {{-   if $gpg_key_id -}}
-{{-     $answer = promptString $question $gpg_passphrase -}}
+{{-     $answer = promptString $question $gpg_key_id -}}
 {{-   else -}}
 {{-     $answer = promptString $question -}}
 {{-   end -}}
@@ -324,9 +319,7 @@ data:
     gnupg:
         key_id: "{{ $gpg_key_id }}"
         passphrase: "{{ $gpg_passphrase }}"
-    gpgkey:
-        sign: {{ $key_sign }}
-        encrypt: {{ $key_sign }}
+        gitsign: false
     system:
         hostname: {{ $hostname }}
         is_wsl: {{ $wsl }}

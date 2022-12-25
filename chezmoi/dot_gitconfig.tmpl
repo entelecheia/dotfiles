@@ -1,12 +1,12 @@
 [user]
 	name = {{ .name }}
     email = {{ .email }}
-    {{- if .gpg.key_id }}
-    signingkey = {{ .gpg.key_id }}
+    {{- if .gnupg.key_id }}
+    signingkey = {{ .gnupg.key_id }}
     {{- end }}
 [commit]
-    {{- if .gpgkey.sign }}
-    gpgsign = {{ .gpgkey.sign }}
+    {{- if .gnupg.gitsign }}
+    gpgsign = {{ .gnupg.gitsign }}
     {{- end }}
 [core]
     autocrlf = input
