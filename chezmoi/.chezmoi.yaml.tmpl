@@ -11,6 +11,7 @@
 {{- $symlink_colab_workspace := false -}}
 {{- $workspace_location := .chezmoi.homeDir -}}
 {{- $symlink_to_home := true -}}
+{{- $gpg_key_id := "" -}}
 {{- $gpg_passphrase := "your_passphrase_for_gpg_encryption" -}}
 
 {{- $chezmoiForce := or (has "--force" .chezmoi.args) (has "--force=true" .chezmoi.args) -}}
@@ -193,6 +194,21 @@
 {{-   writeToStdout (printf "✅ SSH key filename set as '%s'\n" $ssh_keyfile) -}}
 {{- end -}}
 
+{{- if and (hasKey . "gnupg") (hasKey .gnupg "key_id") -}}
+{{-   $gpg_key_id = .gnupg.key_id -}}
+{{- end -}}
+{{- if $interactive -}}
+{{-   $question := "❔ What is your GPG key ID" -}}
+{{-   $answer := "" -}}
+{{-   if $gpg_key_id -}}
+{{-     $answer = promptString $question $gpg_passphrase -}}
+{{-   else -}}
+{{-     $answer = promptString $question -}}
+{{-   end -}}
+{{-   $gpg_key_id = $answer -}}
+{{-   writeToStdout (printf "✅ GPG key ID set as '%s'\n" $gpg_key_id) -}}
+{{- end -}}
+
 {{- if and (hasKey . "gnupg") (hasKey .gnupg "passphrase") -}}
 {{-   $gpg_passphrase = .gnupg.passphrase -}}
 {{- end -}}
@@ -306,6 +322,7 @@ data:
     email: "{{ $email }}"
     editor: "vi"
     gnupg:
+        key_id: "{{ $gpg_key_id }}"
         passphrase: "{{ $gpg_passphrase }}"
     gpgkey:
         sign: {{ $key_sign }}

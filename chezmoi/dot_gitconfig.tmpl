@@ -1,8 +1,8 @@
 [user]
 	name = {{ .name }}
     email = {{ .email }}
-    {{- if .gpgkey.sign }}
-    signingkey = {{ .gpgkey.sign }}
+    {{- if .gpg.key_id }}
+    signingkey = {{ .gpg.key_id }}
     {{- end }}
 [commit]
     {{- if .gpgkey.sign }}

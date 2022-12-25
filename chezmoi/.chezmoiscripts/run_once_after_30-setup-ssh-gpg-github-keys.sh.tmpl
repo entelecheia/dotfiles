@@ -18,13 +18,15 @@ if [ ! -f "${SSH_KEY_FILE}" ]; then
     ssh-keygen -t "${ALGORITHM}" -C "${USER}@${HOST}" -f "${SSH_KEY_FILE}" -N ""
 fi
 
-# set eviroment variable GNUPGHOME to ~/.gnupg
-export GNUPGHOME="${HOME}/.gnupg"
+# set eviroment variable GNUPGHOME to ~/.gnupg if not set
+GNUPGHOME=${GNUPGHOME:-$HOME/.gnupg}
+export GNUPGHOME="${GNUPGHOME}"
 KEY_ID_FILE="${GNUPGHOME}/.key_id"
-KEY_ID=""
-if [ -f "${KEY_ID_FILE}" ]; then
+KEY_ID="{{ .gnupg.key_id }}"
+if [ -z "${KEY_ID}" ] && [ -f "${KEY_ID_FILE}" ]; then 
     KEY_ID=$(cat "${KEY_ID_FILE}")
 fi
+KEY_ID=$(gpg --list-secret-keys --with-colons | grep 'sec' | grep "${KEY_ID}" | cut -d':' -f5)
 # Create a batch file
 if [ -z "${KEY_ID}" ]; then
     log_task "Generating GPG key"
@@ -63,9 +65,8 @@ if command -v gh >/dev/null; then
     GITHUB_TOKEN="{{ .github.token }}"
     c gh config set -h github.com git_protocol ssh
     echo "${GITHUB_TOKEN}" | gh auth login --with-token
-    c gh ssh-key add "${SSH_KEY_FILE}.pub" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}"
-    c gh gpg-key add "${GNUPGHOME}/${KEY_ID}.pub" --title "${USER}@${HOST} ${DATESTAMP}"
-    exit 0
+    c gh ssh-key add "${SSH_KEY_FILE}.pub" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}" || true
+    c gh gpg-key add "${GNUPGHOME}/${KEY_ID}.pub" || true
 else
     log_info "gh is not installed"
 fi
@@ -74,8 +75,8 @@ fi
 if command -v gh >/dev/null; then
     log_info "Logging in to GitHub"
     c gh auth login -h github.com -s admin:public_key -s write:gpg_key
-    c gh gpg-key add "${GNUPGHOME}/${KEY_ID}.pub"
-    exit 0
+    c gh ssh-key add "${SSH_KEY_FILE}.pub" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}" || true
+    c gh gpg-key add "${GNUPGHOME}/${KEY_ID}.pub" || true
 else
     log_info "gh is not installed"
 fi
@@ -84,5 +85,5 @@ log_info "GITHUB_TOKEN environment variable is not set."
 log_info "Log in manually, and add the SSH key to GitHub."
 # {{    end }}
 # {{ end }}
-
+log_info "Done adding SSH and GPG keys to GitHub"
 # {{ end -}}
