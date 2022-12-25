@@ -26,7 +26,10 @@ KEY_ID="{{ .gnupg.key_id }}"
 if [ -z "${KEY_ID}" ] && [ -f "${KEY_ID_FILE}" ]; then 
     KEY_ID=$(cat "${KEY_ID_FILE}")
 fi
-KEY_ID=$(gpg --list-secret-keys --with-colons | grep 'sec' | grep "${KEY_ID}" | cut -d':' -f5)
+# if KEY_ID is not empty, check if it is a valid key ID
+if [ -n "${KEY_ID}" ]; then
+    KEY_ID=$(gpg --list-secret-keys --with-colons | grep 'sec' | grep "${KEY_ID}" | cut -d':' -f5)
+fi
 # Create a batch file
 if [ -z "${KEY_ID}" ]; then
     log_task "Generating GPG key"
