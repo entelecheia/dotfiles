@@ -1,13 +1,6 @@
 [user]
 	name = {{ .name }}
     email = {{ .email }}
-    {{- if .gnupg.key_id }}
-    signingkey = {{ .gnupg.key_id }}
-    {{- end }}
-[commit]
-    {{- if .gnupg.gitsign }}
-    gpgsign = {{ .gnupg.gitsign }}
-    {{- end }}
 [core]
     autocrlf = input
     safecrlf = false
@@ -41,9 +34,3 @@
     prune-refs = fetch --prune --prune-tags
     hist = log --pretty=format:'%C(yellow)%h%Creset %ad | %s%d %Cgreen[%an]%Creset' --graph --date=short
     apply-gitignore = "!set -ex; git rm -r --cached . >/dev/null; git add ."
-[credential "https://github.com"]
-	helper = 
-	helper = !gh auth git-credential
-[credential "https://gist.github.com"]
-	helper = 
-	helper = !gh auth git-credential

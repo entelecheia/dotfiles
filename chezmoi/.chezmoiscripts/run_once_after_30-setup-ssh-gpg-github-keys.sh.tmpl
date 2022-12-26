@@ -61,6 +61,14 @@ EOF
     c gpg --armor --export "${KEY_ID}" > "${GNUPGHOME}/${KEY_ID}.pub"
 fi
 log_info "GPG key ID: ${KEY_ID}"
+# copy gitconfig from .config/git/gitconfig to .gitconfig
+cp "${HOME}/.config/git/gitconfig" "${HOME}/.gitconfig"
+# add gpg key to gitconfig
+if [ -n "${KEY_ID}" ]; then
+    log_task "Adding GPG key to gitconfig"
+    c git config --global user.signingkey "${KEY_ID}"
+    c git config --global commit.gpgsign true
+fi
 
 log_task "Adding SSH key to GitHub after login"
 # {{ if .github.token }}
@@ -69,6 +77,8 @@ if command -v gh >/dev/null; then
     GITHUB_TOKEN="{{ .github.token }}"
     c gh config set -h github.com git_protocol ssh
     echo "${GITHUB_TOKEN}" | gh auth login --with-token
+    # git credention setup
+    c gh auth setup-git
     c gh ssh-key add "${SSH_KEY_FILE}.pub" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}" || true
     c gh gpg-key add "${GNUPGHOME}/${KEY_ID}.pub" || true
 else
@@ -79,6 +89,8 @@ fi
 if command -v gh >/dev/null; then
     log_info "Logging in to GitHub"
     c gh auth login -h github.com -s admin:public_key -s write:gpg_key
+    # git credention setup
+    c gh auth setup-git
     c gh ssh-key add "${SSH_KEY_FILE}.pub" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}" || true
     c gh gpg-key add "${GNUPGHOME}/${KEY_ID}.pub" || true
 else
