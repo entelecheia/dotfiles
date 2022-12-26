@@ -13,6 +13,7 @@
 {{- $symlink_to_home := true -}}
 {{- $gpg_key_id := "" -}}
 {{- $gpg_passphrase := "your_passphrase_for_gpg_encryption" -}}
+{{- $gpg_gitsign := false -}}
 
 {{- $chezmoiForce := or (has "--force" .chezmoi.args) (has "--force=true" .chezmoi.args) -}}
 {{- $interactive := and stdinIsATTY (not $chezmoiForce) -}}
@@ -319,7 +320,7 @@ data:
     gnupg:
         key_id: "{{ $gpg_key_id }}"
         passphrase: "{{ $gpg_passphrase }}"
-        gitsign: false
+        gitsign: {{ $gpg_gitsign }}
     system:
         hostname: {{ $hostname }}
         is_wsl: {{ $wsl }}
