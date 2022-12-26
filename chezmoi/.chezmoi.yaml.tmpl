@@ -220,6 +220,19 @@
 {{-   writeToStdout (printf "✅ GPG passphrase set as '%s'\n" $gpg_passphrase) -}}
 {{- end -}}
 
+{{- if and (hasKey . "gnupg") (hasKey .workspace "gitsign") -}}
+{{-   $gpg_gitsign = .gnupg.gitsign -}}
+{{- end -}}
+{{- if $interactive -}}
+{{-   $question := "❔ Do you want to use GPG to sign git commits" -}}
+{{-   $gpg_gitsign = promptBool $question $gpg_gitsign -}}
+{{-   if $gpg_gitsign -}}
+{{-     writeToStdout "✅ Git commits will be signed by GPG\n" -}}
+{{-   else -}}
+{{-     writeToStdout "✅ Git comiits will not be signed by GPG\n" -}}
+{{-   end -}}
+{{- end -}}
+
 {{- if and (hasKey . "workspace") (hasKey .workspace "location") -}}
 {{-   $workspace_location = .workspace.location -}}
 {{- end -}}
