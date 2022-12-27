@@ -1,13 +1,16 @@
 [user]
-	name = {{ .name }}
+    name = {{ .name }}
     email = {{ .email }}
 [core]
     autocrlf = input
     safecrlf = false
     eol = lf
     editor = {{ .editor }}
+	excludesfile = ~/.config/git/gitignore.global
 [init]
     defaultBranch = main
+[pull]
+    rebase = true
 [hub]
 	protocol = https
 [alias]
@@ -32,5 +35,7 @@
     plr = pull --rebase
     plro = pull --rebase origin
     prune-refs = fetch --prune --prune-tags
+    clean-up = "!git remote prune origin & git repack && git prune-packed && git reflog expire --expire=1.month.ago && git gc --aggressive"
+    cleanup-branches = !git fetch --all --prune && git branch -d $(git branch --merged=origin/main | grep -vE `git rev-parse --abbrev-ref HEAD`'|main' )
     hist = log --pretty=format:'%C(yellow)%h%Creset %ad | %s%d %Cgreen[%an]%Creset' --graph --date=short
     apply-gitignore = "!set -ex; git rm -r --cached . >/dev/null; git add ."

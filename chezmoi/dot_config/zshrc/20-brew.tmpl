@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Enable homebrew zsh completions
+if (( ${+commands[brew]} )); then
+  fpath+="$(brew --prefix)/share/zsh/site-functions"
+fi

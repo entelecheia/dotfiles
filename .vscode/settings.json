@@ -1,0 +1,21 @@
+{
+    "files.associations": {
+        "*.toml.tmpl": "toml",
+        "*.yaml.tmpl": "yaml",
+        "*.sh.tmpl": "shellscript",
+        "dot_*rc*": "shellscript",
+        "dot_*sh*": "shellscript",
+        "*_zshrc*": "shellscript",
+        "*_antigenrc": "shellscript",
+        "*_profile.tmpl": "shellscript",
+        "*_bashrc*": "shellscript",
+        "*_bash_aliases.tmpl": "shellscript",
+        "**/chezmoi/**/run_*": "shellscript",
+        "**/chezmoi/**/executable_*": "shellscript",
+        "**/chezmoi/**/modify_*": "shellscript",
+        ".chezmoiignore": "helm",
+        ".chezmoiremove": "helm",
+        "**/.chezmoitemplates/*": "helm",
+        "**/.chezmoitemplates/*-library": "shellscript"
+       }
+}

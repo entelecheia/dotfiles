@@ -1,319 +1,332 @@
-{{- $name := "name" -}}
-{{- $email := "email at domain" -}}
-{{- $hostname := .chezmoi.hostname }}
-{{- $github_username := "" -}}
-{{- $github_token := "" -}}
-{{- $dotdrop_repo := "dotdrop" -}}
-{{- $ssh_algorithm := "ed25519" -}}
-{{- $ssh_keyfile := printf "id_%s_%s" $ssh_algorithm $hostname -}}
-{{- $workspace_name := "workspace" -}}
-{{- $workspace_root := joinPath .chezmoi.homeDir $workspace_name -}}
-{{- $symlink_colab_workspace := false -}}
-{{- $workspace_location := .chezmoi.homeDir -}}
-{{- $symlink_to_home := true -}}
-{{- $gpg_key_id := "" -}}
-{{- $gpg_passphrase := "your_passphrase_for_gpg_encryption" -}}
-{{- $gpg_gitsign := false -}}
+# {{- $name := "name" -}}
+# {{- $email := "email at domain" -}}
+# {{- $hostname := .chezmoi.hostname -}}
+# {{- $github_username := "" -}}
+# {{- $github_token := "" -}}
+# {{- $dotdrop_repo := "dotdrop" -}}
+# {{- $ssh_algorithm := "ed25519" -}}
+# {{- $ssh_keyfile := printf "id_%s_%s" $ssh_algorithm $hostname -}}
+# {{- $workspace_name := "workspace" -}}
+# {{- $workspace_root := joinPath .chezmoi.homeDir $workspace_name -}}
+# {{- $symlink_colab_workspace := false -}}
+# {{- $workspace_location := .chezmoi.homeDir -}}
+# {{- $symlink_to_home := true -}}
+# {{- $gpg_key_id := "" -}}
+# {{- $gpg_passphrase := "your_passphrase_for_gpg_encryption" -}}
+# {{- $gpg_gitsign := false -}}
+# {{- $install_rootmoi := true -}}
 
-{{- $chezmoiForce := or (has "--force" .chezmoi.args) (has "--force=true" .chezmoi.args) -}}
-{{- $interactive := and stdinIsATTY (not $chezmoiForce) -}}
+# {{- $chezmoiForce := or (has "--force" .chezmoi.args) (has "--force=true" .chezmoi.args) -}}
+# {{- $interactive := and stdinIsATTY (not $chezmoiForce) -}}
+# {{- $ubuntu := hasKey .chezmoi.osRelease "ubuntuCodename" -}}
+# {{- $wsl := or (env "WSL_DISTRO_NAME") (env "IS_WSL") | not | not -}}
+# {{- $devcontainer := or (env "REMOTE_CONTAINERS") (env "CODESPACES") (env "VSCODE_REMOTE_CONTAINERS_SESSION") (env "GITPOD_HOST") | not | not -}}
+# {{- $gnome := lookPath "gnome-shell" | not | not -}}
 
-{{- $ubuntu := hasKey .chezmoi.osRelease "ubuntuCodename" -}}
-{{- $wsl := or (env "WSL_DISTRO_NAME") (env "IS_WSL") | not | not -}}
-{{- $devcontainer := or (env "REMOTE_CONTAINERS") (env "CODESPACES") (env "VSCODE_REMOTE_CONTAINERS_SESSION") (env "GITPOD_HOST") | not | not -}}
-{{- $gnome := lookPath "gnome-shell" | not | not -}}
+# {{- $cpuCores := 1 -}}
+# {{- $cpuThreads := 1 -}}
+# {{- if eq .chezmoi.os "darwin" -}}
+# {{-   $cpuCores = (output "sysctl" "-n" "hw.physicalcpu_max") | trim | atoi -}}
+# {{-   $cpuThreads = (output "sysctl" "-n" "hw.logicalcpu_max") | trim | atoi -}}
+# {{- else if eq .chezmoi.os "linux" -}}
+# {{-   $cpuCores = (output "sh" "-c" "lscpu --online --parse | grep --invert-match '^#' | sort --field-separator=',' --key='2,4' --unique | wc --lines") | trim | atoi -}}
+# {{-   $cpuThreads = (output "sh" "-c" "lscpu --online --parse | grep --invert-match '^#' | wc --lines") | trim | atoi -}}
+# {{- else if eq .chezmoi.os "windows" -}}
+# {{-   $cpuCores = (output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "(Get-CimInstance -ClassName 'Win32_Processor').NumberOfCores") | trim | atoi -}}
+# {{-   $cpuThreads = (output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "(Get-CimInstance -ClassName 'Win32_Processor').NumberOfLogicalProcessors") | trim | atoi -}}
+# {{- end -}}
 
-{{- $cpuCores := 1 }}
-{{- $cpuThreads := 1 }}
-{{- if eq .chezmoi.os "darwin" }}
-{{-   $cpuCores = (output "sysctl" "-n" "hw.physicalcpu_max") | trim | atoi }}
-{{-   $cpuThreads = (output "sysctl" "-n" "hw.logicalcpu_max") | trim | atoi }}
-{{- else if eq .chezmoi.os "linux" }}
-{{-   $cpuCores = (output "sh" "-c" "lscpu --online --parse | grep --invert-match '^#' | sort --field-separator=',' --key='2,4' --unique | wc --lines") | trim | atoi }}
-{{-   $cpuThreads = (output "sh" "-c" "lscpu --online --parse | grep --invert-match '^#' | wc --lines") | trim | atoi }}
-{{- else if eq .chezmoi.os "windows" }}
-{{-   $cpuCores = (output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "(Get-CimInstance -ClassName 'Win32_Processor').NumberOfCores") | trim | atoi }}
-{{-   $cpuThreads = (output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "(Get-CimInstance -ClassName 'Win32_Processor').NumberOfLogicalProcessors") | trim | atoi }}
-{{- end }}
+# {{- $minimum := or $devcontainer (not $ubuntu) -}}
 
+# {{- if hasKey . "name" -}}
+# {{-   $name = .name -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   range $i := until 99 -}}
+# {{-     $question := "❔ What is your full name" -}}
+# {{-     $answer := "" -}}
+# {{-     if $name -}}
+# {{-       $answer = promptString $question $name -}}
+# {{-     else -}}
+# {{-       $answer = promptString $question -}}
+# {{-     end -}}
+# {{-     if regexMatch "^[A-Z][-' a-zA-Z]+$" $answer -}}
+# {{-       $name = $answer -}}
+# {{-       writeToStdout (printf "✅ Name set as '%s'\n" $name) -}}
+# {{-       break -}}
+# {{-     end -}}
+# {{-     writeToStdout (printf "❌ '%s' is an invalid name\n" $answer) -}}
+# {{-     if eq $i 98 -}}
+# {{-       writeToStdout "❌ ERROR: maximum tries exceeded\n" -}}
+# {{-       exit 1 -}}
+# {{-     end -}}
+# {{-   end -}}
+# {{- end -}}
 
-{{- $minimum := or $devcontainer (not $ubuntu) -}}
+# {{- if hasKey . "email" -}}
+# {{-   $email = .email -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   range $i := until 99 -}}
+# {{-     $question := "❔ What is your email" -}}
+# {{-     $answer := "" -}}
+# {{-     if $email -}}
+# {{-       $answer = promptString $question $email -}}
+# {{-     else -}}
+# {{-       $answer = promptString $question -}}
+# {{-     end -}}
+# {{-     $answer = lower $answer -}}
+# {{-     if regexMatch "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$" $answer -}}
+# {{-       $email = $answer -}}
+# {{-       writeToStdout (printf "✅ Email set as '%s'\n" $email) -}}
+# {{-       break -}}
+# {{-     end -}}
+# {{-     writeToStdout (printf "❌ '%s' is an invalid email\n" $answer) -}}
+# {{-     if eq $i 98 -}}
+# {{-       writeToStdout "❌ ERROR: maximum tries exceeded\n" -}}
+# {{-       exit 1 -}}
+# {{-     end -}}
+# {{-   end -}}
+# {{- end -}}
 
-{{- if hasKey . "name" -}}
-{{-   $name = .name -}}
-{{- end -}}
-{{- if $interactive -}}
-{{-   range $i := until 99 -}}
-{{-     $question := "❔ What is your full name" -}}
-{{-     $answer := "" -}}
-{{-     if $name -}}
-{{-       $answer = promptString $question $name -}}
-{{-     else -}}
-{{-       $answer = promptString $question -}}
-{{-     end -}}
-{{-     if regexMatch "^[A-Z][-' a-zA-Z]+$" $answer -}}
-{{-       $name = $answer -}}
-{{-       writeToStdout (printf "✅ Name set as '%s'\n" $name) -}}
-{{-       break -}}
-{{-     end -}}
-{{-     writeToStdout (printf "❌ '%s' is an invalid name\n" $answer) -}}
-{{-     if eq $i 98 -}}
-{{-       writeToStdout "❌ ERROR: maximum tries exceeded\n" -}}
-{{-       exit 1 -}}
-{{-     end -}}
-{{-   end -}}
-{{- end -}}
+# {{- if and (hasKey . "system") (hasKey .system "hostname") -}}
+# {{-   $hostname = .system.hostname -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   range $i := until 99 -}}
+# {{-     $question := "❔ What is hostname" -}}
+# {{-     $answer := "" -}}
+# {{-     if $hostname -}}
+# {{-       $answer = promptString $question $hostname -}}
+# {{-     else -}}
+# {{-       $answer = promptString $question -}}
+# {{-     end -}}
+# {{-     if regexMatch "^[A-Za-z0-9._-]+$" $answer -}}
+# {{-       $hostname = $answer -}}
+# {{-       writeToStdout (printf "✅ Hostname set as '%s'\n" $hostname) -}}
+# {{-       break -}}
+# {{-     end -}}
+# {{-     writeToStdout (printf "❌ '%s' is an invalid hostname\n" $answer) -}}
+# {{-     if eq $i 98 -}}
+# {{-       writeToStdout "❌ ERROR: maximum tries exceeded\n" -}}
+# {{-       exit 1 -}}
+# {{-     end -}}
+# {{-   end -}}
+# {{- end -}}
 
-{{- if hasKey . "email" -}}
-{{-   $email = .email -}}
-{{- end -}}
-{{- if $interactive -}}
-{{-   range $i := until 99 -}}
-{{-     $question := "❔ What is your email" -}}
-{{-     $answer := "" -}}
-{{-     if $email -}}
-{{-       $answer = promptString $question $email -}}
-{{-     else -}}
-{{-       $answer = promptString $question -}}
-{{-     end -}}
-{{-     $answer = lower $answer -}}
-{{-     if regexMatch "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$" $answer -}}
-{{-       $email = $answer -}}
-{{-       writeToStdout (printf "✅ Email set as '%s'\n" $email) -}}
-{{-       break -}}
-{{-     end -}}
-{{-     writeToStdout (printf "❌ '%s' is an invalid email\n" $answer) -}}
-{{-     if eq $i 98 -}}
-{{-       writeToStdout "❌ ERROR: maximum tries exceeded\n" -}}
-{{-       exit 1 -}}
-{{-     end -}}
-{{-   end -}}
-{{- end -}}
+# {{- if and (hasKey . "system") (hasKey .system "install_rootmoi") -}}
+# {{-   $install_rootmoi = .system.install_rootmoi -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ Do you want to install dotfiles for the root user" -}}
+# {{-   $install_rootmoi = promptBool $question $install_rootmoi -}}
+# {{-   if $install_rootmoi -}}
+# {{-     writeToStdout "✅ Dotfiles will be installed for the root user\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
+# {{-   end -}}
+# {{- end -}}
 
-{{- if and (hasKey . "system") (hasKey .system "hostname") -}}
-{{-   $hostname = .system.hostname -}}
-{{- end -}}
-{{- if $interactive -}}
-{{-   range $i := until 99 -}}
-{{-     $question := "❔ What is hostname" -}}
-{{-     $answer := "" -}}
-{{-     if $hostname -}}
-{{-       $answer = promptString $question $hostname -}}
-{{-     else -}}
-{{-       $answer = promptString $question -}}
-{{-     end -}}
-{{-     if regexMatch "^[A-Za-z0-9._-]+$" $answer -}}
-{{-       $hostname = $answer -}}
-{{-       writeToStdout (printf "✅ Hostname set as '%s'\n" $hostname) -}}
-{{-       break -}}
-{{-     end -}}
-{{-     writeToStdout (printf "❌ '%s' is an invalid hostname\n" $answer) -}}
-{{-     if eq $i 98 -}}
-{{-       writeToStdout "❌ ERROR: maximum tries exceeded\n" -}}
-{{-       exit 1 -}}
-{{-     end -}}
-{{-   end -}}
-{{- end -}}
+# {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "repo") -}}
+# {{-   $dotdrop_repo = .dotdrop.repo -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ What is dotdrop repository URL" -}}
+# {{-   $answer := "" -}}
+# {{-   if $dotdrop_repo -}}
+# {{-     $answer = promptString $question $dotdrop_repo -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $dotdrop_repo = $answer -}}
+# {{-   writeToStdout (printf "✅ dotdrop repo set as '%s'\n" $dotdrop_repo) -}}
+# {{- end -}}
 
-{{- if and (hasKey . "dotdrop") (hasKey .dotdrop "repo") -}}
-{{-   $dotdrop_repo = .dotdrop.repo -}}
-{{- end -}}
-{{- if $interactive -}}
-{{-   $question := "❔ What is dotdrop repository URL" -}}
-{{-   $answer := "" -}}
-{{-   if $dotdrop_repo -}}
-{{-     $answer = promptString $question $dotdrop_repo -}}
-{{-   else -}}
-{{-     $answer = promptString $question -}}
-{{-   end -}}
-{{-   $dotdrop_repo = $answer -}}
-{{-   writeToStdout (printf "✅ dotdrop repo set as '%s'\n" $dotdrop_repo) -}}
-{{- end -}}
+# {{- if and (hasKey . "github") (hasKey .github "username") -}}
+# {{-   $github_username = .github.username -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ What is GitHub username" -}}
+# {{-   $answer := "" -}}
+# {{-   if $github_username -}}
+# {{-     $answer = promptString $question $github_username -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $github_username = $answer -}}
+# {{-   writeToStdout (printf "✅ GitHub username set as '%s'\n" $github_username) -}}
+# {{- end -}}
 
-{{- if and (hasKey . "github") (hasKey .github "username") -}}
-{{-   $github_username = .github.username -}}
-{{- end -}}
-{{- if $interactive -}}
-{{-   $question := "❔ What is GitHub username" -}}
-{{-   $answer := "" -}}
-{{-   if $github_username -}}
-{{-     $answer = promptString $question $github_username -}}
-{{-   else -}}
-{{-     $answer = promptString $question -}}
-{{-   end -}}
-{{-   $github_username = $answer -}}
-{{-   writeToStdout (printf "✅ GitHub username set as '%s'\n" $github_username) -}}
-{{- end -}}
+# {{- if and (hasKey . "github") (hasKey .github "token") -}}
+# {{-   $github_token = .github.token -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ What is GitHub Token" -}}
+# {{-   $answer := "" -}}
+# {{-   if $github_token -}}
+# {{-     $answer = promptString $question $github_token -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $github_token = $answer -}}
+# {{-   writeToStdout (printf "✅ GitHub Token set as '%s'\n" $github_token) -}}
+# {{- end -}}
 
-{{- if and (hasKey . "github") (hasKey .github "token") -}}
-{{-   $github_token = .github.token -}}
-{{- end -}}
-{{- if $interactive -}}
-{{-   $question := "❔ What is GitHub Token" -}}
-{{-   $answer := "" -}}
-{{-   if $github_token -}}
-{{-     $answer = promptString $question $github_token -}}
-{{-   else -}}
-{{-     $answer = promptString $question -}}
-{{-   end -}}
-{{-   $github_token = $answer -}}
-{{-   writeToStdout (printf "✅ GitHub Token set as '%s'\n" $github_token) -}}
-{{- end -}}
+# {{- if and (hasKey . "ssh") (hasKey .ssh "algorithm") -}}
+# {{-   $ssh_algorithm = .ssh.algorithm -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ Which SSH algorithm do you want to use" -}}
+# {{-   $answer := "" -}}
+# {{-   if $ssh_algorithm -}}
+# {{-     $answer = promptString $question $ssh_algorithm -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $ssh_algorithm = $answer -}}
+# {{-   writeToStdout (printf "✅ SSH algorithm set as '%s'\n" $ssh_algorithm) -}}
+# {{- end -}}
 
-{{- if and (hasKey . "ssh") (hasKey .ssh "algorithm") -}}
-{{-   $ssh_algorithm = .ssh.algorithm -}}
-{{- end -}}
-{{- if $interactive -}}
-{{-   $question := "❔ Which SSH algorithm do you want to use" -}}
-{{-   $answer := "" -}}
-{{-   if $ssh_algorithm -}}
-{{-     $answer = promptString $question $ssh_algorithm -}}
-{{-   else -}}
-{{-     $answer = promptString $question -}}
-{{-   end -}}
-{{-   $ssh_algorithm = $answer -}}
-{{-   writeToStdout (printf "✅ SSH algorithm set as '%s'\n" $ssh_algorithm) -}}
-{{- end -}}
+# {{- if and (hasKey . "ssh") (hasKey .ssh "key_filename") -}}
+# {{-   $ssh_keyfile = .ssh.key_filename -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ What SSH key filename do you want to use" -}}
+# {{-   $answer := "" -}}
+# {{-   if $ssh_keyfile -}}
+# {{-     $answer = promptString $question $ssh_keyfile -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $ssh_keyfile = $answer -}}
+# {{-   writeToStdout (printf "✅ SSH key filename set as '%s'\n" $ssh_keyfile) -}}
+# {{- end -}}
 
-{{- if and (hasKey . "ssh") (hasKey .ssh "key_filename") -}}
-{{-   $ssh_keyfile = .ssh.key_filename -}}
-{{- end -}}
-{{- if $interactive -}}
-{{-   $question := "❔ What SSH key filename do you want to use" -}}
-{{-   $answer := "" -}}
-{{-   if $ssh_keyfile -}}
-{{-     $answer = promptString $question $ssh_keyfile -}}
-{{-   else -}}
-{{-     $answer = promptString $question -}}
-{{-   end -}}
-{{-   $ssh_keyfile = $answer -}}
-{{-   writeToStdout (printf "✅ SSH key filename set as '%s'\n" $ssh_keyfile) -}}
-{{- end -}}
+# {{- if and (hasKey . "gnupg") (hasKey .gnupg "key_id") -}}
+# {{-   $gpg_key_id = .gnupg.key_id -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ What is your GPG key ID" -}}
+# {{-   $answer := "" -}}
+# {{-   if $gpg_key_id -}}
+# {{-     $answer = promptString $question $gpg_key_id -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $gpg_key_id = $answer -}}
+# {{-   writeToStdout (printf "✅ GPG key ID set as '%s'\n" $gpg_key_id) -}}
+# {{- end -}}
 
-{{- if and (hasKey . "gnupg") (hasKey .gnupg "key_id") -}}
-{{-   $gpg_key_id = .gnupg.key_id -}}
-{{- end -}}
-{{- if $interactive -}}
-{{-   $question := "❔ What is your GPG key ID" -}}
-{{-   $answer := "" -}}
-{{-   if $gpg_key_id -}}
-{{-     $answer = promptString $question $gpg_key_id -}}
-{{-   else -}}
-{{-     $answer = promptString $question -}}
-{{-   end -}}
-{{-   $gpg_key_id = $answer -}}
-{{-   writeToStdout (printf "✅ GPG key ID set as '%s'\n" $gpg_key_id) -}}
-{{- end -}}
+# {{- if and (hasKey . "gnupg") (hasKey .gnupg "passphrase") -}}
+# {{-   $gpg_passphrase = .gnupg.passphrase -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ What is your passphrase for GPG" -}}
+# {{-   $answer := "" -}}
+# {{-   if $gpg_passphrase -}}
+# {{-     $answer = promptString $question $gpg_passphrase -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $gpg_passphrase = $answer -}}
+# {{-   writeToStdout (printf "✅ GPG passphrase set as '%s'\n" $gpg_passphrase) -}}
+# {{- end -}}
 
-{{- if and (hasKey . "gnupg") (hasKey .gnupg "passphrase") -}}
-{{-   $gpg_passphrase = .gnupg.passphrase -}}
-{{- end -}}
-{{- if $interactive -}}
-{{-   $question := "❔ What is your passphrase for GPG" -}}
-{{-   $answer := "" -}}
-{{-   if $gpg_passphrase -}}
-{{-     $answer = promptString $question $gpg_passphrase -}}
-{{-   else -}}
-{{-     $answer = promptString $question -}}
-{{-   end -}}
-{{-   $gpg_passphrase = $answer -}}
-{{-   writeToStdout (printf "✅ GPG passphrase set as '%s'\n" $gpg_passphrase) -}}
-{{- end -}}
+# {{- if and (hasKey . "gnupg") (hasKey .gnupg "gitsign") -}}
+# {{-   $gpg_gitsign = .gnupg.gitsign -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ Do you want to use GPG to sign git commits" -}}
+# {{-   $gpg_gitsign = promptBool $question $gpg_gitsign -}}
+# {{-   if $gpg_gitsign -}}
+# {{-     writeToStdout "✅ Git commits will be signed by GPG\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ Git comiits will not be signed by GPG\n" -}}
+# {{-   end -}}
+# {{- end -}}
 
-{{- if and (hasKey . "gnupg") (hasKey .workspace "gitsign") -}}
-{{-   $gpg_gitsign = .gnupg.gitsign -}}
-{{- end -}}
-{{- if $interactive -}}
-{{-   $question := "❔ Do you want to use GPG to sign git commits" -}}
-{{-   $gpg_gitsign = promptBool $question $gpg_gitsign -}}
-{{-   if $gpg_gitsign -}}
-{{-     writeToStdout "✅ Git commits will be signed by GPG\n" -}}
-{{-   else -}}
-{{-     writeToStdout "✅ Git comiits will not be signed by GPG\n" -}}
-{{-   end -}}
-{{- end -}}
+# {{- if and (hasKey . "workspace") (hasKey .workspace "location") -}}
+# {{-   $workspace_location = .workspace.location -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ Where do you want to put your workspace" -}}
+# {{-   $answer := "" -}}
+# {{-   if $workspace_location -}}
+# {{-     $answer = promptString $question $workspace_location -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $workspace_location = $answer -}}
+# {{-   writeToStdout (printf "✅ Worksapce location set as '%s'\n" $workspace_location) -}}
+# {{- end -}}
 
-{{- if and (hasKey . "workspace") (hasKey .workspace "location") -}}
-{{-   $workspace_location = .workspace.location -}}
-{{- end -}}
-{{- if $interactive -}}
-{{-   $question := "❔ Where do you want to put your workspace" -}}
-{{-   $answer := "" -}}
-{{-   if $workspace_location -}}
-{{-     $answer = promptString $question $workspace_location -}}
-{{-   else -}}
-{{-     $answer = promptString $question -}}
-{{-   end -}}
-{{-   $workspace_location = $answer -}}
-{{-   writeToStdout (printf "✅ Worksapce location set as '%s'\n" $workspace_location) -}}
-{{- end -}}
+# {{- if ne .chezmoi.homeDir $workspace_location -}}
+# {{- if and (hasKey . "workspace") (hasKey .workspace "symlink_to_home") -}}
+# {{-   $symlink_to_home = .workspace.symlink_to_home -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ Should symlink workspace to home directory" -}}
+# {{-   $symlink_to_home = promptBool $question $symlink_to_home -}}
+# {{-   if $symlink_to_home -}}
+# {{-     writeToStdout "✅ Workspace will be symlinked to home directory\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ Workspace will not be symlinked to home directory\n" -}}
+# {{-   end -}}
+# {{- end -}}
+# {{- end -}}
 
-{{- if ne .chezmoi.homeDir $workspace_location }}
-{{- if and (hasKey . "workspace") (hasKey .workspace "symlink_to_home") -}}
-{{-   $symlink_to_home = .workspace.symlink_to_home -}}
-{{- end -}}
-{{- if $interactive -}}
-{{-   $question := "❔ Should symlink workspace to home directory" -}}
-{{-   $symlink_to_home = promptBool $question $symlink_to_home -}}
-{{-   if $symlink_to_home -}}
-{{-     writeToStdout "✅ Workspace will be symlinked to home directory\n" -}}
-{{-   else -}}
-{{-     writeToStdout "✅ Workspace will not be symlinked to home directory\n" -}}
-{{-   end -}}
-{{- end -}}
-{{- end -}}
+# {{- if and (hasKey . "workspace") (hasKey .workspace "name") -}}
+# {{-   $workspace_name = .workspace.name -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ What name do you want to use as workspace root" -}}
+# {{-   $answer := "" -}}
+# {{-   if $workspace_name -}}
+# {{-     $answer = promptString $question $workspace_name -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $workspace_name = $answer -}}
+# {{-   if $symlink_to_home -}}
+# {{-     $workspace_root := joinPath .chezmoi.homeDir $workspace_name -}}
+# {{-   else -}}
+# {{-     $workspace_root := joinPath $workspace_location $workspace_name -}}
+# {{-   end -}}
+# {{-   writeToStdout (printf "✅ Worksapce root set as '%s'\n" $workspace_root) -}}
+# {{- end -}}
 
-{{- if and (hasKey . "workspace") (hasKey .workspace "name") -}}
-{{-   $workspace_name = .workspace.name -}}
-{{- end -}}
-{{- if $interactive -}}
-{{-   $question := "❔ What name do you want to use as workspace root" -}}
-{{-   $answer := "" -}}
-{{-   if $workspace_name -}}
-{{-     $answer = promptString $question $workspace_name -}}
-{{-   else -}}
-{{-     $answer = promptString $question -}}
-{{-   end -}}
-{{-   $workspace_name = $answer -}}
-{{-   if $symlink_to_home -}}
-{{-     $workspace_root := joinPath .chezmoi.homeDir $workspace_name -}}
-{{-   else -}}
-{{-     $workspace_root := joinPath $workspace_location $workspace_name -}}
-{{-   end -}}
-{{-   writeToStdout (printf "✅ Worksapce root set as '%s'\n" $workspace_root) -}}
-{{- end -}}
+# {{- if and (hasKey . "workspace") (hasKey .workspace "symlink_colab_workspace") -}}
+# {{-   $symlink_colab_workspace = .workspace.symlink_colab_workspace -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ Should symlink colab workspace" -}}
+# {{-   $symlink_colab_workspace = promptBool $question $symlink_colab_workspace -}}
+# {{-   if $symlink_colab_workspace -}}
+# {{-     writeToStdout "✅ Colab workspace will be symlinked to workspace root\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ Colab workspace will not be symlinked\n" -}}
+# {{-   end -}}
+# {{- end -}}
 
-{{- if and (hasKey . "workspace") (hasKey .workspace "symlink_colab_workspace") -}}
-{{-   $symlink_colab_workspace = .workspace.symlink_colab_workspace -}}
-{{- end -}}
-{{- if $interactive -}}
-{{-   $question := "❔ Should symlink colab workspace" -}}
-{{-   $symlink_colab_workspace = promptBool $question $symlink_colab_workspace -}}
-{{-   if $symlink_colab_workspace -}}
-{{-     writeToStdout "✅ Colab workspace will be symlinked to workspace root\n" -}}
-{{-   else -}}
-{{-     writeToStdout "✅ Colab workspace will not be symlinked\n" -}}
-{{-   end -}}
-{{- end -}}
+# {{- if and (hasKey . "system") (hasKey .system "is_devcontainer") -}}
+# {{-   $minimum = .system.is_devcontainer -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ Should install in minimum mode (see README)" -}}
+# {{-   $minimum = promptBool $question $minimum -}}
+# {{-   if $minimum -}}
+# {{-     writeToStdout "✅ Minimum mode enabled\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ Minimum mode disabled\n" -}}
+# {{-   end -}}
+# {{- end -}}
 
-{{- if and (hasKey . "system") (hasKey .system "is_devcontainer") -}}
-{{-   $minimum = .system.is_devcontainer -}}
-{{- end -}}
-{{- if $interactive -}}
-{{-   $question := "❔ Should install in minimum mode (see README)" -}}
-{{-   $minimum = promptBool $question $minimum -}}
-{{-   if $minimum -}}
-{{-     writeToStdout "✅ Minimum mode enabled\n" -}}
-{{-   else -}}
-{{-     writeToStdout "✅ Minimum mode disabled\n" -}}
-{{-   end -}}
-{{- end -}}
+# {{- if $interactive -}}
+# {{-   writeToStdout "\n💡 Tip: you can always make chezmoi ask this again by running `chezmoi init` without `--force`.\n" -}}
+# {{- end -}}
 
-{{- if $interactive -}}
-{{-   writeToStdout "\n💡 Tip: you can always make chezmoi ask this again by running `chezmoi init` without `--force`.\n" -}}
-{{- end -}}
-
-{{- /* This retains the value passed with --source on chezmoi init, which is used in the ../install.sh script */ -}}
+# {{- /* This retains the value passed with --source on chezmoi init, which is used in the ../install.sh script */ -}}
+#
 sourceDir: "{{ .chezmoi.workingTree }}"
 
 verbose: true
@@ -325,7 +338,8 @@ status:
     exclude:
         - always
 
-{{/* Here we "export" the variables, so we can access them outside this file */ -}}
+# {{/* Here we "export" the variables, so we can access them outside this file */ -}}
+#
 data:
     name: "{{ $name }}"
     email: "{{ $email }}"
@@ -340,6 +354,7 @@ data:
         is_devcontainer: {{ $minimum }}
         is_gnome: {{ $gnome }}
         is_interactive: {{ $interactive }}
+        install_rootmoi: {{ $install_rootmoi }}
         uname_arch: "{{ output "uname" "-m" | trim }}"
         cpu:
             cores: {{ $cpuCores }}

@@ -10,7 +10,7 @@
 # if not coming from .bash_profile and .bash_profile exists
 if [[ -z "${COMING_FROM_BASH_PROFILE}" && -f "${HOME}/.bash_profile" ]]; then
   export COMING_FROM_BASHRC=true
-  # shellcheck source=./dot_profile.tmpl
+  # shellcheck source=/dev/null
   source "${HOME}/.bash_profile"
   unset COMING_FROM_BASHRC
 fi
@@ -119,7 +119,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
 if [[ -f ~/.bash_aliases ]]; then
-  # shellcheck source=./dot_bash_aliases.tmpl
+  # shellcheck source=/dev/null
   . ~/.bash_aliases
 fi
 
@@ -128,8 +128,10 @@ fi
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
   if [[ -f /usr/share/bash-completion/bash_completion ]]; then
+    # shellcheck source=/dev/null
     . /usr/share/bash-completion/bash_completion
   elif [[ -f /etc/bash_completion ]]; then
+    # shellcheck source=/dev/null
     . /etc/bash_completion
   fi
 fi
