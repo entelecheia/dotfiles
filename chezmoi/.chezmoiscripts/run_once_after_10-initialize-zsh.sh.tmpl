@@ -30,6 +30,6 @@ fi
 # {{ else if eq .chezmoi.os "darwin" }}
 
 log_task "Configuring ZSH as default shell"
-chsh -s $(which zsh)
+sudo chsh -s $(which zsh)
 
 # {{ end }}
