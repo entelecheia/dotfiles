@@ -138,6 +138,7 @@ echo 'Defaults env_keep += "DOTFILES_TEST"' | sudo tee /etc/sudoers.d/env_keep
 
 ~/.dotfiles/scripts/install_chezmoi.sh
 
+"${HOME}/.local/bin/chezmoi" data
 chezmoi data
 EOF
 }
@@ -158,7 +159,7 @@ run_test_darwin() {
 
   ./scripts/install_chezmoi.sh
 
-  chezmoi data
+  "${HOME}/.local/bin/chezmoi" data
 }
 
 set -euo pipefail
