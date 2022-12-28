@@ -138,7 +138,9 @@ echo 'Defaults env_keep += "DOTFILES_TEST"' | sudo tee /etc/sudoers.d/env_keep
 
 ~/.dotfiles/scripts/install_chezmoi.sh
 
-"${HOME}/.local/bin/chezmoi" data
+if [[ -f "${HOME}/.bash_profile" ]]; then
+  source "${HOME}/.bash_profile"
+fi
 chezmoi data
 EOF
 }
