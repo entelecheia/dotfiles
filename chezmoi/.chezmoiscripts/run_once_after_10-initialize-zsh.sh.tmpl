@@ -5,6 +5,8 @@
 # The following line is for ShellCheck to correctly identify the above include
 true || source ../.chezmoitemplates/scripts-library
 
+# {{ if eq .chezmoi.os "linux"}}
+
 zsh_path="/bin/zsh"
 
 if ! getent passwd '{{ .chezmoi.username }}' | cut -d : -f 7- | grep -q "^${zsh_path}$"; then
@@ -24,3 +26,10 @@ cd '{{ .chezmoi.workingTree }}'
 script -qec "zsh -is </dev/null" /dev/null
 EOF
 fi
+
+# {{ else if eq .chezmoi.os "darwin" }}
+
+log_task "Configuring ZSH as default shell"
+chsh -s $(which zsh)
+
+# {{ end }}
