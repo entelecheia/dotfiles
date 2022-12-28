@@ -1,11 +1,9 @@
 # shellcheck shell=bash
 
-# load all shell config files
-if [ -d "${HOME}/.config/shrc" ]; then
-    for file in "${HOME}/.config/shrc"/*(N); do
-        # shellcheck source=/dev/null
-        . "$file"
-    done
+# load .profile
+if [[ -r "${HOME}/.profile" ]]; then
+  # shellcheck source=/dev/null
+  source "${HOME}/.profile"
 fi
 
 # if not coming from .bashrc and .bashrc exists
