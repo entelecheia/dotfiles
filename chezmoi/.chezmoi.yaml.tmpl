@@ -63,6 +63,22 @@
 # {{-   end -}}
 # {{- end -}}
 
+# {{- if and (hasKey . "github") (hasKey .github "username") -}}
+# {{-   $github_username = .github.username -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ What is GitHub username" -}}
+# {{-   $answer := "" -}}
+# {{-   if $github_username -}}
+# {{-     $answer = promptString $question $github_username -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $github_username = $answer -}}
+# {{-   writeToStdout (printf "✅ GitHub username set as '%s'\n" $github_username) -}}
+# {{- end -}}
+
+
 # {{- if hasKey . "email" -}}
 # {{-   $email = .email -}}
 # {{- end -}}
@@ -114,6 +130,9 @@
 # {{-   end -}}
 # {{- end -}}
 
+# {{- if eq .chezmoi.os "darwin" -}}
+# {{- $install_rootmoi := false -}}
+# {{- else -}}
 # {{- if and (hasKey . "system") (hasKey .system "install_rootmoi") -}}
 # {{-   $install_rootmoi = .system.install_rootmoi -}}
 # {{- end -}}
@@ -125,6 +144,7 @@
 # {{-   else -}}
 # {{-     writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
 # {{-   end -}}
+# {{- end -}}
 # {{- end -}}
 
 # {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "repo") -}}
@@ -140,21 +160,6 @@
 # {{-   end -}}
 # {{-   $dotdrop_repo = $answer -}}
 # {{-   writeToStdout (printf "✅ dotdrop repo set as '%s'\n" $dotdrop_repo) -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "github") (hasKey .github "username") -}}
-# {{-   $github_username = .github.username -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ What is GitHub username" -}}
-# {{-   $answer := "" -}}
-# {{-   if $github_username -}}
-# {{-     $answer = promptString $question $github_username -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $github_username = $answer -}}
-# {{-   writeToStdout (printf "✅ GitHub username set as '%s'\n" $github_username) -}}
 # {{- end -}}
 
 # {{- if and (hasKey . "github") (hasKey .github "token") -}}
