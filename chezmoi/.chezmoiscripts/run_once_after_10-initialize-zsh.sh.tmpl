@@ -12,7 +12,7 @@ zsh_path="/bin/zsh"
 if ! getent passwd '{{ .chezmoi.username }}' | cut -d : -f 7- | grep -q "^${zsh_path}$"; then
   log_task "Configuring ZSH as default shell"
 
-  c sudo usermod --shell "${zsh_path}" '{{ .chezmoi.username }}'
+  c usermod --shell "${zsh_path}" '{{ .chezmoi.username }}'
 fi
 
 # Alpine frequently does not come with script (from util-linux) installed

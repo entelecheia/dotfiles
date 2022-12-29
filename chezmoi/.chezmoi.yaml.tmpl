@@ -12,9 +12,10 @@
 # {{- $workspace_location := .chezmoi.homeDir -}}
 # {{- $symlink_to_home := true -}}
 # {{- $gpg_key_id := "" -}}
-# {{- $gpg_passphrase := "your_passphrase_for_gpg_encryption" -}}
+# {{- $gpg_passphrase := "" -}}
 # {{- $gpg_gitsign := false -}}
 # {{- $install_rootmoi := true -}}
+# {{- $sudoer := true -}}
 
 # {{- $chezmoiForce := or (has "--force" .chezmoi.args) (has "--force=true" .chezmoi.args) -}}
 # {{- $interactive := and stdinIsATTY (not $chezmoiForce) -}}
@@ -130,8 +131,22 @@
 # {{-   end -}}
 # {{- end -}}
 
-# {{- if eq .chezmoi.os "darwin" -}}
+# {{- if and (hasKey . "system") (hasKey .system "is_sudoer") -}}
+# {{-   $sudoer = .system.is_sudoer -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ Do you have sudo privileges" -}}
+# {{-   $sudoer = promptBool $question $sudoer -}}
+# {{-   if $sudoer -}}
+# {{-     writeToStdout "✅ Sudo privileges enabled\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ Sudo privileges disabled\n" -}}
+# {{-   end -}}
+# {{- end -}}
+
+# {{- if or (eq .chezmoi.os "darwin") (not $sudoer) -}}
 # {{- $install_rootmoi := false -}}
+# {{-     writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
 # {{- else -}}
 # {{- if and (hasKey . "system") (hasKey .system "install_rootmoi") -}}
 # {{-   $install_rootmoi = .system.install_rootmoi -}}
@@ -349,16 +364,13 @@ data:
     name: "{{ $name }}"
     email: "{{ $email }}"
     editor: "vi"
-    gnupg:
-        key_id: "{{ $gpg_key_id }}"
-        passphrase: "{{ $gpg_passphrase }}"
-        gitsign: {{ $gpg_gitsign }}
     system:
         hostname: {{ $hostname }}
         is_wsl: {{ $wsl }}
         is_devcontainer: {{ $minimum }}
         is_gnome: {{ $gnome }}
         is_interactive: {{ $interactive }}
+        is_sudoer: {{ $sudoer }}
         install_rootmoi: {{ $install_rootmoi }}
         uname_arch: "{{ output "uname" "-m" | trim }}"
         cpu:
@@ -367,6 +379,10 @@ data:
     ssh:
         algorithm: {{ $ssh_algorithm }}
         key_filename: {{ $ssh_keyfile }}
+    gnupg:
+        key_id: "{{ $gpg_key_id }}"
+        passphrase: "{{ $gpg_passphrase }}"
+        gitsign: {{ $gpg_gitsign }}
     github:
         username: {{ $github_username }}
         token: {{ $github_token }}
