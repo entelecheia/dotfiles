@@ -29,7 +29,10 @@ fi
 
 # {{ else if eq .chezmoi.os "darwin" }}
 
-log_task "Configuring ZSH as default shell"
-sudo chsh -s $(which zsh)
+if [ "$SHELL" != "$(which zsh)" ]; then
+  log_task "Configuring ZSH as default shell"
+
+  sudo dscl . -create "/Users/{{ .chezmoi.username }}" UserShell "$(which zsh)"
+fi
 
 # {{ end }}
