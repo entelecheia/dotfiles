@@ -315,6 +315,10 @@
 # {{-   writeToStdout (printf "✅ Worksapce root set as '%s'\n" $workspace_root) -}}
 # {{- end -}}
 
+# {{- if not $sudoer -}}
+# {{- $symlink_colab_workspace := false -}}
+# {{-     writeToStdout "✅ Colab workspace will not be symlinked\n" -}}
+# {{- else -}}
 # {{- if and (hasKey . "workspace") (hasKey .workspace "symlink_colab_workspace") -}}
 # {{-   $symlink_colab_workspace = .workspace.symlink_colab_workspace -}}
 # {{- end -}}
@@ -326,6 +330,7 @@
 # {{-   else -}}
 # {{-     writeToStdout "✅ Colab workspace will not be symlinked\n" -}}
 # {{-   end -}}
+# {{- end -}}
 # {{- end -}}
 
 # {{- if and (hasKey . "system") (hasKey .system "is_devcontainer") -}}
