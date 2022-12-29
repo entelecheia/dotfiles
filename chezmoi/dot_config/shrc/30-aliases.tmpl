@@ -15,7 +15,8 @@ DOTDROP_REPO="${HOME}/.config/dotdrop"
 alias dotdrop="${DOTDROP_PATH} --cfg=${HOME}/.config/dotdrop/config-user.yaml -p {{ .dotdrop.user_profile }}"
 alias rootdrop="${DOTDROP_PATH} --cfg=${HOME}/.config/dotdrop/config-root.yaml -p {{ .dotdrop.root_profile }}"
 alias dotgit="git -C $DOTDROP_REPO"
-alias dotsync="dotgit add -A && dotgit commit && dotgit pull && dotgit push; dotdrop install"
+alias dotp="dotgit add -A && dotgit commit && dotgit push"
+alias dotl="dotgit pull; dotdrop install"
 
 refreshenv() {
   local shell
