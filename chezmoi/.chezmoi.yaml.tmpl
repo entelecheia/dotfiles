@@ -140,13 +140,14 @@
 # {{-   if $sudoer -}}
 # {{-     writeToStdout "✅ Sudo privileges enabled\n" -}}
 # {{-   else -}}
+# {{-     $install_rootmoi := false -}}
 # {{-     writeToStdout "✅ Sudo privileges disabled\n" -}}
 # {{-   end -}}
 # {{- end -}}
 
 # {{- if or (eq .chezmoi.os "darwin") (not $sudoer) -}}
-# {{- $install_rootmoi := false -}}
-# {{-     writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
+# {{-   $install_rootmoi := false -}}
+# {{-   writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
 # {{- else -}}
 # {{- if and (hasKey . "system") (hasKey .system "install_rootmoi") -}}
 # {{-   $install_rootmoi = .system.install_rootmoi -}}
