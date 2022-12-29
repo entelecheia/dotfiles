@@ -33,8 +33,8 @@ if [ "$SHELL" != "$(which zsh)" ]; then
   log_task "Configuring ZSH as default shell"
 
   # c sudo dscl . -create "/Users/{{ .chezmoi.username }}" UserShell "$(which zsh)"
-  c /usr/bin/sudo sh -c "echo $(which zsh) >> /etc/shells"
-  c chsh -s "$(which zsh)"
+  c sudo sh -c "echo $(which zsh) >> /etc/shells"
+  c sudo chsh -s "$(which zsh)" "{{ .chezmoi.username }}"
 fi
 
 # {{ end }}
