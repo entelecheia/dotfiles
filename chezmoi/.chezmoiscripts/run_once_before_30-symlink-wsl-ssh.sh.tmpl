@@ -8,17 +8,21 @@ true || source ../.chezmoitemplates/scripts-library
 
 WIN_HOME="$(wslpath -a "$(wslvar USERPROFILE)")"
 
-# if {WIN_HOME}/.ssh does not exist, create it
-if [[ ! -d "${WIN_HOME}/.ssh" ]]; then
-  log_task "Creating {WIN_HOME}/.ssh"
-  mkdir "${WIN_HOME}/.ssh"
+if [[ -d "${WIN_HOME}" ]]; then
+
+  # if {WIN_HOME}/.ssh does not exist, create it
+  if [[ ! -d "${WIN_HOME}/.ssh" ]]; then
+    log_task "Creating ${WIN_HOME}/.ssh"
+    mkdir "${WIN_HOME}/.ssh"
+  fi
+  # if ${HOME}/.ssh exists, remove it
+  if [[ -d "${HOME}/.ssh" ]]; then
+    log_task "Removing existing ${HOME}/.ssh"
+    rm -rf "${HOME}/.ssh"
+  fi
+  log_task "Symlinking .ssh folder from Windows to WSL"
+  ln -s "${WIN_HOME}/.ssh" "${HOME}/.ssh"
+
 fi
-# if ${HOME}/.ssh exists, remove it
-if [[ -d "${HOME}/.ssh" ]]; then
-  log_task "Removing existing ${HOME}/.ssh"
-  rm -rf "${HOME}/.ssh"
-fi
-log_task "Symlinking .ssh folder from Windows to WSL"
-ln -s "${WIN_HOME}/.ssh" "${HOME}/.ssh"
 
 # {{ end }}
