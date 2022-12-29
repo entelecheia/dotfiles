@@ -1,5 +1,5 @@
 #!/bin/bash
-# {{ if eq .chezmoi.os "linux" -}}
+# {{ if and (eq .chezmoi.os "linux") (.system.is_sudoer) -}}
 
 # We need to install ca-certificates before we add the APT repos, because some of them
 # may use newer CAs.
