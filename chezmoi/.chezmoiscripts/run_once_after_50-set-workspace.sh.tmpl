@@ -12,7 +12,7 @@ true || source ../.chezmoitemplates/scripts-library
 WORKSPACE_NAME="{{ .workspace.name }}"
 # {{ if .system.is_wsl }}
 WORKSPACE_LOCATION="$(wslpath -a "$(wslvar USERPROFILE)")"
-if [[ -d "${WORKSPACE_LOCATION}" ]]; then
+if [[ ! -d "${WORKSPACE_LOCATION}" ]]; then
   WORKSPACE_LOCATION="{{ .workspace.location }}"
 fi
 # {{ else }}
