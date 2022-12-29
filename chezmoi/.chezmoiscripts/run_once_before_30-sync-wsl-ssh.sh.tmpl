@@ -1,0 +1,25 @@
+#!/bin/bash
+# {{ if .system.is_wsl }}
+
+# {{ template "scripts-library" }}
+
+# The following line is for ShellCheck to correctly identify the above include
+true || source ../.chezmoitemplates/scripts-library
+
+win_home="$(wslvar USERPROFILE)"
+win_home="$(wslpath "${win_home}")"
+
+# if {win_home}/.ssh does not exist, create it
+if [[ ! -d "${win_home}/.ssh" ]]; then
+  log_task "Creating {win_home}/.ssh"
+  mkdir "${win_home}/.ssh"
+fi
+# if ${HOME}/.ssh exists, remove it
+if [[ -d "${HOME}/.ssh" ]]; then
+  log_task "Removing existing ${HOME}/.ssh"
+  rm -rf "${HOME}/.ssh"
+fi
+log_task "Symlinking .ssh folder from Windows to WSL"
+ln -s "${win_home}/.ssh" "${HOME}/.ssh"
+
+# {{ end }}

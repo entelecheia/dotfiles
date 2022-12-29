@@ -6,6 +6,12 @@
 # The following line is for ShellCheck to correctly identify the above include
 true || source ../.chezmoitemplates/scripts-library
 
+SSH_HOME="${HOME}/.ssh"
+if [ ! -d "${SSH_HOME}" ]; then
+    log_task "Creating ${SSH_HOME}"
+    mkdir "${SSH_HOME}"
+fi
+
 # Check if we have a GitHub SSH key
 # If not, generate one and add it to GitHub
 SSH_KEY_FILE="${HOME}/.ssh/{{ .ssh.key_filename }}"
@@ -17,6 +23,15 @@ if [ ! -f "${SSH_KEY_FILE}" ]; then
     log_task "Generating SSH key"
     ssh-keygen -t "${ALGORITHM}" -C "${USER}@${HOST}" -f "${SSH_KEY_FILE}" -N ""
 fi
+
+# Symlink authorized_keys from .config/ssh to ~/.ssh
+# If the file exists, remove the file
+log_task "Symlinking authorized_keys"
+if [ -f "${HOME}/.ssh/authorized_keys" ]; then
+    log_task "Removing existing authorized_keys"
+    rm "${HOME}/.ssh/authorized_keys"
+fi
+ln -s "${HOME}/.config/ssh/authorized_keys" "${HOME}/.ssh/authorized_keys"
 
 # set eviroment variable GNUPGHOME to ~/.gnupg if not set
 GNUPGHOME=${GNUPGHOME:-$HOME/.gnupg}
@@ -90,20 +105,15 @@ else
 fi
 # {{ else }}
 # {{   if .system.is_interactive }}
-if [ -v DISPLAY ]; then
-    if command -v gh >/dev/null; then
-        log_info "Logging in to GitHub"
-        c gh auth login -h github.com -s admin:public_key -s write:gpg_key
-        # git credention setup
-        c gh auth setup-git
-        c gh ssh-key add "${SSH_KEY_FILE}.pub" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}" || true
-        c gh gpg-key add "${GNUPGHOME}/${KEY_ID}.pub" || true
-    else
-        log_info "gh is not installed"
-    fi
+if command -v gh >/dev/null; then
+    log_info "Logging in to GitHub"
+    c gh auth login -h github.com -s admin:public_key -s write:gpg_key
+    # git credention setup
+    c gh auth setup-git
+    c gh ssh-key add "${SSH_KEY_FILE}.pub" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}" || true
+    c gh gpg-key add "${GNUPGHOME}/${KEY_ID}.pub" || true
 else
-    log_info "DISPLAY environment variable is not set."
-    log_info "Log in manually, and add the SSH key to GitHub."
+    log_info "gh is not installed"
 fi
 # {{   else }}
 log_info "GITHUB_TOKEN environment variable is not set."
