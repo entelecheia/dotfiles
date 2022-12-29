@@ -10,7 +10,7 @@ true || source ../.chezmoitemplates/scripts-library
 # symlink_colab_workspace: true
 # colab_drive: "/content/drive/MyDrive"
 WORKSPACE_NAME="{{ .workspace.name }}"
-# {{ if .system.is_wsl }}
+# {{ if and .system.is_wsl (eq .workspace.location .chezmoi.homeDir ) }}
 WORKSPACE_LOCATION="$(wslpath -a "$(wslvar USERPROFILE)")"
 if [[ ! -d "${WORKSPACE_LOCATION}" ]]; then
   WORKSPACE_LOCATION="{{ .workspace.location }}"
