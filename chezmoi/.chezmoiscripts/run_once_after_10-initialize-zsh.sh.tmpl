@@ -5,7 +5,7 @@
 # The following line is for ShellCheck to correctly identify the above include
 true || source ../.chezmoitemplates/scripts-library
 
-# {{ if eq .chezmoi.os "linux"}}
+# {{ if and (eq .chezmoi.os "linux") (.system.is_sudoer) }}
 
 zsh_path="/bin/zsh"
 
