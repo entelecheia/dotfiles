@@ -4,7 +4,8 @@ export GITHUB_USERNAME="{{ .github.username }}"
 export WORKSPACE_ROOT="{{ .workspace.root }}"
 export GNUPGHOME="${HOME}/.gnupg"
 # {{ if .gnupg.gitsign }}
-export GPG_TTY=$(tty)
+GPG_TTY=$(tty)
+export GPG_TTY
 # {{ end }}
 
 # {{ if .system.is_wsl }}

@@ -14,8 +14,11 @@ readonly wanted_packages=(
   python3-setuptools
   gh
   vim
-  # {{   if not .system.is_devcontainer }}
   gpg # used to decrypt the gpg keys of the apt repositories
+  pinentry-curses
+  # {{   if not .system.is_devcontainer }}
+  gpa 
+  seahorse
   # {{   end }}
 )
 missing_packages=()
