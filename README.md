@@ -4,12 +4,6 @@ Dotfiles are configuration files that are used to customize your shell and other
 
 ## Getting started
 
-Before installing dotfiles, make sure that you have installed git.
-
-```bash
-sudo apt install git
-```
-
 You can use the [install dotfiles script](./scripts/install_dotfiles.sh) to install the dotfiles on any machine with a single command. Simply run the following command in your terminal:
 
 ```bash
