@@ -3,6 +3,9 @@ export TERM=xterm-256color
 export GITHUB_USERNAME="{{ .github.username }}"
 export WORKSPACE_ROOT="{{ .workspace.root }}"
 export GNUPGHOME="${HOME}/.gnupg"
+# {{ if .gnupg.gitsign }}
+export GPG_TTY=$(tty)
+# {{ end }}
 
 # {{ if .system.is_wsl }}
 # The boot.systemd in /etc/wsl.conf is only for Windows 11, so this workaround is needed
