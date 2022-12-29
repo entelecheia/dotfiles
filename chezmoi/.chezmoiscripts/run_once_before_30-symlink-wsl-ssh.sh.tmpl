@@ -6,12 +6,12 @@
 # The following line is for ShellCheck to correctly identify the above include
 true || source ../.chezmoitemplates/scripts-library
 
-win_home="$(wslpath -a "$(wslvar USERPROFILE)")"
+WIN_HOME="$(wslpath -a "$(wslvar USERPROFILE)")"
 
-# if {win_home}/.ssh does not exist, create it
-if [[ ! -d "${win_home}/.ssh" ]]; then
-  log_task "Creating {win_home}/.ssh"
-  mkdir "${win_home}/.ssh"
+# if {WIN_HOME}/.ssh does not exist, create it
+if [[ ! -d "${WIN_HOME}/.ssh" ]]; then
+  log_task "Creating {WIN_HOME}/.ssh"
+  mkdir "${WIN_HOME}/.ssh"
 fi
 # if ${HOME}/.ssh exists, remove it
 if [[ -d "${HOME}/.ssh" ]]; then
@@ -19,6 +19,6 @@ if [[ -d "${HOME}/.ssh" ]]; then
   rm -rf "${HOME}/.ssh"
 fi
 log_task "Symlinking .ssh folder from Windows to WSL"
-ln -s "${win_home}/.ssh" "${HOME}/.ssh"
+ln -s "${WIN_HOME}/.ssh" "${HOME}/.ssh"
 
 # {{ end }}
