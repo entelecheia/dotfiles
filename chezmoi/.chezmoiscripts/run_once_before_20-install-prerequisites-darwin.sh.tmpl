@@ -13,6 +13,7 @@ readonly wanted_packages=(
   direnv
   gnupg
   gpg-suite
+  pinentry-mac
 )
 missing_packages=()
 
@@ -30,5 +31,8 @@ if [[ ${#missing_packages[@]} -gt 0 ]]; then
   # c "${brew_command[@]}" update
   c "${brew_command[@]}" install "${missing_packages[@]}"
 fi
+
+c echo "pinentry-program $(which pinentry-mac)" >> "${HOME}/.gnupg/gpg-agent.conf"
+c killall gpg-agent || true
 
 # {{ end -}}
