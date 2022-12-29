@@ -149,18 +149,18 @@
 # {{-   $install_rootmoi := false -}}
 # {{-   writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
 # {{- else -}}
-# {{- if and (hasKey . "system") (hasKey .system "install_rootmoi") -}}
-# {{-   $install_rootmoi = .system.install_rootmoi -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ Do you want to install dotfiles for the root user" -}}
-# {{-   $install_rootmoi = promptBool $question $install_rootmoi -}}
-# {{-   if $install_rootmoi -}}
-# {{-     writeToStdout "✅ Dotfiles will be installed for the root user\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
+# {{-   if and (hasKey . "system") (hasKey .system "install_rootmoi") -}}
+# {{-       $install_rootmoi = .system.install_rootmoi -}}
 # {{-   end -}}
-# {{- end -}}
+# {{-   if $interactive -}}
+# {{-       $question := "❔ Do you want to install dotfiles for the root user" -}}
+# {{-       $install_rootmoi = promptBool $question $install_rootmoi -}}
+# {{-       if $install_rootmoi -}}
+# {{-           writeToStdout "✅ Dotfiles will be installed for the root user\n" -}}
+# {{-       else -}}
+# {{-           writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
+# {{-       end -}}
+# {{-   end -}}
 # {{- end -}}
 
 # {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "repo") -}}
