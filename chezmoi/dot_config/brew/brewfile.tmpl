@@ -1,3 +1,4 @@
+{{- if eq .chezmoi.os "darwin" -}}
 # brew bundle --no-lock --file=~/.brew/brewfile --force
 
 #####################
@@ -94,3 +95,4 @@ cask 'font-fira-nerd-font'
 #########################
 # Brewfile contents end #
 #########################
+{{- end -}}

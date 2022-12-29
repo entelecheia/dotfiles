@@ -25,9 +25,9 @@ readonly wanted_packages=(
   wslu
   # {{ else }}
   # {{   if eq .chezmoi.osRelease.versionCodename "bionic" }}
-  # linux-generic-hwe-18.04
+  linux-generic-hwe-18.04
   # {{   else if eq .chezmoi.osRelease.versionCodename "focal" }}
-  # linux-generic-hwe-20.04
+  linux-generic-hwe-20.04
   # {{   end }}
   # {{ end }}
 )
