@@ -377,7 +377,7 @@ data:
         is_gnome: {{ $gnome }}
         is_interactive: {{ $interactive }}
         is_sudoer: {{ $sudoer }}
-        install_rootmoi: {{ $install_rootmoi }}
+        install_rootmoi: {{ and $install_rootmoi $sudoer }}
         uname_arch: "{{ output "uname" "-m" | trim }}"
         cpu:
             cores: {{ $cpuCores }}
