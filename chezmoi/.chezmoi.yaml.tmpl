@@ -145,7 +145,7 @@
 # {{-   end -}}
 # {{- end -}}
 
-# {{- if or (eq .chezmoi.os "darwin") (not $sudoer) -}}
+# {{- if or (eq .chezmoi.os "darwin") (ne $sudoer true) -}}
 # {{-   $install_rootmoi := false -}}
 # {{-   writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
 # {{- else -}}
@@ -266,7 +266,7 @@
 # {{-   end -}}
 # {{- end -}}
 
-# {{- if not $wsl -}}
+# {{- if ne $wsl true -}}
 # {{- if and (hasKey . "workspace") (hasKey .workspace "location") -}}
 # {{-   $workspace_location = .workspace.location -}}
 # {{- end -}}
