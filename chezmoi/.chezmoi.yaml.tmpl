@@ -2,6 +2,7 @@
 # {{- $email := "email at domain" -}}
 # {{- $hostname := .chezmoi.hostname -}}
 # {{- $github_username := "" -}}
+# {{- $docker_username := "" -}}
 # {{- $github_token := "" -}}
 # {{- $dotdrop_repo := "https://github.com/entelecheia/dotdrop-files.git" -}}
 # {{- $dockerfiles_repo := "https://github.com/entelecheia/dockerfiles.git" -}}
@@ -81,7 +82,7 @@
 # {{-   $github_username = .github.username -}}
 # {{- end -}}
 # {{- if $interactive -}}
-# {{-   $question := "❔ What is GitHub username" -}}
+# {{-   $question := "❔ What is your GitHub username" -}}
 # {{-   $answer := "" -}}
 # {{-   if $github_username -}}
 # {{-     $answer = promptString $question $github_username -}}
@@ -92,6 +93,22 @@
 # {{-   writeToStdout (printf "✅ GitHub username set as '%s'\n" $github_username) -}}
 # {{- end -}}
 
+# {{- if and (hasKey . "docker") (hasKey .docker "username") -}}
+# {{-   $docker_username = .docker.username -}}
+# {{- else -}}
+# {{-   $docker_username = $github_username -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ What is your Docker username" -}}
+# {{-   $answer := "" -}}
+# {{-   if $docker_username -}}
+# {{-     $answer = promptString $question $docker_username -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $docker_username = $answer -}}
+# {{-   writeToStdout (printf "✅ Docker username set as '%s'\n" $docker_username) -}}
+# {{- end -}}
 
 # {{- if hasKey . "email" -}}
 # {{-   $email = .email -}}
@@ -417,6 +434,7 @@ data:
         root_profile: root
     docker:
         repo: {{ $dockerfiles_repo }}
+        username: {{ $docker_username }}
     workspace:
         name: {{ $workspace_name }}
         location: {{ $workspace_location }}

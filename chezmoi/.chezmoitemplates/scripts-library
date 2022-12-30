@@ -66,7 +66,7 @@ function log_error() {
 }
 
 function log_info() {
-  log_blue "💡" "$@"
+  log_green "💡" "$@"
 }
 
 function error() {

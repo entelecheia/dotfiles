@@ -24,7 +24,17 @@ else
     # otherwise update the dockerfiles repository
     else
       log_task "Update dockerfiles repository"
-      git -C "$DOCKERFILES_REPO_DIR" pull
+      git -C "$DOCKERFILES_REPO_DIR" pull || true
     fi
   fi
 fi
+
+# {{- if .system.is_interactive }}
+DOCKER_USERNAME="{{ .docker.username }}"
+
+if [ -n "$DOCKER_USERNAME" ]; then
+  log_task "Login to Docker Hub"
+  c docker login || return 1
+fi
+
+# {{- end }}

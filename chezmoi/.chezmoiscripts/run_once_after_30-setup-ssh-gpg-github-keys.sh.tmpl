@@ -116,8 +116,8 @@ else
     log_info "gh is not installed"
 fi
 # {{   else }}
-log_info "GITHUB_TOKEN environment variable is not set."
-log_info "Log in manually, and add the SSH key to GitHub."
+log_manual_action "GITHUB_TOKEN environment variable is not set."
+log_manual_action "Log in manually, and add the SSH key to GitHub."
 # {{    end }}
 # {{ end }}
 log_info "Done adding SSH and GPG keys to GitHub"

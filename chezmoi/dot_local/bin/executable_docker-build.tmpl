@@ -1,0 +1,82 @@
+#!/bin/bash
+
+# {{ template "scripts-library" }}
+
+# The following line is for ShellCheck to correctly identify the above include
+true || source ../../.chezmoitemplates/scripts-library
+
+# parse arguments
+USAGE="-n DOCKER_NAME [-t TYPE] [-v VERSION] [-p BUILD_PATH] [-u USERNAME] [-f DOCKERFILE_PATH]"
+
+# declare variables
+DOCKER_NAME=""
+TYPE=""
+VERSION=""
+BUILD_PATH=""
+USERNAME=""
+DOCKERFILE_PATH=""
+
+while getopts ":n:t:v:p:u:f:" opt; do
+  case ${opt} in
+    n)
+      DOCKER_NAME="${OPTARG}"
+      ;;
+    t)
+      TYPE="${OPTARG}"
+      ;;
+    v)
+      VERSION="${OPTARG}"
+      ;;
+    p)
+      BUILD_PATH="${OPTARG}"
+      ;;
+    u)
+      USERNAME="${OPTARG}"
+      ;;
+    f)
+      DOCKERFILE_PATH="${OPTARG}"
+      ;;
+    \?)
+      echo "Invalid option: -${OPTARG}" >&2
+      echo "Usage: $0 $USAGE" >&2
+      exit 1
+      ;;
+    :)
+      echo "Option -${OPTARG} requires an argument." >&2
+      echo "Usage: $0 $USAGE" >&2
+      exit 1
+      ;;
+  esac
+done
+
+if [[ -z "${DOCKER_NAME}" ]]; then
+  echo "Missing DOCKER_NAME argument" >&2
+  echo "Usage: $0 $USAGE" >&2
+  exit 1
+fi
+if [[ -z "${VERSION}" ]]; then
+  VERSION="latest"
+fi
+if [[ -z "${TYPE}" ]]; then
+  TYPE="runtime"
+fi
+if [[ -z "${USERNAME}" ]]; then
+  USERNAME="{{ .docker.username }}"
+fi
+if [[ -z "${BUILD_PATH}" ]]; then
+  BUILD_PATH="${WORKSPACE_ROOT}/projects/${DOCKER_NAME}"
+fi
+if [[ -z "${DOCKERFILE_PATH}" ]]; then
+  DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
+  DOCKERFILE_PATH="${DOCKERFILES_REPO_DIR}/${DOCKER_NAME}/Dockerfile.${TYPE}"
+fi
+
+TAG="${VERSION}-${TYPE}"
+DOCKER_REPO="${USERNAME}/${DOCKER_NAME}:${TAG}"
+if docker --version &>/dev/null; then
+  log_task "Building ${DOCKER_REPO} for context ${BUILD_PATH}"
+  c docker build --rm --force-rm -t "${DOCKER_REPO}" -f "${DOCKERFILE_PATH}" "${BUILD_PATH}"
+
+  log_info "Successfully built ${DOCKER_REPO} with context ${BUILD_PATH}"
+
+fi

@@ -11,6 +11,14 @@ DOTDROP_PATH="$(which dotdrop)"
 alias dotdrop="${DOTDROP_PATH} --cfg=${HOME}/.config/dotdrop/config-user.yaml -p {{ .dotdrop.user_profile }}"
 alias rootdrop="${DOTDROP_PATH} --cfg=${HOME}/.config/dotdrop/config-root.yaml -p {{ .dotdrop.root_profile }}"
 
+alias dkb="docker-build"
+alias dkr="docker-run"
+alias dkc="docker-clean"
+alias dki="docker image"
+alias dkl="docker image ls"
+alias dkrmi="docker image rm"
+alias dkps="docker ps"
+
 refreshenv() {
   local shell
 
