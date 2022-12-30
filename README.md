@@ -120,5 +120,12 @@ for more.
 
 ## References
 
+Large part of .chezmoitemplates and .chezmoiscripts files are taken from [felipecrs/dotfiles](https://github.com/felipecrs/dotfiles).
+
 - [chezmoi](https://chezmoi.io)
 - [dotdrop](https://github.com/deadc0de6/dotdrop)
+- [dotfiles](https://dotfiles.github.io/)
+
+## License
+
+This project is licensed under the terms of the [MIT](./LICENSE)
