@@ -5,18 +5,11 @@
 # code here must be compatible with bash and zsh.
 
 alias cz="chezmoi"
-CHEZMOI_REPO="{{- .chezmoi.workingTree -}}"
-alias czgit="git -C $CHEZMOI_REPO"
-alias czsync="czgit add -A && czgit commit && czgit pull && czgit push; cz apply -v"
 TMP_HOME="{{- .chezmoi.workingTree -}}/tmp"
 alias czdr="chezmoi apply --verbose --destination ${TMP_HOME} --dry-run"
 DOTDROP_PATH="$(which dotdrop)"
-DOTDROP_REPO="${HOME}/.config/dotdrop"
 alias dotdrop="${DOTDROP_PATH} --cfg=${HOME}/.config/dotdrop/config-user.yaml -p {{ .dotdrop.user_profile }}"
 alias rootdrop="${DOTDROP_PATH} --cfg=${HOME}/.config/dotdrop/config-root.yaml -p {{ .dotdrop.root_profile }}"
-alias dotgit="git -C $DOTDROP_REPO"
-alias dotp="dotgit add -A && dotgit commit && dotgit push"
-alias dotl="dotgit pull; dotdrop install"
 
 refreshenv() {
   local shell

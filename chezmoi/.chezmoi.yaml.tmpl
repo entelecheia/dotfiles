@@ -3,7 +3,7 @@
 # {{- $hostname := .chezmoi.hostname -}}
 # {{- $github_username := "" -}}
 # {{- $github_token := "" -}}
-# {{- $dotdrop_repo := "dotdrop" -}}
+# {{- $dotdrop_repo := "https://github.com/entelecheia/dotdrop-files.git" -}}
 # {{- $ssh_algorithm := "ed25519" -}}
 # {{- $ssh_keyfile := printf "id_%s_%s" $ssh_algorithm $hostname -}}
 # {{- $workspace_name := "workspace" -}}
@@ -38,6 +38,18 @@
 # {{- end -}}
 
 # {{- $minimum := or $devcontainer (not $ubuntu) -}}
+# {{- if and (hasKey . "system") (hasKey .system "is_devcontainer") -}}
+# {{-   $minimum = .system.is_devcontainer -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ Do you want to install in minimum mode (see README)" -}}
+# {{-   $minimum = promptBool $question $minimum -}}
+# {{-   if $minimum -}}
+# {{-     writeToStdout "✅ Minimum mode enabled\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ Minimum mode disabled\n" -}}
+# {{-   end -}}
+# {{- end -}}
 
 # {{- if hasKey . "name" -}}
 # {{-   $name = .name -}}
@@ -106,6 +118,70 @@
 # {{-   end -}}
 # {{- end -}}
 
+# {{- if and (hasKey . "system") (hasKey .system "is_sudoer") -}}
+# {{-   $sudoer = .system.is_sudoer -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ Do you have sudo privileges" -}}
+# {{-   $sudoer = promptBool $question $sudoer -}}
+# {{-   if $sudoer -}}
+# {{-     writeToStdout "✅ Sudo privileges enabled\n" -}}
+# {{-   else -}}
+# {{-     $install_rootmoi := false -}}
+# {{-     writeToStdout "✅ Sudo privileges disabled\n" -}}
+# {{-   end -}}
+# {{- end -}}
+
+# {{- if eq .chezmoi.os "darwin" -}}
+# {{-   $install_rootmoi := false -}}
+# {{- else if $sudoer -}}
+# {{-   if and (hasKey . "system") (hasKey .system "install_rootmoi") -}}
+# {{-       $install_rootmoi = .system.install_rootmoi -}}
+# {{-   end -}}
+# {{-   if $interactive -}}
+# {{-       $question := "❔ Do you want to install dotfiles for the root user" -}}
+# {{-       $install_rootmoi = promptBool $question $install_rootmoi -}}
+# {{-       if $install_rootmoi -}}
+# {{-           writeToStdout "✅ Dotfiles will be installed for the root user\n" -}}
+# {{-       else -}}
+# {{-           writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
+# {{-       end -}}
+# {{-   end -}}
+# {{- else -}}
+# {{-   $install_rootmoi := false -}}
+# {{-   writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "repo") -}}
+# {{-   $dotdrop_repo = .dotdrop.repo -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ What is dotdrop repository URL" -}}
+# {{-   $answer := "" -}}
+# {{-   if $dotdrop_repo -}}
+# {{-     $answer = promptString $question $dotdrop_repo -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $dotdrop_repo = $answer -}}
+# {{-   writeToStdout (printf "✅ dotdrop repo set as '%s'\n" $dotdrop_repo) -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "ssh") (hasKey .ssh "algorithm") -}}
+# {{-   $ssh_algorithm = .ssh.algorithm -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ Which SSH algorithm do you want to use" -}}
+# {{-   $answer := "" -}}
+# {{-   if $ssh_algorithm -}}
+# {{-     $answer = promptString $question $ssh_algorithm -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $ssh_algorithm = $answer -}}
+# {{-   writeToStdout (printf "✅ SSH algorithm set as '%s'\n" $ssh_algorithm) -}}
+# {{- end -}}
+
 # {{- if and (hasKey . "system") (hasKey .system "hostname") -}}
 # {{-   $hostname = .system.hostname -}}
 # {{- end -}}
@@ -131,83 +207,6 @@
 # {{-   end -}}
 # {{- end -}}
 
-# {{- if and (hasKey . "system") (hasKey .system "is_sudoer") -}}
-# {{-   $sudoer = .system.is_sudoer -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ Do you have sudo privileges" -}}
-# {{-   $sudoer = promptBool $question $sudoer -}}
-# {{-   if $sudoer -}}
-# {{-     writeToStdout "✅ Sudo privileges enabled\n" -}}
-# {{-   else -}}
-# {{-     $install_rootmoi := false -}}
-# {{-     writeToStdout "✅ Sudo privileges disabled\n" -}}
-# {{-   end -}}
-# {{- end -}}
-
-# {{- if or (eq .chezmoi.os "darwin") (ne $sudoer true) -}}
-# {{-   $install_rootmoi := false -}}
-# {{-   writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
-# {{- else -}}
-# {{-   if and (hasKey . "system") (hasKey .system "install_rootmoi") -}}
-# {{-       $install_rootmoi = .system.install_rootmoi -}}
-# {{-   end -}}
-# {{-   if $interactive -}}
-# {{-       $question := "❔ Do you want to install dotfiles for the root user" -}}
-# {{-       $install_rootmoi = promptBool $question $install_rootmoi -}}
-# {{-       if $install_rootmoi -}}
-# {{-           writeToStdout "✅ Dotfiles will be installed for the root user\n" -}}
-# {{-       else -}}
-# {{-           writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
-# {{-       end -}}
-# {{-   end -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "repo") -}}
-# {{-   $dotdrop_repo = .dotdrop.repo -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ What is dotdrop repository URL" -}}
-# {{-   $answer := "" -}}
-# {{-   if $dotdrop_repo -}}
-# {{-     $answer = promptString $question $dotdrop_repo -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $dotdrop_repo = $answer -}}
-# {{-   writeToStdout (printf "✅ dotdrop repo set as '%s'\n" $dotdrop_repo) -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "github") (hasKey .github "token") -}}
-# {{-   $github_token = .github.token -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ What is GitHub Token" -}}
-# {{-   $answer := "" -}}
-# {{-   if $github_token -}}
-# {{-     $answer = promptString $question $github_token -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $github_token = $answer -}}
-# {{-   writeToStdout (printf "✅ GitHub Token set as '%s'\n" $github_token) -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "ssh") (hasKey .ssh "algorithm") -}}
-# {{-   $ssh_algorithm = .ssh.algorithm -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ Which SSH algorithm do you want to use" -}}
-# {{-   $answer := "" -}}
-# {{-   if $ssh_algorithm -}}
-# {{-     $answer = promptString $question $ssh_algorithm -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $ssh_algorithm = $answer -}}
-# {{-   writeToStdout (printf "✅ SSH algorithm set as '%s'\n" $ssh_algorithm) -}}
-# {{- end -}}
-
 # {{- if and (hasKey . "ssh") (hasKey .ssh "key_filename") -}}
 # {{-   $ssh_keyfile = .ssh.key_filename -}}
 # {{- end -}}
@@ -223,11 +222,26 @@
 # {{-   writeToStdout (printf "✅ SSH key filename set as '%s'\n" $ssh_keyfile) -}}
 # {{- end -}}
 
+# {{- if and (hasKey . "github") (hasKey .github "token") -}}
+# {{-   $github_token = .github.token -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ What is GitHub Token (If not set, you will be prompted to authenticate)" -}}
+# {{-   $answer := "" -}}
+# {{-   if $github_token -}}
+# {{-     $answer = promptString $question $github_token -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $github_token = $answer -}}
+# {{-   writeToStdout (printf "✅ GitHub Token set as '%s'\n" $github_token) -}}
+# {{- end -}}
+
 # {{- if and (hasKey . "gnupg") (hasKey .gnupg "key_id") -}}
 # {{-   $gpg_key_id = .gnupg.key_id -}}
 # {{- end -}}
 # {{- if $interactive -}}
-# {{-   $question := "❔ What is your GPG key ID" -}}
+# {{-   $question := "❔ What is your GPG key ID (If you don't have one, leave it empty. This will be generated for you)" -}}
 # {{-   $answer := "" -}}
 # {{-   if $gpg_key_id -}}
 # {{-     $answer = promptString $question $gpg_key_id -}}
@@ -242,7 +256,7 @@
 # {{-   $gpg_passphrase = .gnupg.passphrase -}}
 # {{- end -}}
 # {{- if $interactive -}}
-# {{-   $question := "❔ What is your passphrase for GPG" -}}
+# {{-   $question := "❔ What passphrase do you want to use for your GPG key" -}}
 # {{-   $answer := "" -}}
 # {{-   if $gpg_passphrase -}}
 # {{-     $answer = promptString $question $gpg_passphrase -}}
@@ -257,13 +271,33 @@
 # {{-   $gpg_gitsign = .gnupg.gitsign -}}
 # {{- end -}}
 # {{- if $interactive -}}
-# {{-   $question := "❔ Do you want to use GPG to sign git commits" -}}
+# {{-   $question := "❔ Do you want to use GPG to sign git commits globally" -}}
 # {{-   $gpg_gitsign = promptBool $question $gpg_gitsign -}}
 # {{-   if $gpg_gitsign -}}
 # {{-     writeToStdout "✅ Git commits will be signed by GPG\n" -}}
 # {{-   else -}}
 # {{-     writeToStdout "✅ Git comiits will not be signed by GPG\n" -}}
 # {{-   end -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "workspace") (hasKey .workspace "name") -}}
+# {{-   $workspace_name = .workspace.name -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ What name do you want to use as workspace root directory" -}}
+# {{-   $answer := "" -}}
+# {{-   if $workspace_name -}}
+# {{-     $answer = promptString $question $workspace_name -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $workspace_name = $answer -}}
+# {{-   if $symlink_to_home -}}
+# {{-     $workspace_root := joinPath .chezmoi.homeDir $workspace_name -}}
+# {{-   else -}}
+# {{-     $workspace_root := joinPath $workspace_location $workspace_name -}}
+# {{-   end -}}
+# {{-   writeToStdout (printf "✅ Worksapce root set as '%s'\n" $workspace_root) -}}
 # {{- end -}}
 
 # {{- if ne $wsl true -}}
@@ -287,7 +321,7 @@
 # {{-   $symlink_to_home = .workspace.symlink_to_home -}}
 # {{- end -}}
 # {{- if $interactive -}}
-# {{-   $question := "❔ Should symlink workspace to home directory" -}}
+# {{-   $question := "❔ Do you want to symlink your workspace to home directory" -}}
 # {{-   $symlink_to_home = promptBool $question $symlink_to_home -}}
 # {{-   if $symlink_to_home -}}
 # {{-     writeToStdout "✅ Workspace will be symlinked to home directory\n" -}}
@@ -298,26 +332,6 @@
 # {{- end -}}
 # {{- end -}}
 
-# {{- if and (hasKey . "workspace") (hasKey .workspace "name") -}}
-# {{-   $workspace_name = .workspace.name -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ What name do you want to use as workspace root" -}}
-# {{-   $answer := "" -}}
-# {{-   if $workspace_name -}}
-# {{-     $answer = promptString $question $workspace_name -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $workspace_name = $answer -}}
-# {{-   if $symlink_to_home -}}
-# {{-     $workspace_root := joinPath .chezmoi.homeDir $workspace_name -}}
-# {{-   else -}}
-# {{-     $workspace_root := joinPath $workspace_location $workspace_name -}}
-# {{-   end -}}
-# {{-   writeToStdout (printf "✅ Worksapce root set as '%s'\n" $workspace_root) -}}
-# {{- end -}}
-
 # {{- if not $sudoer -}}
 # {{- $symlink_colab_workspace := false -}}
 # {{-     writeToStdout "✅ Colab workspace will not be symlinked\n" -}}
@@ -326,7 +340,7 @@
 # {{-   $symlink_colab_workspace = .workspace.symlink_colab_workspace -}}
 # {{- end -}}
 # {{- if $interactive -}}
-# {{-   $question := "❔ Should symlink colab workspace" -}}
+# {{-   $question := "❔ Do you want to symlink workspace to colab default google drive directory to maintain persistence across sessions" -}}
 # {{-   $symlink_colab_workspace = promptBool $question $symlink_colab_workspace -}}
 # {{-   if $symlink_colab_workspace -}}
 # {{-     writeToStdout "✅ Colab workspace will be symlinked to workspace root\n" -}}
@@ -334,19 +348,6 @@
 # {{-     writeToStdout "✅ Colab workspace will not be symlinked\n" -}}
 # {{-   end -}}
 # {{- end -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "system") (hasKey .system "is_devcontainer") -}}
-# {{-   $minimum = .system.is_devcontainer -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ Should install in minimum mode (see README)" -}}
-# {{-   $minimum = promptBool $question $minimum -}}
-# {{-   if $minimum -}}
-# {{-     writeToStdout "✅ Minimum mode enabled\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "✅ Minimum mode disabled\n" -}}
-# {{-   end -}}
 # {{- end -}}
 
 # {{- if $interactive -}}
