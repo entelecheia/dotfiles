@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# {{ template "scripts-library" }}
+
+# The following line is for ShellCheck to correctly identify the above include
+true || source ../.chezmoitemplates/scripts-library
+
+# Clone or update the dockerfiles repository
+DOCKERFILES_REPO="{{- .docker.repo }}"
+DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
+if [ ! -d "$DOCKERFILES_REPO_DIR" ]; then
+  if [[ "$DOCKERFILES_REPO" == "https://"* ]] || [[ "$DOCKERFILES_REPO" == "git@"* ]]; then
+    log_task "Clone dockerfiles repository"
+    git clone "$DOCKERFILES_REPO" "$DOCKERFILES_REPO_DIR"
+  fi
+else
+  if [[ "$DOCKERFILES_REPO" == "https://"* ]] || [[ "$DOCKERFILES_REPO" == "git@"* ]]; then
+    # if existing dockerfiles repository is not a git repository then remove it
+    if ! git -C "$DOCKERFILES_REPO_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+      log_task "Remove dockerfiles repository"
+      rm -rf "$DOCKERFILES_REPO_DIR"
+      log_task "Clone dockerfiles repository"
+      git clone "$DOCKERFILES_REPO" "$DOCKERFILES_REPO_DIR"
+    # otherwise update the dockerfiles repository
+    else
+      log_task "Update dockerfiles repository"
+      git -C "$DOCKERFILES_REPO_DIR" pull
+    fi
+  fi
+fi

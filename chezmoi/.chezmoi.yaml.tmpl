@@ -4,6 +4,7 @@
 # {{- $github_username := "" -}}
 # {{- $github_token := "" -}}
 # {{- $dotdrop_repo := "https://github.com/entelecheia/dotdrop-files.git" -}}
+# {{- $dockerfiles_repo := "https://github.com/entelecheia/dockerfiles.git" -}}
 # {{- $ssh_algorithm := "ed25519" -}}
 # {{- $ssh_keyfile := printf "id_%s_%s" $ssh_algorithm $hostname -}}
 # {{- $workspace_name := "workspace" -}}
@@ -156,7 +157,7 @@
 # {{-   $dotdrop_repo = .dotdrop.repo -}}
 # {{- end -}}
 # {{- if $interactive -}}
-# {{-   $question := "❔ What is dotdrop repository URL" -}}
+# {{-   $question := "❔ What is your dotdrop files repository URL" -}}
 # {{-   $answer := "" -}}
 # {{-   if $dotdrop_repo -}}
 # {{-     $answer = promptString $question $dotdrop_repo -}}
@@ -164,7 +165,22 @@
 # {{-     $answer = promptString $question -}}
 # {{-   end -}}
 # {{-   $dotdrop_repo = $answer -}}
-# {{-   writeToStdout (printf "✅ dotdrop repo set as '%s'\n" $dotdrop_repo) -}}
+# {{-   writeToStdout (printf "✅ dotdrop files repo set as '%s'\n" $dotdrop_repo) -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "docker") (hasKey .dotdrop "repo") -}}
+# {{-   $dockerfiles_repo = .docker.repo -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ What is your dockerfiles repository URL" -}}
+# {{-   $answer := "" -}}
+# {{-   if $dockerfiles_repo -}}
+# {{-     $answer = promptString $question $dockerfiles_repo -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $dockerfiles_repo = $answer -}}
+# {{-   writeToStdout (printf "✅ dockerfiles repo set as '%s'\n" $dockerfiles_repo) -}}
 # {{- end -}}
 
 # {{- if and (hasKey . "ssh") (hasKey .ssh "algorithm") -}}
@@ -399,6 +415,8 @@ data:
         repo: {{ $dotdrop_repo }}
         user_profile: user
         root_profile: root
+    docker:
+        repo: {{ $dockerfiles_repo }}
     workspace:
         name: {{ $workspace_name }}
         location: {{ $workspace_location }}
