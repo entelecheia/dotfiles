@@ -10,7 +10,7 @@ true || source ../../.chezmoitemplates/scripts-library
 if chezmoi --version &>/dev/null; then
   log_task "Committing dotfile changes and pushing to remote"
   CHEZMOI_REPO="{{ .chezmoi.workingTree }}"
-  c git -C "$CHEZMOI_REPO" commit -a -m "$COMMIT_MESSAGE" && git -C "$CHEZMOI_REPO" push
+  c git -C "$CHEZMOI_REPO" add -A && git -C "$CHEZMOI_REPO" commit -m "$COMMIT_MESSAGE" && git -C "$CHEZMOI_REPO" push
 fi
 
 if dotdrop --version &>/dev/null; then
