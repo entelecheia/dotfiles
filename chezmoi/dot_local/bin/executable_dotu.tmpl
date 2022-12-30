@@ -6,9 +6,19 @@
 true || source ../../.chezmoitemplates/scripts-library
 
 if chezmoi --version &>/dev/null; then
-  log_task "Updating dotfiles for chezmoi"
+  log_task "Pulling latest changes from dotfiles repo"
   # Pull latest changes from dotfiles repo
   c chezmoi update --apply=false
+fi
+if dotdrop --version &>/dev/null; then
+  DOTDROP_REPO="${HOME}/.config/dotdrop"
+
+  log_task "Pulling latest changes from dotdrop repo"
+  c git -C "$DOTDROP_REPO" pull
+fi
+
+if chezmoi --version &>/dev/null; then
+  log_task "Updating dotfiles for chezmoi"
   # if chezmoi diff yields "chezmoi: warning: config file template has changed", init and apply
   if [[ "$(chezmoi diff)" == *"chezmoi: warning: config file template has changed"* ]]; then
     c chezmoi init
@@ -18,10 +28,8 @@ if chezmoi --version &>/dev/null; then
 fi
 
 if dotdrop --version &>/dev/null; then
-  DOTDROP_REPO="${HOME}/.config/dotdrop"
   DOTDROP_PATH="$(which dotdrop)"
 
   log_task "Updating dotfiles for dotdrop"
-  c git -C "$DOTDROP_REPO" pull
   c "${DOTDROP_PATH}" --cfg="${HOME}/.config/dotdrop/config-user.yaml" -p "{{ .dotdrop.user_profile }}" install
 fi
