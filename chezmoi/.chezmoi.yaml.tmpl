@@ -231,7 +231,7 @@
 # {{-   if $github_token -}}
 # {{-     $answer = promptString $question $github_token -}}
 # {{-   else -}}
-# {{-     $answer = promptString $question "" -}}
+# {{-     $answer = promptString $question -}}
 # {{-   end -}}
 # {{-   $github_token = $answer -}}
 # {{-   writeToStdout (printf "✅ GitHub Token set as '%s'\n" $github_token) -}}

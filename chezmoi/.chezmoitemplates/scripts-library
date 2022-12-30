@@ -40,11 +40,11 @@ function log_yellow() {
 }
 
 function log_task() {
-  log_blue "🔃" "$@"
+  log_blue "⏳" "$@"
 }
 
 function log_manual_action() {
-  log_red "⚠️" "$@"
+  log_red "🧑‍🔧" "$@"
 }
 
 function log_c() {
@@ -62,11 +62,11 @@ function c_exec() {
 }
 
 function log_error() {
-  log_red "❌" "$@"
+  log_red "🔴" "$@"
 }
 
 function log_info() {
-  log_blue "ℹ️" "$@"
+  log_blue "💡" "$@"
 }
 
 function error() {
