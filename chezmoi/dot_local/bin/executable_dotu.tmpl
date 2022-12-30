@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# {{ template "scripts-library" }}
+
+# The following line is for ShellCheck to correctly identify the above include
+true || source ../../.chezmoitemplates/scripts-library
+
+if chezmoi --version &>/dev/null; then
+  log_task "Updating dotfiles for chezmoi"
+  # Pull latest changes from dotfiles repo
+  c chezmoi update --apply=false
+  # if chezmoi diff yields "chezmoi: warning: config file template has changed", init and apply
+  if [[ "$(chezmoi diff)" == *"chezmoi: warning: config file template has changed"* ]]; then
+    c chezmoi init
+  fi
+  # Apply the rest
+  c chezmoi apply -v
+fi
+
+if dotdrop --version &>/dev/null; then
+  DOTDROP_REPO="${HOME}/.config/dotdrop"
+  DOTDROP_PATH="$(which dotdrop)"
+
+  log_task "Updating dotfiles for dotdrop"
+  c git -C "$DOTDROP_REPO" pull
+  c "${DOTDROP_PATH}" --cfg="${HOME}/.config/dotdrop/config-user.yaml" -p "{{ .dotdrop.user_profile }}" install
+fi

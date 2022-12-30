@@ -1,0 +1,21 @@
+#!/bin/bash
+
+COMMIT_MESSAGE=${1:-"Updated dotfiles by running dotp"}
+
+# {{ template "scripts-library" }}
+
+# The following line is for ShellCheck to correctly identify the above include
+true || source ../../.chezmoitemplates/scripts-library
+
+if chezmoi --version &>/dev/null; then
+  log_task "Committing dotfile changes and pushing to remote"
+  CHEZMOI_REPO="{{ .chezmoi.workingTree }}"
+  c git -C "$CHEZMOI_REPO" commit -a -m "$COMMIT_MESSAGE" && git -C "$CHEZMOI_REPO" push
+fi
+
+if dotdrop --version &>/dev/null; then
+  DOTDROP_REPO="${HOME}/.config/dotdrop"
+
+  log_task "Committing dotdrop changes and pushing to remote"
+  c git -C "$DOTDROP_REPO" commit -a -m "$COMMIT_MESSAGE" && git -C "$DOTDROP_REPO" push
+fi
