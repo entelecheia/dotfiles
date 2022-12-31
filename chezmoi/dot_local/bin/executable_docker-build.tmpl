@@ -6,11 +6,11 @@
 true || source ../../.chezmoitemplates/scripts-library
 
 # arguments usage
-USAGE="DOCKER_NAME [-t|--type TYPE] [-v|--version VERSION] [-b|--build-path BUILD_PATH] [-u|--username USERNAME] [-d|--dockerfile-path DOCKERFILE_PATH] [-h|--help]"
+USAGE="DOCKER_NAME [-r|--release-type RELEASE_TYPE] [-v|--version VERSION] [-b|--build-path BUILD_PATH] [-u|--username USERNAME] [-d|--dockerfile-path DOCKERFILE_PATH] [-h|--help]"
 
 # declare arguments
 DOCKER_NAME=""
-TYPE="runtime"
+RELEASE_TYPE="runtime"
 VERSION="latest"
 BUILD_PATH=""
 USERNAME="{{ .docker.username }}"
@@ -33,12 +33,12 @@ fi
 # parse options
 while [[ $# -gt 0 ]]; do
   case "$1" in
-  -t | --type)
-    TYPE="$2"
+  -r | --release-type)
+    RELEASE_TYPE="$2"
     shift
     ;;
-  --type=*)
-    TYPE="${1#*=}"
+  --release-type=*)
+    RELEASE_TYPE="${1#*=}"
     ;;
   -v | --version)
     VERSION="$2"
@@ -96,10 +96,10 @@ if [[ -z "$BUILD_PATH" ]]; then
   BUILD_PATH="${WORKSPACE_ROOT}/projects/${DOCKER_NAME}"
 fi
 if [[ -z "$DOCKERFILE_PATH" ]]; then
-  DOCKERFILE_PATH="${DOCKERFILES_REPO_DIR}/${DOCKER_NAME}/Dockerfile.${TYPE}"
+  DOCKERFILE_PATH="${DOCKERFILES_REPO_DIR}/${DOCKER_NAME}/Dockerfile.${RELEASE_TYPE}"
 fi
 
-TAG="${VERSION}-${TYPE}"
+TAG="${VERSION}-${RELEASE_TYPE}"
 DOCKER_REPO="${USERNAME}/${DOCKER_NAME}:${TAG}"
 if docker --version &>/dev/null; then
   log_task "Building ${DOCKER_REPO} for context ${BUILD_PATH}"
