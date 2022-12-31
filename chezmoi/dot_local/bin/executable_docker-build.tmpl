@@ -5,69 +5,97 @@
 # The following line is for ShellCheck to correctly identify the above include
 true || source ../../.chezmoitemplates/scripts-library
 
-# parse arguments
-USAGE="-n DOCKER_NAME [-t TYPE] [-v VERSION] [-p BUILD_PATH] [-u USERNAME] [-f DOCKERFILE_PATH]"
+# arguments usage
+USAGE="DOCKER_NAME [-t|--type TYPE] [-v|--version VERSION] [-b|--build-path BUILD_PATH] [-u|--username USERNAME] [-d|--dockerfile-path DOCKERFILE_PATH] [-h|--help]"
 
-# declare variables
+# declare arguments
 DOCKER_NAME=""
-TYPE=""
-VERSION=""
+TYPE="runtime"
+VERSION="latest"
 BUILD_PATH=""
-USERNAME=""
+USERNAME="{{ .docker.username }}"
 DOCKERFILE_PATH=""
 
-while getopts ":n:t:v:p:u:f:" opt; do
-  case ${opt} in
-    n)
-      DOCKER_NAME="${OPTARG}"
-      ;;
-    t)
-      TYPE="${OPTARG}"
-      ;;
-    v)
-      VERSION="${OPTARG}"
-      ;;
-    p)
-      BUILD_PATH="${OPTARG}"
-      ;;
-    u)
-      USERNAME="${OPTARG}"
-      ;;
-    f)
-      DOCKERFILE_PATH="${OPTARG}"
-      ;;
-    \?)
-      echo "Invalid option: -${OPTARG}" >&2
+set +u
+# read arguments
+# check first argument starts with a dash
+# if it does, it's an option and DOCKER_NAME can be the last argument
+# if not, it's the DOCKER_NAME
+if [[ "$1" != -* ]]; then
+  # if no arguments, print usage
+  if [[ $# -eq 0 ]]; then
+    echo "Usage: $0 $USAGE" >&2    
+    exit 1
+  fi
+  DOCKER_NAME="$1"
+  shift
+fi
+# parse options
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+  -t | --type)
+    TYPE="$2"
+    shift
+    ;;
+  --type=*)
+    TYPE="${1#*=}"
+    ;;
+  -v | --version)
+    VERSION="$2"
+    shift
+    ;;
+  --version=*)
+    VERSION="${1#*=}"
+    ;;
+  -b | --build-path)
+    BUILD_PATH="$2"
+    shift
+    ;;
+  --build-path=*)
+    BUILD_PATH="${1#*=}"
+    ;;
+  -u | --username)
+    USERNAME="$2"
+    shift
+    ;;
+  --username=*)
+    USERNAME="${1#*=}"
+    ;;
+  -d | --dockerfile-path)
+    DOCKERFILE_PATH="$2"
+    shift
+    ;;
+  --dockerfile-path=*)
+    DOCKERFILE_PATH="${1#*=}"
+    ;;
+  -h | --help)
+    echo "Usage: $0 $USAGE" >&2    
+    exit 0
+    ;;
+  -h*)
+    echo "Usage: $0 $USAGE" >&2
+    exit 0
+    ;;
+  *)
+    # if no option matches, it's the DOCKER_NAME
+    if [[ -z "$DOCKER_NAME" ]]; then
+      DOCKER_NAME="$1"
+    else
       echo "Usage: $0 $USAGE" >&2
       exit 1
-      ;;
-    :)
-      echo "Option -${OPTARG} requires an argument." >&2
-      echo "Usage: $0 $USAGE" >&2
-      exit 1
-      ;;
+    fi
+    ;;
   esac
+  shift
 done
+set -u
 
-if [[ -z "${DOCKER_NAME}" ]]; then
-  echo "Missing DOCKER_NAME argument" >&2
-  echo "Usage: $0 $USAGE" >&2
-  exit 1
-fi
-if [[ -z "${VERSION}" ]]; then
-  VERSION="latest"
-fi
-if [[ -z "${TYPE}" ]]; then
-  TYPE="runtime"
-fi
-if [[ -z "${USERNAME}" ]]; then
-  USERNAME="{{ .docker.username }}"
-fi
-if [[ -z "${BUILD_PATH}" ]]; then
+# local variables
+DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
+if [[ -z "$BUILD_PATH" ]]; then
   BUILD_PATH="${WORKSPACE_ROOT}/projects/${DOCKER_NAME}"
 fi
-if [[ -z "${DOCKERFILE_PATH}" ]]; then
-  DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
+if [[ -z "$DOCKERFILE_PATH" ]]; then
   DOCKERFILE_PATH="${DOCKERFILES_REPO_DIR}/${DOCKER_NAME}/Dockerfile.${TYPE}"
 fi
 
