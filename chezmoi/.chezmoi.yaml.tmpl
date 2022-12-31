@@ -18,6 +18,7 @@
 # {{- $gpg_gitsign := false -}}
 # {{- $install_rootmoi := true -}}
 # {{- $sudoer := true -}}
+# {{- $github_clones := "ekorpkit,ekorpkit-app" -}}
 
 # {{- $chezmoiForce := or (has "--force" .chezmoi.args) (has "--force=true" .chezmoi.args) -}}
 # {{- $interactive := and stdinIsATTY (not $chezmoiForce) -}}
@@ -383,12 +384,26 @@
 # {{- end -}}
 # {{- end -}}
 
+# {{- if and (hasKey . "github") (hasKey .github "clones") -}}
+# {{-   $github_clones = .github.clones -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ What are your GitHub repositories to clone (input as comma separated list)" -}}
+# {{-   $answer := "" -}}
+# {{-   if $github_clones -}}
+# {{-     $answer = promptString $question $github_clones -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $github_clones = $answer -}}
+# {{-   writeToStdout (printf "✅ GitHub repositories to clone set as '%s'\n" $github_clones) -}}
+# {{- end -}}
+
 # {{- if $interactive -}}
 # {{-   writeToStdout "\n💡 Tip: you can always make chezmoi ask this again by running `chezmoi init` without `--force`.\n" -}}
 # {{- end -}}
 
-# {{- /* This retains the value passed with --source on chezmoi init, which is used in the ../install.sh script */ -}}
-#
+# {{- /* This retains the value passed with --source on chezmoi init, which is used in the ../install.sh script */ -}} #
 sourceDir: "{{ .chezmoi.workingTree }}"
 
 verbose: true
@@ -400,8 +415,18 @@ status:
     exclude:
         - always
 
-# {{/* Here we "export" the variables, so we can access them outside this file */ -}}
-#
+# {{- if $gpg_passphrase -}} #
+encryption: gpg
+gpg:
+  symmetric: true
+  args:
+    - "--batch"
+    - "--passphrase"
+    - {{ $gpg_passphrase | quote }}
+    - "--no-symkey-cache"
+# {{- end -}}
+
+# {{/* Here we "export" the variables, so we can access them outside this file */ -}} #
 data:
     name: "{{ $name }}"
     email: "{{ $email }}"
@@ -428,6 +453,7 @@ data:
     github:
         username: {{ $github_username }}
         token: {{ $github_token }}
+        clones: {{ $github_clones }}
     dotdrop:
         repo: {{ $dotdrop_repo }}
         user_profile: user
@@ -443,6 +469,10 @@ data:
         symlink_to_home: {{ $symlink_to_home }}
         symlink_colab_workspace: {{ $symlink_colab_workspace }}
         colab_drive: "/content/drive/MyDrive"
-    git_repos:
-        - name: ekorpkit
-          url: https://github.com/entelecheia/ekorpkit.git
+    github_repos:
+# {{- if $github_clones -}}    
+# {{- range (split "," $github_clones) }} #
+        - name: {{.}}
+          url: https://github.com/{{ $github_username }}/{{.}}.git 
+# {{ end -}} #
+# {{ end -}} #

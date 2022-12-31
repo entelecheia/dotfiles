@@ -11,20 +11,20 @@ DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
 if [ ! -d "$DOCKERFILES_REPO_DIR" ]; then
   if [[ "$DOCKERFILES_REPO" == "https://"* ]] || [[ "$DOCKERFILES_REPO" == "git@"* ]]; then
     log_task "Clone dockerfiles repository"
-    git clone "$DOCKERFILES_REPO" "$DOCKERFILES_REPO_DIR"
+    c git clone "$DOCKERFILES_REPO" "$DOCKERFILES_REPO_DIR"
   fi
 else
   if [[ "$DOCKERFILES_REPO" == "https://"* ]] || [[ "$DOCKERFILES_REPO" == "git@"* ]]; then
     # if existing dockerfiles repository is not a git repository then remove it
     if ! git -C "$DOCKERFILES_REPO_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
       log_task "Remove dockerfiles repository"
-      rm -rf "$DOCKERFILES_REPO_DIR"
+      c rm -rf "$DOCKERFILES_REPO_DIR"
       log_task "Clone dockerfiles repository"
-      git clone "$DOCKERFILES_REPO" "$DOCKERFILES_REPO_DIR"
+      c git clone "$DOCKERFILES_REPO" "$DOCKERFILES_REPO_DIR"
     # otherwise update the dockerfiles repository
     else
       log_task "Update dockerfiles repository"
-      git -C "$DOCKERFILES_REPO_DIR" pull || true
+      c git -C "$DOCKERFILES_REPO_DIR" pull || true
     fi
   fi
 fi
@@ -34,7 +34,7 @@ DOCKER_USERNAME="{{ .docker.username }}"
 
 if [ -n "$DOCKER_USERNAME" ]; then
   log_task "Login to Docker Hub"
-  c docker login || return 1
+  c docker login || true
 fi
 
 # {{- end }}
