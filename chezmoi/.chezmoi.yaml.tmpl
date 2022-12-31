@@ -470,7 +470,8 @@ data:
         symlink_colab_workspace: {{ $symlink_colab_workspace }}
         colab_drive: "/content/drive/MyDrive"
     github_repos:
-# {{- if $github_clones -}}    
+# {{- if $github_clones -}}
+# {{- $repo_username := or $github_username "entelecheia" -}}
 # {{- range (split "," $github_clones) }} #
         - name: {{.}}
           url: https://github.com/{{ $github_username }}/{{.}}.git 
