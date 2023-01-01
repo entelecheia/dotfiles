@@ -19,6 +19,7 @@
 # {{- $install_rootmoi := true -}}
 # {{- $sudoer := true -}}
 # {{- $github_clones := "ekorpkit,ekorpkit-app" -}}
+# {{- $auto_update := true -}}
 
 # {{- $chezmoiForce := or (has "--force" .chezmoi.args) (has "--force=true" .chezmoi.args) -}}
 # {{- $interactive := and stdinIsATTY (not $chezmoiForce) -}}
@@ -399,6 +400,19 @@
 # {{-   writeToStdout (printf "✅ GitHub repositories to clone set as '%s'\n" $github_clones) -}}
 # {{- end -}}
 
+# {{- if and (hasKey . "system") (hasKey .system "auto_update") -}}
+# {{-   $auto_update = .system.auto_update -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ Do you want to update dotfiles automatically" -}}
+# {{-   $auto_update = promptBool $question $minimum -}}
+# {{-   if $auto_update -}}
+# {{-     writeToStdout "✅ Auto update enabled\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ Auto update disabled\n" -}}
+# {{-   end -}}
+# {{- end -}}
+
 # {{- if $interactive -}}
 # {{-   writeToStdout "\n💡 Tip: you can always make chezmoi ask this again by running `chezmoi init` without `--force`.\n" -}}
 # {{- end -}}
@@ -432,6 +446,7 @@ data:
     email: {{ $email | quote }}
     editor: "vi"
     system:
+        auto_update: {{ $auto_update }}
         hostname: {{ $hostname }}
         is_wsl: {{ $wsl }}
         is_devcontainer: {{ $minimum }}

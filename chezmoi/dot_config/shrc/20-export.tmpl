@@ -1,5 +1,6 @@
 #!/bin/bash
 export TERM=xterm-256color
+export AUTO_UPDATE_DOTFILES="{{ .system.auto_update }}"
 export GITHUB_USERNAME="{{ .github.username }}"
 export DOCKER_USERNAME="{{ .docker.username }}"
 export WORKSPACE_ROOT="{{ .workspace.root }}"
@@ -65,4 +66,11 @@ if [ -d "${HOME}/.pyenv" ] && command -v pyenv >/dev/null 2>&1; then
     eval "$(pyenv virtualenv-init -)"
   fi
   export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+fi
+
+# auto-update dotfiles
+if [ "${AUTO_UPDATE_DOTFILES}" = "true" ]; then
+  if [ -x "${HOME}/.local/bin/dotu" ]; then
+    "${HOME}/.local/bin/dotu" -f
+  fi
 fi
