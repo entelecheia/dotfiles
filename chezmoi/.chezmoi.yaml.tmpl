@@ -40,7 +40,7 @@
 # {{-   $cpuThreads = (output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "(Get-CimInstance -ClassName 'Win32_Processor').NumberOfLogicalProcessors") | trim | atoi -}}
 # {{- end -}}
 
-# {{- $minimum := or $devcontainer (not $ubuntu) -}}
+# {{- $minimum := or $devcontainer ($ubuntu | not) -}}
 # {{- if and (hasKey . "system") (hasKey .system "is_devcontainer") -}}
 # {{-   $minimum = .system.is_devcontainer -}}
 # {{- end -}}
@@ -428,8 +428,8 @@ gpg:
 
 # {{/* Here we "export" the variables, so we can access them outside this file */ -}} #
 data:
-    name: "{{ $name }}"
-    email: "{{ $email }}"
+    name: {{ $name | quote }}
+    email: {{ $email | quote }}
     editor: "vi"
     system:
         hostname: {{ $hostname }}
@@ -439,7 +439,7 @@ data:
         is_interactive: {{ $interactive }}
         is_sudoer: {{ $sudoer }}
         install_rootmoi: {{ and $install_rootmoi $sudoer }}
-        uname_arch: "{{ output "uname" "-m" | trim }}"
+        uname_arch: {{ output "uname" "-m" | trim | quote }}
         cpu:
             cores: {{ $cpuCores }}
             threads: {{ $cpuThreads }}
@@ -447,12 +447,12 @@ data:
         algorithm: {{ $ssh_algorithm }}
         key_filename: {{ $ssh_keyfile }}
     gnupg:
-        key_id: "{{ $gpg_key_id }}"
-        passphrase: "{{ $gpg_passphrase }}"
+        key_id: {{ $gpg_key_id | quote }}
+        passphrase: {{ $gpg_passphrase | quote }}
         gitsign: {{ $gpg_gitsign }}
     github:
         username: {{ $github_username }}
-        token: {{ $github_token }}
+        token: {{ $github_token | quote }}
         clones: {{ $github_clones }}
     dotdrop:
         repo: {{ $dotdrop_repo }}

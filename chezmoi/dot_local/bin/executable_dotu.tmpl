@@ -5,6 +5,14 @@
 # The following line is for ShellCheck to correctly identify the above include
 true || source ../../.chezmoitemplates/scripts-library
 
+set +u
+FORCE=false
+# check if --force or -f flag is set
+if [[ "$1" == "--force" ]] || [[ "$1" == "-f" ]]; then
+  FORCE=true
+fi
+set -u
+
 if chezmoi --version &>/dev/null; then
   log_task "Pulling latest changes from dotfiles repo"
   # Pull latest changes from dotfiles repo
@@ -19,12 +27,12 @@ fi
 
 if chezmoi --version &>/dev/null; then
   log_task "Updating dotfiles for chezmoi"
-  # if chezmoi diff yields "chezmoi: warning: config file template has changed", init and apply
-  if [[ "$(chezmoi diff)" == *"chezmoi: warning: config file template has changed"* ]]; then
-    c chezmoi init
+  c chezmoi init --force
+  if [[ "$FORCE" == "true" ]]; then
+    c chezmoi apply --force
+  else
+    c chezmoi apply
   fi
-  # Apply the rest
-  c chezmoi apply -v
 fi
 
 if dotdrop --version &>/dev/null; then
