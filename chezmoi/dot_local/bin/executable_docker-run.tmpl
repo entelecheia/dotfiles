@@ -6,20 +6,20 @@
 true || source ../../.chezmoitemplates/scripts-library
 
 # arguments usage
-USAGE="DOCKER_NAME [-r|--release-type RELEASE_TYPE] [--variant VARIANT] [--target TARGET] [--build-args BUILD_ARGS] [-v|--version VERSION] [-l|--latest] [-u|--username USERNAME] [-b|--build-path BUILD_PATH] [-d|--dockerfile-path DOCKERFILE_PATH] [-p|--push ] [-h|--help]"
+USAGE="DOCKER_NAME [-c:--cmd CMD] [-r|--release-type RELEASE_TYPE] [--variant VARIANT] --run-args RUN_ARGS] [-v|--version VERSION] [-l|--latest] [-u|--username USERNAME] [-b|--build-path BUILD_PATH] [-d|--dockerfile-path DOCKERFILE_PATH] [-h|--help]"
 
 # declare arguments
 DOCKER_NAME=""
 RELEASE_TYPE="runtime"
 VARIANT=""
-VERSION=""
+VERSION="latest"
 LATEST="false"
 USERNAME="{{ .docker.username }}"
 BUILD_PATH=""
 DOCKERFILE_PATH=""
-PUSH="false"
-TARGET=""
-BUILD_ARGS=""
+ADDITIONAL_ARGS=""
+CMD="/bin/bash"
+RUN_ARGS=""
 
 set +u
 # read arguments
@@ -38,6 +38,13 @@ fi
 # parse options
 while [[ $# -gt 0 ]]; do
   case "$1" in
+  -c | --cmd)
+    CMD="$2"
+    shift
+    ;;
+  --cmd=*)
+    CMD="${1#*=}"
+    ;;
   -r | --release-type)
     RELEASE_TYPE="$2"
     shift
@@ -59,19 +66,12 @@ while [[ $# -gt 0 ]]; do
   --variant=*)
     VARIANT="${1#*=}"
     ;;
-  --target)
-    TARGET="$2"
+  --run-args)
+    RUN_ARGS="$2"
     shift
     ;;
-  --target=*)
-    TARGET="${1#*=}"
-    ;;
-  --build-args)
-    BUILD_ARGS="$2"
-    shift
-    ;;
-  --build-args=*)
-    BUILD_ARGS="${1#*=}"
+  --run-args=*)
+    RUN_ARGS="${1#*=}"
     ;;
   -l | --latest)
     LATEST="true"
@@ -83,6 +83,10 @@ while [[ $# -gt 0 ]]; do
   --username=*)
     USERNAME="${1#*=}"
     ;;
+  -d | --dockerfile-path)
+    DOCKERFILE_PATH="$2"
+    shift
+    ;;
   -b | --build-path)
     BUILD_PATH="$2"
     shift
@@ -90,15 +94,8 @@ while [[ $# -gt 0 ]]; do
   --build-path=*)
     BUILD_PATH="${1#*=}"
     ;;
-  -d | --dockerfile-path)
-    DOCKERFILE_PATH="$2"
-    shift
-    ;;
   --dockerfile-path=*)
     DOCKERFILE_PATH="${1#*=}"
-    ;;
-  -p | --push)
-    PUSH="true"
     ;;
   -h | --help)
     echo "Usage: $0 $USAGE" >&2    
@@ -113,13 +110,16 @@ while [[ $# -gt 0 ]]; do
     if [[ -z "$DOCKER_NAME" ]]; then
       DOCKER_NAME="$1"
     else
-      echo "Usage: $0 $USAGE" >&2
-      exit 1
+      ADDITIONAL_ARGS="$ADDITIONAL_ARGS $1"
     fi
     ;;
   esac
   shift
 done
+# check if remaining arguments exist
+if [[ -n "$ADDITIONAL_ARGS" ]]; then
+  echo "Additional arguments: $ADDITIONAL_ARGS" >&2
+fi
 set -u
 
 # check version format
@@ -135,13 +135,11 @@ if [[ -z "$BUILD_PATH" ]]; then
 fi
 if [[ -z "$DOCKERFILE_PATH" ]]; then
   DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
-  DOCKERFILE_PATH="${DOCKERFILES_REPO_DIR}/${DOCKER_NAME}/Dockerfile.${RELEASE_TYPE}"
+  DOCKERFILE_PATH="${DOCKERFILES_REPO_DIR}/${DOCKER_NAME}"
 fi
-DOCKERFILE_DIR=$(dirname "$DOCKERFILE_PATH")
-
 # check DOCKER_SCRIPT
-DOCKER_SCRIPT=".docker.build"
-DOCKER_SCRIPT_PATH="${DOCKERFILE_DIR}/${DOCKER_SCRIPT}"
+DOCKER_SCRIPT=".docker.run"
+DOCKER_SCRIPT_PATH="${DOCKERFILE_PATH}/${DOCKER_SCRIPT}"
 if [[ -f "$DOCKER_SCRIPT_PATH" ]]; then
   log_task "Sourcing environment script from ${DOCKER_SCRIPT_PATH}"
   set -a
@@ -150,42 +148,31 @@ if [[ -f "$DOCKER_SCRIPT_PATH" ]]; then
   set +a
 fi
 
+ENV_FILE=".env.${RELEASE_TYPE}"
+ENV_PATH="${DOCKERFILE_PATH}/${ENV_FILE}"
+
 if [[ -n "$VARIANT" ]]; then
   TAG="${VERSION}-${VARIANT}-${RELEASE_TYPE}"
-  LATEST_TAG="latest-${VARIANT}-${RELEASE_TYPE}"
 else
   TAG="${VERSION}-${RELEASE_TYPE}"
-  LATEST_TAG="latest-${RELEASE_TYPE}"
 fi
-DOCKER_REPO="${USERNAME}/${DOCKER_NAME}:${TAG}"
+DOCKER_IMAGE_NAME="${USERNAME}/${DOCKER_NAME}:${TAG}"
+DOCKER_CONTAINTER_NAME="${DOCKER_NAME}-${RELEASE_TYPE}"
 
 if docker --version &>/dev/null; then
-  log_task "Building ${DOCKER_REPO} for context ${BUILD_PATH}"
-  DOCKER_CMD="docker build --rm --force-rm "
-  if [[ -n "$TARGET" ]]; then
-    DOCKER_CMD="${DOCKER_CMD}--target ${TARGET} "
+  log_task "Running docker container ${DOCKER_CONTAINTER_NAME} from image ${DOCKER_IMAGE_NAME}"
+  DOCKER_CMD="docker run --rm "
+  if [[ -n "$ADDITIONAL_ARGS" ]]; then
+    DOCKER_CMD="${DOCKER_CMD}${ADDITIONAL_ARGS} "
   fi
-  DOCKER_CMD="${DOCKER_CMD}${BUILD_ARGS}"
-  DOCKER_CMD="${DOCKER_CMD}-t ${DOCKER_REPO} "
-  DOCKER_CMD="${DOCKER_CMD}-f ${DOCKERFILE_PATH} "
-  DOCKER_CMD="${DOCKER_CMD}${BUILD_PATH}"
+  if [[ -f "$ENV_PATH" ]]; then
+    DOCKER_CMD="${DOCKER_CMD}--env-file ${ENV_PATH} "
+  fi
+  if [[ -n "$RUN_ARGS" ]]; then
+    DOCKER_CMD="${DOCKER_CMD}${RUN_ARGS} "
+  fi
+  DOCKER_CMD="${DOCKER_CMD}--name ${DOCKER_CONTAINTER_NAME} "
+  DOCKER_CMD="${DOCKER_CMD}${DOCKER_IMAGE_NAME} ${CMD}"
   c eval "$DOCKER_CMD"
-
-  log_info "Successfully built ${DOCKER_REPO} with context ${BUILD_PATH}"
-
-  if [[ "$PUSH" == "true" ]]; then
-    log_task "Pushing ${DOCKER_REPO}"
-    c docker push "${DOCKER_REPO}"
-  fi
-  # exclude VERSION=latest|prerelease|nightly from latest tag
-  if [[ "$LATEST" == "true" ]] && [[ "$VERSION" != "latest*" ]] && [[ "$VERSION" != "pre*" ]] && [[ "$VERSION" != "night*" ]]; then
-    log_task "Tagging ${DOCKER_REPO} as latest"
-    c docker tag "${DOCKER_REPO}" "${USERNAME}/${DOCKER_NAME}:${LATEST_TAG}"
-
-    if [[ "$PUSH" == "true" ]]; then
-      log_task "Pushing ${USERNAME}/${DOCKER_NAME}:${LATEST_TAG}"
-      c docker push "${USERNAME}/${DOCKER_NAME}:${LATEST_TAG}"
-    fi
-  fi
 
 fi

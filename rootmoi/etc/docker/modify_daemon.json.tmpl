@@ -11,4 +11,7 @@ fi
 
 json=$("${jq[@]}" '.features.buildkit = true' <<<"${json}")
 
+# nvidia runtime
+json=$("${jq[@]}" '.runtimes."nvidia" = {"path": "nvidia-container-runtime", "runtimeArgs": []}' <<<"${json}")
+
 echo -n "${json}"

@@ -24,6 +24,13 @@
     command: gpg
     args: ["--dearmor"]
 
+"usr/share/keyrings/nvidia-container-toolkit-keyring":
+  type: file
+  url: "https://nvidia.github.io/libnvidia-container/gpgkey"
+  filter:
+    command: gpg
+    args: ["--dearmor"]
+
 "usr/share/keyrings/helm.gpg":
   type: file
   url: "https://baltocdn.com/helm/signing.asc"
