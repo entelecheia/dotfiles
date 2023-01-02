@@ -6,15 +6,17 @@
 true || source ../../.chezmoitemplates/scripts-library
 
 # arguments usage
-USAGE="DOCKER_NAME [-r|--release-type RELEASE_TYPE] [-v|--version VERSION] [-b|--build-path BUILD_PATH] [-u|--username USERNAME] [-d|--dockerfile-path DOCKERFILE_PATH] [-h|--help]"
+USAGE="DOCKER_NAME [-r|--release-type RELEASE_TYPE] [-v|--version VERSION] [-l|--latest] [-b|--build-path BUILD_PATH] [-u|--username USERNAME] [-d|--dockerfile-path DOCKERFILE_PATH] [-p|--push ] [-h|--help]"
 
 # declare arguments
 DOCKER_NAME=""
 RELEASE_TYPE="runtime"
-VERSION="latest"
+VERSION=""
+LATEST="false"
 BUILD_PATH=""
 USERNAME="{{ .docker.username }}"
 DOCKERFILE_PATH=""
+PUSH="false"
 
 set +u
 # read arguments
@@ -47,6 +49,9 @@ while [[ $# -gt 0 ]]; do
   --version=*)
     VERSION="${1#*=}"
     ;;
+  -l | --latest)
+    LATEST="true"
+    ;;
   -b | --build-path)
     BUILD_PATH="$2"
     shift
@@ -67,6 +72,9 @@ while [[ $# -gt 0 ]]; do
     ;;
   --dockerfile-path=*)
     DOCKERFILE_PATH="${1#*=}"
+    ;;
+  -p | --push)
+    PUSH="true"
     ;;
   -h | --help)
     echo "Usage: $0 $USAGE" >&2    
@@ -99,12 +107,52 @@ if [[ -z "$DOCKERFILE_PATH" ]]; then
   DOCKERFILE_PATH="${DOCKERFILES_REPO_DIR}/${DOCKER_NAME}/Dockerfile.${RELEASE_TYPE}"
 fi
 
+if [[ "$LATEST" == "true" ]] && [[ -z "$VERSION" ]]; then
+  VERSION="latest"
+fi
 TAG="${VERSION}-${RELEASE_TYPE}"
 DOCKER_REPO="${USERNAME}/${DOCKER_NAME}:${TAG}"
+TARGET=""
+if [[ "$VERSION" == "latest" ]]; then
+  TARGET="image-latest"
+elif [[ "$VERSION" == "pre*" ]] || [[ "$VERSION" == "night*" ]]; then
+  TARGET="image-nightly"
+elif [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+  TARGET="image-versioned"
+else
+  echo "ERROR: unknown version: $VERSION"
+fi
+
 if docker --version &>/dev/null; then
   log_task "Building ${DOCKER_REPO} for context ${BUILD_PATH}"
-  c docker build --rm --force-rm -t "${DOCKER_REPO}" -f "${DOCKERFILE_PATH}" "${BUILD_PATH}"
+  DOCKER_CMD="docker build --rm --force-rm "
+  if [[ -n "$TARGET" ]]; then
+    DOCKER_CMD="${DOCKER_CMD}--target ${TARGET} "
+  fi
+  if [[ -n "$VERSION" ]]; then
+    DOCKER_CMD="${DOCKER_CMD}--build-arg VERSION=${VERSION} "
+  fi
+  DOCKER_CMD="${DOCKER_CMD}-t ${DOCKER_REPO} "
+  DOCKER_CMD="${DOCKER_CMD}-f ${DOCKERFILE_PATH} "
+  DOCKER_CMD="${DOCKER_CMD}${BUILD_PATH}"
+  c eval "$DOCKER_CMD"
 
   log_info "Successfully built ${DOCKER_REPO} with context ${BUILD_PATH}"
+
+  if [[ "$PUSH" == "true" ]]; then
+    log_task "Pushing ${DOCKER_REPO}"
+    c docker push "${DOCKER_REPO}"
+  fi
+  # exclude VERSION=latest|prerelease|nightly from latest tag
+  if [[ "$LATEST" == "true" ]] && [[ "$VERSION" != "latest*" ]] && [[ "$VERSION" != "pre*" ]] && [[ "$VERSION" != "night*" ]]; then
+    log_task "Tagging ${DOCKER_REPO} as latest"
+    LATEST_TAG="latest-${RELEASE_TYPE}"
+    c docker tag "${DOCKER_REPO}" "${USERNAME}/${DOCKER_NAME}:${LATEST_TAG}"
+
+    if [[ "$PUSH" == "true" ]]; then
+      log_task "Pushing ${USERNAME}/${DOCKER_NAME}:${LATEST_TAG}"
+      c docker push "${USERNAME}/${DOCKER_NAME}:${LATEST_TAG}"
+    fi
+  fi
 
 fi
