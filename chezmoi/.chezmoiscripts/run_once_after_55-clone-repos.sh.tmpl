@@ -1,0 +1,37 @@
+#!/bin/bash
+# {{ if eq .chezmoi.os "linux" "darwin" -}}
+
+# {{ include (joinPath .chezmoi.sourceDir ".chezmoitemplates/scripts-library") }}
+
+# The following line is for ShellCheck to correctly identify the above included library
+true || source ../.chezmoitemplates/scripts-library
+
+# root: /home/yj.lee/workspace
+# symlink_colab_workspace: true
+# colab_drive: "/content/drive/MyDrive"
+WORKSPACE_NAME="{{ .workspace.name }}"
+# {{ if and .system.is_wsl (eq .workspace.location .chezmoi.homeDir ) }}
+WORKSPACE_LOCATION="$(wslpath -a "$(wslvar USERPROFILE)")"
+if [[ ! -d "${WORKSPACE_LOCATION}" ]]; then
+  WORKSPACE_LOCATION="{{ .workspace.location }}"
+fi
+# {{ else }}
+WORKSPACE_LOCATION="{{ .workspace.location }}"
+# {{ end }}
+WORKSPACE_DIR="${WORKSPACE_LOCATION}/${WORKSPACE_NAME}"
+
+# clone git repos into workspace/projects
+c mkdir -p "${WORKSPACE_DIR}/projects"
+# {{ range .github_repos }}
+log_task "Cloning git repo: {{ .name }}"
+REPO_NAME="{{ .name }}"
+# split repo name into org and repo
+REPO_NAME="$(echo "${REPO_NAME}" | cut -d'/' -f2)"
+if [[ -d "${WORKSPACE_DIR}/projects/${REPO_NAME}" ]]; then
+  log_info "Git repo already exists: {{ .name }}"
+else
+  c git clone "{{ .url -}}" "${WORKSPACE_DIR}/projects/${REPO_NAME}"
+fi
+# {{ end }}
+
+# {{ end -}}

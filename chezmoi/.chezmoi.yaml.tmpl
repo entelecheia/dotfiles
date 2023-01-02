@@ -18,7 +18,7 @@
 # {{- $gpg_gitsign := false -}}
 # {{- $install_rootmoi := true -}}
 # {{- $sudoer := true -}}
-# {{- $github_clones := "ekorpkit,ekorpkit-app" -}}
+# {{- $github_clones := "entelecheia/ekorpkit,entelecheia/ekorpkit-app" -}}
 # {{- $auto_update := true -}}
 
 # {{- $chezmoiForce := or (has "--force" .chezmoi.args) (has "--force=true" .chezmoi.args) -}}
@@ -53,6 +53,53 @@
 # {{-   else -}}
 # {{-     writeToStdout "✅ Minimum mode disabled\n" -}}
 # {{-   end -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "system") (hasKey .system "auto_update") -}}
+# {{-   $auto_update = .system.auto_update -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ Do you want to update dotfiles automatically" -}}
+# {{-   $auto_update = promptBool $question $minimum -}}
+# {{-   if $auto_update -}}
+# {{-     writeToStdout "✅ Auto update enabled\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ Auto update disabled\n" -}}
+# {{-   end -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "system") (hasKey .system "is_sudoer") -}}
+# {{-   $sudoer = .system.is_sudoer -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ Do you have sudo privileges" -}}
+# {{-   $sudoer = promptBool $question $sudoer -}}
+# {{-   if $sudoer -}}
+# {{-     writeToStdout "✅ Sudo privileges enabled\n" -}}
+# {{-   else -}}
+# {{-     $install_rootmoi := false -}}
+# {{-     writeToStdout "✅ Sudo privileges disabled\n" -}}
+# {{-   end -}}
+# {{- end -}}
+
+# {{- if eq .chezmoi.os "darwin" -}}
+# {{-   $install_rootmoi := false -}}
+# {{- else if $sudoer -}}
+# {{-   if and (hasKey . "system") (hasKey .system "install_rootmoi") -}}
+# {{-       $install_rootmoi = .system.install_rootmoi -}}
+# {{-   end -}}
+# {{-   if $interactive -}}
+# {{-       $question := "❔ Do you want to install dotfiles for the root user" -}}
+# {{-       $install_rootmoi = promptBool $question $install_rootmoi -}}
+# {{-       if $install_rootmoi -}}
+# {{-           writeToStdout "✅ Dotfiles will be installed for the root user\n" -}}
+# {{-       else -}}
+# {{-           writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
+# {{-       end -}}
+# {{-   end -}}
+# {{- else -}}
+# {{-   $install_rootmoi := false -}}
+# {{-   writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
 # {{- end -}}
 
 # {{- if hasKey . "name" -}}
@@ -138,40 +185,6 @@
 # {{-   end -}}
 # {{- end -}}
 
-# {{- if and (hasKey . "system") (hasKey .system "is_sudoer") -}}
-# {{-   $sudoer = .system.is_sudoer -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ Do you have sudo privileges" -}}
-# {{-   $sudoer = promptBool $question $sudoer -}}
-# {{-   if $sudoer -}}
-# {{-     writeToStdout "✅ Sudo privileges enabled\n" -}}
-# {{-   else -}}
-# {{-     $install_rootmoi := false -}}
-# {{-     writeToStdout "✅ Sudo privileges disabled\n" -}}
-# {{-   end -}}
-# {{- end -}}
-
-# {{- if eq .chezmoi.os "darwin" -}}
-# {{-   $install_rootmoi := false -}}
-# {{- else if $sudoer -}}
-# {{-   if and (hasKey . "system") (hasKey .system "install_rootmoi") -}}
-# {{-       $install_rootmoi = .system.install_rootmoi -}}
-# {{-   end -}}
-# {{-   if $interactive -}}
-# {{-       $question := "❔ Do you want to install dotfiles for the root user" -}}
-# {{-       $install_rootmoi = promptBool $question $install_rootmoi -}}
-# {{-       if $install_rootmoi -}}
-# {{-           writeToStdout "✅ Dotfiles will be installed for the root user\n" -}}
-# {{-       else -}}
-# {{-           writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
-# {{-       end -}}
-# {{-   end -}}
-# {{- else -}}
-# {{-   $install_rootmoi := false -}}
-# {{-   writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
-# {{- end -}}
-
 # {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "repo") -}}
 # {{-   $dotdrop_repo = .dotdrop.repo -}}
 # {{- end -}}
@@ -200,6 +213,21 @@
 # {{-   end -}}
 # {{-   $dockerfiles_repo = $answer -}}
 # {{-   writeToStdout (printf "✅ dockerfiles repo set as '%s'\n" $dockerfiles_repo) -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "github") (hasKey .github "clones") -}}
+# {{-   $github_clones = .github.clones -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ What are your GitHub repositories to clone (input as comma separated list)" -}}
+# {{-   $answer := "" -}}
+# {{-   if $github_clones -}}
+# {{-     $answer = promptString $question $github_clones -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $github_clones = $answer -}}
+# {{-   writeToStdout (printf "✅ GitHub repositories to clone set as '%s'\n" $github_clones) -}}
 # {{- end -}}
 
 # {{- if and (hasKey . "ssh") (hasKey .ssh "algorithm") -}}
@@ -385,34 +413,6 @@
 # {{- end -}}
 # {{- end -}}
 
-# {{- if and (hasKey . "github") (hasKey .github "clones") -}}
-# {{-   $github_clones = .github.clones -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ What are your GitHub repositories to clone (input as comma separated list)" -}}
-# {{-   $answer := "" -}}
-# {{-   if $github_clones -}}
-# {{-     $answer = promptString $question $github_clones -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $github_clones = $answer -}}
-# {{-   writeToStdout (printf "✅ GitHub repositories to clone set as '%s'\n" $github_clones) -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "system") (hasKey .system "auto_update") -}}
-# {{-   $auto_update = .system.auto_update -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ Do you want to update dotfiles automatically" -}}
-# {{-   $auto_update = promptBool $question $minimum -}}
-# {{-   if $auto_update -}}
-# {{-     writeToStdout "✅ Auto update enabled\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "✅ Auto update disabled\n" -}}
-# {{-   end -}}
-# {{- end -}}
-
 # {{- if $interactive -}}
 # {{-   writeToStdout "\n💡 Tip: you can always make chezmoi ask this again by running `chezmoi init` without `--force`.\n" -}}
 # {{- end -}}
@@ -486,9 +486,8 @@ data:
         colab_drive: "/content/drive/MyDrive"
     github_repos:
 # {{- if $github_clones -}}
-# {{- $repo_username := or $github_username "entelecheia" -}}
 # {{- range (split "," $github_clones) }} #
         - name: {{.}}
-          url: https://github.com/{{ $repo_username }}/{{.}}.git 
+          url: https://github.com/{{.}}.git 
 # {{ end -}} #
 # {{ end -}} #
