@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# {{ template "scripts-library" }}
+
+# The following line is for ShellCheck to correctly identify the above include
+true || source ../../.chezmoitemplates/scripts-library
+
+if docker --version &>/dev/null; then
+  # Remove all stopped containers
+  containers=$(docker ps -a -q)
+  if [[ -n "${containers}" ]]; then
+    log_task "Removing stopped containers"
+    for container in ${containers}; do
+      c docker rm "${container}" || true
+    done
+  fi
+  # Remove all dangling images
+  images=$(docker images -q -f dangling=true)
+  if [[ -n "${images}" ]]; then
+    log_task "Removing dangling images"
+    for image in ${images}; do
+      c docker rmi "${image}" || true
+    done
+  fi
+  # Remove all dangling volumes
+  volumes=$(docker volume ls -q -f dangling=true)
+  if [[ -n "${volumes}" ]]; then
+    log_task "Removing dangling volumes"
+    for volume in ${volumes}; do
+      c docker volume rm "${volume}" || true
+    done
+  fi
+
+fi
