@@ -9,6 +9,7 @@ true || source ../.chezmoitemplates/scripts-library
 # shellcheck disable=all
 original_args=({{ range (rest .chezmoi.args) }} {{ . | quote }}{{ end }})
 args=(apply)
+diff_args=(diff)
 
 # Filter incompatible args
 skip_one_more=false
@@ -44,10 +45,14 @@ for i in "${!original_args[@]}"; do
   fi
 
   args+=("${original_args[i]}")
+  diff_args+=("${original_args[i]}")
 done
 
-log_task "Applying root dotfiles"
+# .config/rootmoi/.rootmoiversion hash: {{ include "dot_config/rootmoi/dot_rootmoiversion" | sha256sum }}
+ROOTMOI_VERSION=$(cat "${HOME}/.config/rootmoi/.rootmoiversion")
+ROOTMOI='{{ joinPath .chezmoi.homeDir ".local/bin/rootmoi" }}'
+log_task "Applying root dotfiles with rootmoi (version ${ROOTMOI_VERSION})"
 log_c "rootmoi" "${args[@]}"
-exec '{{ joinPath .chezmoi.homeDir ".local/bin/rootmoi" }}' "${args[@]}"
+exec "${ROOTMOI}" "${args[@]}"
 
 # {{ end -}}

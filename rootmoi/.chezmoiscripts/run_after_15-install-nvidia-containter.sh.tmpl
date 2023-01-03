@@ -5,11 +5,19 @@
 # The following line is for ShellCheck to correctly identify the above included library
 true || source ../.chezmoitemplates/scripts-library
 
-distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
-      && curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
-      && curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | \
-            sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
-            sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+KEYRING_FILE="/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg"
+if [[ ! -f "${KEYRING_FILE}" ]]; then
+  c curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+fi
+
+SOURCE_LIST_FILE="/etc/apt/sources.list.d/nvidia-container-toolkit.list"
+if [[ ! -f "${SOURCE_LIST_FILE}" ]]; then
+  # shellcheck disable=SC1091
+  distribution=$(. /etc/os-release;echo "$ID$VERSION_ID")
+  c curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | \
+      sed "s#deb https://#deb [signed-by=${KEYRING_FILE}] https://#g" | \
+      sudo tee "$SOURCE_LIST_FILE"
+fi
 
 package="nvidia-docker2"
 if ! is_apt_package_installed "${package}"; then
