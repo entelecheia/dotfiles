@@ -6,11 +6,10 @@
 true || source ../../.chezmoitemplates/scripts-library
 
 # arguments usage
-USAGE="DOCKER_NAME [-b|--build-path BUILD_PATH] [-d|--dockerfile-path DOCKERFILE_PATH] [-e|--env-file ENV_PATH] [-h|--help]"
+USAGE="DOCKER_NAME [-d|--dockerfile-path DOCKERFILE_PATH] [-e|--env-file ENV_PATH] [-h|--help]"
 
 # declare arguments
 DOCKER_NAME=""
-BUILD_PATH=""
 DOCKERFILE_PATH=""
 ENV_PATH=""
 ADDITIONAL_ARGS=""
@@ -32,13 +31,6 @@ fi
 # parse options
 while [[ $# -gt 0 ]]; do
   case "$1" in
-  -b | --build-path)
-    BUILD_PATH="$2"
-    shift
-    ;;
-  --build-path=*)
-    BUILD_PATH="${1#*=}"
-    ;;
   -d | --dockerfile-path)
     DOCKERFILE_PATH="$2"
     shift
@@ -79,14 +71,8 @@ fi
 set -u
 
 # check PATHs
-if [[ -z "$BUILD_PATH" ]]; then
-  BUILD_PATH="${WORKSPACE_ROOT}/projects/${DOCKER_NAME}"
-fi
-# export BUILD_PATH
-export BUILD_PATH
-
 if [[ -z "$DOCKERFILE_PATH" ]]; then
-  DOCKERFILE_PATH="${BUILD_PATH}/docker-compose.yml"
+  DOCKERFILE_PATH="${WORKSPACE_ROOT}/projects/${DOCKER_NAME}/docker-compose.yml"
 fi
 if [[ -z "$DOCKERFILE_PATH" ]]; then
   DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
@@ -94,6 +80,8 @@ if [[ -z "$DOCKERFILE_PATH" ]]; then
 fi
 DOCKERFILE_DIR=$(dirname "$DOCKERFILE_PATH")
 export DOCKERFILE_DIR
+BUILD_PATH="${DOCKERFILE_DIR}"
+export BUILD_PATH
 
 if [[ -z "$ENV_PATH" ]]; then
   ENV_PATH="${DOCKERFILE_DIR}/.env.docker"
