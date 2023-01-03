@@ -134,12 +134,27 @@ if [[ -z "$BUILD_PATH" ]]; then
   BUILD_PATH="${WORKSPACE_ROOT}/projects/${DOCKER_NAME}"
 fi
 if [[ -z "$DOCKERFILE_PATH" ]]; then
+  DOCKERFILE_PATH="${BUILD_PATH}/Dockerfile.${RELEASE_TYPE}"
+fi
+if [[ -z "$DOCKERFILE_PATH" ]]; then
   DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
   DOCKERFILE_PATH="${DOCKERFILES_REPO_DIR}/${DOCKER_NAME}"
 fi
+DOCKERFILE_DIR="$DOCKERFILE_PATH"
+
+# load environment variables
+DOCKER_ENV_PATH="${DOCKERFILE_DIR}/.env.docker"
+if [[ -f "$DOCKER_ENV_PATH" ]]; then
+  log_task "Sourcing environment variables from ${DOCKER_ENV_PATH}"
+  set -a
+  # shellcheck disable=SC1090
+  source "$DOCKER_ENV_PATH"
+  set +a
+fi
+
 # check DOCKER_SCRIPT
 DOCKER_SCRIPT=".docker.run"
-DOCKER_SCRIPT_PATH="${DOCKERFILE_PATH}/${DOCKER_SCRIPT}"
+DOCKER_SCRIPT_PATH="${DOCKERFILE_DIR}/${DOCKER_SCRIPT}"
 if [[ -f "$DOCKER_SCRIPT_PATH" ]]; then
   log_task "Sourcing environment script from ${DOCKER_SCRIPT_PATH}"
   set -a
@@ -149,7 +164,7 @@ if [[ -f "$DOCKER_SCRIPT_PATH" ]]; then
 fi
 
 ENV_FILE=".env.${RELEASE_TYPE}"
-ENV_PATH="${DOCKERFILE_PATH}/${ENV_FILE}"
+ENV_PATH="${DOCKERFILE_DIR}/${ENV_FILE}"
 
 if [[ -n "$VARIANT" ]]; then
   TAG="${VERSION}-${VARIANT}-${RELEASE_TYPE}"

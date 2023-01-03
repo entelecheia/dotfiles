@@ -1,0 +1,107 @@
+#!/bin/bash
+
+# {{ template "scripts-library" }}
+
+# The following line is for ShellCheck to correctly identify the above include
+true || source ../../.chezmoitemplates/scripts-library
+
+# arguments usage
+USAGE="DOCKER_NAME [-b|--build-path BUILD_PATH] [-d|--dockerfile-path DOCKERFILE_PATH] [-e|--env-file ENV_PATH] [-h|--help]"
+
+# declare arguments
+DOCKER_NAME=""
+BUILD_PATH=""
+DOCKERFILE_PATH=""
+ENV_PATH=""
+
+set +u
+# read arguments
+# check first argument starts with a dash
+# if it does, it's an option and DOCKER_NAME can be the last argument
+# if not, it's the DOCKER_NAME
+if [[ "$1" != -* ]]; then
+  # if no arguments, print usage
+  if [[ $# -eq 0 ]]; then
+    echo "Usage: $0 $USAGE" >&2    
+    exit 1
+  fi
+  DOCKER_NAME="$1"
+  shift
+fi
+# parse options
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+  -b | --build-path)
+    BUILD_PATH="$2"
+    shift
+    ;;
+  --build-path=*)
+    BUILD_PATH="${1#*=}"
+    ;;
+  -d | --dockerfile-path)
+    DOCKERFILE_PATH="$2"
+    shift
+    ;;
+  --dockerfile-path=*)
+    DOCKERFILE_PATH="${1#*=}"
+    ;;
+  -e | --env-file)
+    ENV_PATH="$2"
+    shift
+    ;;
+  --env-file=*)
+    ENV_PATH="${1#*=}"
+    ;;
+  -h | --help)
+    echo "Usage: $0 $USAGE" >&2    
+    exit 0
+    ;;
+  -h*)
+    echo "Usage: $0 $USAGE" >&2
+    exit 0
+    ;;
+  *)
+    # if no option matches, it's the DOCKER_NAME
+    if [[ -z "$DOCKER_NAME" ]]; then
+      DOCKER_NAME="$1"
+    else
+      echo "Usage: $0 $USAGE" >&2
+      exit 1
+    fi
+    ;;
+  esac
+  shift
+done
+set -u
+
+# check PATHs
+if [[ -z "$BUILD_PATH" ]]; then
+  BUILD_PATH="${WORKSPACE_ROOT}/projects/${DOCKER_NAME}"
+fi
+# export BUILD_PATH
+export BUILD_PATH
+
+if [[ -z "$DOCKERFILE_PATH" ]]; then
+  DOCKERFILE_PATH="${BUILD_PATH}/docker-compose.yml"
+fi
+if [[ -z "$DOCKERFILE_PATH" ]]; then
+  DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
+  DOCKERFILE_PATH="${DOCKERFILES_REPO_DIR}/${DOCKER_NAME}/docker-compose.yml"
+fi
+DOCKERFILE_DIR=$(dirname "$DOCKERFILE_PATH")
+export DOCKERFILE_DIR
+
+if [[ -z "$ENV_PATH" ]]; then
+  ENV_PATH="${DOCKERFILE_DIR}/.env.docker"
+fi
+
+if docker-compose --version &>/dev/null; then
+  log_task "Building ${DOCKER_NAME} for context ${BUILD_PATH} with docker-compose"
+
+  # change to the directory of the build context
+  c cd "${BUILD_PATH}" || exit 1  
+  c docker-compose -f "${DOCKERFILE_PATH}" --env-file "${ENV_PATH}" build
+
+  log_info "Successfully built ${DOCKER_NAME} with context ${BUILD_PATH}"
+
+fi

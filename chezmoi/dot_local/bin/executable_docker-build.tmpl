@@ -134,10 +134,23 @@ if [[ -z "$BUILD_PATH" ]]; then
   BUILD_PATH="${WORKSPACE_ROOT}/projects/${DOCKER_NAME}"
 fi
 if [[ -z "$DOCKERFILE_PATH" ]]; then
+  DOCKERFILE_PATH="${BUILD_PATH}/Dockerfile.${RELEASE_TYPE}"
+fi
+if [[ -z "$DOCKERFILE_PATH" ]]; then
   DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
   DOCKERFILE_PATH="${DOCKERFILES_REPO_DIR}/${DOCKER_NAME}/Dockerfile.${RELEASE_TYPE}"
 fi
 DOCKERFILE_DIR=$(dirname "$DOCKERFILE_PATH")
+
+# load environment variables
+DOCKER_ENV_PATH="${DOCKERFILE_DIR}/.env.docker"
+if [[ -f "$DOCKER_ENV_PATH" ]]; then
+  log_task "Sourcing environment variables from ${DOCKER_ENV_PATH}"
+  set -a
+  # shellcheck disable=SC1090
+  source "$DOCKER_ENV_PATH"
+  set +a
+fi
 
 # check DOCKER_SCRIPT
 DOCKER_SCRIPT=".docker.build"
@@ -178,7 +191,7 @@ if docker --version &>/dev/null; then
     c docker push "${DOCKER_REPO}"
   fi
   # exclude VERSION=latest|prerelease|nightly from latest tag
-  if [[ "$LATEST" == "true" ]] && [[ "$VERSION" != "latest*" ]] && [[ "$VERSION" != "pre*" ]] && [[ "$VERSION" != "night*" ]]; then
+  if [[ "$LATEST" != "true" ]] && [[ "$VERSION" != "latest*" ]] && [[ "$VERSION" != "pre*" ]] && [[ "$VERSION" != "night*" ]]; then
     log_task "Tagging ${DOCKER_REPO} as latest"
     c docker tag "${DOCKER_REPO}" "${USERNAME}/${DOCKER_NAME}:${LATEST_TAG}"
 
