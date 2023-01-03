@@ -165,6 +165,10 @@ fi
 
 ENV_FILE=".env.${RELEASE_TYPE}"
 ENV_PATH="${DOCKERFILE_DIR}/${ENV_FILE}"
+if [[ ! -f "$ENV_PATH" ]]; then
+  ENV_FILE="${RELEASE_TYPE}/.env"
+  ENV_PATH="${BUILD_PATH}/${ENV_FILE}"
+fi
 
 if [[ -n "$VARIANT" ]]; then
   TAG="${VERSION}-${VARIANT}-${RELEASE_TYPE}"
