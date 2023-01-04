@@ -18,12 +18,11 @@
 # {{-   $cpuThreads = (output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "(Get-CimInstance -ClassName 'Win32_Processor').NumberOfLogicalProcessors") | trim | atoi -}}
 # {{- end -}}
 
-# {{- $name:= or (env "DOTFILES_USER_NAME") "your name" -}}
-# {{- $email:= or (env "DOTFILES_USER_EMAIL") "email at domain" -}}
+# {{- $name:= or (env "DOTFILES_USER_NAME") "Your Name" -}}
+# {{- $email:= or (env "DOTFILES_USER_EMAIL") "your_email@your.domain.com" -}}
 # {{- $github_username := env "DOTFILES_GITHUB_USERNAME" -}}
 # {{- $install_rootmoi := true -}}
 # {{- if (env "DOTFILES_NO_ROOTMOI") -}}
-# {{- writeToStdout (printf "👨‍💻 Install rootmoi: %s\n" (env "DOTFILES_NO_ROOTMOI")) -}}
 # {{- $install_rootmoi = false -}}
 # {{- writeToStdout (printf "👨‍💻 Install rootmoi: %t\n" $install_rootmoi) -}}
 # {{- end -}}
