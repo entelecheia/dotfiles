@@ -95,6 +95,7 @@ if [[ -f "$ENV_PATH" ]]; then
   set +o allexport
 fi
 
+# load network variables
 NET_PATH="${DOCKERFILE_DIR}/.docker.net"
 if [[ -f "$NET_PATH" ]]; then
   log_info "Preparing network from ${NET_PATH}"

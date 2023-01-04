@@ -153,8 +153,7 @@ if [[ -f "$DOCKER_ENV_PATH" ]]; then
 fi
 
 # check DOCKER_SCRIPT
-DOCKER_SCRIPT=".docker.run"
-DOCKER_SCRIPT_PATH="${DOCKERFILE_DIR}/${DOCKER_SCRIPT}"
+DOCKER_SCRIPT_PATH="${DOCKERFILE_DIR}/.docker.run"
 if [[ -f "$DOCKER_SCRIPT_PATH" ]]; then
   log_task "Sourcing environment script from ${DOCKER_SCRIPT_PATH}"
   set -a
@@ -163,10 +162,23 @@ if [[ -f "$DOCKER_SCRIPT_PATH" ]]; then
   set +a
 fi
 
-ENV_FILE=".env.${RELEASE_TYPE}"
+# load network variables
+NET_PATH="${DOCKERFILE_DIR}/.docker.net"
+if [[ -f "$NET_PATH" ]]; then
+  log_info "Preparing network from ${NET_PATH}"
+  # shellcheck disable=SC1090
+  source "$NET_PATH"
+fi
+
+if [[ "${RELEASE_TYPE}" == "devel" ]]; then
+  ENV_FILE="${RELEASE_TYPE}/.env.dev"
+elif [[ "${RELEASE_TYPE}" == "runtime" ]]; then
+  ENV_FILE="${RELEASE_TYPE}/.env"
+else
+  ENV_FILE=".env.${RELEASE_TYPE}"
+fi
 ENV_PATH="${DOCKERFILE_DIR}/${ENV_FILE}"
 if [[ ! -f "$ENV_PATH" ]]; then
-  ENV_FILE="${RELEASE_TYPE}/.env"
   ENV_PATH="${BUILD_PATH}/${ENV_FILE}"
 fi
 
