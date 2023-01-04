@@ -30,6 +30,7 @@
 # {{- writeToStdout (printf "👤 Name: %s\n" $name) -}}
 # {{- writeToStdout (printf "📧 Email: %s\n" $email) -}}
 # {{- writeToStdout (printf "🐙 GitHub username: %s\n" $github_username) -}}
+# {{- writeToStdout (printf "📁 Workspace location: %s\n" $workspace_location) -}}
 # {{- writeToStdout (printf "👨‍💻 Install rootmoi: %t\n" $install_rootmoi) -}}
 # {{- end -}}
 
@@ -469,27 +470,27 @@ data:
             cores: {{ $cpuCores }}
             threads: {{ $cpuThreads }}
     ssh:
-        algorithm: {{ $ssh_algorithm }}
-        key_filename: {{ $ssh_keyfile }}
+        algorithm: {{ $ssh_algorithm | quote }}
+        key_filename: {{ $ssh_keyfile | quote }}
     gnupg:
         key_id: {{ $gpg_key_id | quote }}
         passphrase: {{ $gpg_passphrase | quote }}
         gitsign: {{ $gpg_gitsign }}
     github:
-        username: {{ $github_username }}
+        username: {{ $github_username | quote }}
         token: {{ $github_token | quote }}
-        clones: {{ $github_clones }}
+        clones: {{ $github_clones | quote }}
     dotdrop:
-        repo: {{ $dotdrop_repo }}
+        repo: {{ $dotdrop_repo | quote }}
         user_profile: user
         root_profile: root
     docker:
-        repo: {{ $dockerfiles_repo }}
-        username: {{ $docker_username }}
+        repo: {{ $dockerfiles_repo | quote }}
+        username: {{ $docker_username | quote }}
     workspace:
-        name: {{ $workspace_name }}
-        location: {{ $workspace_location }}
-        root: {{ $workspace_root }}
+        name: {{ $workspace_name | quote }}
+        location: {{ $workspace_location | quote }}
+        root: {{ $workspace_root | quote }}
         move_existing: true
         symlink_to_home: {{ $symlink_to_home }}
         symlink_colab_workspace: {{ $symlink_colab_workspace }}

@@ -20,6 +20,7 @@ DOCKERFILE_PATH=""
 PUSH="false"
 TARGET=""
 BUILD_ARGS=""
+ADDITIONAL_ARGS=""
 
 set +u
 # read arguments
@@ -113,13 +114,16 @@ while [[ $# -gt 0 ]]; do
     if [[ -z "$DOCKER_NAME" ]]; then
       DOCKER_NAME="$1"
     else
-      echo "Usage: $0 $USAGE" >&2
-      exit 1
+      ADDITIONAL_ARGS="$ADDITIONAL_ARGS $1"
     fi
     ;;
   esac
   shift
 done
+# check if remaining arguments exist
+if [[ -n "$ADDITIONAL_ARGS" ]]; then
+  echo "Additional arguments: $ADDITIONAL_ARGS" >&2
+fi
 set -u
 
 # check version format
@@ -177,6 +181,9 @@ if docker --version &>/dev/null; then
   DOCKER_CMD="docker build --rm --force-rm "
   if [[ -n "$TARGET" ]]; then
     DOCKER_CMD="${DOCKER_CMD}--target ${TARGET} "
+  fi
+  if [[ -n "$ADDITIONAL_ARGS" ]]; then
+    DOCKER_CMD="${DOCKER_CMD}${ADDITIONAL_ARGS} "
   fi
   DOCKER_CMD="${DOCKER_CMD}${BUILD_ARGS}"
   DOCKER_CMD="${DOCKER_CMD}-t ${DOCKER_REPO} "
