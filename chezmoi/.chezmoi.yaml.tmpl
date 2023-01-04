@@ -1,26 +1,3 @@
-# {{- $name := "name" -}}
-# {{- $email := "email at domain" -}}
-# {{- $hostname := .chezmoi.hostname -}}
-# {{- $github_username := "" -}}
-# {{- $docker_username := "" -}}
-# {{- $github_token := "" -}}
-# {{- $dotdrop_repo := "https://github.com/entelecheia/dotdrop-files.git" -}}
-# {{- $dockerfiles_repo := "https://github.com/entelecheia/dockerfiles.git" -}}
-# {{- $ssh_algorithm := "ed25519" -}}
-# {{- $ssh_keyfile := printf "id_%s_%s" $ssh_algorithm $hostname -}}
-# {{- $workspace_name := "workspace" -}}
-# {{- $workspace_root := joinPath .chezmoi.homeDir $workspace_name -}}
-# {{- $symlink_colab_workspace := false -}}
-# {{- $workspace_location := .chezmoi.homeDir -}}
-# {{- $symlink_to_home := true -}}
-# {{- $gpg_key_id := "" -}}
-# {{- $gpg_passphrase := "change_this_passphrase_to_something_secure" -}}
-# {{- $gpg_gitsign := false -}}
-# {{- $install_rootmoi := true -}}
-# {{- $sudoer := true -}}
-# {{- $github_clones := "entelecheia/ekorpkit,entelecheia/ekorpkit-app" -}}
-# {{- $auto_update := true -}}
-
 # {{- $chezmoiForce := or (has "--force" .chezmoi.args) (has "--force=true" .chezmoi.args) -}}
 # {{- $interactive := and stdinIsATTY (not $chezmoiForce) -}}
 # {{- $ubuntu := hasKey .chezmoi.osRelease "ubuntuCodename" -}}
@@ -41,6 +18,41 @@
 # {{-   $cpuThreads = (output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "(Get-CimInstance -ClassName 'Win32_Processor').NumberOfLogicalProcessors") | trim | atoi -}}
 # {{- end -}}
 
+# {{- $name:= or (env "DOTFILES_USER_NAME") "your name" -}}
+# {{- $email:= or (env "DOTFILES_USER_EMAIL") "email at domain" -}}
+# {{- $github_username := env "DOTFILES_GITHUB_USERNAME" -}}
+# {{- $install_rootmoi := true -}}
+# {{- if (env "DOTFILES_NO_ROOTMOI") -}}
+# {{- writeToStdout (printf "👨‍💻 Install rootmoi: %s\n" (env "DOTFILES_NO_ROOTMOI")) -}}
+# {{- $install_rootmoi = false -}}
+# {{- writeToStdout (printf "👨‍💻 Install rootmoi: %t\n" $install_rootmoi) -}}
+# {{- end -}}
+# {{- if $devcontainer -}}
+# {{- writeToStdout (printf "👤 Name: %s\n" $name) -}}
+# {{- writeToStdout (printf "📧 Email: %s\n" $email) -}}
+# {{- writeToStdout (printf "🐙 GitHub username: %s\n" $github_username) -}}
+# {{- writeToStdout (printf "👨‍💻 Install rootmoi: %t\n" $install_rootmoi) -}}
+# {{- end -}}
+
+# {{- $hostname := .chezmoi.hostname -}}
+# {{- $docker_username := "" -}}
+# {{- $github_token := "" -}}
+# {{- $dotdrop_repo := "https://github.com/entelecheia/dotdrop-files.git" -}}
+# {{- $dockerfiles_repo := "https://github.com/entelecheia/dockerfiles.git" -}}
+# {{- $ssh_algorithm := "ed25519" -}}
+# {{- $ssh_keyfile := printf "id_%s_%s" $ssh_algorithm $hostname -}}
+# {{- $workspace_name := "workspace" -}}
+# {{- $workspace_root := joinPath .chezmoi.homeDir $workspace_name -}}
+# {{- $symlink_colab_workspace := false -}}
+# {{- $workspace_location := .chezmoi.homeDir -}}
+# {{- $symlink_to_home := true -}}
+# {{- $gpg_key_id := "" -}}
+# {{- $gpg_passphrase := "change_this_passphrase_to_something_secure" -}}
+# {{- $gpg_gitsign := false -}}
+# {{- $sudoer := true -}}
+# {{- $github_clones := "entelecheia/ekorpkit,entelecheia/ekorpkit-app" -}}
+# {{- $auto_update := false -}}
+
 # {{- $minimum := or $devcontainer ($ubuntu | not) -}}
 # {{- if and (hasKey . "system") (hasKey .system "is_devcontainer") -}}
 # {{-   $minimum = .system.is_devcontainer -}}
@@ -60,7 +72,7 @@
 # {{- end -}}
 # {{- if $interactive -}}
 # {{-   $question := "❔ Do you want to update dotfiles automatically" -}}
-# {{-   $auto_update = promptBool $question $minimum -}}
+# {{-   $auto_update = promptBool $question $auto_update -}}
 # {{-   if $auto_update -}}
 # {{-     writeToStdout "✅ Auto update enabled\n" -}}
 # {{-   else -}}

@@ -6,6 +6,19 @@
 # The following line is for ShellCheck to correctly identify the above included library
 true || source ../.chezmoitemplates/scripts-library
 
+# prepare to install githubcli
+KEYRING_FILE="/usr/share/keyrings/githubcli-archive-keyring.gpg"
+if [[ ! -f "${KEYRING_FILE}" ]]; then
+  log_task "Downloading githubcli keyring"
+  c curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | gpg --dearmor -o "${KEYRING_FILE}"
+fi
+SOURCE_LIST_FILE="/etc/apt/sources.list.d/github-cli.list"
+if [[ ! -f "${SOURCE_LIST_FILE}" ]]; then
+  log_task "Adding githubcli repository"
+  # shellcheck disable=SC1091
+  c sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+  c echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee "$SOURCE_LIST_FILE"
+fi
 
 readonly wanted_packages=(
   jq
