@@ -14,6 +14,7 @@ if [[ ! -f "${KEYRING_FILE}" ]]; then
   c curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | gpg --dearmor -o "${KEYRING_FILE}"
   # {{   else }}
   c sudo curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | gpg --dearmor -o "${KEYRING_FILE}"
+  # {{   end }}
 fi
 SOURCE_LIST_FILE="/etc/apt/sources.list.d/github-cli.list"
 if [[ ! -f "${SOURCE_LIST_FILE}" ]]; then
