@@ -21,10 +21,10 @@
 # {{- $name:= or (env "DOTFILES_USER_NAME") "Your Name" -}}
 # {{- $email:= or (env "DOTFILES_USER_EMAIL") "your_email@your.domain.com" -}}
 # {{- $github_username := env "DOTFILES_GITHUB_USERNAME" -}}
+# {{- $workspace_location := or (env "DOTFILES_WORKSPACE_LOCATION") .chezmoi.homeDir -}}
 # {{- $install_rootmoi := true -}}
 # {{- if (env "DOTFILES_NO_ROOTMOI") -}}
 # {{- $install_rootmoi = false -}}
-# {{- writeToStdout (printf "👨‍💻 Install rootmoi: %t\n" $install_rootmoi) -}}
 # {{- end -}}
 # {{- if $devcontainer -}}
 # {{- writeToStdout (printf "👤 Name: %s\n" $name) -}}
@@ -43,7 +43,6 @@
 # {{- $workspace_name := "workspace" -}}
 # {{- $workspace_root := joinPath .chezmoi.homeDir $workspace_name -}}
 # {{- $symlink_colab_workspace := false -}}
-# {{- $workspace_location := .chezmoi.homeDir -}}
 # {{- $symlink_to_home := true -}}
 # {{- $gpg_key_id := "" -}}
 # {{- $gpg_passphrase := "change_this_passphrase_to_something_secure" -}}

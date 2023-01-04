@@ -13,7 +13,7 @@ if [[ ! -f "${KEYRING_FILE}" ]]; then
   # {{   if eq .chezmoi.username "root" }}
   c curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | gpg --dearmor -o "${KEYRING_FILE}"
   # {{   else }}
-  c sudo curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | gpg --dearmor -o "${KEYRING_FILE}"
+  c sudo curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o "${KEYRING_FILE}"
   # {{   end }}
 fi
 SOURCE_LIST_FILE="/etc/apt/sources.list.d/github-cli.list"
