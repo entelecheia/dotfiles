@@ -33,6 +33,9 @@ if [ -f "${HOME}/.ssh/authorized_keys" ]; then
 fi
 ln -s "${HOME}/.config/ssh/authorized_keys" "${HOME}/.ssh/authorized_keys"
 
+# copy gitconfig from .config/git/gitconfig to .gitconfig
+cp "${HOME}/.config/git/gitconfig" "${HOME}/.gitconfig"
+
 # set eviroment variable GNUPGHOME to ~/.gnupg if not set
 GNUPGHOME=${GNUPGHOME:-$HOME/.gnupg}
 export GNUPGHOME="${GNUPGHOME}"
@@ -47,6 +50,8 @@ fi
 if [ -n "${KEY_ID}" ]; then
     KEY_ID=$(gpg --list-secret-keys --with-colons | grep 'sec' | grep "${KEY_ID}" | cut -d':' -f5)
 fi
+
+# {{ if .gnupg.passphrase }}
 # Create a batch file
 if [ -z "${KEY_ID}" ]; then
     log_task "Generating GPG key"
@@ -77,9 +82,9 @@ EOF
     # Save public key to a file
     c gpg --armor --export "${KEY_ID}" > "${GNUPGHOME}/${KEY_ID}.pub"
 fi
+# {{ end }}
+
 log_info "GPG key ID: ${KEY_ID}"
-# copy gitconfig from .config/git/gitconfig to .gitconfig
-cp "${HOME}/.config/git/gitconfig" "${HOME}/.gitconfig"
 # add gpg key to gitconfig
 if [ -n "${KEY_ID}" ]; then
     log_task "Adding GPG key to gitconfig"
@@ -89,7 +94,10 @@ if [ -n "${KEY_ID}" ]; then
     fi
 fi
 
-log_task "Adding SSH key to GitHub after login"
+# "Adding SSH & GPG keys to GitHub after login"
+PUB_SSH_KEY_FILE="${SSH_KEY_FILE}.pub"
+PUB_GPG_KEY_FILE="${GNUPGHOME}/${KEY_ID}.pub"
+
 # {{ if .github.token }}
 if command -v gh >/dev/null; then
     log_info "Logging in to GitHub"
@@ -98,8 +106,14 @@ if command -v gh >/dev/null; then
     echo "${GITHUB_TOKEN}" | gh auth login --with-token
     # git credention setup
     c gh auth setup-git
-    c gh ssh-key add "${SSH_KEY_FILE}.pub" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}" || true
-    c gh gpg-key add "${GNUPGHOME}/${KEY_ID}.pub" || true
+    if [ -f "${PUB_SSH_KEY_FILE}" ]; then
+        log_task "Adding SSH key to GitHub"
+        c gh ssh-key add "${PUB_SSH_KEY_FILE}" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}" || true
+    fi
+    if [ -f "${PUB_GPG_KEY_FILE}" ]; then
+        log_task "Adding GPG key to GitHub"
+        c gh gpg-key add "${PUB_GPG_KEY_FILE}" || true
+    fi
 else
     log_info "gh is not installed"
 fi
@@ -110,8 +124,14 @@ if command -v gh >/dev/null; then
     c gh auth login -h github.com -s admin:public_key -s write:gpg_key
     # git credention setup
     c gh auth setup-git
-    c gh ssh-key add "${SSH_KEY_FILE}.pub" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}" || true
-    c gh gpg-key add "${GNUPGHOME}/${KEY_ID}.pub" || true
+    if [ -f "${PUB_SSH_KEY_FILE}" ]; then
+        log_task "Adding SSH key to GitHub"
+        c gh ssh-key add "${PUB_SSH_KEY_FILE}" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}" || true
+    fi
+    if [ -f "${PUB_GPG_KEY_FILE}" ]; then
+        log_task "Adding GPG key to GitHub"
+        c gh gpg-key add "${PUB_GPG_KEY_FILE}" || true
+    fi
 else
     log_info "gh is not installed"
 fi
