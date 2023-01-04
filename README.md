@@ -125,7 +125,11 @@ Large part of .chezmoitemplates and .chezmoiscripts files are taken from [felipe
 - [chezmoi](https://chezmoi.io)
 - [dotdrop](https://github.com/deadc0de6/dotdrop)
 - [dotfiles](https://dotfiles.github.io/)
-
+- [git-secret](https://git-secret.io/)
+- [Use git-secret to encrypt secrets](https://www.pascallandau.com/blog/git-secret-encrypt-repository-docker/#git-secret-installation)
+- [Secrets at the Command Line](https://blog.gitguardian.com/secrets-at-the-command-line/)
+- [Using Command-Line Passphrase Input for GPG with Git](https://betakuang.medium.com/using-command-line-passphrase-input-for-gpg-with-git-for-windows-f78ae2c7cd2e)
+  
 ## License
 
 This project is licensed under the terms of the [MIT](./LICENSE)
