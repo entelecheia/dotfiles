@@ -5,14 +5,18 @@
 # The following line is for ShellCheck to correctly identify the above include
 true || source ../.chezmoitemplates/scripts-library
 
-# {{ if and (eq .chezmoi.os "linux") (.system.is_sudoer) }}
+# {{ if and (eq .chezmoi.os "linux") }}
 
 zsh_path="/bin/zsh"
 
 if ! getent passwd '{{ .chezmoi.username }}' | cut -d : -f 7- | grep -q "^${zsh_path}$"; then
   log_task "Configuring ZSH as default shell"
 
+# {{ (.system.is_sudoer) }}
   c sudo usermod --shell "${zsh_path}" '{{ .chezmoi.username }}'
+# {{ else }}
+  c chsh --shell "${zsh_path}"
+# {{ end }}
 fi
 
 # Alpine frequently does not come with script (from util-linux) installed
