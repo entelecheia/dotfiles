@@ -31,7 +31,10 @@ if [ -f "${HOME}/.ssh/authorized_keys" ]; then
     log_task "Removing existing authorized_keys"
     rm "${HOME}/.ssh/authorized_keys"
 fi
-ln -s "${HOME}/.config/ssh/authorized_keys" "${HOME}/.ssh/authorized_keys"
+# check if symlink exists, if not, create it
+if [ ! -L "${HOME}/.ssh/authorized_keys" ]; then
+    ln -s "${HOME}/.config/ssh/authorized_keys" "${HOME}/.ssh/authorized_keys"
+fi
 
 # copy gitconfig from .config/git/gitconfig to .gitconfig
 cp "${HOME}/.config/git/gitconfig" "${HOME}/.gitconfig"
