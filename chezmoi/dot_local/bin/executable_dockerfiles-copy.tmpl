@@ -1,0 +1,121 @@
+#!/bin/bash
+
+# {{ template "scripts-library" }}
+
+# The following line is for ShellCheck to correctly identify the above include
+true || source ../../.chezmoitemplates/scripts-library
+
+# arguments usage
+USAGE="DOCKER_NAME [-b|--build-path BUILD_PATH] [-d|--dockerfile-path DOCKERFILE_PATH] [-h|--help]"
+
+# declare arguments
+BUILD_PATH=""
+DOCKERFILE_PATH=""
+ADDITIONAL_ARGS=""
+
+set +u
+# read arguments
+# check first argument starts with a dash
+# if it does, it's an option and DOCKER_NAME can be the last argument
+# if not, it's the DOCKER_NAME
+# if no arguments, use default arguments
+if [[ $# -eq 0 ]]; then
+  DOCKER_NAME=""
+else
+  if [[ "$1" != -* ]]; then
+    DOCKER_NAME="$1"
+    shift
+  fi
+fi
+# parse options
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+  -b | --build-path)
+    BUILD_PATH="$2"
+    shift
+    ;;
+  --build-path=*)
+    BUILD_PATH="${1#*=}"
+    ;;
+  -d | --dockerfile-path)
+    DOCKERFILE_PATH="$2"
+    shift
+    ;;
+  --dockerfile-path=*)
+    DOCKERFILE_PATH="${1#*=}"
+    ;;
+  -h | --help)
+    echo "Usage: $0 $USAGE" >&2    
+    exit 0
+    ;;
+  -h*)
+    echo "Usage: $0 $USAGE" >&2
+    exit 0
+    ;;
+  *)
+    # if no option matches
+    # if it does not start with dash and DOCKER_NAME is empty, it's the DOCKER_NAME
+    # if it does start with dash, it's an additional argument
+    if [[ "$1" != -* ]] && [[ -z "$DOCKER_NAME" ]]; then
+      DOCKER_NAME="$1"
+    else
+      ADDITIONAL_ARGS="$ADDITIONAL_ARGS $1"
+    fi
+    ;;
+  esac
+  shift
+done
+# check if remaining arguments exist
+if [[ -n "$ADDITIONAL_ARGS" ]]; then
+  echo "Additional arguments: $ADDITIONAL_ARGS" >&2
+fi
+set -u
+
+# define function to copy dockerfiles from source to destination
+function copy_dockerfiles() {
+  local source_dir="$1"
+  local destination_dir="$2"
+  # copy files that match the pattern *docker* and *Docker*
+  local pattern="*docker*"
+  local dockerfiles
+
+  if [[ ! -d "$source_dir" ]]; then
+    log_error "Source directory does not exist: $source_dir"
+    exit 1
+  fi
+  if [[ ! -d "$destination_dir" ]]; then
+    log_error "Destination directory does not exist: $destination_dir"
+    exit 1
+  fi
+  # ignore case
+  dockerfiles=$(find "$source_dir" -type f -iname "$pattern" -print)
+  if [[ -n "$dockerfiles" ]]; then
+    log_task "Copying dockerfiles from: $source_dir to: $destination_dir"
+    for dockerfile in $dockerfiles; do
+      c cp "$dockerfile" "$destination_dir"
+    done
+  fi
+}
+
+log_task "Copying dockerfiles"
+
+PROJECT_DIR="${WORKSPACE_ROOT}/projects"
+DOCKERFILE_DIR="${HOME}/.local/share/dockerfiles"
+
+# if both BUILD_PATH and DOCKERFILE_PATH are provided, copy dockerfiles
+if [[ -n "$BUILD_PATH" ]] && [[ -n "$DOCKERFILE_PATH" ]]; then
+  copy_dockerfiles "$BUILD_PATH" "$DOCKERFILE_PATH"
+else
+  # if DOCKER_NAME is provided, copy dockerfiles from project directory
+  if [[ -n "$DOCKER_NAME" ]]; then
+    copy_dockerfiles "${PROJECT_DIR}/${DOCKER_NAME}" "${DOCKERFILE_DIR}/${DOCKER_NAME}"
+  else
+    # if DOCKER_NAME is not provided, copy dockerfiles from all project directories
+    for docker_dir in "${DOCKERFILE_DIR}"/*; do
+      if [[ -d "$docker_dir" ]]; then
+        DOCKER_NAME=$(basename "$docker_dir")
+        copy_dockerfiles "${PROJECT_DIR}/${DOCKER_NAME}" "${DOCKERFILE_DIR}/${DOCKER_NAME}"
+      fi
+    done
+  fi  
+fi

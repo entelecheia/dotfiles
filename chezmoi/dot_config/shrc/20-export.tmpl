@@ -1,8 +1,12 @@
 #!/bin/bash
 export TERM=xterm-256color
 export AUTO_UPDATE_DOTFILES="{{ .system.auto_update }}"
+export USER_FULLNAME="{{ .name }}"
+export USER_EMAIL="{{ .email }}"
+export APPLY_ROOTMOI="{{ .system.apply_rootmoi }}"
 export GITHUB_USERNAME="{{ .github.username }}"
 export DOCKER_USERNAME="{{ .docker.username }}"
+export WORKSPACE_LOCATION="{{ .workspace.location }}"
 export WORKSPACE_ROOT="{{ .workspace.root }}"
 export GNUPGHOME="${HOME}/.gnupg"
 # {{ if .gnupg.gitsign }}

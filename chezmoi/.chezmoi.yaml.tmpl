@@ -18,21 +18,21 @@
 # {{-   $cpuThreads = (output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "(Get-CimInstance -ClassName 'Win32_Processor').NumberOfLogicalProcessors") | trim | atoi -}}
 # {{- end -}}
 
-# {{- $name:= or (env "DOTFILES_USER_NAME") "Your Name" -}}
-# {{- $email:= or (env "DOTFILES_USER_EMAIL") "your_email@your.domain.com" -}}
-# {{- $github_username := env "DOTFILES_GITHUB_USERNAME" -}}
-# {{- $workspace_location := or (env "DOTFILES_WORKSPACE_LOCATION") .chezmoi.homeDir -}}
-# {{- $install_rootmoi := true -}}
-# {{- if (env "DOTFILES_NO_ROOTMOI") -}}
-# {{- $install_rootmoi = false -}}
+# {{- $name:= or (env "USER_FULLNAME") "Your Name" -}}
+# {{- $email:= or (env "USER_EMAIL") "your_email@your.domain.com" -}}
+# {{- $github_username := env "GITHUB_USERNAME" -}}
+# {{- $workspace_location := or (env "WORKSPACE_LOCATION") .chezmoi.homeDir -}}
+# {{- $apply_rootmoi := true -}}
+# {{- if (env "APPLY_ROOTMOI") -}}
+# {{- $apply_rootmoi = (env "APPLY_ROOTMOI") | not | not -}}
 # {{- end -}}
-# {{- if $devcontainer -}}
+# {{- if $devcontainer | not -}}
 # {{- writeToStdout "🐳 Running in a devcontainer, following environment variables will be used as defaults:\n" -}}
 # {{- writeToStdout (printf "👤 Name: %s\n" $name) -}}
 # {{- writeToStdout (printf "📧 Email: %s\n" $email) -}}
 # {{- writeToStdout (printf "🐙 GitHub username: %s\n" $github_username) -}}
 # {{- writeToStdout (printf "📁 Workspace location: %s\n" $workspace_location) -}}
-# {{- writeToStdout (printf "👨‍💻 Install rootmoi: %t\n" $install_rootmoi) -}}
+# {{- writeToStdout (printf "👨‍💻 Apply rootmoi: %t\n" $apply_rootmoi) -}}
 # {{- writeToStdout "---\n" -}}
 # {{- end -}}
 
@@ -55,8 +55,8 @@
 # {{- $auto_update := false -}}
 
 # {{- $minimum := or $devcontainer ($ubuntu | not) -}}
-# {{- if and (hasKey . "system") (hasKey .system "is_devcontainer") -}}
-# {{-   $minimum = .system.is_devcontainer -}}
+# {{- if and (hasKey . "system") (hasKey .system "minimum") -}}
+# {{-   $minimum = .system.minimum -}}
 # {{- end -}}
 # {{- if $interactive -}}
 # {{-   $question := "❔ Do you want to install in minimum mode (see README)" -}}
@@ -90,28 +90,28 @@
 # {{-   if $sudoer -}}
 # {{-     writeToStdout "✅ Sudo privileges enabled\n" -}}
 # {{-   else -}}
-# {{-     $install_rootmoi := false -}}
+# {{-     $apply_rootmoi := false -}}
 # {{-     writeToStdout "✅ Sudo privileges disabled\n" -}}
 # {{-   end -}}
 # {{- end -}}
 
 # {{- if eq .chezmoi.os "darwin" -}}
-# {{-   $install_rootmoi := false -}}
+# {{-   $apply_rootmoi := false -}}
 # {{- else if $sudoer -}}
-# {{-   if and (hasKey . "system") (hasKey .system "install_rootmoi") -}}
-# {{-       $install_rootmoi = .system.install_rootmoi -}}
+# {{-   if and (hasKey . "system") (hasKey .system "apply_rootmoi") -}}
+# {{-       $apply_rootmoi = .system.apply_rootmoi -}}
 # {{-   end -}}
 # {{-   if $interactive -}}
 # {{-       $question := "❔ Do you want to install dotfiles for the root user" -}}
-# {{-       $install_rootmoi = promptBool $question $install_rootmoi -}}
-# {{-       if $install_rootmoi -}}
+# {{-       $apply_rootmoi = promptBool $question $apply_rootmoi -}}
+# {{-       if $apply_rootmoi -}}
 # {{-           writeToStdout "✅ Dotfiles will be installed for the root user\n" -}}
 # {{-       else -}}
 # {{-           writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
 # {{-       end -}}
 # {{-   end -}}
 # {{- else -}}
-# {{-   $install_rootmoi := false -}}
+# {{-   $apply_rootmoi := false -}}
 # {{-   writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
 # {{- end -}}
 
@@ -462,11 +462,12 @@ data:
         auto_update: {{ $auto_update }}
         hostname: {{ $hostname }}
         is_wsl: {{ $wsl }}
-        is_devcontainer: {{ $minimum }}
+        is_devcontainer: {{ $devcontainer }}
+        is_minimum: {{ $minimum }}
         is_gnome: {{ $gnome }}
         is_interactive: {{ $interactive }}
         is_sudoer: {{ $sudoer }}
-        install_rootmoi: {{ and $install_rootmoi $sudoer }}
+        apply_rootmoi: {{ and $apply_rootmoi $sudoer }}
         uname_arch: {{ output "uname" "-m" | trim | quote }}
         cpu:
             cores: {{ $cpuCores }}
