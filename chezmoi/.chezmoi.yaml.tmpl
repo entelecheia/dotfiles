@@ -26,7 +26,7 @@
 # {{- if eq (env "APPLY_ROOTMOI") "false" "False" "0" -}}
 # {{- $apply_rootmoi = false -}}
 # {{- end -}}
-# {{- if $devcontainer | not -}}
+
 # {{- writeToStdout "🐳 Running in a devcontainer, following environment variables will be used as defaults:\n" -}}
 # {{- writeToStdout (printf "👤 Name: %s\n" $name) -}}
 # {{- writeToStdout (printf "📧 Email: %s\n" $email) -}}
@@ -34,7 +34,6 @@
 # {{- writeToStdout (printf "📁 Workspace location: %s\n" $workspace_location) -}}
 # {{- writeToStdout (printf "👨‍💻 Apply rootmoi: %t\n" $apply_rootmoi) -}}
 # {{- writeToStdout "---\n" -}}
-# {{- end -}}
 
 # {{- $hostname := .chezmoi.hostname -}}
 # {{- $docker_username := "" -}}
