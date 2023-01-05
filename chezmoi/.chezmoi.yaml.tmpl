@@ -23,8 +23,8 @@
 # {{- $github_username := env "GITHUB_USERNAME" -}}
 # {{- $workspace_location := or (env "WORKSPACE_LOCATION") .chezmoi.homeDir -}}
 # {{- $apply_rootmoi := true -}}
-# {{- if (env "APPLY_ROOTMOI") -}}
-# {{- $apply_rootmoi = (env "APPLY_ROOTMOI") | not | not -}}
+# {{- if eq (env "APPLY_ROOTMOI") "false" "False" "0" -}}
+# {{- $apply_rootmoi = false -}}
 # {{- end -}}
 # {{- if $devcontainer | not -}}
 # {{- writeToStdout "🐳 Running in a devcontainer, following environment variables will be used as defaults:\n" -}}
