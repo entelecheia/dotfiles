@@ -1,5 +1,6 @@
-{{- if .github.username -}}
+# list of authorized keys for the user
+{{ if .github.username -}}
 {{ range gitHubKeys .github.username -}}
 {{   .Key }}
 {{ end -}}
-{{- end }}
+{{- end -}}
