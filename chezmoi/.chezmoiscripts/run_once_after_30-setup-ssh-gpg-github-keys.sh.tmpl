@@ -98,6 +98,7 @@ fi
 PUB_SSH_KEY_FILE="${SSH_KEY_FILE}.pub"
 PUB_GPG_KEY_FILE="${GNUPGHOME}/${KEY_ID}.pub"
 
+# {{ if .github.username }}
 # {{ if .github.token }}
 if command -v gh >/dev/null; then
     log_info "Logging in to GitHub"
@@ -141,4 +142,5 @@ log_manual_action "Log in manually, and add the SSH key to GitHub."
 # {{    end }}
 # {{ end }}
 log_info "Done adding SSH and GPG keys to GitHub"
+# {{ end -}}
 # {{ end -}}
