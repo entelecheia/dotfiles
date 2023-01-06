@@ -45,7 +45,6 @@
 # {{- $dotdrop_repo := "https://github.com/entelecheia/dotdrop-files.git" -}}
 # {{- $dockerfiles_repo := "https://github.com/entelecheia/dockerfiles.git" -}}
 # {{- $ssh_algorithm := "ed25519" -}}
-# {{- $ssh_keyfile := printf "id_%s_%s" $ssh_algorithm $hostname -}}
 # {{- $workspace_name := "workspace" -}}
 # {{- $workspace_root := joinPath .chezmoi.homeDir $workspace_name -}}
 # {{- $symlink_colab_workspace := false -}}
@@ -115,7 +114,9 @@
 # {{-   end -}}
 # {{- else -}}
 # {{-   $apply_rootmoi := false -}}
-# {{-   writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
+# {{-   if $interactive -}}
+# {{-       writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
+# {{-   end -}}
 # {{- end -}}
 
 # {{- if hasKey . "name" -}}
@@ -286,18 +287,8 @@
 # {{-   end -}}
 # {{- end -}}
 
-# {{- if and (hasKey . "ssh") (hasKey .ssh "key_filename") -}}
-# {{-   $ssh_keyfile = .ssh.key_filename -}}
-# {{- end -}}
+# {{- $ssh_keyfile := printf "id_%s_%s" $ssh_algorithm $hostname -}}
 # {{- if $interactive -}}
-# {{-   $question := "❔ What SSH key filename do you want to use" -}}
-# {{-   $answer := "" -}}
-# {{-   if $ssh_keyfile -}}
-# {{-     $answer = promptString $question $ssh_keyfile -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $ssh_keyfile = $answer -}}
 # {{-   writeToStdout (printf "✅ SSH key filename set as '%s'\n" $ssh_keyfile) -}}
 # {{- end -}}
 
@@ -412,8 +403,10 @@
 # {{- end -}}
 
 # {{- if not $sudoer -}}
-# {{- $symlink_colab_workspace := false -}}
+# {{-   $symlink_colab_workspace := false -}}
+# {{-   if $interactive -}}
 # {{-     writeToStdout "✅ Colab workspace will not be symlinked\n" -}}
+# {{-   end -}}
 # {{- else -}}
 # {{- if and (hasKey . "workspace") (hasKey .workspace "symlink_colab_workspace") -}}
 # {{-   $symlink_colab_workspace = .workspace.symlink_colab_workspace -}}
