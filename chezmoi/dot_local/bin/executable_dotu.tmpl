@@ -16,29 +16,29 @@ set -u
 if chezmoi --version &>/dev/null; then
   log_task "Pulling latest changes from dotfiles repo"
   # Pull latest changes from dotfiles repo
-  c chezmoi update --apply=false
+  chezmoi update --apply=false
 fi
 if dotdrop --version &>/dev/null; then
   DOTDROP_REPO="${HOME}/.config/dotdrop"
 
   log_task "Pulling latest changes from dotdrop repo"
-  c git -C "$DOTDROP_REPO" pull
+  git -C "$DOTDROP_REPO" pull
 fi
 DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
 if [ -d "$DOCKERFILES_REPO_DIR" ]; then
     if git -C "$DOCKERFILES_REPO_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
       log_task "Update dockerfiles repository"
-      c git -C "$DOCKERFILES_REPO_DIR" pull || true
+      git -C "$DOCKERFILES_REPO_DIR" pull || true
     fi
 fi
 
 if chezmoi --version &>/dev/null; then
   log_task "Updating dotfiles for chezmoi"
-  c chezmoi init --force
+  chezmoi init --force
   if [[ "$FORCE" == "true" ]]; then
-    c chezmoi apply --force
+    chezmoi apply --force
   else
-    c chezmoi apply
+    chezmoi apply
   fi
 fi
 
@@ -46,5 +46,5 @@ if dotdrop --version &>/dev/null; then
   DOTDROP_PATH="$(which dotdrop)"
 
   log_task "Updating dotfiles for dotdrop"
-  c "${DOTDROP_PATH}" --cfg="${HOME}/.config/dotdrop/config-user.yaml" -p "{{ .dotdrop.user_profile }}" install
+  "${DOTDROP_PATH}" --cfg="${HOME}/.config/dotdrop/config-user.yaml" -p "{{ .dotdrop.user_profile }}" install
 fi
