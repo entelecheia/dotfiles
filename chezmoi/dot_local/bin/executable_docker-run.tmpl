@@ -6,10 +6,11 @@
 true || source ../../.chezmoitemplates/scripts-library
 
 # arguments usage
-USAGE="DOCKER_NAME [-c:--cmd CMD] [-r|--release-type RELEASE_TYPE] [--variant VARIANT] --run-args RUN_ARGS] [-v|--version VERSION] [-l|--latest] [-u|--username USERNAME] [-b|--build-path BUILD_PATH] [-d|--dockerfile-path DOCKERFILE_PATH] [-h|--help]"
+USAGE="DOCKER_NAME [--cmd CMD] [-n|--name CONTAINER_NAME] [-r|--release-type RELEASE_TYPE] [--variant VARIANT] --run-args RUN_ARGS] [-v|--version VERSION] [-l|--latest] [-u|--username USERNAME] [-b|--build-path BUILD_PATH] [-d|--dockerfile-path DOCKERFILE_PATH] [-h|--help]"
 
 # declare arguments
 DOCKER_NAME=""
+CONTAINER_NAME=""
 RELEASE_TYPE="runtime"
 VARIANT=""
 VERSION="latest"
@@ -38,12 +39,19 @@ fi
 # parse options
 while [[ $# -gt 0 ]]; do
   case "$1" in
-  -c | --cmd)
+  --cmd)
     CMD="$2"
     shift
     ;;
   --cmd=*)
     CMD="${1#*=}"
+    ;;
+  -n | --name)
+    CONTAINER_NAME="$2"
+    shift
+    ;;
+  --name=*)
+    CONTAINER_NAME="${1#*=}"
     ;;
   -r | --release-type)
     RELEASE_TYPE="$2"
@@ -87,15 +95,15 @@ while [[ $# -gt 0 ]]; do
     DOCKERFILE_PATH="$2"
     shift
     ;;
+  --dockerfile-path=*)
+    DOCKERFILE_PATH="${1#*=}"
+    ;;
   -b | --build-path)
     BUILD_PATH="$2"
     shift
     ;;
   --build-path=*)
     BUILD_PATH="${1#*=}"
-    ;;
-  --dockerfile-path=*)
-    DOCKERFILE_PATH="${1#*=}"
     ;;
   -h | --help)
     echo "Usage: $0 $USAGE" >&2    
@@ -188,10 +196,12 @@ else
   TAG="${VERSION}-${RELEASE_TYPE}"
 fi
 DOCKER_IMAGE_NAME="${USERNAME}/${DOCKER_NAME}:${TAG}"
-DOCKER_CONTAINTER_NAME="${DOCKER_NAME}-${RELEASE_TYPE}"
+if [[ -z "$CONTAINER_NAME" ]]; then
+  CONTAINER_NAME="${DOCKER_NAME}-${RELEASE_TYPE}-${VERSION}-${USERNAME}"
+fi
 
 if docker --version &>/dev/null; then
-  log_task "Running docker container ${DOCKER_CONTAINTER_NAME} from image ${DOCKER_IMAGE_NAME}"
+  log_task "Running docker container ${CONTAINER_NAME} from image ${DOCKER_IMAGE_NAME}"
   DOCKER_CMD="docker run --rm "
   if [[ -n "$ADDITIONAL_ARGS" ]]; then
     DOCKER_CMD="${DOCKER_CMD}${ADDITIONAL_ARGS} "
@@ -202,7 +212,7 @@ if docker --version &>/dev/null; then
   if [[ -n "$RUN_ARGS" ]]; then
     DOCKER_CMD="${DOCKER_CMD}${RUN_ARGS} "
   fi
-  DOCKER_CMD="${DOCKER_CMD}--name ${DOCKER_CONTAINTER_NAME} "
+  DOCKER_CMD="${DOCKER_CMD}--name ${CONTAINER_NAME} "
   DOCKER_CMD="${DOCKER_CMD}${DOCKER_IMAGE_NAME} ${CMD}"
   c eval "$DOCKER_CMD"
 
