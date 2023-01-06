@@ -27,7 +27,7 @@ fi
 DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
 if [ -d "$DOCKERFILES_REPO_DIR" ]; then
     if git -C "$DOCKERFILES_REPO_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-      log_task "Update dockerfiles repository"
+      log_task "Updating dockerfiles repo"
       git -C "$DOCKERFILES_REPO_DIR" pull || true
     fi
 fi
