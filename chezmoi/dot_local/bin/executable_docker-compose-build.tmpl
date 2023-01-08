@@ -6,13 +6,19 @@
 true || source ../../.chezmoitemplates/scripts-library
 
 # arguments usage
-USAGE="DOCKER_NAME [-b|--build-path BUILD_PATH] [-d|--dockerfile-path DOCKERFILE_PATH] [-e|--env-file ENV_PATH] [-h|--help]"
+USAGE="DOCKER_NAME [-t|--tag TAG] [-b|--build-path BUILD_PATH] [-d|--dockerfile-path DOCKERFILE_PATH] [-c|--compose-file COMPOSE_FILE] [-e|--env-file ENV_FILE] [-v|--version VERSION] [-l|--latest] [-p|--push ] [-h|--help]"
 
 # declare arguments
 DOCKER_NAME=""
+TAG=""
 BUILD_PATH=""
 DOCKERFILE_PATH=""
-ENV_PATH=""
+COMPOSE_FILE="docker-compose.yaml"
+ENV_FILE=".env.docker"
+VERSION=""
+LATEST="false"
+PUSH="false"
+ADDITIONAL_ARGS=""
 
 set +u
 # read arguments
@@ -31,6 +37,13 @@ fi
 # parse options
 while [[ $# -gt 0 ]]; do
   case "$1" in
+  -t | --tag)
+    TAG="$2"
+    shift
+    ;;
+  --tag=*)
+    TAG="${1#*=}"
+    ;;
   -b | --build-path)
     BUILD_PATH="$2"
     shift
@@ -45,12 +58,32 @@ while [[ $# -gt 0 ]]; do
   --dockerfile-path=*)
     DOCKERFILE_PATH="${1#*=}"
     ;;
+  -c | --compose-file)
+    COMPOSE_FILE="$2"
+    shift
+    ;;
+  --compose-file=*)
+    COMPOSE_FILE="${1#*=}"
+    ;;
   -e | --env-file)
-    ENV_PATH="$2"
+    ENV_FILE="$2"
     shift
     ;;
   --env-file=*)
-    ENV_PATH="${1#*=}"
+    ENV_FILE="${1#*=}"
+    ;;
+  -v | --version)
+    VERSION="$2"
+    shift
+    ;;
+  --version=*)
+    VERSION="${1#*=}"
+    ;;
+  -l | --latest)
+    LATEST="true"
+    ;;
+  -p | --push)
+    PUSH="true"
     ;;
   -h | --help)
     echo "Usage: $0 $USAGE" >&2    
@@ -65,43 +98,75 @@ while [[ $# -gt 0 ]]; do
     if [[ -z "$DOCKER_NAME" ]]; then
       DOCKER_NAME="$1"
     else
-      echo "Usage: $0 $USAGE" >&2
-      exit 1
+      ADDITIONAL_ARGS="$ADDITIONAL_ARGS $1"
     fi
     ;;
   esac
   shift
 done
+# check if remaining arguments exist
+if [[ -n "$ADDITIONAL_ARGS" ]]; then
+  echo "Additional arguments: $ADDITIONAL_ARGS" >&2
+fi
 set -u
+
+# check version format
+if [[ "$LATEST" == "true" ]] && [[ -z "$VERSION" ]]; then
+  VERSION="latest"
+elif [[ "$VERSION" == "pre*" ]] || [[ "$VERSION" == "night*" ]]; then
+  VERSION="nightly"
+fi
+
+DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
+if [[ -n "$TAG" ]]; then
+  # {base_name}-{TAG}.{ext}
+  COMPOSE_FILE="${COMPOSE_FILE%.*}-${TAG}.${COMPOSE_FILE##*.}"
+fi
 
 # check PATHs
 if [[ -z "$BUILD_PATH" ]]; then
   BUILD_PATH="${WORKSPACE_ROOT}/projects/${DOCKER_NAME}"
 fi
+# if build path does not exist, use dockerfile repo path
+if [[ ! -d "$BUILD_PATH" ]]; then
+  BUILD_PATH="${DOCKERFILES_REPO_DIR}/${DOCKER_NAME}"
+fi
+# if it still does not exist, exit
+if [[ ! -d "$BUILD_PATH" ]]; then
+  log_error "Build path ${BUILD_PATH} does not exist"
+  exit 1
+fi
 # export BUILD_PATH
 export BUILD_PATH
 
 if [[ -z "$DOCKERFILE_PATH" ]]; then
-  DOCKERFILE_PATH="${BUILD_PATH}/docker-compose.yml"
+  DOCKERFILE_PATH="${BUILD_PATH}"
 fi
-if [[ -z "$DOCKERFILE_PATH" ]]; then
-  DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
-  DOCKERFILE_PATH="${DOCKERFILES_REPO_DIR}/${DOCKER_NAME}/docker-compose.yml"
+COMPOSEFILE_PATH="${DOCKERFILE_PATH}/${COMPOSE_FILE}"
+if [[ ! -f "$COMPOSEFILE_PATH" ]]; then
+  log_error "Dockerfile ${COMPOSEFILE_PATH} does not exist"
+  exit 1
 fi
-DOCKERFILE_DIR=$(dirname "$DOCKERFILE_PATH")
-export DOCKERFILE_DIR
+export DOCKERFILE_PATH
 
-if [[ -z "$ENV_PATH" ]]; then
-  ENV_PATH="${DOCKERFILE_DIR}/.env.docker"
+ENV_PATH="${DOCKERFILE_PATH}/${ENV_FILE}"
+ENV_ARGS=""
+if [[ -f "$ENV_PATH" ]]; then
+  ENV_ARGS="--env-file ${ENV_PATH}"
 fi
 
 if docker-compose --version &>/dev/null; then
-  log_task "Building ${DOCKER_NAME} for context ${BUILD_PATH} with docker-compose"
+  log_task "Building ${DOCKER_NAME} for context ${BUILD_PATH} with ${COMPOSE_FILE} and ${ENV_PATH}"
 
   # change to the directory of the build context
   c cd "${BUILD_PATH}" || exit 1  
-  c docker-compose -f "${DOCKERFILE_PATH}" --env-file "${ENV_PATH}" build
+  CMD="docker-compose -f ${COMPOSEFILE_PATH} ${ENV_ARGS} ${ADDITIONAL_ARGS} build"
+  c eval "$CMD" || exit 1
 
-  log_info "Successfully built ${DOCKER_NAME} with context ${BUILD_PATH}"
+  if [[ "$PUSH" == "true" ]]; then
+    log_task "Pushing ${DOCKER_NAME}"
+    CMD="docker-compose -f ${COMPOSEFILE_PATH} ${ENV_ARGS} ${ADDITIONAL_ARGS} push"
+    c eval "$CMD" || exit 1
+  fi
 
 fi
