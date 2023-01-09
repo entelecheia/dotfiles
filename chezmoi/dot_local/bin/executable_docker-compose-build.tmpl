@@ -160,12 +160,12 @@ if docker-compose --version &>/dev/null; then
 
   # change to the directory of the build context
   c cd "${BUILD_PATH}" || exit 1  
-  CMD="docker-compose -f ${COMPOSEFILE_PATH} ${ENV_ARGS} ${ADDITIONAL_ARGS} build"
+  CMD="docker-compose -f ${COMPOSEFILE_PATH} ${ENV_ARGS} build ${ADDITIONAL_ARGS}"
   c eval "$CMD" || exit 1
 
   if [[ "$PUSH" == "true" ]]; then
     log_task "Pushing ${DOCKER_NAME}"
-    CMD="docker-compose -f ${COMPOSEFILE_PATH} ${ENV_ARGS} ${ADDITIONAL_ARGS} push"
+    CMD="docker-compose -f ${COMPOSEFILE_PATH} ${ENV_ARGS} push ${ADDITIONAL_ARGS}"
     c eval "$CMD" || exit 1
   fi
 

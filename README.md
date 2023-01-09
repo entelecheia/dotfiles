@@ -16,11 +16,31 @@ sh -c "$(wget -qO- https://bit.ly/3W2JGyL)"
 >  sh -c "$(curl -fsSL https://bit.ly/3W2JGyL)"
 > ```
 
-## [chezmoi](https://chezmoi.io)
+## Installing the font on **Windows**
+
+1. [Download Fira Code Regular Nerd Font Complete](https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/Regular/complete/Fira%20Code%20Regular%20Nerd%20Font%20Complete.ttf).
+2. Open the downloaded file and click **Install**.
+3. Restart **Windows Terminal** or **VS Code**.
+
+### Configuring the font in **VS Code**
+
+1. Open settings by pressing <kbd>Ctrl/Cmd</kbd>+<kbd>,</kbd>.
+2. Change the font family to **FiraCode Nerd Font** in **_Terminal › Integrated: Font Family_**.
+
+### Configuring the font in **Windows Terminal**
+
+1. On **Windows Terminal**, press <kbd>Ctrl</kbd>+<kbd>,</kbd> to open the settings.
+2. Go to **_Profiles -> Defaults_** in the left panel. Then, go to **_Additional settings -> Appearance_**.
+3. At **_Text -> Font face_**, enable the **_Show all fonts_** option and select **_FiraCode Nerd Font_**. Like below:
+
+
+## Dotfiles management tools
+
+### [chezmoi](https://chezmoi.io)
 
 Chezmoi is a tool for managing your dotfiles across multiple machines, securely. Chezmoi allows you to manage your dotfiles in a Git repository.
 
-### Install chezmoi
+#### Install chezmoi
 
 Before installing chezmoi, make sure that you have installed Git, curl, and a recent version of Go.
 
@@ -38,7 +58,7 @@ export PATH="$HOME/.local/bin:$PATH"
 
 For more information, see [Install chezmoi](https://www.chezmoi.io/install/).
 
-### Initialize chezmoi
+#### Initialize chezmoi
 
 If it is the first time you use chezmoi, you need to initialize it.
 
@@ -64,24 +84,7 @@ Apply the changes by running:
 chezmoi apply -v
 ```
 
-## Installing the font on **Windows**
-
-1. [Download Fira Code Regular Nerd Font Complete](https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/Regular/complete/Fira%20Code%20Regular%20Nerd%20Font%20Complete.ttf).
-2. Open the downloaded file and click **Install**.
-3. Restart **Windows Terminal** or **VS Code**.
-
-### Configuring the font in **VS Code**
-
-1. Open settings by pressing <kbd>Ctrl/Cmd</kbd>+<kbd>,</kbd>.
-2. Change the font family to **FiraCode Nerd Font** in **_Terminal › Integrated: Font Family_**.
-
-### Configuring the font in **Windows Terminal**
-
-1. On **Windows Terminal**, press <kbd>Ctrl</kbd>+<kbd>,</kbd> to open the settings.
-2. Go to **_Profiles -> Defaults_** in the left panel. Then, go to **_Additional settings -> Appearance_**.
-3. At **_Text -> Font face_**, enable the **_Show all fonts_** option and select **_FiraCode Nerd Font_**. Like below:
-
-## [dotdrop](https://github.com/deadc0de6/dotdrop)
+### [dotdrop](https://github.com/deadc0de6/dotdrop)
 
 Save your dotfiles once, deploy them everywhere
 
