@@ -82,8 +82,21 @@ chezmoi init --apply
 2. Go to **_Profiles -> Defaults_** in the left panel. Then, go to **_Additional settings -> Appearance_**.
 3. At **_Text -> Font face_**, enable the **_Show all fonts_** option and select **_FiraCode Nerd Font_**. Like below:
 
+## License
 
-## Dotfiles management tools
+This project is licensed under the terms of the [MIT](./LICENSE)
+
+## References
+
+Large part of .chezmoitemplates and .chezmoiscripts files are taken from [felipecrs/dotfiles](https://github.com/felipecrs/dotfiles).
+
+- [chezmoi](https://chezmoi.io)
+- [dotdrop](https://github.com/deadc0de6/dotdrop)
+- [dotfiles](https://dotfiles.github.io/)
+- [git-secret](https://git-secret.io/)
+- [Use git-secret to encrypt secrets](https://www.pascallandau.com/blog/git-secret-encrypt-repository-docker/#git-secret-installation)
+- [Secrets at the Command Line](https://blog.gitguardian.com/secrets-at-the-command-line/)
+- [Using Command-Line Passphrase Input for GPG with Git](https://betakuang.medium.com/using-command-line-passphrase-input-for-gpg-with-git-for-windows-f78ae2c7cd2e)
 
 ### [chezmoi](https://chezmoi.io)
 
@@ -168,20 +181,3 @@ Also check out the [blog post](https://deadc0de.re/articles/dotfiles.html),
 the [example](#getting-started), the [documentation](https://dotdrop.readthedocs.io/) or
 how [people are using dotdrop](https://dotdrop.readthedocs.io/en/latest/misc/people-using-dotdrop/)
 for more.
-
-
-## References
-
-Large part of .chezmoitemplates and .chezmoiscripts files are taken from [felipecrs/dotfiles](https://github.com/felipecrs/dotfiles).
-
-- [chezmoi](https://chezmoi.io)
-- [dotdrop](https://github.com/deadc0de6/dotdrop)
-- [dotfiles](https://dotfiles.github.io/)
-- [git-secret](https://git-secret.io/)
-- [Use git-secret to encrypt secrets](https://www.pascallandau.com/blog/git-secret-encrypt-repository-docker/#git-secret-installation)
-- [Secrets at the Command Line](https://blog.gitguardian.com/secrets-at-the-command-line/)
-- [Using Command-Line Passphrase Input for GPG with Git](https://betakuang.medium.com/using-command-line-passphrase-input-for-gpg-with-git-for-windows-f78ae2c7cd2e)
-  
-## License
-
-This project is licensed under the terms of the [MIT](./LICENSE)
