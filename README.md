@@ -4,6 +4,8 @@ Dotfiles are configuration files that are used to customize your shell and other
 
 ## Getting started
 
+### Install dotfiles
+
 You can use the [install dotfiles script](./scripts/install_dotfiles.sh) to install the dotfiles on any machine with a single command. Simply run the following command in your terminal:
 
 ```bash
@@ -15,6 +17,53 @@ sh -c "$(wget -qO- https://bit.ly/3W2JGyL)"
 > ```bash
 >  sh -c "$(curl -fsSL https://bit.ly/3W2JGyL)"
 > ```
+
+![install dotfiles script](./assets/figs/install_dotfiles_script.png)
+
+For unattended installations such as in a dockerfile, you can use the environment variables to initialize the dotfiles automatically. For example:
+
+```dockerfile
+# install dotfiles
+ARG USER_FULLNAME="John Doe"
+ARG USER_EMAIL="john.doe@email.com"
+ARG GITHUB_USERNAME="john-doe"
+ARG SYSTEM_HOSTNANE="devcon-arm64"
+
+ENV USER_FULLNAME=$USER_FULLNAME
+ENV USER_EMAIL=$USER_EMAIL
+ENV GITHUB_USERNAME=$GITHUB_USERNAME
+ENV SYSTEM_HOSTNAME=$SYSTEM_HOSTNAME
+ENV WORKSPACE_LOCATION="/"
+ENV APPLY_ROOTMOI=0
+ENV REMOTE_CONTAINERS=1
+
+RUN sh -c "$(wget -qO- https://bit.ly/3W2JGyL)"
+
+CMD ["zsh"]
+```
+
+Or you can provide the environment variables in the command line:
+
+```bash
+USER_FULLNAME="John Doe" \
+USER_EMAIL="john.doe@email.com" \
+GITHUB_USERNAME="john-doe" \
+SYSTEM_HOSTNAME="devcon-arm64" \
+WORKSPACE_LOCATION="/" \
+APPLY_ROOTMOI=0 \
+REMOTE_CONTAINERS=1 \
+sh -c "$(wget -qO- https://bit.ly/3W2JGyL)"
+```
+
+### Initialize dotfiles
+
+When installing the dotfiles, initialization starts automatically. If you want to initialize the dotfiles manually, you can run the following command:
+
+```bash
+chezmoi init --apply
+```
+
+![initialize dotfiles](./assets/figs/initialize_dotfiles.png)
 
 ## Installing the font on **Windows**
 
