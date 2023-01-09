@@ -6,23 +6,34 @@
 true || source ../../.chezmoitemplates/scripts-library
 
 # arguments usage
-USAGE="DOCKER_NAME [-t|--tag TAG] [-b|--build-path BUILD_PATH] [-d|--dockerfile-path DOCKERFILE_PATH] [-c|--compose-file COMPOSE_FILE] [-e|--env-file ENV_FILE] [-v|--version VERSION] [-l|--latest] [-p|--push ] [-h|--help]"
+USAGE="COMMAND DOCKER_NAME [-t|--tag TAG] [-b|--build-path BUILD_PATH] [-d|--dockerfile-path DOCKERFILE_PATH] [-c|--compose-file COMPOSE_FILE] [-e|--env-file ENV_FILE] [-v|--version VERSION] [-l|--latest] [-p|--push ] [-n|--name CONTAINER_NAME] [--network NETWORK_NAME] [-h|--help]"
 
 # declare arguments
+COMMAND=""
 DOCKER_NAME=""
 TAG=""
 BUILD_PATH=""
 DOCKERFILE_PATH=""
 COMPOSE_FILE="docker-compose.yaml"
 ENV_FILE=".env.docker"
-VERSION=""
+VERSION="latest"
 LATEST="false"
 PUSH="false"
+CONTAINER_NAME=""
+NETWORK_NAME=""
 ADDITIONAL_ARGS=""
 
 set +u
 # read arguments
-# check first argument starts with a dash
+# first argument is the command
+COMMAND="$1"
+shift
+if [[ "$COMMAND" != "build" ]] && [[ "$COMMAND" != "run" ]] && [[ "$COMMAND" != "up" ]] && [[ "$COMMAND" != "down" ]]; then
+  echo "Invalid command: $COMMAND" >&2
+  echo "Usage: $0 $USAGE" >&2
+  exit 1
+fi
+# check second argument starts with a dash
 # if it does, it's an option and DOCKER_NAME can be the last argument
 # if not, it's the DOCKER_NAME
 if [[ "$1" != -* ]]; then
@@ -85,6 +96,20 @@ while [[ $# -gt 0 ]]; do
   -p | --push)
     PUSH="true"
     ;;
+  -n | --name)
+    CONTAINER_NAME="$2"
+    shift
+    ;;
+  --name=*)
+    CONTAINER_NAME="${1#*=}"
+    ;;
+  --network)
+    NETWORK_NAME="$2"
+    shift
+    ;;
+  --network=*)
+    NETWORK_NAME="${1#*=}"
+    ;;
   -h | --help)
     echo "Usage: $0 $USAGE" >&2    
     exit 0
@@ -116,6 +141,7 @@ if [[ "$LATEST" == "true" ]] && [[ -z "$VERSION" ]]; then
 elif [[ "$VERSION" == "pre*" ]] || [[ "$VERSION" == "night*" ]]; then
   VERSION="nightly"
 fi
+export VERSION
 
 DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
 if [[ -n "$TAG" ]]; then
@@ -148,19 +174,39 @@ if [[ ! -f "$COMPOSEFILE_PATH" ]]; then
   exit 1
 fi
 export DOCKERFILE_PATH
-
+if [[ -n "$CONTAINER_NAME" ]]; then
+  export CONTAINER_NAME
+fi
 ENV_PATH="${DOCKERFILE_PATH}/${ENV_FILE}"
 ENV_ARGS=""
 if [[ -f "$ENV_PATH" ]]; then
   ENV_ARGS="--env-file ${ENV_PATH}"
+  log_task "Loading environment variables from ${ENV_PATH}"
+  set -a
+  # shellcheck disable=SC1090
+  source "$ENV_PATH"
+  set +a
+fi
+
+# if network does not exist, create it
+if [[ -n "$NETWORK_NAME" ]]; then
+  # shellcheck disable=SC2143
+  if [[ -z "$(docker network ls | grep "${NETWORK_NAME}")" ]]; then
+    log_task "Creating network ${NETWORK_NAME}"
+    docker network create "${NETWORK_NAME}"
+  else
+    log_info "Network ${NETWORK_NAME} already exists."
+  fi
+else
+  log_info "NETWORK_NAME not set, skipping creation of docker network."
 fi
 
 if docker-compose --version &>/dev/null; then
-  log_task "Building ${DOCKER_NAME} for context ${BUILD_PATH} with ${COMPOSE_FILE} and ${ENV_PATH}"
+  log_task "docker-compose ${COMMAND} for [${DOCKER_NAME}] with tag [${TAG}] and version [${VERSION}] from [${BUILD_PATH}]"
 
   # change to the directory of the build context
   c cd "${BUILD_PATH}" || exit 1  
-  CMD="docker-compose -f ${COMPOSEFILE_PATH} ${ENV_ARGS} build ${ADDITIONAL_ARGS}"
+  CMD="docker-compose -f ${COMPOSEFILE_PATH} ${ENV_ARGS} ${COMMAND} ${ADDITIONAL_ARGS}"
   c eval "$CMD" || exit 1
 
   if [[ "$PUSH" == "true" ]]; then
