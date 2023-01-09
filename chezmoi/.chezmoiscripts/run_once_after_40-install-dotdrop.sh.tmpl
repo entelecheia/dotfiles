@@ -7,7 +7,7 @@ true || source ../.chezmoitemplates/scripts-library
 
 if ! command -v dotdrop >/dev/null; then
   log_task "Install dotdrop with pip3"
-  c /usr/bin/pip3 install dotdrop -t "$HOME/.local/bin"
+  c /usr/bin/pip3 install dotdrop --user
   # Add ~/.local/bin to PATH in order to use dotdrop before finishing the installation
   export PATH="$HOME/.local/bin:$PATH"
 fi
