@@ -14,8 +14,8 @@ DOCKER_NAME=""
 TAG=""
 BUILD_PATH=""
 DOCKERFILE_PATH=""
-COMPOSE_FILE="docker-compose.yaml"
-ENV_FILE=".env.docker"
+COMPOSE_FILE=""
+ENV_FILE=""
 VERSION="latest"
 LATEST="false"
 PUSH="false"
@@ -146,7 +146,20 @@ export VERSION
 DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
 if [[ -n "$TAG" ]]; then
   # {base_name}-{TAG}.{ext}
-  COMPOSE_FILE="${COMPOSE_FILE%.*}-${TAG}.${COMPOSE_FILE##*.}"
+  if [[ -z "$COMPOSE_FILE" ]]; then
+    COMPOSE_FILE="docker-compose.${TAG}.yaml"
+  fi
+  if [[ -z "$ENV_FILE" ]]; then
+    ENV_FILE=".env.docker.${TAG}"
+  fi
+else
+  # {base_name}.{ext}
+  if [[ -z "$COMPOSE_FILE" ]]; then
+    COMPOSE_FILE="docker-compose.yaml"
+  fi
+  if [[ -z "$ENV_FILE" ]]; then
+    ENV_FILE=".env.docker"
+  fi
 fi
 
 # check PATHs
