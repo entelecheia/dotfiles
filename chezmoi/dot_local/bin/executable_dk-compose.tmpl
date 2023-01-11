@@ -179,6 +179,9 @@ fi
 export BUILD_PATH
 
 if [[ -z "$DOCKERFILE_PATH" ]]; then
+  DOCKERFILE_PATH="${BUILD_PATH}/.docker"
+fi
+if [[ ! -d "$DOCKERFILE_PATH" ]]; then
   DOCKERFILE_PATH="${BUILD_PATH}"
 fi
 COMPOSEFILE_PATH="${DOCKERFILE_PATH}/${COMPOSE_FILE}"
@@ -222,7 +225,7 @@ if docker-compose --version &>/dev/null; then
 
   # change to the directory of the build context
   c cd "${BUILD_PATH}" || exit 1  
-  CMD="docker-compose -f ${COMPOSEFILE_PATH} ${ENV_ARGS} ${COMMAND} ${ADDITIONAL_ARGS}"
+  CMD="docker-compose --project-directory ${BUILD_PATH} -f ${COMPOSEFILE_PATH} ${ENV_ARGS} ${COMMAND} ${ADDITIONAL_ARGS}"
   c eval "$CMD" || exit 1
 
   if [[ "$PUSH" == "true" ]]; then

@@ -91,12 +91,18 @@ function copy_dockerfiles() {
   fi
   if [[ -d "$source_dir" ]] && [[ -d "$destination_dir" ]]; then
     # ignore case
-    dockerfiles=$(find "$source_dir" -type f -iname "$pattern" -print)
-    if [[ -n "$dockerfiles" ]]; then
-      log_task "Copying dockerfiles from: $source_dir to: $destination_dir"
-      for dockerfile in $dockerfiles; do
-        c cp "$dockerfile" "$destination_dir"
-      done
+    dockerfiles_dir="${source_dir}/.docker"
+    if [[ -d "$dockerfiles_dir" ]]; then
+      log_task "Copying dockerfiles from: $dockerfiles_dir to: $destination_dir"
+      c cp -r "$dockerfiles_dir" "$destination_dir"
+    else
+      dockerfiles=$(find "$source_dir" -type f -iname "$pattern" -print)
+      if [[ -n "$dockerfiles" ]]; then
+        log_task "Copying dockerfiles from: $source_dir to: $destination_dir"
+        for dockerfile in $dockerfiles; do
+          c cp "$dockerfile" "$destination_dir"
+        done
+      fi
     fi
   fi
 }
