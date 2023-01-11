@@ -16,7 +16,7 @@ BUILD_PATH=""
 DOCKERFILE_PATH=""
 COMPOSE_FILE=""
 ENV_FILE=""
-VERSION="latest"
+VERSION=""
 LATEST="false"
 PUSH="false"
 CONTAINER_NAME=""
@@ -182,6 +182,9 @@ if [[ -z "$DOCKERFILE_PATH" ]]; then
   DOCKERFILE_PATH="${BUILD_PATH}"
 fi
 COMPOSEFILE_PATH="${DOCKERFILE_PATH}/${COMPOSE_FILE}"
+if [[ ! -f "$COMPOSEFILE_PATH" ]]; then
+  COMPOSEFILE_PATH="${DOCKERFILE_PATH}/docker-compose.yaml"
+fi
 if [[ ! -f "$COMPOSEFILE_PATH" ]]; then
   log_error "Dockerfile ${COMPOSEFILE_PATH} does not exist"
   exit 1
