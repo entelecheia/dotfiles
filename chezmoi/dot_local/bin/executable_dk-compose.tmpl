@@ -6,7 +6,7 @@
 true || source ../../.chezmoitemplates/scripts-library
 
 # arguments usage
-USAGE="COMMAND DOCKER_NAME [-t|--tag TAG] [-b|--build-path BUILD_PATH] [-d|--dockerfile-path DOCKERFILE_PATH] [-c|--compose-file COMPOSE_FILE] [-e|--env-file ENV_FILE] [-v|--version VERSION] [-l|--latest] [-p|--push ] [-n|--name CONTAINER_NAME] [--network NETWORK_NAME] [-h|--help]"
+USAGE="COMMAND DOCKER_NAME [-t|--tag TAG] [-b|--build-path BUILD_PATH] [-d|--dockerfile-path DOCKERFILE_PATH] [-c|--compose-file COMPOSE_FILE] [-e|--env-file ENV_FILE] [-v|--version VERSION] [-l|--latest] [-p|--push ] [-n|--name CONTAINER_NAME] [--network DOCKER_NETWORK_NAME] [-h|--help]"
 
 # declare arguments
 COMMAND=""
@@ -20,7 +20,7 @@ VERSION="latest"
 LATEST="false"
 PUSH="false"
 CONTAINER_NAME=""
-NETWORK_NAME=""
+DOCKER_NETWORK_NAME=""
 ADDITIONAL_ARGS=""
 
 set +u
@@ -104,11 +104,11 @@ while [[ $# -gt 0 ]]; do
     CONTAINER_NAME="${1#*=}"
     ;;
   --network)
-    NETWORK_NAME="$2"
+    DOCKER_NETWORK_NAME="$2"
     shift
     ;;
   --network=*)
-    NETWORK_NAME="${1#*=}"
+    DOCKER_NETWORK_NAME="${1#*=}"
     ;;
   -h | --help)
     echo "Usage: $0 $USAGE" >&2    
@@ -147,7 +147,7 @@ DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
 if [[ -n "$TAG" ]]; then
   # {base_name}-{TAG}.{ext}
   if [[ -z "$COMPOSE_FILE" ]]; then
-    COMPOSE_FILE="docker-compose.${TAG}.yaml"
+    COMPOSE_FILE="docker-compose-${TAG}.yaml"
   fi
   if [[ -z "$ENV_FILE" ]]; then
     ENV_FILE=".env.docker.${TAG}"
@@ -202,16 +202,16 @@ if [[ -f "$ENV_PATH" ]]; then
 fi
 
 # if network does not exist, create it
-if [[ -n "$NETWORK_NAME" ]]; then
+if [[ -n "$DOCKER_NETWORK_NAME" ]]; then
   # shellcheck disable=SC2143
-  if [[ -z "$(docker network ls | grep "${NETWORK_NAME}")" ]]; then
-    log_task "Creating network ${NETWORK_NAME}"
-    docker network create "${NETWORK_NAME}"
+  if [[ -z "$(docker network ls | grep "${DOCKER_NETWORK_NAME}")" ]]; then
+    log_task "Creating network ${DOCKER_NETWORK_NAME}"
+    docker network create "${DOCKER_NETWORK_NAME}"
   else
-    log_info "Network ${NETWORK_NAME} already exists."
+    log_info "Network ${DOCKER_NETWORK_NAME} already exists."
   fi
 else
-  log_info "NETWORK_NAME not set, skipping creation of docker network."
+  log_info "DOCKER_NETWORK_NAME not set, skipping creation of docker network."
 fi
 
 if docker-compose --version &>/dev/null; then
