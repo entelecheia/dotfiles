@@ -20,7 +20,7 @@
 
 # {{- $name:= or (env "USER_FULLNAME") "Your Name" -}}
 # {{- $email:= or (env "USER_EMAIL") "your_email@your.domain.com" -}}
-# {{- $hostname := or (env "SYSTEM_HOSTNAME") .chezmoi.hostname -}}
+# {{- $hostname := or (env "SYSTEM_HOSTNAME") .chezmoi.hostname | quote -}}
 # {{- $github_username := env "GITHUB_USERNAME" -}}
 # {{- $workspace_location := or (env "WORKSPACE_LOCATION") .chezmoi.homeDir -}}
 # {{- $apply_rootmoi := true -}}
@@ -263,7 +263,7 @@
 # {{- end -}}
 
 # {{- if and (hasKey . "system") (hasKey .system "hostname") -}}
-# {{-   $hostname = .system.hostname -}}
+# {{-   $hostname = .system.hostname | quote -}}
 # {{- end -}}
 # {{- if $interactive -}}
 # {{-   range $i := until 99 -}}
@@ -456,7 +456,7 @@ data:
     editor: "vi"
     system:
         auto_update: {{ $auto_update }}
-        hostname: {{ $hostname }}
+        hostname: {{ $hostname | quote }}
         is_wsl: {{ $wsl }}
         is_devcontainer: {{ $devcontainer }}
         is_minimum: {{ $minimum }}
