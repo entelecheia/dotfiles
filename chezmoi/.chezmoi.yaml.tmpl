@@ -263,7 +263,7 @@
 # {{- end -}}
 
 # {{- if and (hasKey . "system") (hasKey .system "hostname") -}}
-# {{-   $hostname = .system.hostname | quote -}}
+# {{-   $hostname = .system.hostname -}}
 # {{- end -}}
 # {{- if $interactive -}}
 # {{-   range $i := until 99 -}}
