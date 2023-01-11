@@ -81,19 +81,23 @@ function copy_dockerfiles() {
 
   if [[ ! -d "$source_dir" ]]; then
     log_error "Source directory does not exist: $source_dir"
-    exit 1
+    # skip copying dockerfiles
+    return
   fi
   if [[ ! -d "$destination_dir" ]]; then
     log_error "Destination directory does not exist: $destination_dir"
-    exit 1
+    # skip copying dockerfiles
+    return
   fi
-  # ignore case
-  dockerfiles=$(find "$source_dir" -type f -iname "$pattern" -print)
-  if [[ -n "$dockerfiles" ]]; then
-    log_task "Copying dockerfiles from: $source_dir to: $destination_dir"
-    for dockerfile in $dockerfiles; do
-      c cp "$dockerfile" "$destination_dir"
-    done
+  if [[ -d "$source_dir" ]] && [[ -d "$destination_dir" ]]; then
+    # ignore case
+    dockerfiles=$(find "$source_dir" -type f -iname "$pattern" -print)
+    if [[ -n "$dockerfiles" ]]; then
+      log_task "Copying dockerfiles from: $source_dir to: $destination_dir"
+      for dockerfile in $dockerfiles; do
+        c cp "$dockerfile" "$destination_dir"
+      done
+    fi
   fi
 }
 
