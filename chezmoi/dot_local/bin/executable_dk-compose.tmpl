@@ -239,7 +239,7 @@ if docker-compose --version &>/dev/null; then
 
   if [[ "$PUSH" == "true" ]]; then
     log_task "Pushing ${DOCKER_NAME}"
-    CMD="docker-compose -f ${COMPOSEFILE_PATH} ${ENV_ARGS} push ${ADDITIONAL_ARGS}"
+    CMD="docker-compose --project-directory ${BUILD_PATH} -f ${COMPOSEFILE_PATH} ${ENV_ARGS} push ${ADDITIONAL_ARGS}"
     c eval "$CMD" || exit 1
   fi
 
