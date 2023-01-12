@@ -94,7 +94,7 @@ function copy_dockerfiles() {
     dockerfiles_dir="${source_dir}/.docker"
     if [[ -d "$dockerfiles_dir" ]]; then
       log_task "Copying dockerfiles from: $dockerfiles_dir to: $destination_dir"
-      c cp -r "$dockerfiles_dir" "$destination_dir"
+      c cp -rf "$dockerfiles_dir" "$destination_dir"
     else
       dockerfiles=$(find "$source_dir" -type f -iname "$pattern" -print)
       if [[ -n "$dockerfiles" ]]; then

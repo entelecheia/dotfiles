@@ -167,7 +167,7 @@ if [[ -z "$BUILD_PATH" ]]; then
   BUILD_PATH="${WORKSPACE_ROOT}/projects/${DOCKER_NAME}"
 fi
 # if build path does not exist, use dockerfile repo path
-if [[ ! -d "$BUILD_PATH" ]]; then
+if [[ ! -d "$BUILD_PATH/.docker" ]]; then
   BUILD_PATH="${DOCKERFILES_REPO_DIR}/${DOCKER_NAME}"
 fi
 # if it still does not exist, exit
