@@ -6,7 +6,7 @@
 true || source ../../.chezmoitemplates/scripts-library
 
 # arguments usage
-USAGE="COMMAND DOCKER_NAME [-t|--tag TAG] [-b|--build-path BUILD_PATH] [-d|--dockerfile-path DOCKERFILE_PATH] [-c|--compose-file COMPOSE_FILE] [-e|--env-file ENV_FILE] [-v|--version VERSION] [-l|--latest] [-p|--push ] [-n|--name CONTAINER_NAME] [--network DOCKER_NETWORK_NAME] [-h|--help]"
+USAGE="COMMAND DOCKER_NAME [-t|--tag TAG] [-b|--build-path BUILD_PATH] [-d|--dockerfile-path DOCKERFILE_PATH] [-c|--compose-file COMPOSE_FILE] [-e|--env-file ENV_FILE] [-v|--version VERSION] [-l|--latest] [-p|--push ] [-n|--name CONTAINER_NAME] [--network DOCKER_NETWORK_NAME] [-u|--username USERNAME] [-h|--help]"
 
 # declare arguments
 COMMAND=""
@@ -21,6 +21,7 @@ LATEST="false"
 PUSH="false"
 CONTAINER_NAME=""
 DOCKER_NETWORK_NAME=""
+USERNAME="{{ .chezmoi.username }}"
 ADDITIONAL_ARGS=""
 
 set +u
@@ -110,6 +111,13 @@ while [[ $# -gt 0 ]]; do
   --network=*)
     DOCKER_NETWORK_NAME="${1#*=}"
     ;;
+  -u | --username)
+    USERNAME="$2"
+    shift
+    ;;
+  --username=*)
+    USERNAME="${1#*=}"
+    ;;
   -h | --help)
     echo "Usage: $0 $USAGE" >&2    
     exit 0
@@ -196,6 +204,7 @@ export DOCKERFILE_PATH
 if [[ -n "$CONTAINER_NAME" ]]; then
   export CONTAINER_NAME
 fi
+export USERNAME
 ENV_PATH="${DOCKERFILE_PATH}/${ENV_FILE}"
 ENV_ARGS=""
 if [[ -f "$ENV_PATH" ]]; then
