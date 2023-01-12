@@ -179,8 +179,6 @@
 
 # {{- if and (hasKey . "docker") (hasKey .docker "username") -}}
 # {{-   $docker_username = .docker.username -}}
-# {{- else -}}
-# {{-   $docker_username = $github_username -}}
 # {{- end -}}
 # {{- if $interactive -}}
 # {{-   $question := "❔ What is your Docker username" -}}
