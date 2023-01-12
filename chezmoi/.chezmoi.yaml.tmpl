@@ -24,8 +24,12 @@
 # {{- $github_username := env "GITHUB_USERNAME" -}}
 # {{- $workspace_location := or (env "WORKSPACE_LOCATION") .chezmoi.homeDir -}}
 # {{- $apply_rootmoi := true -}}
-# {{- if eq (env "APPLY_ROOTMOI") "false" "False" "0" -}}
+# {{- if eq (env "APPLY_ROOTMOI") "false" "False" "FALSE" "0" -}}
 # {{- $apply_rootmoi = false -}}
+# {{- end -}}
+# {{- $use_dotdrop := false -}}
+# {{- if eq (env "DOTFILES_USE_DOTDROP") "true" "True" "TRUE" "1" -}}
+# {{- $use_dotdrop = true -}}
 # {{- end -}}
 
 # {{- writeToStdout "---\n" -}}
@@ -38,6 +42,7 @@
 # {{- if and (eq .chezmoi.os "linux") -}}
 # {{- writeToStdout (printf "🦸  Apply rootmoi: %t\n" $apply_rootmoi) -}}
 # {{- end -}}
+# {{- writeToStdout (printf "📦  Use dotdrop: %t\n" $use_dotdrop) -}}
 # {{- writeToStdout "---\n" -}}
 
 # {{- $docker_username := "" -}}
@@ -116,6 +121,19 @@
 # {{-   $apply_rootmoi := false -}}
 # {{-   if $interactive -}}
 # {{-       writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
+# {{-   end -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "system") (hasKey .system "use_dotdrop") -}}
+# {{-   $use_dotdrop = .system.use_dotdrop -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ Do you want to use dotdrop to manage your private dotfiles" -}}
+# {{-   $use_dotdrop = promptBool $question $use_dotdrop -}}
+# {{-   if $use_dotdrop -}}
+# {{-     writeToStdout "✅ Dotdrop enabled\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ Dotdrop disabled\n" -}}
 # {{-   end -}}
 # {{- end -}}
 
@@ -205,7 +223,7 @@
 # {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "repo") -}}
 # {{-   $dotdrop_repo = .dotdrop.repo -}}
 # {{- end -}}
-# {{- if $interactive -}}
+# {{- if and $interactive $use_dotdrop -}}
 # {{-   $question := "❔ What is your dotdrop files repository URL" -}}
 # {{-   $answer := "" -}}
 # {{-   if $dotdrop_repo -}}
@@ -464,6 +482,7 @@ data:
         is_interactive: {{ $interactive }}
         is_sudoer: {{ $sudoer }}
         apply_rootmoi: {{ and $apply_rootmoi $sudoer }}
+        use_dotdrop: {{ $use_dotdrop }}
         uname_arch: {{ output "uname" "-m" | trim | quote }}
         cpu:
             cores: {{ $cpuCores }}

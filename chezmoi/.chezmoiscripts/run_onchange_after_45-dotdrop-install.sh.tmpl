@@ -1,7 +1,5 @@
 #!/bin/bash
-
-# We need to install ca-certificates before we add the APT repos, because some of them
-# may use newer CAs.
+# {{ if .system.use_dotdrop -}}
 
 # {{ include (joinPath .chezmoi.sourceDir ".chezmoitemplates/scripts-library") }}
 
@@ -20,3 +18,5 @@ elif test "$(which dotdrop)"; then
 else
     log_c "dotdrop" "not installed"
 fi
+
+# {{ end -}}

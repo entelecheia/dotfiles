@@ -1,4 +1,5 @@
 #!/bin/bash
+# {{ if .system.use_dotdrop -}}
 
 # {{ template "scripts-library" }}
 
@@ -44,3 +45,5 @@ else
     fi
   fi
 fi
+
+# {{ end -}}
