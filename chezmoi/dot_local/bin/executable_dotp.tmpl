@@ -13,9 +13,11 @@ if chezmoi --version &>/dev/null; then
   c git -C "$CHEZMOI_REPO" add -A && git -C "$CHEZMOI_REPO" commit -m "$COMMIT_MESSAGE" && git -C "$CHEZMOI_REPO" push
 fi
 
+# {{ if .system.use_dotdrop }}
 if dotdrop --version &>/dev/null; then
   DOTDROP_REPO="${HOME}/.config/dotdrop"
 
   log_task "Committing dotdrop changes and pushing to remote"
   c git -C "$DOTDROP_REPO" commit -a -m "$COMMIT_MESSAGE" && git -C "$DOTDROP_REPO" push
 fi
+# {{ end }}
