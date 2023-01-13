@@ -47,7 +47,7 @@
 
 # {{- $docker_username := "" -}}
 # {{- $github_token := "" -}}
-# {{- $dotdrop_repo := "https://github.com/entelecheia/dotdrop-files.git" -}}
+# {{- $dotdrop_repo := "" -}}
 # {{- $dockerfiles_repo := "https://github.com/entelecheia/dockerfiles.git" -}}
 # {{- $ssh_algorithm := "ed25519" -}}
 # {{- $workspace_name := "workspace" -}}
@@ -58,7 +58,7 @@
 # {{- $gpg_passphrase := "" -}}
 # {{- $gpg_gitsign := false -}}
 # {{- $sudoer := true -}}
-# {{- $github_clones := "entelecheia/devcon,entelecheia/ekorpkit" -}}
+# {{- $github_clones := "" -}}
 # {{- $auto_update := false -}}
 
 # {{- $minimum := or $devcontainer ($ubuntu | not) -}}
@@ -121,19 +121,6 @@
 # {{-   $apply_rootmoi := false -}}
 # {{-   if $interactive -}}
 # {{-       writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
-# {{-   end -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "system") (hasKey .system "use_dotdrop") -}}
-# {{-   $use_dotdrop = .system.use_dotdrop -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ Do you want to use dotdrop to manage your private dotfiles" -}}
-# {{-   $use_dotdrop = promptBool $question $use_dotdrop -}}
-# {{-   if $use_dotdrop -}}
-# {{-     writeToStdout "✅ Dotdrop enabled\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "✅ Dotdrop disabled\n" -}}
 # {{-   end -}}
 # {{- end -}}
 
@@ -218,11 +205,24 @@
 # {{-   end -}}
 # {{- end -}}
 
+# {{- if and (hasKey . "system") (hasKey .system "use_dotdrop") -}}
+# {{-   $use_dotdrop = .system.use_dotdrop -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ Do you want to use dotdrop to manage your private dotfiles" -}}
+# {{-   $use_dotdrop = promptBool $question $use_dotdrop -}}
+# {{-   if $use_dotdrop -}}
+# {{-     writeToStdout "✅ Dotdrop enabled\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ Dotdrop disabled\n" -}}
+# {{-   end -}}
+# {{- end -}}
+
 # {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "repo") -}}
 # {{-   $dotdrop_repo = .dotdrop.repo -}}
 # {{- end -}}
 # {{- if and $interactive $use_dotdrop -}}
-# {{-   $question := "❔ What is your dotdrop files repository URL" -}}
+# {{-   $question := "❔ What is your dotdrop files repository URL (use your repo by forking https://github.com/entelecheia/dotdrop-files.git)" -}}
 # {{-   $answer := "" -}}
 # {{-   if $dotdrop_repo -}}
 # {{-     $answer = promptString $question $dotdrop_repo -}}
@@ -230,6 +230,7 @@
 # {{-     $answer = promptString $question -}}
 # {{-   end -}}
 # {{-   $dotdrop_repo = $answer -}}
+# {{-   $use_dotdrop = $answer | not | not -}}
 # {{-   writeToStdout (printf "✅ dotdrop files repo set as '%s'\n" $dotdrop_repo) -}}
 # {{- end -}}
 
@@ -237,7 +238,7 @@
 # {{-   $dockerfiles_repo = .docker.repo -}}
 # {{- end -}}
 # {{- if $interactive -}}
-# {{-   $question := "❔ What is your dockerfiles repository URL" -}}
+# {{-   $question := "❔ What is your dockerfiles repository URL (ex: https://github.com/entelecheia/dockerfiles.git)" -}}
 # {{-   $answer := "" -}}
 # {{-   if $dockerfiles_repo -}}
 # {{-     $answer = promptString $question $dockerfiles_repo -}}
@@ -252,7 +253,7 @@
 # {{-   $github_clones = .github.clones -}}
 # {{- end -}}
 # {{- if $interactive -}}
-# {{-   $question := "❔ What are your GitHub repositories to clone (input as comma separated list)" -}}
+# {{-   $question := "❔ What are your GitHub repositories to clone (input as comma separated list, ex: entelecheia/devcon,entelecheia/ekorpkit)" -}}
 # {{-   $answer := "" -}}
 # {{-   if $github_clones -}}
 # {{-     $answer = promptString $question $github_clones -}}
