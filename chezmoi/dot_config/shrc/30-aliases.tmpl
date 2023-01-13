@@ -12,9 +12,6 @@ alias dotdrop="${DOTDROP_PATH} --cfg=${HOME}/.config/dotdrop/config-user.yaml -p
 alias rootdrop="${DOTDROP_PATH} --cfg=${HOME}/.config/dotdrop/config-root.yaml -p {{ .dotdrop.root_profile }}"
 
 alias cw="chown-workspace"
-alias dotenv-vault="npx dotenv-vault"
-alias dotenv="npx dotenv-vault"
-alias denv="npx dotenv-vault"
 
 alias dkb="dk-build"
 alias dkr="dk-run"
@@ -34,6 +31,12 @@ alias deit="docker exec -it"
 alias dkx="deit"
 alias dkex="deit"
 
+dotenv-vault() {
+  npx dotenv-vault "$@"
+}
+alias dotenv="dotenv-vault"
+alias denv="dotenv-vault"
+
 refreshenv() {
   local shell
 
@@ -51,7 +54,7 @@ mcd() {
 cdr() {
   local repo="${1:-}"
 
-  cd "${HOME}/repos/${repo}"
+  cd "${WORKSPACE_ROOT}/projects/${repo}"
 }
 
 # See: https://github.com/twpayne/chezmoi/issues/854#issuecomment-675160348
