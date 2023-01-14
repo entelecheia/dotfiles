@@ -1,1 +1,1 @@
-../docs/install-dotfiles
+../docs/install
