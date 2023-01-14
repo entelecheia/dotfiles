@@ -9,13 +9,13 @@ Dotfiles are configuration files that are used to customize your shell and other
 You can use the [install dotfiles script](./scripts/install_dotfiles.sh) to install the dotfiles on any machine with a single command. Simply run the following command in your terminal:
 
 ```bash
-sh -c "$(wget -qO- https://bit.ly/3W2JGyL)"
+sh -c "$(wget -qO- http://link.entelecheia.in/install-dotfiles)"
 ```
 
 > 💡 For most Ubuntu-based distributions, `wget` is already installed. If you want to use `curl` instead:
 >
 > ```bash
->  sh -c "$(curl -fsSL https://bit.ly/3W2JGyL)"
+>  sh -c "$(curl -fsSL http://link.entelecheia.in/install-dotfiles)"
 > ```
 
 ![install dotfiles script](./assets/figs/install_dotfiles_script.png)
