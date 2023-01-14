@@ -18,7 +18,7 @@ sh -c "$(wget -qO- http://link.entelecheia.in/install-dotfiles)"
 >  sh -c "$(curl -fsSL http://link.entelecheia.in/install-dotfiles)"
 > ```
 
-![install dotfiles script](./assets/figs/install_dotfiles_script.png)
+![install dotfiles script](./docs/figs/install_dotfiles_script.png)
 
 For unattended installations such as in a dockerfile, you can use the environment variables to initialize the dotfiles automatically. For example:
 
@@ -63,7 +63,7 @@ When installing the dotfiles, initialization starts automatically. If you want t
 chezmoi init --apply
 ```
 
-![initialize dotfiles](./assets/figs/initialize_dotfiles.png)
+![initialize dotfiles](./docs/figs/initialize_dotfiles.png)
 
 ## Installing the font on **Windows**
 
