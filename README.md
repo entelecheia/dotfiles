@@ -6,16 +6,16 @@ Dotfiles are configuration files that are used to customize your shell and other
 
 ### Install dotfiles
 
-You can use the [install dotfiles script](https://dotfiles.entelecheia.in/install) to install the dotfiles on any machine with a single command. Simply run the following command in your terminal:
+You can use the [install dotfiles script](https://dotfiles.entelecheia.cc/install) to install the dotfiles on any machine with a single command. Simply run the following command in your terminal:
 
 ```bash
-sh -c "$(wget -qO- https://dotfiles.entelecheia.in/install)"
+sh -c "$(wget -qO- https://dotfiles.entelecheia.cc/install)"
 ```
 
 > 💡 For most Ubuntu-based distributions, `wget` is already installed. If you want to use `curl` instead:
 >
 > ```bash
->  sh -c "$(curl -fsSL https://dotfiles.entelecheia.in/install)"
+>  sh -c "$(curl -fsSL https://dotfiles.entelecheia.cc/install)"
 > ```
 
 ![install dotfiles script](./docs/figs/install_dotfiles_script.png)
