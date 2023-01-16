@@ -37,6 +37,15 @@ elif [ -x "${HOME}/.linuxbrew/bin/brew" ]; then
 fi
 # {{ end }}
 
+if [ -d "${HOME}/.nvm" ]; then
+  export NVM_DIR="$HOME/.nvm"
+  # shellcheck disable=SC1091
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+  # shellcheck disable=SC1091
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fi
+
+
 if [ -r "${HOME}/.sdkman/bin/sdkman-init.sh" ]; then
   export SDKMAN_DIR="${HOME}/.sdkman"
   # shellcheck disable=SC1091

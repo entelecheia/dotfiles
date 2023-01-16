@@ -37,7 +37,7 @@ ENV WORKSPACE_LOCATION="/"
 ENV APPLY_ROOTMOI=0
 ENV REMOTE_CONTAINERS=1
 
-RUN sh -c "$(wget -qO- https://bit.ly/3W2JGyL)"
+RUN sh -c "$(wget -qO- https://dotfiles.entelecheia.cc/install)"
 
 CMD ["zsh"]
 ```
@@ -52,7 +52,7 @@ SYSTEM_HOSTNAME="devcon-arm64" \
 WORKSPACE_LOCATION="/" \
 APPLY_ROOTMOI=0 \
 REMOTE_CONTAINERS=1 \
-sh -c "$(wget -qO- https://bit.ly/3W2JGyL)"
+sh -c "$(wget -qO- https://dotfiles.entelecheia.cc/install)"
 ```
 
 ### Initialize dotfiles
