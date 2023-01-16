@@ -37,7 +37,7 @@
   type: archive
   url: "https://github.com/nvm-sh/nvm/archive/{{ template "get-github-head-revision" list "nvm-sh/nvm" $cache }}.tar.gz"
   stripComponents: 1
-  exact: true
+  # exact: true
 
 # {{- if ne .chezmoi.os "darwin" -}}
 #
