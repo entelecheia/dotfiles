@@ -1,7 +1,7 @@
 #!/bin/bash
 # load all shell config files
 if [ -d "${HOME}/.config/shrc" ]; then
-    for file in "${HOME}/.config/shrc"/*(N); do
+    for file in "${HOME}/.config/shrc"/*; do
         # shellcheck source=/dev/null
         . "$file"
     done
@@ -9,7 +9,7 @@ fi
 
 # load all zsh config files
 if [ -d "${HOME}/.config/zshrc" ]; then
-    for file in "${HOME}/.config/zshrc"/*(N); do
+    for file in "${HOME}/.config/zshrc"/*; do
         # shellcheck source=/dev/null
         . "$file"
     done
