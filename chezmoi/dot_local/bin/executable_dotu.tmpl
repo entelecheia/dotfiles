@@ -35,9 +35,7 @@ fi
 
 # {{ if .system.use_dotdrop }}
 if dotdrop --version &>/dev/null; then
-  DOTDROP_PATH="$(which dotdrop)"
-
   log_task "Updating dotfiles for dotdrop"
-  "${DOTDROP_PATH}" --cfg="${HOME}/.config/dotdrop/config-user.yaml" -p "{{ .dotdrop.user_profile }}" install
+  dotdrop --cfg="${HOME}/.config/dotdrop/config-user.yaml" -p "{{ .dotdrop.user_profile }}" install
 fi
 # {{ end }}

@@ -1,11 +1,12 @@
 #!/bin/bash
 export TERM=xterm-256color
-export AUTO_UPDATE_DOTFILES="{{ .system.auto_update }}"
 export USER_FULLNAME="{{ .name }}"
 export USER_EMAIL="{{ .email }}"
 export SYSTEM_HOSTNAME="{{ .system.hostname }}"
 export APPLY_ROOTMOI="{{ .system.apply_rootmoi }}"
+export DOTFILES_VERBOSE="{{ .system.verbose }}"
 export DOTFILES_USE_DOTDROP="{{ .system.use_dotdrop }}"
+export DOTDROP_USER_PROFILE="{{ .dotdrop.user_profile }}"
 export GITHUB_USERNAME="{{ .github.username }}"
 export DOCKER_USERNAME="{{ .docker.username }}"
 export WORKSPACE_LOCATION="{{ .workspace.location }}"

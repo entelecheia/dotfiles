@@ -8,11 +8,10 @@ alias cz="chezmoi"
 TMP_HOME="{{- .chezmoi.workingTree -}}/tmp"
 # shellcheck disable=SC2139
 alias czdr="chezmoi apply --verbose --destination ${TMP_HOME} --dry-run"
-DOTDROP_PATH="$(which dotdrop)"
 # shellcheck disable=SC2139
-alias dotdrop="${DOTDROP_PATH} --cfg=${HOME}/.config/dotdrop/config-user.yaml -p {{ .dotdrop.user_profile }}"
+alias dotdrop="dotdrop --cfg=${HOME}/.config/dotdrop/config-user.yaml -p {{ .dotdrop.user_profile }}"
 # shellcheck disable=SC2139
-alias rootdrop="${DOTDROP_PATH} --cfg=${HOME}/.config/dotdrop/config-root.yaml -p {{ .dotdrop.root_profile }}"
+alias rootdrop="dotdrop --cfg=${HOME}/.config/dotdrop/config-root.yaml -p {{ .dotdrop.root_profile }}"
 
 alias cw="chown-workspace"
 

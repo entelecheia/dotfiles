@@ -20,16 +20,21 @@
 
 # {{- $name:= or (env "USER_FULLNAME") "Your Name" -}}
 # {{- $email:= or (env "USER_EMAIL") "your_email@your.domain.com" -}}
-# {{- $hostname := or (env "SYSTEM_HOSTNAME") .chezmoi.hostname | quote -}}
+# {{- $hostname := or (env "SYSTEM_HOSTNAME") .chezmoi.hostname -}}
+# {{- $dotdrop_user_profile := or (env "DOTDROP_USER_PROFILE") "user" -}}
 # {{- $github_username := env "GITHUB_USERNAME" -}}
 # {{- $workspace_location := or (env "WORKSPACE_LOCATION") .chezmoi.homeDir -}}
 # {{- $apply_rootmoi := true -}}
 # {{- if eq (env "APPLY_ROOTMOI") "false" "False" "FALSE" "0" -}}
-# {{- $apply_rootmoi = false -}}
+# {{-   $apply_rootmoi = false -}}
 # {{- end -}}
 # {{- $use_dotdrop := false -}}
 # {{- if eq (env "DOTFILES_USE_DOTDROP") "true" "True" "TRUE" "1" -}}
-# {{- $use_dotdrop = true -}}
+# {{-   $use_dotdrop = true -}}
+# {{- end -}}
+# {{- $verbose := false -}}
+# {{- if eq (env "DOTFILES_VERBOSE") "true" "True" "TRUE" "1" -}}
+# {{-   $verbose = true -}}
 # {{- end -}}
 
 # {{- writeToStdout "---\n" -}}
@@ -85,6 +90,19 @@
 # {{-     writeToStdout "✅ Auto update enabled\n" -}}
 # {{-   else -}}
 # {{-     writeToStdout "✅ Auto update disabled\n" -}}
+# {{-   end -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "system") (hasKey .system "verbose") -}}
+# {{-   $verbose = .system.verbose -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ Do you want to enable verbose mode" -}}
+# {{-   $verbose = promptBool $question $verbose -}}
+# {{-   if $verbose -}}
+# {{-     writeToStdout "✅ Verbose mode enabled\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ Verbose mode disabled\n" -}}
 # {{-   end -}}
 # {{- end -}}
 
@@ -232,6 +250,21 @@
 # {{-   $dotdrop_repo = $answer -}}
 # {{-   $use_dotdrop = $answer | not | not -}}
 # {{-   writeToStdout (printf "✅ dotdrop files repo set as '%s'\n" $dotdrop_repo) -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "user_profile") -}}
+# {{-   $dotdrop_user_profile = .dotdrop.user_profile -}}
+# {{- end -}}
+# {{- if and $interactive $use_dotdrop -}}
+# {{-   $question := "❔ What is your dotdrop user profile (ex: hostname)" -}}
+# {{-   $answer := "" -}}
+# {{-   if $dotdrop_user_profile -}}
+# {{-     $answer = promptString $question $dotdrop_user_profile -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $dotdrop_user_profile = $answer -}}
+# {{-   writeToStdout (printf "✅ dotdrop user profile set as '%s'\n" $dotdrop_user_profile) -}}
 # {{- end -}}
 
 # {{- if and (hasKey . "docker") (hasKey .dotdrop "repo") -}}
@@ -446,7 +479,7 @@
 # {{- /* This retains the value passed with --source on chezmoi init, which is used in the ../install.sh script */ -}} #
 sourceDir: "{{ .chezmoi.workingTree }}"
 
-# verbose: true
+verbose: {{ $verbose }}
 
 diff:
     exclude:
@@ -473,6 +506,7 @@ data:
     editor: "vi"
     system:
         auto_update: {{ $auto_update }}
+        verbose: {{ $verbose }}
         hostname: {{ $hostname | quote }}
         is_wsl: {{ $wsl }}
         is_devcontainer: {{ $devcontainer }}
@@ -499,8 +533,8 @@ data:
         clones: {{ $github_clones | quote }}
     dotdrop:
         repo: {{ $dotdrop_repo | quote }}
-        user_profile: user
-        root_profile: root
+        user_profile: {{ $dotdrop_user_profile | quote }}
+        root_profile: "root"
     docker:
         repo: {{ $dockerfiles_repo | quote }}
         username: {{ $docker_username | quote }}
