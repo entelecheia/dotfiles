@@ -1,16 +1,5 @@
 #!/bin/bash
 export TERM=xterm-256color
-export USER_FULLNAME="{{ .name }}"
-export USER_EMAIL="{{ .email }}"
-export SYSTEM_HOSTNAME="{{ .system.hostname }}"
-export APPLY_ROOTMOI="{{ .system.apply_rootmoi }}"
-export DOTFILES_VERBOSE="{{ .system.verbose }}"
-export DOTFILES_USE_DOTDROP="{{ .system.use_dotdrop }}"
-export DOTDROP_USER_PROFILE="{{ .dotdrop.user_profile }}"
-export GITHUB_USERNAME="{{ .github.username }}"
-export DOCKER_USERNAME="{{ .docker.username }}"
-export WORKSPACE_LOCATION="{{ .workspace.location }}"
-export WORKSPACE_ROOT="{{ .workspace.root }}"
 export GNUPGHOME="${HOME}/.gnupg"
 # {{ if .gnupg.gitsign }}
 GPG_TTY=$(tty)
@@ -59,10 +48,6 @@ fi
 
 if [ -d "${HOME}/bin" ]; then
   export PATH="${HOME}/bin:${PATH}"
-fi
-
-if [ -d "${HOME}/.local/bin" ]; then
-  export PATH="${HOME}/.local/bin:${PATH}"
 fi
 
 export VISUAL="{{ .editor }}"
