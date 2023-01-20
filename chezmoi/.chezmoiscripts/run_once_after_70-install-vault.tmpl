@@ -6,10 +6,14 @@
 # The following line is for ShellCheck to correctly identify the above included library
 true || source ../.chezmoitemplates/scripts-library
 
-package="vault"
-if ! is_brew_package_installed "${package}"; then
-  c brew tap hashicorp/tap
-  c brew install hashicorp/tap/vault  
+# if brew is installed, then install vault
+if brew --version &>/dev/null; then
+  package="vault"
+  if ! is_brew_package_installed "${package}"; then
+    log_task "Installing Hashicorp Vault"
+    c brew tap hashicorp/tap
+    c brew install hashicorp/tap/vault  
+  fi
 fi
 
 # {{ end }}
