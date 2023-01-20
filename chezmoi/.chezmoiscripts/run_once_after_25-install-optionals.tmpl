@@ -25,6 +25,7 @@ if snap --version &>/dev/null; then
   if ! is_snap_package_installed "${package}"; then
     log_task "Installing MicroK8s"
     c sudo snap install microk8s --classic
+    c sudo usermod -a -G microk8s "{{ .chezmoi.username }}"
   fi
 elif brew --version &>/dev/null; then
   package="microk8s"

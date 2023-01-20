@@ -8,10 +8,13 @@ alias cz="chezmoi"
 TMP_HOME="{{ .chezmoi.workingTree }}/tmp"
 # shellcheck disable=SC2139
 alias czdr="chezmoi apply --verbose --destination ${TMP_HOME} --dry-run"
+
 # shellcheck disable=SC2139
 alias dotdrop="dotdrop --cfg=${HOME}/.config/dotdrop/config-user.yaml -p {{ .dotdrop.user_profile }}"
 # shellcheck disable=SC2139
 alias rootdrop="dotdrop --cfg=${HOME}/.config/dotdrop/config-root.yaml -p {{ .dotdrop.root_profile }}"
+
+alias mkctl="microk8s kubectl"
 
 alias cw="chown-workspace"
 alias cdc="cd {{ .chezmoi.workingTree }}"
