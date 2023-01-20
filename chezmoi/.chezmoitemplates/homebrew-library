@@ -1,6 +1,28 @@
 # shellcheck shell=bash
 
-readonly home_homebrew_prefix="${HOME}/.linuxbrew"
-readonly root_homebrew_prefix="/home/linuxbrew/.linuxbrew"
+readonly home_homebrew_prefix="${HOME}/.homebrew"
 
-ensure_path_entry "${home_homebrew_prefix}/bin" "${root_homebrew_prefix}/bin"
+# First check OS.
+OS="$(uname)"
+if [[ "${OS}" == "Linux" ]]; then
+    HOMEBREW_ON_LINUX=1
+elif [[ "${OS}" == "Darwin" ]]; then
+    HOMEBREW_ON_MACOS=1
+fi  
+if [[ -n "${HOMEBREW_ON_MACOS-}" ]]; then
+    # macOS
+    UNAME_MACHINE="$(/usr/bin/uname -m)"
+    if [[ "${UNAME_MACHINE}" == "arm64" ]]; then
+    readonly homebrew_prefix="/opt/homebrew"
+    else
+    readonly homebrew_prefix="/usr/local"
+    fi
+elif [[ -n "${HOMEBREW_ON_LINUX-}" ]]; then
+    # Linux
+    readonly homebrew_prefix="/home/linuxbrew/.linuxbrew"
+else
+    # Unsupported OS
+    readonly homebrew_prefix="${HOME}/.homebrew"
+fi
+
+ensure_path_entry "${homebrew_prefix}/bin"
