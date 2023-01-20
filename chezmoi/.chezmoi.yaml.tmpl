@@ -32,6 +32,14 @@
 # {{- if eq (env "DOTFILES_USE_DOTDROP") "true" "True" "TRUE" "1" -}}
 # {{-   $use_dotdrop = true -}}
 # {{- end -}}
+# {{- $use_vault := false -}}
+# {{- if eq (env "DOTFILES_USE_VAULT") "true" "True" "TRUE" "1" -}}
+# {{-   $use_vault = true -}}
+# {{- end -}}
+# {{- $use_microk8s := false -}}
+# {{- if eq (env "DOTFILES_USE_MICROK8S") "true" "True" "TRUE" "1" -}}
+# {{-   $use_microk8s = true -}}
+# {{- end -}}
 # {{- $verbose := false -}}
 # {{- if eq (env "DOTFILES_VERBOSE") "true" "True" "TRUE" "1" -}}
 # {{-   $verbose = true -}}
@@ -139,6 +147,32 @@
 # {{-   $apply_rootmoi := false -}}
 # {{-   if $interactive -}}
 # {{-       writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
+# {{-   end -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "system") (hasKey .system "use_vault") -}}
+# {{-   $use_vault = .system.use_vault -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ Do you want to use vault for secrets" -}}
+# {{-   $use_vault = promptBool $question $use_vault -}}
+# {{-   if $use_vault -}}
+# {{-     writeToStdout "✅ Vault enabled\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ Vault disabled\n" -}}
+# {{-   end -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "system") (hasKey .system "use_microk8s") -}}
+# {{-   $use_microk8s = .system.use_microk8s -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ Do you want to use MicroK8s for Kubernetes" -}}
+# {{-   $use_microk8s = promptBool $question $use_microk8s -}}
+# {{-   if $use_microk8s -}}
+# {{-     writeToStdout "✅ MicroK8s enabled\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ MicroK8s disabled\n" -}}
 # {{-   end -}}
 # {{- end -}}
 
@@ -516,6 +550,8 @@ data:
         is_sudoer: {{ $sudoer }}
         apply_rootmoi: {{ and $apply_rootmoi $sudoer }}
         use_dotdrop: {{ $use_dotdrop }}
+        use_vault: {{ $use_vault }}
+        use_microk8s: {{ $use_microk8s }}
         uname_arch: {{ output "uname" "-m" | trim | quote }}
         cpu:
             cores: {{ $cpuCores }}

@@ -5,7 +5,7 @@
 # code here must be compatible with bash and zsh.
 
 alias cz="chezmoi"
-TMP_HOME="{{- .chezmoi.workingTree -}}/tmp"
+TMP_HOME="{{ .chezmoi.workingTree }}/tmp"
 # shellcheck disable=SC2139
 alias czdr="chezmoi apply --verbose --destination ${TMP_HOME} --dry-run"
 # shellcheck disable=SC2139
@@ -14,6 +14,10 @@ alias dotdrop="dotdrop --cfg=${HOME}/.config/dotdrop/config-user.yaml -p {{ .dot
 alias rootdrop="dotdrop --cfg=${HOME}/.config/dotdrop/config-root.yaml -p {{ .dotdrop.root_profile }}"
 
 alias cw="chown-workspace"
+alias cdc="cd {{ .chezmoi.workingTree }}"
+alias cdd="cdc"
+alias cddd="cd ${HOME}/.config/dotdrop"
+alias cddk="cd ${HOME}/.local/share/dockerfiles"
 
 alias dkb="dk-build"
 alias dkr="dk-run"
