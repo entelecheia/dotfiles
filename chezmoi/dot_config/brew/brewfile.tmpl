@@ -1,5 +1,5 @@
 {{- if eq .chezmoi.os "darwin" -}}
-# brew bundle --no-lock --file=~/.brew/brewfile --force
+# brew bundle --no-lock --file=~/.config/brew/brewfile.bundle --force
 
 #####################
 # Brewfile contents #
@@ -11,11 +11,6 @@ tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 tap "homebrew/core"
 tap "homebrew/services"
-tap "1password/tap"
-
-# GNU utils
-brew 'coreutils' # Those that come with macOS are outdated
-brew 'findutils'
 
 # Mac Utilities
 # Keep your application settings in sync. https://github.com/lra/mackup
