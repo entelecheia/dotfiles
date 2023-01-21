@@ -1,5 +1,5 @@
 #!/bin/bash
-# {{ if eq .chezmoi.os "darwin" -}}
+# {{ if and (eq .chezmoi.os "darwin" "linux") (.system.is_sudoer) -}}
 
 # {{ include (joinPath .chezmoi.sourceDir ".chezmoitemplates/scripts-library") }}
 
@@ -7,13 +7,8 @@
 true || source ../.chezmoitemplates/scripts-library
 
 readonly wanted_packages=(
-  zsh
-  jq
-  dotdrop
-  direnv
-  gnupg
-  pinentry-mac
-  node
+  gh
+  age
 )
 missing_packages=()
 
