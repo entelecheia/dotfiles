@@ -106,7 +106,7 @@ function is_apt_package_installed() {
 
   # first check if the package command is available
   if command -v apt >/dev/null 2>&1; then
-    return 1
+    return 0
   fi
   apt list --quiet --quiet --installed "${package}" 2>/dev/null | grep --quiet .
 
@@ -117,7 +117,7 @@ function is_brew_package_installed() {
 
   # first check if the package command is available
   if command -v apt >/dev/null 2>&1; then
-    return 1
+    return 0
   fi
   brew list --formula --versions "${package}" 2>/dev/null | grep --quiet .
 }
@@ -127,7 +127,7 @@ function is_snap_package_installed() {
 
   # first check if the package command is available
   if command -v apt >/dev/null 2>&1; then
-    return 1
+    return 0
   fi
   snap list "${package}" 2>/dev/null | grep --quiet .
 }
