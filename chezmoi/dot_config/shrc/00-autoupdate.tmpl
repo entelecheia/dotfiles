@@ -8,6 +8,16 @@ if [ -d "/opt/homebrew/bin" ]; then
 fi
 # {{ end }}
 
+# set eviroment variable GNUPGHOME to ~/.gnupg if not set
+GNUPGHOME=${GNUPGHOME:-$HOME/.gnupg}
+export GNUPGHOME="${GNUPGHOME}"
+GPG_KEY_ID_FILE="${GNUPGHOME}/.key_id"
+
+if [ -f "${GPG_KEY_ID_FILE}" ]; then 
+  GPG_KEY_ID=$(cat "${GPG_KEY_ID_FILE}")
+  export GPG_KEY_ID="${GPG_KEY_ID}"
+fi
+
 export DOTFILES_AUTO_UPDATE="{{ .system.auto_update }}"
 export USER_FULLNAME="{{ .name }}"
 export USER_EMAIL="{{ .email }}"

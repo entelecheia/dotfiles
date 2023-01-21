@@ -48,6 +48,7 @@
 # {{- if eq (env "DOTFILES_VERBOSE") "true" "True" "TRUE" "1" -}}
 # {{-   $verbose = true -}}
 # {{- end -}}
+# {{- $gpg_key_id := env "GPG_KEY_ID" -}}
 
 # {{- writeToStdout "---\n" -}}
 # {{- writeToStdout "🖥️  Information found from your environment:\n\n" -}}
@@ -410,21 +411,6 @@
 # {{-   end -}}
 # {{-   $github_token = $answer -}}
 # {{-   writeToStdout (printf "✅ GitHub Token set as '%s'\n" $github_token) -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "gnupg") (hasKey .gnupg "key_id") -}}
-# {{-   $gpg_key_id = .gnupg.key_id -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ What is your GPG key ID (If you don't have one, leave it empty. This will be generated for you)" -}}
-# {{-   $answer := "" -}}
-# {{-   if $gpg_key_id -}}
-# {{-     $answer = promptString $question $gpg_key_id -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $gpg_key_id = $answer -}}
-# {{-   writeToStdout (printf "✅ GPG key ID set as '%s'\n" $gpg_key_id) -}}
 # {{- end -}}
 
 # {{- if and (hasKey . "gnupg") (hasKey .gnupg "passphrase") -}}

@@ -1,9 +1,13 @@
 #!/bin/bash
 export TERM=xterm-256color
-export GNUPGHOME="${HOME}/.gnupg"
 # {{ if .gnupg.gitsign }}
 GPG_TTY=$(tty)
 export GPG_TTY
+# {{ end }}
+export VISUAL="{{ .editor }}"
+export EDITOR="{{ .editor }}"
+# {{ if .system.is_wsl }}
+export BROWSER="wslview"
 # {{ end }}
 
 # {{ if .system.is_wsl }}
@@ -50,13 +54,6 @@ if [ -d "${HOME}/bin" ]; then
   export PATH="${HOME}/bin:${PATH}"
 fi
 
-export VISUAL="{{ .editor }}"
-export EDITOR="{{ .editor }}"
-
-# {{ if .system.is_wsl }}
-export BROWSER="wslview"
-# {{ end }}
-
 # if ${HOME}/.pyenv exists and pyenv is installed, then initialize pyenv
 if [ -d "${HOME}/.pyenv" ] && command -v pyenv >/dev/null 2>&1; then
   export PYENV_ROOT="${HOME}/.pyenv"
@@ -67,4 +64,10 @@ if [ -d "${HOME}/.pyenv" ] && command -v pyenv >/dev/null 2>&1; then
     eval "$(pyenv virtualenv-init -)"
   fi
   export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+fi
+
+if op --version &>/dev/null; then
+  if [[ -n "$ZSH_VERSION" ]]; then
+    eval "$(op completion zsh)"; compdef _op op
+  fi
 fi

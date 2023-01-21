@@ -15,6 +15,7 @@ fi
 # Check if we have a GitHub SSH key
 # If not, generate one and add it to GitHub
 SSH_KEY_FILE="${HOME}/.ssh/{{ .ssh.key_filename }}"
+SSH_PUB_KEY_FILE="${SSH_KEY_FILE}.pub"
 HOST="{{ .system.hostname }}"
 USER="{{ .chezmoi.username }}"
 ALGORITHM="{{ .ssh.algorithm }}"
@@ -39,24 +40,37 @@ fi
 # copy gitconfig from .config/git/gitconfig to .gitconfig
 cp "${HOME}/.config/git/gitconfig" "${HOME}/.gitconfig"
 
+GPGSIGN="{{ .gnupg.gitsign }}"
+# add ssh key to gitconfig for signing commits
+if [ -f "${SSH_PUB_KEY_FILE}" ]; then 
+    SSH_KEY_ID=$(cat "${SSH_PUB_KEY_FILE}")
+fi
+if [ -n "${SSH_KEY_ID}" ]; then
+    log_task "Adding SSH key to gitconfig for signing commits"
+    c git config --global user.signingkey "${SSH_KEY_ID}"
+    if [[ "${GPGSIGN}" == "true" ]]; then
+        c git config --global gpg.format ssh
+        c git config --global commit.gpgsign true
+    fi
+fi
+
 # set eviroment variable GNUPGHOME to ~/.gnupg if not set
 GNUPGHOME=${GNUPGHOME:-$HOME/.gnupg}
 export GNUPGHOME="${GNUPGHOME}"
-KEY_ID_FILE="${GNUPGHOME}/.key_id"
-KEY_ID="{{ .gnupg.key_id }}"
-GPGSIGN="{{ .gnupg.gitsign }}"
+GPG_KEY_ID_FILE="${GNUPGHOME}/.key_id"
+GPG_KEY_ID="{{ .gnupg.key_id }}"
 
-if [ -z "${KEY_ID}" ] && [ -f "${KEY_ID_FILE}" ]; then 
-    KEY_ID=$(cat "${KEY_ID_FILE}")
+if [ -z "${GPG_KEY_ID}" ] && [ -f "${GPG_KEY_ID_FILE}" ]; then 
+    GPG_KEY_ID=$(cat "${GPG_KEY_ID_FILE}")
 fi
-# if KEY_ID is not empty, check if it is a valid key ID
-if [ -n "${KEY_ID}" ]; then
-    KEY_ID=$(gpg --list-secret-keys --with-colons | grep 'sec' | grep "${KEY_ID}" | cut -d':' -f5)
+# if GPG_KEY_ID is not empty, check if it is a valid key ID
+if [ -n "${GPG_KEY_ID}" ]; then
+    GPG_KEY_ID=$(gpg --list-secret-keys --with-colons | grep 'sec' | grep "${GPG_KEY_ID}" | cut -d':' -f5)
 fi
 
 # {{ if .gnupg.passphrase }}
 # Create a batch file
-if [ -z "${KEY_ID}" ]; then
+if [ -z "${GPG_KEY_ID}" ]; then
     log_task "Generating GPG key"
 
     # Generate a GPG key
@@ -79,27 +93,27 @@ if [ -z "${KEY_ID}" ]; then
 EOF
     c gpg --batch --generate-key .tmp_gpg_batch
     rm .tmp_gpg_batch
-    KEY_ID=$(gpg --list-secret-keys --with-colons | grep 'sec' | tail -n 1 | cut -d':' -f5)
+    GPG_KEY_ID=$(gpg --list-secret-keys --with-colons | grep 'sec' | tail -n 1 | cut -d':' -f5)
     # Save the key ID to a file
-    echo "${KEY_ID}" > "${KEY_ID_FILE}"
+    echo "${GPG_KEY_ID}" > "${GPG_KEY_ID_FILE}"
     # Save public key to a file
-    c gpg --armor --export "${KEY_ID}" > "${GNUPGHOME}/${KEY_ID}.pub"
+    c gpg --armor --export "${GPG_KEY_ID}" > "${GNUPGHOME}/${GPG_KEY_ID}.pub"
 fi
 # {{ end }}
 
-log_info "GPG key ID: ${KEY_ID}"
+log_info "GPG key ID: ${GPG_KEY_ID}"
 # add gpg key to gitconfig
-if [ -n "${KEY_ID}" ]; then
-    log_task "Adding GPG key to gitconfig"
-    c git config --global user.signingkey "${KEY_ID}"
-    if [[ "${GPGSIGN}" == "true" ]]; then
-        c git config --global commit.gpgsign true
-    fi
-fi
+# if [ -n "${GPG_KEY_ID}" ]; then
+#     log_task "Adding GPG key to gitconfig"
+#     c git config --global user.signingkey "${GPG_KEY_ID}"
+#     if [[ "${GPGSIGN}" == "true" ]]; then
+#         c git config --global commit.gpgsign true
+#     fi
+# fi
 
 # "Adding SSH & GPG keys to GitHub after login"
 PUB_SSH_KEY_FILE="${SSH_KEY_FILE}.pub"
-PUB_GPG_KEY_FILE="${GNUPGHOME}/${KEY_ID}.pub"
+PUB_GPG_KEY_FILE="${GNUPGHOME}/${GPG_KEY_ID}.pub"
 
 # {{ if .github.username }}
 # {{ if .github.token }}
