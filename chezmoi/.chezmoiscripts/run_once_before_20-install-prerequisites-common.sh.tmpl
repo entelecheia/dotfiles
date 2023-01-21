@@ -8,25 +8,29 @@
 true || source ../.chezmoitemplates/scripts-library
 true || source ../.chezmoitemplates/homebrew-library
 
-readonly wanted_packages=(
-  age
-  sops
-)
-missing_packages=()
+if brew --version &>/dev/null; then
 
-for package in "${wanted_packages[@]}"; do
-  if ! is_brew_package_installed "${package}"; then
-    missing_packages+=("${package}")
+  readonly wanted_packages=(
+    age
+    sops
+  )
+  missing_packages=()
+
+  for package in "${wanted_packages[@]}"; do
+    if ! is_brew_package_installed "${package}"; then
+      missing_packages+=("${package}")
+    fi
+  done
+
+  if [[ ${#missing_packages[@]} -gt 0 ]]; then
+    log_task "Installing missing packages with brew: ${missing_packages[*]}"
+
+    brew_command=(brew)
+
+    # c "${brew_command[@]}" update
+    c "${brew_command[@]}" install "${missing_packages[@]}"
   fi
-done
 
-if [[ ${#missing_packages[@]} -gt 0 ]]; then
-  log_task "Installing missing packages with brew: ${missing_packages[*]}"
-
-  brew_command=(brew)
-
-  # c "${brew_command[@]}" update
-  c "${brew_command[@]}" install "${missing_packages[@]}"
 fi
 
 # {{ end -}}
