@@ -32,6 +32,10 @@
 # {{- if eq (env "DOTFILES_USE_DOTDROP") "true" "True" "TRUE" "1" -}}
 # {{-   $use_dotdrop = true -}}
 # {{- end -}}
+# {{- $use_1password := false -}}
+# {{- if eq (env "DOTFILES_USE_1PASSWORD") "true" "True" "TRUE" "1" -}}
+# {{-   $use_1password = true -}}
+# {{- end -}}
 # {{- $use_vault := false -}}
 # {{- if eq (env "DOTFILES_USE_VAULT") "true" "True" "TRUE" "1" -}}
 # {{-   $use_vault = true -}}
@@ -56,6 +60,10 @@
 # {{- writeToStdout (printf "🦸  Apply rootmoi: %t\n" $apply_rootmoi) -}}
 # {{- end -}}
 # {{- writeToStdout (printf "📦  Use dotdrop: %t\n" $use_dotdrop) -}}
+# {{- writeToStdout (printf "🔑  Use 1password: %t\n" $use_1password) -}}
+# {{- writeToStdout (printf "🔐  Use vault: %t\n" $use_vault) -}}
+# {{- writeToStdout (printf "🚀  Use microk8s: %t\n" $use_microk8s) -}}
+# {{- writeToStdout (printf "🔬  Verbose: %t\n" $verbose) -}}
 # {{- writeToStdout "---\n" -}}
 
 # {{- $docker_username := "" -}}
@@ -150,10 +158,23 @@
 # {{-   end -}}
 # {{- end -}}
 
+# {{- if and (hasKey . "system") (hasKey .system "use_1password") -}}
+# {{-   $use_1password = .system.use_1password -}}
+# {{- end -}}
+# {{- if and $interactive $sudoer -}}
+# {{-   $question := "❔ Do you want to use 1password for secrets" -}}
+# {{-   $use_1password = promptBool $question $use_1password -}}
+# {{-   if $use_1password -}}
+# {{-     writeToStdout "✅ 1password enabled\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ 1password disabled\n" -}}
+# {{-   end -}}
+# {{- end -}}
+
 # {{- if and (hasKey . "system") (hasKey .system "use_vault") -}}
 # {{-   $use_vault = .system.use_vault -}}
 # {{- end -}}
-# {{- if $interactive -}}
+# {{- if and $interactive $sudoer -}}
 # {{-   $question := "❔ Do you want to use vault for secrets" -}}
 # {{-   $use_vault = promptBool $question $use_vault -}}
 # {{-   if $use_vault -}}
@@ -166,7 +187,7 @@
 # {{- if and (hasKey . "system") (hasKey .system "use_microk8s") -}}
 # {{-   $use_microk8s = .system.use_microk8s -}}
 # {{- end -}}
-# {{- if $interactive -}}
+# {{- if and $interactive $sudoer -}}
 # {{-   $question := "❔ Do you want to use MicroK8s for Kubernetes" -}}
 # {{-   $use_microk8s = promptBool $question $use_microk8s -}}
 # {{-   if $use_microk8s -}}
@@ -550,6 +571,7 @@ data:
         is_sudoer: {{ $sudoer }}
         apply_rootmoi: {{ and $apply_rootmoi $sudoer }}
         use_dotdrop: {{ $use_dotdrop }}
+        use_1password: {{ $use_1password }}
         use_vault: {{ $use_vault }}
         use_microk8s: {{ $use_microk8s }}
         uname_arch: {{ output "uname" "-m" | trim | quote }}

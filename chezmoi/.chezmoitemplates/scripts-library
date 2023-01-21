@@ -119,7 +119,7 @@ function is_brew_package_installed() {
   if command -v "${package}" >/dev/null 2>&1; then
     return 0
   fi
-  brew list --formula --versions "${package}" 2>/dev/null | grep --quiet .
+  brew list "${package}" 2>/dev/null | grep --quiet --ignore-case "error"  &&  return 1 || return 0
 }
 
 function is_snap_package_installed() {
@@ -129,7 +129,7 @@ function is_snap_package_installed() {
   if command -v "${package}" >/dev/null 2>&1; then
     return 0
   fi
-  snap list "${package}" 2>/dev/null | grep --quiet .
+  snap list "${package}" 2>/dev/null | grep --quiet --ignore-case "error"  &&  return 1 || return 0
 }
 
 function not_during_test() {
