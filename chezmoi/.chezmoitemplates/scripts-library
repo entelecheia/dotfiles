@@ -105,27 +105,31 @@ function is_apt_package_installed() {
   local package="$1"
 
   # first check if the package command is available
-  if ! command -v apt >/dev/null 2>&1; then
-    apt list --quiet --quiet --installed "${package}" 2>/dev/null | grep --quiet .
-  fi  
+  if command -v apt >/dev/null 2>&1; then
+    return 1
+  fi
+  apt list --quiet --quiet --installed "${package}" 2>/dev/null | grep --quiet .
+
 }
 
 function is_brew_package_installed() {
   local package="$1"
 
   # first check if the package command is available
-  if ! command -v apt >/dev/null 2>&1; then
-    brew list --formula --versions "${package}" 2>/dev/null | grep --quiet .
-  fi  
+  if command -v apt >/dev/null 2>&1; then
+    return 1
+  fi
+  brew list --formula --versions "${package}" 2>/dev/null | grep --quiet .
 }
 
 function is_snap_package_installed() {
   local package="$1"
 
   # first check if the package command is available
-  if ! command -v apt >/dev/null 2>&1; then
-    snap list "${package}" 2>/dev/null | grep --quiet .
+  if command -v apt >/dev/null 2>&1; then
+    return 1
   fi
+  snap list "${package}" 2>/dev/null | grep --quiet .
 }
 
 function not_during_test() {
