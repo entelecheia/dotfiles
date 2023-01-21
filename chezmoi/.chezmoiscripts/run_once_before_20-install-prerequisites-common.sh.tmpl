@@ -5,10 +5,12 @@
 
 # The following line is for ShellCheck to correctly identify the above included library
 true || source ../.chezmoitemplates/scripts-library
+true || source ../.chezmoitemplates/homebrew-library
 
 readonly wanted_packages=(
   gh
   age
+  sops
 )
 missing_packages=()
 
