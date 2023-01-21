@@ -30,6 +30,9 @@ if [[ ! -f "${SOURCE_LIST_FILE}" ]]; then
 fi
 
 readonly wanted_packages=(
+  build-essential
+  procps
+  file
   jq
   zsh
   tmux
@@ -37,7 +40,7 @@ readonly wanted_packages=(
   python3-setuptools
   gh
   vim
-  gpg # used to decrypt the gpg keys of the apt repositories
+  gnupg # used to decrypt the gpg keys of the apt repositories
   pinentry-curses
   # {{   if not .system.is_devcontainer }}
   gpa 
