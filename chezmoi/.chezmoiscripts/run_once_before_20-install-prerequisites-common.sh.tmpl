@@ -2,13 +2,13 @@
 # {{ if and (eq .chezmoi.os "darwin" "linux") (.system.is_sudoer) -}}
 
 # {{ include (joinPath .chezmoi.sourceDir ".chezmoitemplates/scripts-library") }}
+# {{ include (joinPath .chezmoi.sourceDir ".chezmoitemplates/homebrew-library") }}
 
 # The following line is for ShellCheck to correctly identify the above included library
 true || source ../.chezmoitemplates/scripts-library
 true || source ../.chezmoitemplates/homebrew-library
 
 readonly wanted_packages=(
-  gh
   age
   sops
 )
@@ -28,8 +28,5 @@ if [[ ${#missing_packages[@]} -gt 0 ]]; then
   # c "${brew_command[@]}" update
   c "${brew_command[@]}" install "${missing_packages[@]}"
 fi
-
-# c echo "pinentry-program $(which pinentry-mac)" >> "${HOME}/.gnupg/gpg-agent.conf"
-# c killall gpg-agent || true
 
 # {{ end -}}
