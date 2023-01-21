@@ -1,5 +1,5 @@
 #!/bin/bash
-# {{ if and (eq .chezmoi.os "linux") (.system.is_sudoer) (.system.is_minimum | not) }}
+# {{ if and (eq .chezmoi.os "linux") (.system.is_sudoer) }}
 
 # {{ include (joinPath .chezmoi.sourceDir ".chezmoitemplates/scripts-library") }}
 # {{ include (joinPath .chezmoi.sourceDir ".chezmoitemplates/homebrew-library") }}
