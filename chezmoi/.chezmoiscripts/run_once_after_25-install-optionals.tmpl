@@ -7,6 +7,7 @@
 true || source ../.chezmoitemplates/scripts-library
 
 # {{ if .system.use_1password -}}
+# if op is not installed, then install 1password-cli
 if ! op --version &>/dev/null; then
   log_task "Installing 1Password"
 # {{ if eq .chezmoi.os "darwin" }}
