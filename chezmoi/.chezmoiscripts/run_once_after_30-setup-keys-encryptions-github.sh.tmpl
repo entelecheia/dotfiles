@@ -24,6 +24,9 @@ if [ ! -f "${SSH_KEY_FILE}" ]; then
     log_task "Generating SSH key"
     ssh-keygen -t "${ALGORITHM}" -C "${USER}@${HOST}" -f "${SSH_KEY_FILE}" -N ""
 fi
+# {{ if eq .chezmoi.os "darwin" }}
+ssh-add --apple-use-keychain "${SSH_KEY_FILE}"
+# {{ end }}
 
 # Symlink authorized_keys from .config/ssh to ~/.ssh
 # If the file exists, remove the file
@@ -55,7 +58,6 @@ if [ -n "${SSH_KEY_ID}" ]; then
 fi
 # if you need to use allowed_signers, 
 # refer to https://janik6n.net/signing-git-commits-with-ssh-key
-
 
 # set eviroment variable GNUPGHOME to ~/.gnupg if not set
 GNUPGHOME=${GNUPGHOME:-$HOME/.gnupg}
