@@ -25,7 +25,9 @@ if [ ! -f "${SSH_KEY_FILE}" ]; then
     ssh-keygen -t "${ALGORITHM}" -C "${USER}@${HOST}" -f "${SSH_KEY_FILE}" -N ""
 fi
 # {{ if eq .chezmoi.os "darwin" }}
-ssh-add --apple-use-keychain "${SSH_KEY_FILE}"
+# Add SSH key to macOS keychain
+log_task "Adding SSH key to macOS keychain"
+c ssh-add --apple-use-keychain "${SSH_KEY_FILE}"
 # {{ end }}
 
 # Symlink authorized_keys from .config/ssh to ~/.ssh
