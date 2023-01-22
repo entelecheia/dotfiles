@@ -6,6 +6,14 @@ fi
 if [ -d "/opt/homebrew/bin" ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
+# {{ else if eq .chezmoi.os "linux" }}
+if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+  # shellcheck disable=SC2312
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+elif [ -x "${HOME}/.linuxbrew/bin/brew" ]; then
+  # shellcheck disable=SC2312
+  eval "$("${HOME}/.linuxbrew/bin/brew" shellenv)"
+fi
 # {{ end }}
 
 # set eviroment variable GNUPGHOME to ~/.gnupg if not set
@@ -23,8 +31,10 @@ AGE_KEY_FILE="{{ .age.key_filename }}"
 if [ -f "${AGE_KEY_FILE}" ]; then
   export AGE_KEY_FILE="${AGE_KEY_FILE}"
   export SOPS_AGE_KEY_FILE="${AGE_KEY_FILE}"
-  AGE_RECIPIENT=$(age-keygen -y "${AGE_KEY_FILE}")
-  export AGE_RECIPIENT="${AGE_RECIPIENT}"
+  if command -v age-keygen >/dev/null 2>&1; then
+    AGE_RECIPIENT=$(age-keygen -y "${AGE_KEY_FILE}")
+    export AGE_RECIPIENT="${AGE_RECIPIENT}"
+  fi
 fi
 
 export DOTFILES_AUTO_UPDATE="{{ .system.auto_update }}"
