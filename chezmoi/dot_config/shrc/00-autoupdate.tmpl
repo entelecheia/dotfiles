@@ -18,6 +18,15 @@ if [ -f "${GPG_KEY_ID_FILE}" ]; then
   export GPG_KEY_ID="${GPG_KEY_ID}"
 fi
 
+# age key
+AGE_KEY_FILE="{{ .age.key_filename }}"
+if [ -f "${AGE_KEY_FILE}" ]; then
+  export AGE_KEY_FILE="${AGE_KEY_FILE}"
+  export SOPS_AGE_KEY_FILE="${AGE_KEY_FILE}"
+  AGE_RECIPIENT=$(age-keygen -y "${AGE_KEY_FILE}")
+  export AGE_RECIPIENT="${AGE_RECIPIENT}"
+fi
+
 export DOTFILES_AUTO_UPDATE="{{ .system.auto_update }}"
 export USER_FULLNAME="{{ .name }}"
 export USER_EMAIL="{{ .email }}"

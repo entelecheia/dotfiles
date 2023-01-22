@@ -61,6 +61,17 @@ fi
 # if you need to use allowed_signers, 
 # refer to https://janik6n.net/signing-git-commits-with-ssh-key
 
+AGE_KEY_FILE=${AGE_KEY_FILE:-"{{ .age.key_filename }}"}
+if [ ! -f "${AGE_KEY_FILE}" ]; then
+    log_task "Generating age key"
+    c age-keygen -o "${AGE_KEY_FILE}"
+fi
+if [ -f "${AGE_KEY_FILE}" ]; then
+    AGE_RECIPIENT=$(age-keygen -y "${AGE_KEY_FILE}")
+    export AGE_RECIPIENT="${AGE_RECIPIENT}"
+    log_info "AGE_RECIPIENT: ${AGE_RECIPIENT}"
+fi
+
 # set eviroment variable GNUPGHOME to ~/.gnupg if not set
 GNUPGHOME=${GNUPGHOME:-$HOME/.gnupg}
 export GNUPGHOME="${GNUPGHOME}"

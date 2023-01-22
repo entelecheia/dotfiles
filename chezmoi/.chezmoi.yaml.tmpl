@@ -84,8 +84,8 @@
 # {{- $auto_update := false -}}
 
 # {{- $minimum := or $devcontainer ($ubuntu | not) -}}
-# {{- if and (hasKey . "system") (hasKey .system "minimum") -}}
-# {{-   $minimum = .system.minimum -}}
+# {{- if and (hasKey . "system") (hasKey .system "is_minimum") -}}
+# {{-   $minimum = .system.is_minimum -}}
 # {{- end -}}
 # {{- if $interactive -}}
 # {{-   $question := "❔ Do you want to install in minimum mode (see README)" -}}
@@ -398,6 +398,11 @@
 # {{-   writeToStdout (printf "✅ SSH key filename set as '%s'\n" $ssh_keyfile) -}}
 # {{- end -}}
 
+# {{- $age_keyfile := or (env "AGE_KEY_FILE") (joinPath .chezmoi.homeDir (printf ".ssh/age_key_%s" $hostname)) -}}
+# {{- if $interactive -}}
+# {{-   writeToStdout (printf "✅ Age key filename set as '%s'\n" $age_keyfile) -}}
+# {{- end -}}
+
 # {{- if and (hasKey . "github") (hasKey .github "token") -}}
 # {{-   $github_token = .github.token -}}
 # {{- end -}}
@@ -476,21 +481,6 @@
 # {{-   $workspace_location = $answer -}}
 # {{-   writeToStdout (printf "✅ Worksapce location set as '%s'\n" $workspace_location) -}}
 # {{- end -}}
-
-# {{- if ne .chezmoi.homeDir $workspace_location -}}
-# {{- if and (hasKey . "workspace") (hasKey .workspace "symlink_to_home") -}}
-# {{-   $symlink_to_home = .workspace.symlink_to_home -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ Do you want to symlink your workspace to home directory" -}}
-# {{-   $symlink_to_home = promptBool $question $symlink_to_home -}}
-# {{-   if $symlink_to_home -}}
-# {{-     writeToStdout "✅ Workspace will be symlinked to home directory\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "✅ Workspace will not be symlinked to home directory\n" -}}
-# {{-   end -}}
-# {{- end -}}
-# {{- end -}}
 # {{- end -}}
 
 # {{- if not $sudoer -}}
@@ -529,15 +519,18 @@ status:
     exclude:
         - always
 
+encryption: age
+age:
+    identity: {{ $age_keyfile | quote }}
+    recipient: {{ (env "AGE_RECIPIENT") | quote }}
 # {{- if $gpg_passphrase -}} #
-encryption: gpg
 gpg:
-  symmetric: true
-  args:
-    - "--batch"
-    - "--passphrase"
-    - {{ $gpg_passphrase | quote }}
-    - "--no-symkey-cache"
+    symmetric: true
+    args:
+        - "--batch"
+        - "--passphrase"
+        - {{ $gpg_passphrase | quote }}
+        - "--no-symkey-cache"
 # {{- end -}}
 
 # {{/* Here we "export" the variables, so we can access them outside this file */ -}} #
@@ -567,6 +560,8 @@ data:
     ssh:
         algorithm: {{ $ssh_algorithm | quote }}
         key_filename: {{ $ssh_keyfile | quote }}
+    age:
+        key_filename: {{ $age_keyfile | quote }}
     gnupg:
         key_id: {{ $gpg_key_id | quote }}
         passphrase: {{ $gpg_passphrase | quote }}

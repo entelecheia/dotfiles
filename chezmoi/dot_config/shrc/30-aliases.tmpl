@@ -91,3 +91,55 @@ cdw() {
     cd "${win_home}"
 }
 # {{ end }}
+
+function socrypt {
+    local file
+    local basedir
+    local filename
+    local name
+    local extension
+    local output
+    local args
+
+    file="$1"
+    filename=$(basename -- "$file")
+    basedir=$(dirname -- "$file")
+    extension="${filename##*.}"
+    name="${filename%.*}"
+    output="${basedir}/${name}.sops.${extension}"
+    if [ ! -f "$file" ]; then
+        echo "File does not exist"
+        return 1
+    fi
+    # check if there are additional arguments
+    if [ $# -gt 1 ]; then
+        args="${*:2}"
+    fi
+    # check if '--inplace' is in the arguments
+    if [[ $args == *"--inplace"* ]]; then
+        # remove '--inplace' from the arguments
+        args=${args//--inplace/}
+        # set the output to the input file
+        output="$file"
+    fi
+    if [ -z "$AGE_KEY_FILE" ]; then
+        echo "AGE_KEY_FILE is not set"
+        return 1
+    fi
+    if [ ! -f "$AGE_KEY_FILE" ]; then
+        echo "AGE_KEY_FILE does not exist"
+        return 1
+    fi
+    # encrypt the file
+    # if args is empty, it will be ignored
+    if [ -z "$args" ]; then
+        sops --encrypt --age "$(age-keygen -y "${AGE_KEY_FILE}")" "$file" > "$output"
+    else
+        sops --encrypt --age "$(age-keygen -y "${AGE_KEY_FILE}")" "${args}" "$file" > "$output"
+    fi
+}
+
+alias socrypt-inplace="socrypt --inplace"
+alias senc="socrypt"
+alias senci="socrypt-inplace"
+alias sdec="sops --decrypt"
