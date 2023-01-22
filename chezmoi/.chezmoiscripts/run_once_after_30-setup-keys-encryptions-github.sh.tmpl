@@ -53,6 +53,9 @@ if [ -n "${SSH_KEY_ID}" ]; then
         c git config --global commit.gpgsign true
     fi
 fi
+# if you need to use allowed_signers, 
+# refer to https://janik6n.net/signing-git-commits-with-ssh-key
+
 
 # set eviroment variable GNUPGHOME to ~/.gnupg if not set
 GNUPGHOME=${GNUPGHOME:-$HOME/.gnupg}
@@ -113,7 +116,7 @@ log_info "GPG key ID: ${GPG_KEY_ID}"
 
 # "Adding SSH & GPG keys to GitHub after login"
 PUB_SSH_KEY_FILE="${SSH_KEY_FILE}.pub"
-PUB_GPG_KEY_FILE="${GNUPGHOME}/${GPG_KEY_ID}.pub"
+GPG_PUB_KEY_FILE="${GNUPGHOME}/${GPG_KEY_ID}.pub"
 
 # {{ if .github.username }}
 # {{ if .github.token }}
@@ -128,10 +131,10 @@ if command -v gh >/dev/null; then
         log_task "Adding SSH key to GitHub"
         c gh ssh-key add "${PUB_SSH_KEY_FILE}" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}" || true
     fi
-    if [ -f "${PUB_GPG_KEY_FILE}" ]; then
-        log_task "Adding GPG key to GitHub"
-        c gh gpg-key add "${PUB_GPG_KEY_FILE}" || true
-    fi
+    # if [ -f "${GPG_PUB_KEY_FILE}" ]; then
+    #     log_task "Adding GPG key to GitHub"
+    #     c gh gpg-key add "${GPG_PUB_KEY_FILE}" || true
+    # fi
 else
     log_info "gh is not installed"
 fi
@@ -146,10 +149,10 @@ if command -v gh >/dev/null; then
         log_task "Adding SSH key to GitHub"
         c gh ssh-key add "${PUB_SSH_KEY_FILE}" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}" || true
     fi
-    if [ -f "${PUB_GPG_KEY_FILE}" ]; then
-        log_task "Adding GPG key to GitHub"
-        c gh gpg-key add "${PUB_GPG_KEY_FILE}" || true
-    fi
+    # if [ -f "${GPG_PUB_KEY_FILE}" ]; then
+    #     log_task "Adding GPG key to GitHub"
+    #     c gh gpg-key add "${GPG_PUB_KEY_FILE}" || true
+    # fi
 else
     log_info "gh is not installed"
 fi
@@ -157,6 +160,13 @@ fi
 log_manual_action "GITHUB_TOKEN environment variable is not set."
 log_manual_action "Log in manually, and add the SSH key to GitHub."
 # {{    end }}
+log_manual_action "If you want to add SSH key to GitHub for signing commits (github-cli does not support this yet), visit the following URL: "
+log_manual_action " > https://github.com/settings/ssh/new"
+if [ -f "${GPG_PUB_KEY_FILE}" ]; then
+    log_manual_action "If you want to add GPG key to GitHub for signing commits, run the following: "
+    log_manual_action " > gh gpg-key add ${GPG_PUB_KEY_FILE}"
+fi
+
 # {{ end }}
 log_info "Done adding SSH and GPG keys to GitHub"
 # {{ end -}}
