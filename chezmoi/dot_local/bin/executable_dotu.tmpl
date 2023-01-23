@@ -26,16 +26,16 @@ if [ -d "$DOCKERFILES_REPO_DIR" ]; then
     fi
 fi
 
-if chezmoi --version &>/dev/null; then
-  log_task "Updating dotfiles for chezmoi"
-  chezmoi init --force
-  # pass additional arguments to chezmoi apply
-  chezmoi apply "$@"
-fi
-
 # {{ if .system.use_dotdrop }}
 if dotdrop --version &>/dev/null; then
   log_task "Updating dotfiles for dotdrop"
   dotdrop --cfg="${HOME}/.config/dotdrop/config-user.yaml" -p "{{ .dotdrop.user_profile }}" install
 fi
 # {{ end }}
+
+if chezmoi --version &>/dev/null; then
+  log_task "Updating dotfiles for chezmoi"
+  chezmoi init --force
+  # pass additional arguments to chezmoi apply
+  chezmoi apply "$@"
+fi

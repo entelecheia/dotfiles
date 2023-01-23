@@ -67,6 +67,7 @@
 # {{- writeToStdout (printf "🔬  Verbose: %t\n" $verbose) -}}
 # {{- writeToStdout "---\n" -}}
 
+# {{- $age_recipients:= or (env "AGE_RECIPIENTS") (output "sh" "-c" "cat ${HOME}/.ssh/authorized_age_keys | sed -n '/^age1/p'" | trim) -}}
 # {{- $docker_username := "" -}}
 # {{- $github_token := "" -}}
 # {{- $dotdrop_repo := "" -}}
@@ -522,18 +523,9 @@ status:
 encryption: age
 age:
     identity: {{ $age_keyfile | quote }}
-    recipient: {{ (env "AGE_RECIPIENT") | quote }}
-# {{- if $gpg_passphrase -}} #
-gpg:
-    symmetric: true
-    args:
-        - "--batch"
-        - "--passphrase"
-        - {{ $gpg_passphrase | quote }}
-        - "--no-symkey-cache"
-# {{- end -}}
+    recipients: ['{{- $age_recipients | replaceAllRegex "\n" "', '" -}}']
 
-# {{/* Here we "export" the variables, so we can access them outside this file */ -}} #
+# {{- /* Here we "export" the variables, so we can access them outside this file */ -}} #
 data:
     name: {{ $name | quote }}
     email: {{ $email | quote }}
@@ -587,8 +579,8 @@ data:
         colab_drive: "/content/drive/MyDrive"
     github_repos:
 # {{- if $github_clones -}}
-# {{- range (split "," $github_clones) }} #
+# {{- range (split "," $github_clones) -}} #
         - name: {{.}}
           url: https://github.com/{{.}}.git 
-# {{ end -}} #
-# {{ end -}} #
+# {{- end -}}
+# {{- end -}}

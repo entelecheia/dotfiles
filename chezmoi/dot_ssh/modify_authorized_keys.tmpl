@@ -1,0 +1,30 @@
+#!/bin/bash
+
+set -euo pipefail
+
+# read authorized_keys from stdin
+keys=$(cat /dev/stdin)
+
+# if authorized_keys is empty, set it to empty string
+if [[ -z "${keys}" ]]; then
+  keys=''
+fi
+
+# read from ${HOME}/.config/ssh/authorized_keys if it exists
+if [[ -f "${HOME}/.config/ssh/authorized_keys" ]]; then
+  keys="${keys}\n$(cat "${HOME}/.config/ssh/authorized_keys")"
+fi
+
+# {{ if .github.username }}
+# {{ range gitHubKeys .github.username }}
+keys="${keys}\n{{ .Key }}"
+# {{ end }}
+# {{ end }}
+
+# remove empty lines
+keys=$(echo -e "${keys}" | sed '/^$/d')
+
+# remove duplicate lines
+keys=$(echo -e "${keys}" | sort -u)
+
+echo -e "${keys}"

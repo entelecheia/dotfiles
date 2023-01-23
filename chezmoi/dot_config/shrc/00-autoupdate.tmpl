@@ -36,6 +36,12 @@ if [ -f "${AGE_KEY_FILE}" ]; then
     export AGE_RECIPIENT="${AGE_RECIPIENT}"
   fi
 fi
+if [[ -f "${HOME}/.ssh/authorized_age_keys" ]]; then
+  AGE_RECIPIENTS="$(cat "${HOME}/.ssh/authorized_age_keys")"
+  # remove lines starting with '#'
+  AGE_RECIPIENTS=$(echo -e "${AGE_RECIPIENTS}" | sed '/^#/d')
+  export AGE_RECIPIENTS="${AGE_RECIPIENTS}"
+fi
 
 export DOTFILES_AUTO_UPDATE="{{ .system.auto_update }}"
 export USER_FULLNAME="{{ .name }}"
