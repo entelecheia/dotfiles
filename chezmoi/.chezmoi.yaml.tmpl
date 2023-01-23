@@ -67,7 +67,7 @@
 # {{- writeToStdout (printf "🔬  Verbose: %t\n" $verbose) -}}
 # {{- writeToStdout "---\n" -}}
 
-# {{- $age_recipients:= or (env "AGE_RECIPIENTS") (output "sh" "-c" "cat ${HOME}/.ssh/authorized_age_keys | sed -n '/^age1/p'" | trim) -}}
+# {{- $age_recipients:= or (env "AGE_RECIPIENTS") (output "sh" "-c" "sed -n '/^age1/p' ${HOME}/.ssh/authorized_age_keys | sort -u | sed 'H;1h;$!d;x;y/\n/,/'" | trim) -}}
 # {{- $docker_username := "" -}}
 # {{- $github_token := "" -}}
 # {{- $dotdrop_repo := "" -}}
@@ -523,7 +523,7 @@ status:
 encryption: age
 age:
     identity: {{ $age_keyfile | quote }}
-    recipients: ['{{- $age_recipients | replaceAllRegex "\n" "', '" -}}']
+    recipients: ['{{- $age_recipients | replaceAllRegex "," "', '" -}}']
 
 # {{- /* Here we "export" the variables, so we can access them outside this file */ -}} #
 data:

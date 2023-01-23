@@ -1,0 +1,41 @@
+#!/bin/bash
+
+file="$1"
+filename=$(basename -- "$file")
+basedir=$(dirname -- "$file")
+extension="${filename##*.}"
+name="${filename%.*}"
+output="${basedir}/${name}.sops.${extension}"
+if [ ! -f "$file" ]; then
+  echo "File does not exist"
+  exit 1
+fi
+# check if there are additional arguments
+if [ $# -gt 1 ]; then
+  args="${*:2}"
+fi
+# check if '--inplace' is in the arguments
+if [[ $args == *"--inplace"* ]]; then
+  # remove '--inplace' from the arguments
+  args=${args//--inplace/}
+  # set the output to the input file
+  output="$file"
+fi
+if [ -z "$SOPS_AGE_RECIPIENTS" ]; then
+  if [[ -f "${HOME}/.ssh/authorized_age_keys" ]]; then
+    AGE_RECIPIENTS="$(sed -n '/^age1/p' "${HOME}/.ssh/authorized_age_keys" | sort -u | sed 'H;1h;$!d;x;y/\n/,/')"
+    export AGE_RECIPIENTS="${AGE_RECIPIENTS}"
+    export SOPS_AGE_RECIPIENTS="${AGE_RECIPIENTS}"
+  fi
+  if [ -z "$SOPS_AGE_RECIPIENTS" ]; then
+    echo "SOPS_AGE_RECIPIENTS is not set"
+    exit 1
+  fi
+fi
+# encrypt the file
+# if args is empty, it will be ignored
+if [ -z "$args" ]; then
+  sops --encrypt "$file" > "$output"
+else
+  sops --encrypt "${args}" "$file" > "$output"
+fi
