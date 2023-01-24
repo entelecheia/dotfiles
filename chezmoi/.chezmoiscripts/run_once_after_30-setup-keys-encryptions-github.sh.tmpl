@@ -37,6 +37,9 @@ GPGSIGN="{{ .gnupg.gitsign }}"
 # add ssh key to gitconfig for signing commits
 if [ -f "${SSH_PUB_KEY_FILE}" ]; then 
     SSH_KEY_ID=$(cat "${SSH_PUB_KEY_FILE}")
+    SSH_PUB_KEY_ALGORITHM=$(echo "${SSH_KEY_ID}" | cut -d' ' -f1)
+    SSH_PUB_KEY_KEY=$(echo "${SSH_KEY_ID}" | cut -d' ' -f2)
+    SSH_KEY_ID="${SSH_PUB_KEY_ALGORITHM} ${SSH_PUB_KEY_KEY}"
 fi
 if [ -n "${SSH_KEY_ID}" ]; then
     log_task "Adding SSH key to gitconfig for signing commits"
