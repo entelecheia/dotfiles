@@ -44,6 +44,7 @@ if [ -n "${SSH_KEY_ID}" ]; then
     if [[ "${GPGSIGN}" == "true" ]]; then
         c git config --global gpg.format ssh
         c git config --global commit.gpgsign true
+        c git config --global gpg.ssh.allowedSignersFile "${HOME}/.ssh/allowed_signers"
     fi
 fi
 # if you need to use allowed_signers, 
