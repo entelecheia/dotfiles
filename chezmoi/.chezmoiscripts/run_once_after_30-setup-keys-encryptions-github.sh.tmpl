@@ -24,11 +24,6 @@ if [ ! -f "${SSH_KEY_FILE}" ]; then
     log_task "Generating SSH key"
     ssh-keygen -t "${ALGORITHM}" -C "${USER}@${HOST}" -f "${SSH_KEY_FILE}" -N ""
 fi
-# {{ if eq .chezmoi.os "darwin" }}
-# Add SSH key to macOS keychain
-log_task "Adding SSH key to macOS keychain"
-c ssh-add --apple-use-keychain "${SSH_KEY_FILE}"
-# {{ end }}
 
 # copy gitconfig from .config/git/gitconfig to .gitconfig
 cp "${HOME}/.config/git/gitconfig" "${HOME}/.gitconfig"
@@ -50,8 +45,15 @@ if [ -n "${SSH_KEY_ID}" ]; then
         c git config --global gpg.ssh.allowedSignersFile "${HOME}/.ssh/allowed_signers"
     fi
 fi
-# if you need to use allowed_signers, 
-# refer to https://janik6n.net/signing-git-commits-with-ssh-key
+# {{ if eq .chezmoi.os "darwin" }}
+# Add SSH key to macOS keychain
+log_task "Adding SSH key to macOS keychain"
+c ssh-add --apple-use-keychain "${SSH_KEY_FILE}"
+# {{ end }}
+if command -v ssh-agent &> /dev/null; then
+    log_task "Refreshing ssh-agent to load new keys"
+    c eval "$(ssh-agent -s)"
+fi
 
 # Age encryption
 # if age is not installed, skip
