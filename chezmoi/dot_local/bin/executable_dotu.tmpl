@@ -15,7 +15,8 @@ if dotdrop --version &>/dev/null; then
   DOTDROP_REPO="${HOME}/.config/dotdrop"
 
   log_task "Pulling latest changes from dotdrop repo"
-  git -C "$DOTDROP_REPO" pull
+  # git -C "$DOTDROP_REPO" fetch --all && git -C "$DOTDROP_REPO" reset --hard origin/main && git -C "$DOTDROP_REPO" clean -f
+  git -C "$DOTDROP_REPO" pull || true
 fi
 # {{ end }}
 DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
