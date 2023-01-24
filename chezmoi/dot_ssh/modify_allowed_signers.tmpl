@@ -1,0 +1,35 @@
+#!/bin/bash
+
+set -euo pipefail
+
+# read authorized_keys from stdin
+keys=$(cat /dev/stdin)
+
+# if authorized_keys is empty, set it to empty string
+if [[ -z "${keys}" ]]; then
+  keys=''
+fi
+
+# read from ${HOME}/.config/ssh/allowed_signers if it exists
+if [[ -f "${HOME}/.config/ssh/allowed_signers" ]]; then
+  keys="${keys}\n$(cat "${HOME}/.config/ssh/allowed_signers")"
+fi
+
+SSH_PUB_KEY_FILE="${HOME}/.ssh/{{ .ssh.key_filename }}.pub"
+EMAIL="{{ .email }}"
+if [ -f "${SSH_PUB_KEY_FILE}" ]; then
+    SSH_PUB_KEY=$(cat "${SSH_PUB_KEY_FILE}")
+    # parse the key: ALGORITHM KEY COMMENT
+    SSH_PUB_KEY_ALGORITHM=$(echo "${SSH_PUB_KEY}" | cut -d' ' -f1)
+    SSH_PUB_KEY_KEY=$(echo "${SSH_PUB_KEY}" | cut -d' ' -f2)
+    # add to allowed_signers: EMAIL ALGORITHM KEY
+    keys="${keys}\n${EMAIL} ${SSH_PUB_KEY_ALGORITHM} ${SSH_PUB_KEY_KEY}"
+fi
+
+# remove empty lines
+keys=$(echo -e "${keys}" | sed '/^$/d')
+
+# remove duplicate lines
+keys=$(echo -e "${keys}" | sort -u)
+
+echo -e "${keys}"
