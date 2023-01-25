@@ -1,8 +1,8 @@
 #!/bin/bash
 # {{ if and (eq .chezmoi.os "darwin" "linux") (.system.is_sudoer) -}}
 
-# {{ include (joinPath .chezmoi.sourceDir ".chezmoitemplates/scripts-library") }}
-# {{ include (joinPath .chezmoi.sourceDir ".chezmoitemplates/homebrew-library") }}
+# {{ template "scripts-library" }}
+# {{ template "homebrew-library" }}
 
 # The following line is for ShellCheck to correctly identify the above included library
 true || source ../.chezmoitemplates/scripts-library

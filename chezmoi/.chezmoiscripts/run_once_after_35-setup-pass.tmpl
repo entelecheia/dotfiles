@@ -2,9 +2,11 @@
 # {{ if eq .chezmoi.os "linux" "darwin" }}
 
 # {{ template "scripts-library" }}
+# {{ template "homebrew-library" }}
 
 # The following line is for ShellCheck to correctly identify the above include
 true || source ../.chezmoitemplates/scripts-library
+true || source ../.chezmoitemplates/homebrew-library
 
 # install passage if not installed
 if ! command -v passage >/dev/null; then
