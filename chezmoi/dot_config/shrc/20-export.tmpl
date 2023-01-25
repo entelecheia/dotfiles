@@ -71,3 +71,6 @@ if op --version &>/dev/null; then
     eval "$(op completion zsh)"; compdef _op op
   fi
 fi
+
+# shellcheck disable=SC1091
+[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"

@@ -1,0 +1,18 @@
+#!/bin/bash
+# {{ if eq .chezmoi.os "linux" "darwin" }}
+
+# {{ template "scripts-library" }}
+
+# The following line is for ShellCheck to correctly identify the above include
+true || source ../.chezmoitemplates/scripts-library
+
+# install passage if not installed
+if ! command -v passage >/dev/null; then
+    log_task "Installing passage"
+    PASSGE_PATH="${HOME}/.local/share/passage"
+    c cd "${PASSGE_PATH}" || exit 1  
+    c make install PREFIX="$(brew --cellar)/passage/$(git describe --tags)"
+    c brew link passage
+fi
+
+# {{ end -}}

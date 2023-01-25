@@ -39,8 +39,17 @@
   stripComponents: 1
   # exact: true
 
-# {{- if ne .chezmoi.os "darwin" -}}
-#
+".local/share/passage":
+  type: git-repo
+  url: "https://github.com/FiloSottile/passage.git"
+
+# {{- if .docker.repo | not | not -}} #
+".local/share/dockerfiles":
+  type: git-repo
+  url: "{{ .docker.repo }}"
+# {{- end -}}
+
+# {{- if ne .chezmoi.os "darwin" -}} #
 ".local/bin/direnv":
   type: file
   url: "https://github.com/direnv/direnv/releases/download/v{{- template "get-github-latest-version" list "direnv/direnv" $cache -}}/direnv.linux-{{- .chezmoi.arch -}}"
