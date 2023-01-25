@@ -1,5 +1,5 @@
 #!/bin/bash
-# {{ if eq .chezmoi.os "linux" "darwin" }}
+# {{ if and (eq .chezmoi.os "darwin" "linux") (.system.is_sudoer) -}}
 
 # {{ template "scripts-library" }}
 # {{ template "homebrew-library" }}

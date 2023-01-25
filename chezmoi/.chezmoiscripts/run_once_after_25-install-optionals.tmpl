@@ -1,7 +1,7 @@
 #!/bin/bash
 # {{ if and (eq .chezmoi.os "linux" "darwin") (.system.is_sudoer) (.system.is_minimum | not) }}
 
-# {{ include (joinPath .chezmoi.sourceDir ".chezmoitemplates/scripts-library") }}
+# {{ template "scripts-library" }}
 
 # The following line is for ShellCheck to correctly identify the above included library
 true || source ../.chezmoitemplates/scripts-library
@@ -11,6 +11,8 @@ if ! command -v webi >/dev/null; then
   log_task "Installing webi"
   c curl https://webi.sh/webi | sh
 fi
+
+ensure_path_entry "${HOME}/.local/bin"
 
 # install serviceman if not installed
 if ! command -v serviceman >/dev/null; then
