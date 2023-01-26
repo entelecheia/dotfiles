@@ -81,7 +81,6 @@ readonly wanted_sanp_packages=(
   restic
   helm
 )
-missing_packages=()
 
 # This script also gets called when running rootmoi
 # {{   if eq .chezmoi.username "root" }}
@@ -92,7 +91,7 @@ snap_command=(sudo snap)
 
 for package in "${wanted_sanp_packages[@]}"; do
   if ! is_snap_package_installed "${package}"; then
-    log_task "Installing missing packages with snap: ${package}"
+    log_task "Installing a package with snap: ${package}"
     c "${snap_command[@]}" install "${package}" --classic
   fi
 done

@@ -33,14 +33,43 @@ for package in "${wanted_packages[@]}"; do
   fi
 done
 
+brew_command=(brew)
 if [[ ${#missing_packages[@]} -gt 0 ]]; then
   log_task "Installing missing packages with brew: ${missing_packages[*]}"
-
-  brew_command=(brew)
-
   # c "${brew_command[@]}" update
   c "${brew_command[@]}" install "${missing_packages[@]}"
 fi
+
+readonly wanted_tabs=(
+  homebrew/cask-fonts
+  homebrew/bundle
+  homebrew/cask
+  homebrew/cask-fonts
+  homebrew/core
+  homebrew/services
+)
+
+for tab in "${wanted_tabs[@]}"; do
+  log_task "Installing a tab for brew cask: ${tab}"
+done
+
+# TODO: check tab list
+# get tab list into BREW_TABS variable
+
+readonly wanted_cask_packages=(
+  gpg-suite
+  font-fira-code
+  font-fira-code-nerd-font
+)
+
+# TODO: check with brew list --casks
+for package in "${wanted_cask_packages[@]}"; do
+  if ! is_brew_package_installed "${package}"; then
+    log_task "Installing a package with brew cask: ${package}"
+    c brew bundle --file="${BREWFILE}" --no-lock --no-upgrade --verbose
+    c "${brew_command[@]}" install --cask "${package}"
+  fi
+done
 
 # c echo "pinentry-program $(which pinentry-mac)" >> "${HOME}/.gnupg/gpg-agent.conf"
 # c killall gpg-agent || true
