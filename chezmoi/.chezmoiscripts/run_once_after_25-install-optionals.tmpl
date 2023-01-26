@@ -52,18 +52,6 @@ if ! op --version &>/dev/null; then
 fi
 # {{ end }}
 
-# {{ if .system.use_vault -}}
-# if brew is installed, then install vault
-if brew --version &>/dev/null; then
-  package="vault"
-  if ! is_brew_package_installed "${package}"; then
-    log_task "Installing Hashicorp Vault"
-    c brew tap hashicorp/tap
-    c brew install hashicorp/tap/vault  
-  fi
-fi
-# {{ end }}
-
 # {{ if .system.use_microk8s -}}
 # if snap is installed, then install microk8s
 if snap --version &>/dev/null; then

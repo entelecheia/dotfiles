@@ -6,6 +6,30 @@
 # The following line is for ShellCheck to correctly identify the above included library
 true || source ../.chezmoitemplates/scripts-library
 
+readonly wanted_tabs=(
+  homebrew/cask-fonts
+  homebrew/bundle
+  homebrew/cask
+  homebrew/cask-fonts
+  homebrew/core
+  homebrew/services
+  # {{ if .system.use_vault }}
+  hashicorp/tap
+  # {{ end }}
+)
+
+# get tab list into BREW_TABS variable
+BREW_TABS=$(brew tap)
+
+# install tabs that are not installed
+for tab in "${wanted_tabs[@]}"; do
+  if ! echo "${BREW_TABS}" | grep -q "^${tab}$"; then
+    log_task "Installing brew tab: ${tab}"
+    c brew tap "${tab}"
+  fi
+done
+
+# install packages that are not installed
 readonly wanted_packages=(
   coreutils
   findutils
@@ -24,6 +48,9 @@ readonly wanted_packages=(
   autorestic
   fzf
   helm
+  # {{ if .system.use_vault }}
+  hashicorp/tap/vault
+  # {{ end }}
 )
 missing_packages=()
 
@@ -40,21 +67,6 @@ if [[ ${#missing_packages[@]} -gt 0 ]]; then
   c "${brew_command[@]}" install "${missing_packages[@]}"
 fi
 
-readonly wanted_tabs=(
-  homebrew/cask-fonts
-  homebrew/bundle
-  homebrew/cask
-  homebrew/cask-fonts
-  homebrew/core
-  homebrew/services
-)
-
-for tab in "${wanted_tabs[@]}"; do
-  log_task "Installing a tab for brew cask: ${tab}"
-done
-
-# TODO: check tab list
-# get tab list into BREW_TABS variable
 
 readonly wanted_cask_packages=(
   gpg-suite
@@ -62,9 +74,12 @@ readonly wanted_cask_packages=(
   font-fira-code-nerd-font
 )
 
-# TODO: check with brew list --casks
+# get installed cask packages with brew list --casks
+BREW_CASK_PACKAGES=$(brew list --casks)
+
+# install cask packages that are not installed
 for package in "${wanted_cask_packages[@]}"; do
-  if ! is_brew_package_installed "${package}"; then
+  if ! echo "${BREW_CASK_PACKAGES}" | grep -q "^${package}$"; then
     log_task "Installing a package with brew cask: ${package}"
     c "${brew_command[@]}" install --cask "${package}"
   fi
