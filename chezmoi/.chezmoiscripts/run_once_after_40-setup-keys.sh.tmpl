@@ -38,7 +38,7 @@ if [ -f "${SSH_PUB_KEY_FILE}" ]; then
 fi
 if [ -n "${SSH_KEY_ID}" ]; then
     log_task "Adding SSH key to gitconfig for signing commits"
-    c git config --global user.signingkey "${SSH_KEY_ID}"
+    c git config --global user.signingkey "${SSH_PUB_KEY_FILE}"
     if [[ "${GPGSIGN}" == "true" ]]; then
         c git config --global gpg.format ssh
         c git config --global commit.gpgsign true
