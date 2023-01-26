@@ -1,0 +1,11 @@
+version: 2
+
+locations:
+  vault:
+    from: ~/.local/vault
+    to: remote    
+
+backends:    
+  remote:
+    type: b2
+    path: 

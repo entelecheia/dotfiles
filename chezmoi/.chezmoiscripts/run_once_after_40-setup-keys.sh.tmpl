@@ -134,14 +134,7 @@ PUB_SSH_KEY_FILE="${SSH_KEY_FILE}.pub"
 GPG_PUB_KEY_FILE="${GNUPGHOME}/${GPG_KEY_ID}.pub"
 
 # {{ if .github.username }}
-# {{ if .github.token }}
 if command -v gh >/dev/null; then
-    log_info "Logging in to GitHub"
-    GITHUB_TOKEN="{{ .github.token }}"
-    c gh config set -h github.com git_protocol ssh
-    echo "${GITHUB_TOKEN}" | gh auth login --with-token
-    # git credention setup
-    c gh auth setup-git
     if [ -f "${PUB_SSH_KEY_FILE}" ]; then
         log_task "Adding SSH key to GitHub"
         c gh ssh-key add "${PUB_SSH_KEY_FILE}" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}" || true
@@ -153,36 +146,13 @@ if command -v gh >/dev/null; then
 else
     log_info "gh is not installed"
 fi
-# {{ else }}
-# {{   if .system.is_interactive }}
-if command -v gh >/dev/null; then
-    log_info "Logging in to GitHub"
-    c gh auth login -h github.com -s admin:public_key -s write:gpg_key
-    # git credention setup
-    c gh auth setup-git
-    if [ -f "${PUB_SSH_KEY_FILE}" ]; then
-        log_task "Adding SSH key to GitHub"
-        c gh ssh-key add "${PUB_SSH_KEY_FILE}" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}" || true
-    fi
-    # if [ -f "${GPG_PUB_KEY_FILE}" ]; then
-    #     log_task "Adding GPG key to GitHub"
-    #     c gh gpg-key add "${GPG_PUB_KEY_FILE}" || true
-    # fi
-else
-    log_info "gh is not installed"
-fi
-# {{   else }}
-log_manual_action "GITHUB_TOKEN environment variable is not set."
-log_manual_action "Log in manually, and add the SSH key to GitHub."
-# {{    end }}
+
 log_manual_action "If you want to add SSH key to GitHub for signing commits (github-cli does not support this yet), visit the following URL: "
 log_manual_action " > https://github.com/settings/ssh/new"
 if [ -f "${GPG_PUB_KEY_FILE}" ]; then
     log_manual_action "If you want to add GPG key to GitHub for signing commits, run the following: "
     log_manual_action " > gh gpg-key add ${GPG_PUB_KEY_FILE}"
 fi
-
-# {{ end }}
 log_info "Done adding SSH and GPG keys to GitHub"
 # {{ end -}}
 # {{ end -}}

@@ -74,14 +74,6 @@ elif brew --version &>/dev/null; then
     log_manual_action "MicroK8s installed, but not finished. To finish the installation, run the following command: microk8s install"
   fi
 fi
-# install helm
-if helm version &>/dev/null; then
-  package="helm"
-  if ! is_brew_package_installed "${package}"; then
-    log_task "Installing Helm"
-    c brew install helm
-  fi
-fi
 # {{ end }}
 
 # {{ if .system.use_dotdrop }}

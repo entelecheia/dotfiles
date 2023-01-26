@@ -38,7 +38,8 @@ readonly wanted_packages=(
   tmux
   python3-pip
   python3-setuptools
-  # gh
+  gh
+  fzf
   vim
   gnupg # used to decrypt the gpg keys of the apt repositories
   pinentry-curses
@@ -67,6 +68,51 @@ if [[ ${#missing_packages[@]} -gt 0 ]]; then
 
   c "${apt_command[@]}" update
   c "${apt_command[@]}" install --yes --no-install-recommends "${missing_packages[@]}"
+fi
+
+# if snap is not installed, exit
+if ! snap --version &>/dev/null; then
+  log_manual_action "snap is not installed, skipping snap packages"
+  exit 0
+fi
+
+readonly wanted_sanp_packages=(
+  go
+  restic
+  helm
+)
+missing_packages=()
+
+# This script also gets called when running rootmoi
+# {{   if eq .chezmoi.username "root" }}
+snap_command=(snap)
+# {{   else }}
+snap_command=(sudo snap)
+# {{   end }}
+
+for package in "${wanted_sanp_packages[@]}"; do
+  if ! is_snap_package_installed "${package}"; then
+    log_task "Installing missing packages with snap: ${package}"
+    c "${snap_command[@]}" install "${package}" --classic
+  fi
+done
+
+# install autorestic
+if ! autorestic --version &>/dev/null; then
+  log_task "Installing autorestic"
+  c wget -qO - https://raw.githubusercontent.com/cupcakearmy/autorestic/master/install.sh | sudo bash
+fi
+
+# install age
+if ! age --version &>/dev/null; then
+  log_task "Installing age"
+  c go install filippo.io/age/cmd/...@latest
+fi
+
+# install sops
+if ! sops --version &>/dev/null; then
+  log_task "Installing sops"
+  c go install go.mozilla.org/sops/v3/cmd/sops@latest
 fi
 
 # {{ end -}}

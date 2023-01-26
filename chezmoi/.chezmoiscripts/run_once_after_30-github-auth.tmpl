@@ -1,20 +1,45 @@
 #!/bin/bash
-# {{ if .system.use_dotdrop -}}
+# {{ if eq .chezmoi.os "linux" "darwin" }}
 
 # {{ template "scripts-library" }}
 
 # The following line is for ShellCheck to correctly identify the above include
 true || source ../.chezmoitemplates/scripts-library
 
-if ! command -v dotdrop >/dev/null; then
-  log_task "Install dotdrop with pip3"
-  c /usr/bin/pip3 install wheel
-  c /usr/bin/pip3 install dotdrop --user
-  # Add ~/.local/bin to PATH in order to use dotdrop before finishing the installation
-  export PATH="$HOME/.local/bin:$PATH"
-fi
+ensure_path_entry "${HOME}/.local/bin"
 
-# Clone or update the dotdrop repository
+# {{ if .github.username }}
+# {{ if .github.token }}
+if command -v gh >/dev/null; then
+    log_info "Logging in to GitHub"
+    GITHUB_TOKEN="{{ .github.token }}"
+    c gh config set -h github.com git_protocol ssh
+    echo "${GITHUB_TOKEN}" | gh auth login --with-token
+    c gh auth setup-git
+else
+    log_info "gh is not installed"
+fi
+# {{ else }}
+# {{   if .system.is_interactive }}
+if command -v gh >/dev/null; then
+    log_info "Logging in to GitHub"
+    c gh auth login -h github.com -s admin:public_key -s write:gpg_key
+    # git credention setup
+    c gh auth setup-git
+else
+    log_info "gh is not installed"
+fi
+# {{   else }}
+log_manual_action "GITHUB_TOKEN environment variable is not set."
+log_manual_action "Log in manually, and add the SSH key to GitHub."
+# {{   end }}
+
+# {{ end }}
+# {{ end -}}
+
+# {{ if .system.use_dotdrop }}
+
+# Clone or update the dotdrop repository (github auth is required for private repositories)
 DOTDROP_REPO="{{- .dotdrop.repo }}"
 DOTDROP_LOCAL_REPO="{{- .chezmoi.workingTree }}/dotdrop"
 DOTDROP_REPO_DIR="${HOME}/.config/dotdrop"
@@ -45,5 +70,12 @@ else
     fi
   fi
 fi
+
+if dotdrop --version &>/dev/null; then
+  log_task "Updating dotfiles for dotdrop"
+  dotdrop --cfg="${HOME}/.config/dotdrop/config-user.yaml" -p "{{ .dotdrop.user_profile }}" install
+fi
+
+# {{ end }}
 
 # {{ end -}}
