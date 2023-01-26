@@ -20,6 +20,13 @@ if ! command -v serviceman >/dev/null; then
   c webi serviceman
 fi
 
+# install mutagen
+if ! command -v metagen >/dev/null; then
+  log_task "Installing mutagen"
+  c webi mutagen@stable
+  c docker extension install mutagenio/docker-desktop-extension:latest --force || true 
+fi
+
 # {{ if .system.use_1password -}}
 # if op is not installed, then install 1password-cli
 if ! op --version &>/dev/null; then
