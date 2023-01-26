@@ -23,6 +23,8 @@ fi
 # {{   if .system.is_interactive }}
 if command -v gh >/dev/null; then
     log_info "Logging in to GitHub"
+    log_info "If you choose to login with a web browser and the device page is not displayed, please open the following URL in your browser: "
+    log_info " > https://github.com/login/device"
     c gh auth login -h github.com -s admin:public_key -s write:gpg_key
     # git credention setup
     c gh auth setup-git
