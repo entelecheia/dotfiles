@@ -125,9 +125,9 @@
 # {{- end -}}
 
 # {{- if eq .chezmoi.os "linux" -}}
-# {{-   $sudoer = (output "sh" "-c" "test -n \"$(groups | grep -w sudo)\" && echo true || echo false") -}}
+# {{-   $sudoer = (output "sh" "-c" "test -n \"$(groups | grep -w sudo)\" && echo true || echo ''") -}}
 # {{- else -}}
-# {{-   $sudoer = (output "sh" "-c" "test -n \"$(groups | grep -w admin)\" && echo true || echo false") -}}
+# {{-   $sudoer = (output "sh" "-c" "test -n \"$(groups | grep -w admin)\" && echo true || echo ''") -}}
 # {{- end -}}
 # {{- if $sudoer -}}
 # {{-   writeToStdout "✅ Sudo privileges enabled\n" -}}
