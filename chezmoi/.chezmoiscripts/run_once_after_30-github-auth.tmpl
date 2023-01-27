@@ -26,7 +26,7 @@ if command -v gh >/dev/null; then
     log_info "If you choose to login with a web browser and the device page is not displayed, please open the following URL in your browser: "
     log_info " > https://github.com/login/device"
     c gh auth login -h github.com -s admin:public_key -s write:gpg_key
-    # git credention setup
+    # setup git authentication
     c gh auth setup-git
 else
     log_info "gh is not installed"

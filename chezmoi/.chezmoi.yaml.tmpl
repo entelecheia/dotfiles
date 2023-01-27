@@ -18,6 +18,10 @@
 # {{-   $cpuThreads = (output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "(Get-CimInstance -ClassName 'Win32_Processor').NumberOfLogicalProcessors") | trim | atoi -}}
 # {{- end -}}
 
+# {{- $minimum := $devcontainer -}}
+# {{- if eq (env "DOTFILES_MINIMUM") "true" "True" "TRUE" "1" -}}
+# {{-   $minimum = true -}}
+# {{- end -}}
 # {{- $name:= or (env "USER_FULLNAME") "Your Name" -}}
 # {{- $email:= or (env "USER_EMAIL") "your_email@your.domain.com" -}}
 # {{- $hostname := or (env "SYSTEM_HOSTNAME") .chezmoi.hostname -}}
@@ -48,7 +52,18 @@
 # {{- if eq (env "DOTFILES_VERBOSE") "true" "True" "TRUE" "1" -}}
 # {{-   $verbose = true -}}
 # {{- end -}}
+# {{- $gpg_homedir := or (env "GNUPGHOME") (joinPath .chezmoi.homeDir ".gnupg") -}}
+# {{- $gpg_key_id_file := joinPath $gpg_homedir ".gpg-id" -}}
 # {{- $gpg_key_id := env "GPG_KEY_ID" -}}
+# {{- $gpg_passphrase := "" -}}
+# {{- $gpg_gitsign := false -}}
+
+# {{- $use_stow := false -}}
+# {{- $stow_repo := "" -}}
+# {{- $stow_location := joinPath .chezmoi.homeDir ".local/share/stowfiles" -}}
+# {{- $stow_autorestic_config_path := joinPath .chezmoi.homeDir ".config/autorestic/stowfiles" -}}
+# {{- $use_passwordstore := true -}}
+# {{- $passwordstore_repo := "" -}}
 
 # {{- $sudoer := true -}}
 # {{- $sudo_check := "" -}}
@@ -75,10 +90,12 @@
 # {{- if and (eq .chezmoi.os "linux") -}}
 # {{- writeToStdout (printf "🦸  Apply rootmoi: %t\n" $apply_rootmoi) -}}
 # {{- end -}}
+# {{- if $minimum | not -}}
 # {{- writeToStdout (printf "📦  Use dotdrop: %t\n" $use_dotdrop) -}}
 # {{- writeToStdout (printf "🔑  Use 1password: %t\n" $use_1password) -}}
-# {{- writeToStdout (printf "🔐  Use vault: %t\n" $use_vault) -}}
+# {{- writeToStdout (printf "🔒  Use vault: %t\n" $use_vault) -}}
 # {{- writeToStdout (printf "🚀  Use microk8s: %t\n" $use_microk8s) -}}
+# {{- end -}}
 # {{- writeToStdout (printf "🔬  Verbose: %t\n" $verbose) -}}
 # {{- writeToStdout "---\n" -}}
 
@@ -92,13 +109,9 @@
 # {{- $workspace_root := joinPath .chezmoi.homeDir $workspace_name -}}
 # {{- $symlink_colab_workspace := false -}}
 # {{- $symlink_to_home := true -}}
-# {{- $gpg_key_id := "" -}}
-# {{- $gpg_passphrase := "" -}}
-# {{- $gpg_gitsign := false -}}
 # {{- $github_clones := "" -}}
 # {{- $auto_update := false -}}
 
-# {{- $minimum := or $devcontainer ($ubuntu | not) -}}
 # {{- if and (hasKey . "system") (hasKey .system "is_minimum") -}}
 # {{-   $minimum = .system.is_minimum -}}
 # {{- end -}}
@@ -157,45 +170,6 @@
 # {{-   $apply_rootmoi := false -}}
 # {{-   if $interactive -}}
 # {{-       writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
-# {{-   end -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "op") (hasKey .op "enabled") -}}
-# {{-   $use_1password = .op.enabled -}}
-# {{- end -}}
-# {{- if and $interactive $sudoer -}}
-# {{-   $question := "❔ Do you want to use 1password for secrets" -}}
-# {{-   $use_1password = promptBool $question $use_1password -}}
-# {{-   if $use_1password -}}
-# {{-     writeToStdout "✅ 1password enabled\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "✅ 1password disabled\n" -}}
-# {{-   end -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "vault") (hasKey .vault "enabled") -}}
-# {{-   $use_vault = .vault.enabled -}}
-# {{- end -}}
-# {{- if and $interactive $sudoer -}}
-# {{-   $question := "❔ Do you want to use vault for secrets" -}}
-# {{-   $use_vault = promptBool $question $use_vault -}}
-# {{-   if $use_vault -}}
-# {{-     writeToStdout "✅ Vault enabled\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "✅ Vault disabled\n" -}}
-# {{-   end -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "microk8s") (hasKey .microk8s "enabled") -}}
-# {{-   $use_microk8s = .microk8s.enabled -}}
-# {{- end -}}
-# {{- if and $interactive $sudoer -}}
-# {{-   $question := "❔ Do you want to use MicroK8s for Kubernetes" -}}
-# {{-   $use_microk8s = promptBool $question $use_microk8s -}}
-# {{-   if $use_microk8s -}}
-# {{-     writeToStdout "✅ MicroK8s enabled\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "✅ MicroK8s disabled\n" -}}
 # {{-   end -}}
 # {{- end -}}
 
@@ -280,10 +254,189 @@
 # {{-   end -}}
 # {{- end -}}
 
+# {{- if and (hasKey . "system") (hasKey .system "hostname") -}}
+# {{-   $hostname = .system.hostname -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   range $i := until 99 -}}
+# {{-     $question := "❔ What is hostname" -}}
+# {{-     $answer := "" -}}
+# {{-     if $hostname -}}
+# {{-       $answer = promptString $question $hostname -}}
+# {{-     else -}}
+# {{-       $answer = promptString $question -}}
+# {{-     end -}}
+# {{-     if regexMatch "^[A-Za-z0-9._-]+$" $answer -}}
+# {{-       $hostname = $answer -}}
+# {{-       writeToStdout (printf "✅ Hostname set as '%s'\n" $hostname) -}}
+# {{-       break -}}
+# {{-     end -}}
+# {{-     writeToStdout (printf "❌ '%s' is an invalid hostname\n" $answer) -}}
+# {{-     if eq $i 98 -}}
+# {{-       writeToStdout "❌ ERROR: maximum tries exceeded\n" -}}
+# {{-       exit 1 -}}
+# {{-     end -}}
+# {{-   end -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "ssh") (hasKey .ssh "algorithm") -}}
+# {{-   $ssh_algorithm = .ssh.algorithm -}}
+# {{- end -}}
+# {{- if and $interactive ($minimum | not) -}}
+# {{-   $question := "❔ Which SSH algorithm do you want to use" -}}
+# {{-   $answer := "" -}}
+# {{-   if $ssh_algorithm -}}
+# {{-     $answer = promptString $question $ssh_algorithm -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $ssh_algorithm = $answer -}}
+# {{-   writeToStdout (printf "✅ SSH algorithm set as '%s'\n" $ssh_algorithm) -}}
+# {{- end -}}
+
+# {{- $ssh_keyfile := joinPath .chezmoi.homeDir (printf ".ssh/id_%s_%s" $ssh_algorithm $hostname) -}}
+# {{- if $interactive -}}
+# {{-   writeToStdout (printf "✅ SSH key filename set as '%s'\n" $ssh_keyfile) -}}
+# {{- end -}}
+
+# {{- $age_keyfile := or (env "AGE_KEY_FILE") (joinPath .chezmoi.homeDir (printf ".ssh/age_key_%s" $hostname)) -}}
+# {{- if $interactive -}}
+# {{-   writeToStdout (printf "✅ Age key filename set as '%s'\n" $age_keyfile) -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "github") (hasKey .github "token") -}}
+# {{-   $github_token = .github.token -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ What is GitHub Token (If not set, you will be prompted to authenticate)" -}}
+# {{-   $answer := "" -}}
+# {{-   if $github_token -}}
+# {{-     $answer = promptString $question $github_token -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $github_token = $answer -}}
+# {{-   writeToStdout (printf "✅ GitHub Token set as '%s'\n" $github_token) -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "gnupg") (hasKey .gnupg "passphrase") -}}
+# {{-   $gpg_passphrase = .gnupg.passphrase -}}
+# {{- end -}}
+# {{- if and $interactive ($minimum | not) -}}
+# {{-   $question := "❔ What passphrase do you want to use for your GPG key" -}}
+# {{-   $answer := "" -}}
+# {{-   if $gpg_passphrase -}}
+# {{-     $answer = promptString $question $gpg_passphrase -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $gpg_passphrase = $answer -}}
+# {{-   writeToStdout (printf "✅ GPG passphrase set as '%s'\n" $gpg_passphrase) -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "gnupg") (hasKey .gnupg "gitsign") -}}
+# {{-   $gpg_gitsign = .gnupg.gitsign -}}
+# {{- end -}}
+# {{- if and $interactive ($minimum | not) -}}
+# {{-   $question := "❔ Do you want to use GPG to sign git commits globally" -}}
+# {{-   $gpg_gitsign = promptBool $question $gpg_gitsign -}}
+# {{-   if $gpg_gitsign -}}
+# {{-     writeToStdout "✅ Git commits will be signed by GPG\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ Git comiits will not be signed by GPG\n" -}}
+# {{-   end -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "workspace") (hasKey .workspace "name") -}}
+# {{-   $workspace_name = .workspace.name -}}
+# {{- end -}}
+
+# {{- if $wsl | not -}}
+# {{- if and (hasKey . "workspace") (hasKey .workspace "location") -}}
+# {{-   $workspace_location = .workspace.location -}}
+# {{- end -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ Where do you want to put your workspace" -}}
+# {{-   $answer := "" -}}
+# {{-   if $workspace_location -}}
+# {{-     $answer = promptString $question $workspace_location -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $workspace_location = $answer -}}
+# {{-   writeToStdout (printf "✅ Worksapce location set as '%s'\n" $workspace_location) -}}
+# {{-   if $symlink_to_home -}}
+# {{-     $workspace_root := joinPath .chezmoi.homeDir $workspace_name -}}
+# {{-   else -}}
+# {{-     $workspace_root := joinPath $workspace_location $workspace_name -}}
+# {{-   end -}}
+# {{-   writeToStdout (printf "✅ Worksapce root set as '%s'\n" $workspace_root) -}}
+# {{- end -}}
+# {{- end -}}
+
+# {{- if not $sudoer -}}
+# {{-   $symlink_colab_workspace := false -}}
+# {{-   if $interactive -}}
+# {{-     writeToStdout "✅ Colab workspace will not be symlinked\n" -}}
+# {{-   end -}}
+# {{- else -}}
+# {{- if and (hasKey . "workspace") (hasKey .workspace "symlink_colab_workspace") -}}
+# {{-   $symlink_colab_workspace = .workspace.symlink_colab_workspace -}}
+# {{- end -}}
+# {{- if and $interactive ($minimum | not) -}}
+# {{-   $question := "❔ Do you want to symlink workspace to colab default google drive directory to maintain persistence across sessions" -}}
+# {{-   $symlink_colab_workspace = promptBool $question $symlink_colab_workspace -}}
+# {{-   if $symlink_colab_workspace -}}
+# {{-     writeToStdout "✅ Colab workspace will be symlinked to workspace root\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ Colab workspace will not be symlinked\n" -}}
+# {{-   end -}}
+# {{- end -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "op") (hasKey .op "enabled") -}}
+# {{-   $use_1password = .op.enabled -}}
+# {{- end -}}
+# {{- if and $interactive $sudoer ($minimum | not) -}}
+# {{-   $question := "❔ Do you want to use 1password for secrets" -}}
+# {{-   $use_1password = promptBool $question $use_1password -}}
+# {{-   if $use_1password -}}
+# {{-     writeToStdout "✅ 1password enabled\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ 1password disabled\n" -}}
+# {{-   end -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "vault") (hasKey .vault "enabled") -}}
+# {{-   $use_vault = .vault.enabled -}}
+# {{- end -}}
+# {{- if and $interactive $sudoer ($minimum | not) -}}
+# {{-   $question := "❔ Do you want to use vault for secrets" -}}
+# {{-   $use_vault = promptBool $question $use_vault -}}
+# {{-   if $use_vault -}}
+# {{-     writeToStdout "✅ Vault enabled\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ Vault disabled\n" -}}
+# {{-   end -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "microk8s") (hasKey .microk8s "enabled") -}}
+# {{-   $use_microk8s = .microk8s.enabled -}}
+# {{- end -}}
+# {{- if and $interactive $sudoer ($minimum | not) -}}
+# {{-   $question := "❔ Do you want to use MicroK8s for Kubernetes" -}}
+# {{-   $use_microk8s = promptBool $question $use_microk8s -}}
+# {{-   if $use_microk8s -}}
+# {{-     writeToStdout "✅ MicroK8s enabled\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ MicroK8s disabled\n" -}}
+# {{-   end -}}
+# {{- end -}}
+
 # {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "enabled") -}}
 # {{-   $use_dotdrop = .dotdrop.enabled -}}
 # {{- end -}}
-# {{- if $interactive -}}
+# {{- if and $interactive ($minimum | not) -}}
 # {{-   $question := "❔ Do you want to use dotdrop to manage your private dotfiles" -}}
 # {{-   $use_dotdrop = promptBool $question $use_dotdrop -}}
 # {{-   if $use_dotdrop -}}
@@ -327,7 +480,7 @@
 # {{- if and (hasKey . "docker") (hasKey .dotdrop "repo") -}}
 # {{-   $dockerfiles_repo = .docker.repo -}}
 # {{- end -}}
-# {{- if $interactive -}}
+# {{- if and $interactive ($minimum | not) -}}
 # {{-   $question := "❔ What is your dockerfiles repository URL (ex: https://github.com/entelecheia/dockerfiles.git)" -}}
 # {{-   $answer := "" -}}
 # {{-   if $dockerfiles_repo -}}
@@ -342,7 +495,7 @@
 # {{- if and (hasKey . "github") (hasKey .github "clones") -}}
 # {{-   $github_clones = .github.clones -}}
 # {{- end -}}
-# {{- if $interactive -}}
+# {{- if and $interactive ($minimum | not) -}}
 # {{-   $question := "❔ What are your GitHub repositories to clone (input as comma separated list, ex: entelecheia/devcon,entelecheia/ekorpkit)" -}}
 # {{-   $answer := "" -}}
 # {{-   if $github_clones -}}
@@ -352,156 +505,6 @@
 # {{-   end -}}
 # {{-   $github_clones = $answer -}}
 # {{-   writeToStdout (printf "✅ GitHub repositories to clone set as '%s'\n" $github_clones) -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "ssh") (hasKey .ssh "algorithm") -}}
-# {{-   $ssh_algorithm = .ssh.algorithm -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ Which SSH algorithm do you want to use" -}}
-# {{-   $answer := "" -}}
-# {{-   if $ssh_algorithm -}}
-# {{-     $answer = promptString $question $ssh_algorithm -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $ssh_algorithm = $answer -}}
-# {{-   writeToStdout (printf "✅ SSH algorithm set as '%s'\n" $ssh_algorithm) -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "system") (hasKey .system "hostname") -}}
-# {{-   $hostname = .system.hostname -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   range $i := until 99 -}}
-# {{-     $question := "❔ What is hostname" -}}
-# {{-     $answer := "" -}}
-# {{-     if $hostname -}}
-# {{-       $answer = promptString $question $hostname -}}
-# {{-     else -}}
-# {{-       $answer = promptString $question -}}
-# {{-     end -}}
-# {{-     if regexMatch "^[A-Za-z0-9._-]+$" $answer -}}
-# {{-       $hostname = $answer -}}
-# {{-       writeToStdout (printf "✅ Hostname set as '%s'\n" $hostname) -}}
-# {{-       break -}}
-# {{-     end -}}
-# {{-     writeToStdout (printf "❌ '%s' is an invalid hostname\n" $answer) -}}
-# {{-     if eq $i 98 -}}
-# {{-       writeToStdout "❌ ERROR: maximum tries exceeded\n" -}}
-# {{-       exit 1 -}}
-# {{-     end -}}
-# {{-   end -}}
-# {{- end -}}
-
-# {{- $ssh_keyfile := joinPath .chezmoi.homeDir (printf ".ssh/id_%s_%s" $ssh_algorithm $hostname) -}}
-# {{- if $interactive -}}
-# {{-   writeToStdout (printf "✅ SSH key filename set as '%s'\n" $ssh_keyfile) -}}
-# {{- end -}}
-
-# {{- $age_keyfile := or (env "AGE_KEY_FILE") (joinPath .chezmoi.homeDir (printf ".ssh/age_key_%s" $hostname)) -}}
-# {{- if $interactive -}}
-# {{-   writeToStdout (printf "✅ Age key filename set as '%s'\n" $age_keyfile) -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "github") (hasKey .github "token") -}}
-# {{-   $github_token = .github.token -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ What is GitHub Token (If not set, you will be prompted to authenticate)" -}}
-# {{-   $answer := "" -}}
-# {{-   if $github_token -}}
-# {{-     $answer = promptString $question $github_token -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $github_token = $answer -}}
-# {{-   writeToStdout (printf "✅ GitHub Token set as '%s'\n" $github_token) -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "gnupg") (hasKey .gnupg "passphrase") -}}
-# {{-   $gpg_passphrase = .gnupg.passphrase -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ What passphrase do you want to use for your GPG key" -}}
-# {{-   $answer := "" -}}
-# {{-   if $gpg_passphrase -}}
-# {{-     $answer = promptString $question $gpg_passphrase -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $gpg_passphrase = $answer -}}
-# {{-   writeToStdout (printf "✅ GPG passphrase set as '%s'\n" $gpg_passphrase) -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "gnupg") (hasKey .gnupg "gitsign") -}}
-# {{-   $gpg_gitsign = .gnupg.gitsign -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ Do you want to use GPG to sign git commits globally" -}}
-# {{-   $gpg_gitsign = promptBool $question $gpg_gitsign -}}
-# {{-   if $gpg_gitsign -}}
-# {{-     writeToStdout "✅ Git commits will be signed by GPG\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "✅ Git comiits will not be signed by GPG\n" -}}
-# {{-   end -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "workspace") (hasKey .workspace "name") -}}
-# {{-   $workspace_name = .workspace.name -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ What name do you want to use as workspace root directory" -}}
-# {{-   $answer := "" -}}
-# {{-   if $workspace_name -}}
-# {{-     $answer = promptString $question $workspace_name -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $workspace_name = $answer -}}
-# {{-   if $symlink_to_home -}}
-# {{-     $workspace_root := joinPath .chezmoi.homeDir $workspace_name -}}
-# {{-   else -}}
-# {{-     $workspace_root := joinPath $workspace_location $workspace_name -}}
-# {{-   end -}}
-# {{-   writeToStdout (printf "✅ Worksapce root set as '%s'\n" $workspace_root) -}}
-# {{- end -}}
-
-# {{- if ne $wsl true -}}
-# {{- if and (hasKey . "workspace") (hasKey .workspace "location") -}}
-# {{-   $workspace_location = .workspace.location -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ Where do you want to put your workspace" -}}
-# {{-   $answer := "" -}}
-# {{-   if $workspace_location -}}
-# {{-     $answer = promptString $question $workspace_location -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $workspace_location = $answer -}}
-# {{-   writeToStdout (printf "✅ Worksapce location set as '%s'\n" $workspace_location) -}}
-# {{- end -}}
-# {{- end -}}
-
-# {{- if not $sudoer -}}
-# {{-   $symlink_colab_workspace := false -}}
-# {{-   if $interactive -}}
-# {{-     writeToStdout "✅ Colab workspace will not be symlinked\n" -}}
-# {{-   end -}}
-# {{- else -}}
-# {{- if and (hasKey . "workspace") (hasKey .workspace "symlink_colab_workspace") -}}
-# {{-   $symlink_colab_workspace = .workspace.symlink_colab_workspace -}}
-# {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ Do you want to symlink workspace to colab default google drive directory to maintain persistence across sessions" -}}
-# {{-   $symlink_colab_workspace = promptBool $question $symlink_colab_workspace -}}
-# {{-   if $symlink_colab_workspace -}}
-# {{-     writeToStdout "✅ Colab workspace will be symlinked to workspace root\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "✅ Colab workspace will not be symlinked\n" -}}
-# {{-   end -}}
-# {{- end -}}
 # {{- end -}}
 
 # {{- if $interactive -}}
@@ -551,6 +554,8 @@ data:
     age:
         identity_file: {{ $age_keyfile | quote }}
     gnupg:
+        home: {{ $gpg_homedir | quote }}
+        key_id_file: {{ $gpg_key_id_file | quote }}
         key_id: {{ $gpg_key_id | quote }}
         passphrase: {{ $gpg_passphrase | quote }}
         gitsign: {{ $gpg_gitsign }}
@@ -563,6 +568,14 @@ data:
         repo: {{ $dotdrop_repo | quote }}
         user_profile: {{ $dotdrop_user_profile | quote }}
         root_profile: "root"
+    stow:
+        enabled: {{ $use_stow }}
+        repo: {{ $stow_repo | quote }}
+        location: {{ $stow_location | quote }}
+        autorestic_config_path: {{ $stow_autorestic_config_path | quote }}
+    password_store:
+        enabled: {{ $use_passwordstore }}
+        repo: {{ $passwordstore_repo | quote }}
     microk8s:
         enabled: {{ $use_microk8s }}
     vault:

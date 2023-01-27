@@ -73,9 +73,14 @@ else
 fi
 
 # set eviroment variable GNUPGHOME to ~/.gnupg if not set
-GNUPGHOME=${GNUPGHOME:-$HOME/.gnupg}
+GNUPGHOME="{{ .gnupg.home }}"
 export GNUPGHOME="${GNUPGHOME}"
-GPG_KEY_ID_FILE="${GNUPGHOME}/.key_id"
+GPG_KEY_ID_FILE_OLD="${GNUPGHOME}/.key_id"
+GPG_KEY_ID_FILE="{{ .gnupg.key_id_file }}"
+if [ -f "${GPG_KEY_ID_FILE_OLD}" ]; then
+    log_task "Moving ${GPG_KEY_ID_FILE_OLD} to ${GPG_KEY_ID_FILE}"
+    c mv "${GPG_KEY_ID_FILE_OLD}" "${GPG_KEY_ID_FILE}"
+fi
 GPG_KEY_ID="{{ .gnupg.key_id }}"
 
 if [ -z "${GPG_KEY_ID}" ] && [ -f "${GPG_KEY_ID_FILE}" ]; then 
@@ -143,6 +148,8 @@ if command -v gh >/dev/null; then
     #     log_task "Adding GPG key to GitHub"
     #     c gh gpg-key add "${GPG_PUB_KEY_FILE}" || true
     # fi
+    # setup git authentication
+    c gh auth setup-git
 else
     log_info "gh is not installed"
 fi
@@ -153,6 +160,6 @@ if [ -f "${GPG_PUB_KEY_FILE}" ]; then
     log_manual_action "If you want to add GPG key to GitHub for signing commits, run the following: "
     log_manual_action " > gh gpg-key add ${GPG_PUB_KEY_FILE}"
 fi
-log_info "Done adding SSH and GPG keys to GitHub"
+log_info "Done setting up SSH, AGE, and GPG keys"
 # {{ end -}}
 # {{ end -}}
