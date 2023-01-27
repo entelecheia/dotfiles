@@ -126,11 +126,11 @@
 
 # {{- $sudo_check := "" -}}
 # {{- if eq .chezmoi.os "linux" -}}
-# {{-   $sudo_check = (output "sh" "-c" "test -n \"$(groups | grep -w 'sudo\|root')\" && echo sudo || echo false") | trim -}}
+# {{-   $sudo_check = (output "sh" "-c" "test -n \"$(groups | grep -w sudo)\" && echo sudo || echo false") | trim -}}
 # {{- else -}}
 # {{-   $sudo_check = (output "sh" "-c" "test -n \"$(groups | grep -w admin)\" && echo sudo || echo false") | trim -}}
 # {{- end -}}
-# {{- if eq $sudo_check "sudo" -}}
+# {{- if or (eq $sudo_check "sudo") (eq .chezmoi.username "root") -}}
 # {{-   $sudoer = true -}}
 # {{-   writeToStdout "✅ Sudo privileges enabled\n" -}}
 # {{- else -}}
