@@ -1,7 +1,9 @@
 #!/bin/bash
-# {{ if and (eq .chezmoi.os "linux" "darwin") (.system.is_sudoer) (.system.is_minimum | not) }}
+# {{ if and (eq .chezmoi.os "linux" "darwin") (.system.is_minimum | not) }}
 
 # {{ template "scripts-library" }}
+# {{ $cache := dict "chezmoi" .chezmoi }}
+# {{ template "read-versions-and-revisions-cache" $cache }}
 
 # The following line is for ShellCheck to correctly identify the above included library
 true || source ../.chezmoitemplates/scripts-library
@@ -21,13 +23,19 @@ if ! command -v serviceman >/dev/null; then
 fi
 
 # install mutagen
-if ! command -v metagen >/dev/null; then
+if ! command -v mutagen >/dev/null; then
   log_task "Installing mutagen"
   c webi mutagen@stable
-  c docker extension install mutagenio/docker-desktop-extension:latest --force || true 
+fi
+# install mutagen-compose from the archive:
+if ! command -v mutagen-compose >/dev/null; then
+  log_task "Installing mutagen-compose"
+  version="{{ template "get-github-latest-version" list "mutagen-io/mutagen-compose" $cache }}"
+  archive_url="https://github.com/mutagen-io/mutagen-compose/releases/download/v${version}/mutagen-compose_{{ .chezmoi.os }}_{{ .chezmoi.arch }}_v${version}.tar.gz"
+  c curl -L "${archive_url}" | tar -xz -C "${HOME}/.local/bin"
 fi
 
-# {{ if .system.use_1password -}}
+# {{ if and .system.use_1password  .system.is_sudoer }}
 # if op is not installed, then install 1password-cli
 if ! op --version &>/dev/null; then
   log_task "Installing 1Password"
@@ -52,7 +60,7 @@ if ! op --version &>/dev/null; then
 fi
 # {{ end }}
 
-# {{ if .system.use_microk8s -}}
+# {{ if and .system.is_sudoer .system.use_microk8s -}}
 # if snap is installed, then install microk8s
 if snap --version &>/dev/null; then
   package="microk8s"
