@@ -18,23 +18,47 @@ SSH_KEY_FILE="{{ .ssh.identity_file }}"
 SSH_PUB_KEY_FILE="${SSH_KEY_FILE}.pub"
 HOST="{{ .system.hostname }}"
 USER="{{ .chezmoi.username }}"
+EMAIL="{{ .email }}"
 ALGORITHM="{{ .ssh.algorithm }}"
 DATESTAMP=$(date +'%y.%m.%d')
-if [ ! -f "${SSH_KEY_FILE}" ]; then
+if [ ! -e "${SSH_KEY_FILE}" ]; then
     log_task "Generating SSH key"
-    ssh-keygen -t "${ALGORITHM}" -C "${USER}@${HOST}" -f "${SSH_KEY_FILE}" -N ""
+    ssh-keygen -t "${ALGORITHM}" -C "${EMAIL}" -f "${SSH_KEY_FILE}" -N ""
 fi
 
 # copy gitconfig from .config/git/gitconfig to .gitconfig
 cp "${HOME}/.config/git/gitconfig" "${HOME}/.gitconfig"
 
 GPGSIGN="{{ .gnupg.gitsign }}"
+ALLOWED_SIGNERS_FILE="${HOME}/.ssh/allowed_signers"
+AUTHORIZED_KEYS_FILE="${HOME}/.ssh/authorized_keys"
 # add ssh key to gitconfig for signing commits
-if [ -f "${SSH_PUB_KEY_FILE}" ]; then 
+if [ -e "${SSH_PUB_KEY_FILE}" ]; then 
     SSH_KEY_ID=$(cat "${SSH_PUB_KEY_FILE}")
     SSH_PUB_KEY_ALGORITHM=$(echo "${SSH_KEY_ID}" | cut -d' ' -f1)
     SSH_PUB_KEY_KEY=$(echo "${SSH_KEY_ID}" | cut -d' ' -f2)
     SSH_KEY_ID="${SSH_PUB_KEY_ALGORITHM} ${SSH_PUB_KEY_KEY}"
+    SSH_SIGNER="${EMAIL} ${SSH_KEY_ID}"
+    # add SSH_SIGNER to allowed_signers
+    if [ -e "${ALLOWED_SIGNERS_FILE}" ]; then
+        if ! grep -q "${SSH_SIGNER}" "${ALLOWED_SIGNERS_FILE}"; then
+            log_task "Adding SSH key to allowed_signers"
+            c echo "${SSH_SIGNER}" >> "${ALLOWED_SIGNERS_FILE}"
+        fi
+    else
+        log_task "Adding SSH key to allowed_signers"
+        c echo "${SSH_SIGNER}" > "${ALLOWED_SIGNERS_FILE}"
+    fi
+    # add SSH_KEY_ID to authorized_keys
+    if [ -e "${AUTHORIZED_KEYS_FILE}" ]; then
+        if ! grep -q "${SSH_KEY_ID}" "${AUTHORIZED_KEYS_FILE}"; then
+            log_task "Adding SSH key to authorized_keys"
+            c echo "${SSH_KEY_ID}" >> "${AUTHORIZED_KEYS_FILE}"
+        fi
+    else
+        log_task "Adding SSH key to authorized_keys"
+        c echo "${SSH_KEY_ID}" > "${AUTHORIZED_KEYS_FILE}"
+    fi
 fi
 if [ -n "${SSH_KEY_ID}" ]; then
     log_task "Adding SSH key to gitconfig for signing commits"
@@ -42,7 +66,7 @@ if [ -n "${SSH_KEY_ID}" ]; then
     if [[ "${GPGSIGN}" == "true" ]]; then
         c git config --global gpg.format ssh
         c git config --global commit.gpgsign true
-        c git config --global gpg.ssh.allowedSignersFile "${HOME}/.ssh/allowed_signers"
+        c git config --global gpg.ssh.allowedSignersFile "${ALLOWED_SIGNERS_FILE}"
     fi
 fi
 # {{ if eq .chezmoi.os "darwin" }}
@@ -59,14 +83,25 @@ fi
 # if age is not installed, skip
 if command -v age-keygen &> /dev/null; then
     AGE_KEY_FILE=${AGE_KEY_FILE:-"{{ .age.identity_file }}"}
-    if [ ! -f "${AGE_KEY_FILE}" ]; then
+    AUTHORIZED_AGE_KEYS_FILE="${HOME}/.ssh/authorized_age_keys"
+    if [ ! -e "${AGE_KEY_FILE}" ]; then
         log_task "Generating age key"
         c age-keygen -o "${AGE_KEY_FILE}"
     fi
-    if [ -f "${AGE_KEY_FILE}" ]; then
+    if [ -e "${AGE_KEY_FILE}" ]; then
         AGE_RECIPIENT=$(age-keygen -y "${AGE_KEY_FILE}")
         export AGE_RECIPIENT="${AGE_RECIPIENT}"
         log_info "AGE_RECIPIENT: ${AGE_RECIPIENT}"
+        # add AGE_RECIPIENT to authorized_age_keys
+        if [ -e "${AUTHORIZED_AGE_KEYS_FILE}" ]; then
+            if ! grep -q "${AGE_RECIPIENT}" "${AUTHORIZED_AGE_KEYS_FILE}"; then
+                log_task "Adding age key to authorized_age_keys"
+                c echo "${AGE_RECIPIENT}" >> "${AUTHORIZED_AGE_KEYS_FILE}"
+            fi
+        else
+            log_task "Adding age key to authorized_age_keys"
+            c echo "${AGE_RECIPIENT}" > "${AUTHORIZED_AGE_KEYS_FILE}"
+        fi
     fi
 else
     log_manual_action "Install age to generate age key"
@@ -77,7 +112,7 @@ GNUPGHOME="{{ .gnupg.home }}"
 export GNUPGHOME="${GNUPGHOME}"
 GPG_KEY_ID_FILE_OLD="${GNUPGHOME}/.key_id"
 GPG_KEY_ID_FILE="{{ .gnupg.key_id_file }}"
-if [ -f "${GPG_KEY_ID_FILE_OLD}" ]; then
+if [ -e "${GPG_KEY_ID_FILE_OLD}" ]; then
     log_task "Moving ${GPG_KEY_ID_FILE_OLD} to ${GPG_KEY_ID_FILE}"
     c mv "${GPG_KEY_ID_FILE_OLD}" "${GPG_KEY_ID_FILE}"
 fi
@@ -135,14 +170,11 @@ log_info "GPG key ID: ${GPG_KEY_ID}"
 # fi
 
 # "Adding SSH & GPG keys to GitHub after login"
-PUB_SSH_KEY_FILE="${SSH_KEY_FILE}.pub"
-GPG_PUB_KEY_FILE="${GNUPGHOME}/${GPG_KEY_ID}.pub"
-
 # {{ if .github.username }}
 if command -v gh >/dev/null; then
-    if [ -f "${PUB_SSH_KEY_FILE}" ]; then
+    if [ -e "${SSH_PUB_KEY_FILE}" ]; then
         log_task "Adding SSH key to GitHub"
-        c gh ssh-key add "${PUB_SSH_KEY_FILE}" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}" || true
+        c gh ssh-key add "${SSH_PUB_KEY_FILE}" --title "${USER}@${HOST} ${ALGORITHM} ${DATESTAMP}" || true
     fi
     # if [ -f "${GPG_PUB_KEY_FILE}" ]; then
     #     log_task "Adding GPG key to GitHub"
@@ -156,6 +188,8 @@ fi
 
 log_manual_action "If you want to add SSH key to GitHub for signing commits (github-cli does not support this yet), visit the following URL: "
 log_manual_action " > https://github.com/settings/ssh/new"
+
+GPG_PUB_KEY_FILE="${GNUPGHOME}/${GPG_KEY_ID}.pub"
 if [ -f "${GPG_PUB_KEY_FILE}" ]; then
     log_manual_action "If you want to add GPG key to GitHub for signing commits, run the following: "
     log_manual_action " > gh gpg-key add ${GPG_PUB_KEY_FILE}"

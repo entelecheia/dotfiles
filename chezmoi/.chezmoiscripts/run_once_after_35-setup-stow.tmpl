@@ -1,0 +1,42 @@
+#!/bin/bash
+# {{ if and (eq .chezmoi.os "linux" "darwin") (.system.is_sudoer) (.system.is_minimum | not) }}
+
+# {{ template "scripts-library" }}
+
+# The following line is for ShellCheck to correctly identify the above included library
+true || source ../.chezmoitemplates/scripts-library
+
+ensure_path_entry "${HOME}/.local/bin"
+
+# {{ if .stow.enabled }}
+
+# {{ if .stow.repo }}
+# Clone or update the stow repository (github auth is required for private repositories)
+STOW_REPO="{{ .stow.repo }}"
+STOW_REPO_DIR="{{ .stow.location }}"
+if [ ! -d "$STOW_REPO_DIR" ]; then
+  log_task "Clone stow repository"
+  c git clone "$STOW_REPO" "$STOW_REPO_DIR"
+else
+  if git -C "$STOW_REPO_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    log_task "Link and update stow repository"
+    c git -C "$STOW_REPO_DIR" remote set-url origin "$STOW_REPO"
+    c git -C "$STOW_REPO_DIR" pull --autostash --ff-only
+  fi
+fi
+# {{ end }}
+
+if stow --version &>/dev/null; then
+  log_task "Stow version: $(stow --version)"
+  for STOW_DIR in "${STOW_REPO_DIR}"/*; do
+    if [ -d "$STOW_DIR" ]; then
+      STOW_DIR_NAME="$(basename "$STOW_DIR")"
+      log_task "Stowing $STOW_DIR_NAME"
+      c stow -v -d "$STOW_REPO_DIR" -t "${HOME}" "$STOW_DIR_NAME"
+    fi
+  done
+fi
+
+# {{ end }}
+
+# {{ end }}

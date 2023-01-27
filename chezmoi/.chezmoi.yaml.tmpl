@@ -294,12 +294,12 @@
 # {{-   writeToStdout (printf "✅ SSH algorithm set as '%s'\n" $ssh_algorithm) -}}
 # {{- end -}}
 
-# {{- $ssh_keyfile := joinPath .chezmoi.homeDir (printf ".ssh/id_%s_%s" $ssh_algorithm $hostname) -}}
+# {{- $ssh_keyfile := joinPath .chezmoi.homeDir (printf ".ssh/id_%s_%s" $ssh_algorithm $github_username) -}}
 # {{- if $interactive -}}
 # {{-   writeToStdout (printf "✅ SSH key filename set as '%s'\n" $ssh_keyfile) -}}
 # {{- end -}}
 
-# {{- $age_keyfile := or (env "AGE_KEY_FILE") (joinPath .chezmoi.homeDir (printf ".ssh/age_key_%s" $hostname)) -}}
+# {{- $age_keyfile := or (env "AGE_KEY_FILE") (joinPath .chezmoi.homeDir (printf ".ssh/age_key_%s" $github_username)) -}}
 # {{- if $interactive -}}
 # {{-   writeToStdout (printf "✅ Age key filename set as '%s'\n" $age_keyfile) -}}
 # {{- end -}}
@@ -475,6 +475,50 @@
 # {{-   end -}}
 # {{-   $dotdrop_user_profile = $answer -}}
 # {{-   writeToStdout (printf "✅ dotdrop user profile set as '%s'\n" $dotdrop_user_profile) -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "stow") (hasKey .stow "enabled") -}}
+# {{-   $use_stow = .stow.enabled -}}
+# {{- end -}}
+# {{- if and $interactive ($minimum | not) -}}
+# {{-   $question := "❔ Do you want to use stow to manage your private dotfiles" -}}
+# {{-   $use_stow = promptBool $question $use_stow -}}
+# {{-   if $use_stow -}}
+# {{-     writeToStdout "✅ Stow enabled\n" -}}
+# {{-     writeToStdout (printf "✅ stow files location set as '%s'\n" $stow_location) -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ Stow disabled\n" -}}
+# {{-   end -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "stow") (hasKey .stow "repo") -}}
+# {{-   $stow_repo = .stow.repo -}}
+# {{- end -}}
+# {{- if and $interactive $use_stow -}}
+# {{-   $question := "❔ What is your stow files repository URL (ex: https://github.com/entelecheia/stowfiles.git)" -}}
+# {{-   $answer := "" -}}
+# {{-   if $stow_repo -}}
+# {{-     $answer = promptString $question $stow_repo -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $stow_repo = $answer -}}
+# {{-   writeToStdout (printf "✅ stow files repo set as '%s'\n" $stow_repo) -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "stow") (hasKey .stow "autorestic_config_path") -}}
+# {{-   $stow_autorestic_config_path = .stow.autorestic_config_path -}}
+# {{- end -}}
+# {{- if and $interactive $use_dotdrop -}}
+# {{-   $question := "❔ What is your autorestic config path to backup your stow files (ex: ~/.config/autorestic/stowfiles)" -}}
+# {{-   $answer := "" -}}
+# {{-   if $stow_autorestic_config_path -}}
+# {{-     $answer = promptString $question $stow_autorestic_config_path -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $stow_autorestic_config_path = $answer -}}
+# {{-   writeToStdout (printf "✅ stow autorestic config path set as '%s'\n" $stow_autorestic_config_path) -}}
 # {{- end -}}
 
 # {{- if and (hasKey . "docker") (hasKey .dotdrop "repo") -}}

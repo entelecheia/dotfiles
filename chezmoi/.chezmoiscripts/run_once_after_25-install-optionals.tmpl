@@ -35,6 +35,12 @@ if ! command -v mutagen-compose >/dev/null; then
   c curl -L "${archive_url}" | tar -xz -C "${HOME}/.local/bin"
 fi
 
+# install syncthing if not installed
+if ! command -v syncthing >/dev/null; then
+  log_task "Installing syncthing"
+  c webi syncthing 
+fi
+
 # {{ if and .op.enabled  .system.is_sudoer }}
 # if op is not installed, then install 1password-cli
 if ! op --version &>/dev/null; then

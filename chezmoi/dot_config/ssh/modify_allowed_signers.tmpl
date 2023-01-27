@@ -11,9 +11,9 @@ if [[ -z "${keys}" ]]; then
 fi
 
 # read from ${HOME}/.config/ssh/allowed_signers if it exists
-if [[ -f "${HOME}/.config/ssh/allowed_signers" ]]; then
-  keys="${keys}\n$(cat "${HOME}/.config/ssh/allowed_signers")"
-fi
+# if [[ -f "${HOME}/.config/ssh/allowed_signers" ]]; then
+#   keys="${keys}\n$(cat "${HOME}/.config/ssh/allowed_signers")"
+# fi
 
 SSH_PUB_KEY_FILE="{{ .ssh.identity_file }}.pub"
 EMAIL="{{ .email }}"

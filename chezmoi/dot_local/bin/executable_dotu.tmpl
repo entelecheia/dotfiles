@@ -22,6 +22,19 @@ if dotdrop --version &>/dev/null; then
 fi
 # {{ end }}
 
+# {{ if .stow.enabled }}
+if stow --version &>/dev/null; then
+  STOW_REPO_DIR="{{ .stow.location }}"
+  for STOW_DIR in "${STOW_REPO_DIR}"/*; do
+    if [ -d "$STOW_DIR" ]; then
+      STOW_DIR_NAME="$(basename "$STOW_DIR")"
+      log_task "Stowing $STOW_DIR_NAME"
+      stow -v -d "$STOW_REPO_DIR" -t "${HOME}" "$STOW_DIR_NAME"
+    fi
+  done
+fi
+# {{ end }}
+
 # DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
 # if [ -d "$DOCKERFILES_REPO_DIR" ]; then
 #     if git -C "$DOCKERFILES_REPO_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
