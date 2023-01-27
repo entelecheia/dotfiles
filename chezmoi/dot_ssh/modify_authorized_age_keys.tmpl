@@ -18,7 +18,7 @@ fi
 # if AGE_RECIPIENT is not set, read it from key file
 if [[ -z "${AGE_RECIPIENT:-}" ]]; then
   if command -v age-keygen &> /dev/null; then
-    AGE_KEY_FILE=${AGE_KEY_FILE:-"{{ .age.key_filename }}"}
+    AGE_KEY_FILE=${AGE_KEY_FILE:-"{{ .age.identity_file }}"}
     if [ -f "${AGE_KEY_FILE}" ]; then
       AGE_RECIPIENT=$(age-keygen -y "${AGE_KEY_FILE}")
       export AGE_RECIPIENT="${AGE_RECIPIENT}"

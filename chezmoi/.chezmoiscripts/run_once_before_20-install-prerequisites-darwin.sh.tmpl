@@ -13,7 +13,7 @@ readonly wanted_tabs=(
   homebrew/cask-fonts
   homebrew/core
   homebrew/services
-  # {{ if .system.use_vault }}
+  # {{ if .vault.enabled }}
   hashicorp/tap
   # {{ end }}
 )
@@ -48,7 +48,7 @@ readonly wanted_packages=(
   autorestic
   fzf
   helm
-  # {{ if .system.use_vault }}
+  # {{ if .vault.enabled }}
   hashicorp/tap/vault
   # {{ end }}
 )

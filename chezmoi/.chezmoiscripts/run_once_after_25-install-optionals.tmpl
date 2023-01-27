@@ -35,7 +35,7 @@ if ! command -v mutagen-compose >/dev/null; then
   c curl -L "${archive_url}" | tar -xz -C "${HOME}/.local/bin"
 fi
 
-# {{ if and .system.use_1password  .system.is_sudoer }}
+# {{ if and .op.enabled  .system.is_sudoer }}
 # if op is not installed, then install 1password-cli
 if ! op --version &>/dev/null; then
   log_task "Installing 1Password"
@@ -60,7 +60,7 @@ if ! op --version &>/dev/null; then
 fi
 # {{ end }}
 
-# {{ if and .system.is_sudoer .system.use_microk8s -}}
+# {{ if and .system.is_sudoer .microk8s.enabled -}}
 # if snap is installed, then install microk8s
 if snap --version &>/dev/null; then
   package="microk8s"
@@ -79,7 +79,7 @@ elif brew --version &>/dev/null; then
 fi
 # {{ end }}
 
-# {{ if .system.use_dotdrop }}
+# {{ if .dotdrop.enabled }}
 if ! command -v dotdrop >/dev/null; then
   log_task "Install dotdrop with pip3"
   c /usr/bin/pip3 install wheel

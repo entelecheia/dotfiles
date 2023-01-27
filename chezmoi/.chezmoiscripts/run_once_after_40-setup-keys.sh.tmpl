@@ -14,7 +14,7 @@ fi
 
 # Check if we have a GitHub SSH key
 # If not, generate one and add it to GitHub
-SSH_KEY_FILE="${HOME}/.ssh/{{ .ssh.key_filename }}"
+SSH_KEY_FILE="{{ .ssh.identity_file }}"
 SSH_PUB_KEY_FILE="${SSH_KEY_FILE}.pub"
 HOST="{{ .system.hostname }}"
 USER="{{ .chezmoi.username }}"
@@ -58,7 +58,7 @@ fi
 # Age encryption
 # if age is not installed, skip
 if command -v age-keygen &> /dev/null; then
-    AGE_KEY_FILE=${AGE_KEY_FILE:-"{{ .age.key_filename }}"}
+    AGE_KEY_FILE=${AGE_KEY_FILE:-"{{ .age.identity_file }}"}
     if [ ! -f "${AGE_KEY_FILE}" ]; then
         log_task "Generating age key"
         c age-keygen -o "${AGE_KEY_FILE}"

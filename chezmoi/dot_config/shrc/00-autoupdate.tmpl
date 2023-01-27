@@ -27,7 +27,7 @@ if [ -f "${GPG_KEY_ID_FILE}" ]; then
 fi
 
 # age key
-AGE_KEY_FILE="{{ .age.key_filename }}"
+AGE_KEY_FILE="{{ .age.identity_file }}"
 if [ -f "${AGE_KEY_FILE}" ]; then
   export AGE_KEY_FILE="${AGE_KEY_FILE}"
   export SOPS_AGE_KEY_FILE="${AGE_KEY_FILE}"
@@ -52,10 +52,10 @@ export USER_EMAIL="{{ .email }}"
 export SYSTEM_HOSTNAME="{{ .system.hostname }}"
 export APPLY_ROOTMOI="{{ .system.apply_rootmoi }}"
 export DOTFILES_VERBOSE="{{ .system.verbose }}"
-export DOTFILES_USE_DOTDROP="{{ .system.use_dotdrop }}"
-export DOTFILES_USE_1PASSWORD="{{ .system.use_1password }}"
-export DOTFILES_USE_VAULT="{{ .system.use_vault }}"
-export DOTFILES_USE_MICROK8S="{{ .system.use_microk8s }}"
+export DOTFILES_USE_DOTDROP="{{ .dotdrop.enabled }}"
+export DOTFILES_USE_1PASSWORD="{{ .op.enabled }}"
+export DOTFILES_USE_VAULT="{{ .vault.enabled }}"
+export DOTFILES_USE_MICROK8S="{{ .microk8s.enabled }}"
 export DOTDROP_USER_PROFILE="{{ .dotdrop.user_profile }}"
 export GITHUB_USERNAME="{{ .github.username }}"
 export DOCKER_USERNAME="{{ .docker.username }}"

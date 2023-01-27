@@ -39,7 +39,7 @@ log_manual_action "Log in manually, and add the SSH key to GitHub."
 # {{ end }}
 # {{ end -}}
 
-# {{ if .system.use_dotdrop }}
+# {{ if .dotdrop.enabled }}
 
 # Clone or update the dotdrop repository (github auth is required for private repositories)
 DOTDROP_REPO="{{- .dotdrop.repo }}"

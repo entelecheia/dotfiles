@@ -124,18 +124,16 @@
 # {{-   end -}}
 # {{- end -}}
 
-# {{- if and (hasKey . "system") (hasKey .system "is_sudoer") -}}
-# {{-   $sudoer = .system.is_sudoer -}}
+# {{- if eq .chezmoi.os "linux" -}}
+# {{-   $sudoer = (output "sh" "-c" "groups | grep -w sudo") | not | not -}}
+# {{- else -}}
+# {{-   $sudoer = (output "sh" "-c" "groups | grep -w admin") | not | not -}}
 # {{- end -}}
-# {{- if $interactive -}}
-# {{-   $question := "❔ Do you have sudo privileges" -}}
-# {{-   $sudoer = promptBool $question $sudoer -}}
-# {{-   if $sudoer -}}
-# {{-     writeToStdout "✅ Sudo privileges enabled\n" -}}
-# {{-   else -}}
-# {{-     $apply_rootmoi := false -}}
-# {{-     writeToStdout "✅ Sudo privileges disabled\n" -}}
-# {{-   end -}}
+# {{- if $sudoer -}}
+# {{-   writeToStdout "✅ Sudo privileges enabled\n" -}}
+# {{- else -}}
+# {{-   $apply_rootmoi := false -}}
+# {{-   writeToStdout "✅ Sudo privileges disabled\n" -}}
 # {{- end -}}
 
 # {{- if eq .chezmoi.os "darwin" -}}
@@ -160,8 +158,8 @@
 # {{-   end -}}
 # {{- end -}}
 
-# {{- if and (hasKey . "system") (hasKey .system "use_1password") -}}
-# {{-   $use_1password = .system.use_1password -}}
+# {{- if and (hasKey . "op") (hasKey .op "enabled") -}}
+# {{-   $use_1password = .op.enabled -}}
 # {{- end -}}
 # {{- if and $interactive $sudoer -}}
 # {{-   $question := "❔ Do you want to use 1password for secrets" -}}
@@ -173,8 +171,8 @@
 # {{-   end -}}
 # {{- end -}}
 
-# {{- if and (hasKey . "system") (hasKey .system "use_vault") -}}
-# {{-   $use_vault = .system.use_vault -}}
+# {{- if and (hasKey . "vault") (hasKey .vault "enabled") -}}
+# {{-   $use_vault = .vault.enabled -}}
 # {{- end -}}
 # {{- if and $interactive $sudoer -}}
 # {{-   $question := "❔ Do you want to use vault for secrets" -}}
@@ -186,8 +184,8 @@
 # {{-   end -}}
 # {{- end -}}
 
-# {{- if and (hasKey . "system") (hasKey .system "use_microk8s") -}}
-# {{-   $use_microk8s = .system.use_microk8s -}}
+# {{- if and (hasKey . "microk8s") (hasKey .microk8s "enabled") -}}
+# {{-   $use_microk8s = .microk8s.enabled -}}
 # {{- end -}}
 # {{- if and $interactive $sudoer -}}
 # {{-   $question := "❔ Do you want to use MicroK8s for Kubernetes" -}}
@@ -280,8 +278,8 @@
 # {{-   end -}}
 # {{- end -}}
 
-# {{- if and (hasKey . "system") (hasKey .system "use_dotdrop") -}}
-# {{-   $use_dotdrop = .system.use_dotdrop -}}
+# {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "enabled") -}}
+# {{-   $use_dotdrop = .dotdrop.enabled -}}
 # {{- end -}}
 # {{- if $interactive -}}
 # {{-   $question := "❔ Do you want to use dotdrop to manage your private dotfiles" -}}
@@ -394,7 +392,7 @@
 # {{-   end -}}
 # {{- end -}}
 
-# {{- $ssh_keyfile := printf "id_%s_%s" $ssh_algorithm $hostname -}}
+# {{- $ssh_keyfile := joinPath .chezmoi.homeDir (printf ".ssh/id_%s_%s" $ssh_algorithm $hostname) -}}
 # {{- if $interactive -}}
 # {{-   writeToStdout (printf "✅ SSH key filename set as '%s'\n" $ssh_keyfile) -}}
 # {{- end -}}
@@ -541,19 +539,15 @@ data:
         is_interactive: {{ $interactive }}
         is_sudoer: {{ $sudoer }}
         apply_rootmoi: {{ and $apply_rootmoi $sudoer }}
-        use_dotdrop: {{ $use_dotdrop }}
-        use_1password: {{ $use_1password }}
-        use_vault: {{ $use_vault }}
-        use_microk8s: {{ $use_microk8s }}
         uname_arch: {{ output "uname" "-m" | trim | quote }}
         cpu:
             cores: {{ $cpuCores }}
             threads: {{ $cpuThreads }}
     ssh:
         algorithm: {{ $ssh_algorithm | quote }}
-        key_filename: {{ $ssh_keyfile | quote }}
+        identity_file: {{ $ssh_keyfile | quote }}
     age:
-        key_filename: {{ $age_keyfile | quote }}
+        identity_file: {{ $age_keyfile | quote }}
     gnupg:
         key_id: {{ $gpg_key_id | quote }}
         passphrase: {{ $gpg_passphrase | quote }}
@@ -563,9 +557,16 @@ data:
         token: {{ $github_token | quote }}
         clones: {{ $github_clones | quote }}
     dotdrop:
+        enabled: {{ $use_dotdrop }}
         repo: {{ $dotdrop_repo | quote }}
         user_profile: {{ $dotdrop_user_profile | quote }}
         root_profile: "root"
+    microk8s:
+        enabled: {{ $use_microk8s }}
+    vault:
+        enabled: {{ $use_vault }}
+    op:
+        enabled: {{ $use_1password }}
     docker:
         repo: {{ $dockerfiles_repo | quote }}
         username: {{ $docker_username | quote }}
