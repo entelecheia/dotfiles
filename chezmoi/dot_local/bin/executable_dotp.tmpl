@@ -21,3 +21,11 @@ if dotdrop --version &>/dev/null; then
   c git -C "$DOTDROP_REPO" commit -a -m "$COMMIT_MESSAGE" && git -C "$DOTDROP_REPO" push
 fi
 # {{ end }}
+
+# {{ if and .stow.enabled .stow.repo}}
+STOW_REPO_DIR="{{ .stow.location }}"
+if [ -d "$STOW_REPO_DIR" ]; then
+  log_task "Committing stow changes and pushing to remote"
+  c git -C "$STOW_REPO_DIR" add -A && git -C "$STOW_REPO_DIR" commit -a -m "$COMMIT_MESSAGE" && git -C "$STOW_REPO_DIR" push
+fi
+# {{ end }}
