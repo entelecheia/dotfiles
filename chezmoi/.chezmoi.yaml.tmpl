@@ -50,6 +50,20 @@
 # {{- end -}}
 # {{- $gpg_key_id := env "GPG_KEY_ID" -}}
 
+# {{- $sudoer := true -}}
+# {{- $sudo_check := "" -}}
+# {{- if eq .chezmoi.os "linux" -}}
+# {{-   $sudo_check = (output "sh" "-c" "test -n \"$(groups | grep -w sudo)\" && echo sudo || echo false") | trim -}}
+# {{- else -}}
+# {{-   $sudo_check = (output "sh" "-c" "test -n \"$(groups | grep -w admin)\" && echo sudo || echo false") | trim -}}
+# {{- end -}}
+# {{- if or (eq $sudo_check "sudo") (eq .chezmoi.username "root") -}}
+# {{-   $sudoer = true -}}
+# {{- else -}}
+# {{-   $sudoer = false -}}
+# {{-   $apply_rootmoi := false -}}
+# {{- end -}}
+
 # {{- writeToStdout "---\n" -}}
 # {{- writeToStdout "🖥️  Information found from your environment:\n\n" -}}
 # {{- writeToStdout (printf "👤  Name: %s\n" $name) -}}
@@ -57,6 +71,7 @@
 # {{- writeToStdout (printf "🏠  Hostname: %s\n" $hostname) -}}
 # {{- writeToStdout (printf "🐙  GitHub username: %s\n" $github_username) -}}
 # {{- writeToStdout (printf "📁  Workspace location: %s\n" $workspace_location) -}}
+# {{- writeToStdout (printf "🔐  Have sudo access: %t\n" $sudoer) -}}
 # {{- if and (eq .chezmoi.os "linux") -}}
 # {{- writeToStdout (printf "🦸  Apply rootmoi: %t\n" $apply_rootmoi) -}}
 # {{- end -}}
@@ -80,7 +95,6 @@
 # {{- $gpg_key_id := "" -}}
 # {{- $gpg_passphrase := "" -}}
 # {{- $gpg_gitsign := false -}}
-# {{- $sudoer := true -}}
 # {{- $github_clones := "" -}}
 # {{- $auto_update := false -}}
 
@@ -122,21 +136,6 @@
 # {{-   else -}}
 # {{-     writeToStdout "✅ Verbose mode disabled\n" -}}
 # {{-   end -}}
-# {{- end -}}
-
-# {{- $sudo_check := "" -}}
-# {{- if eq .chezmoi.os "linux" -}}
-# {{-   $sudo_check = (output "sh" "-c" "test -n \"$(groups | grep -w sudo)\" && echo sudo || echo false") | trim -}}
-# {{- else -}}
-# {{-   $sudo_check = (output "sh" "-c" "test -n \"$(groups | grep -w admin)\" && echo sudo || echo false") | trim -}}
-# {{- end -}}
-# {{- if or (eq $sudo_check "sudo") (eq .chezmoi.username "root") -}}
-# {{-   $sudoer = true -}}
-# {{-   writeToStdout "✅ Sudo privileges enabled\n" -}}
-# {{- else -}}
-# {{-   $sudoer = false -}}
-# {{-   $apply_rootmoi := false -}}
-# {{-   writeToStdout "✅ Sudo privileges disabled\n" -}}
 # {{- end -}}
 
 # {{- if eq .chezmoi.os "darwin" -}}
