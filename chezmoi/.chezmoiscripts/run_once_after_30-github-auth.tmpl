@@ -40,7 +40,6 @@ log_manual_action "Log in manually, and add the SSH key to GitHub."
 # {{ end -}}
 
 # {{ if .dotdrop.enabled }}
-
 # Clone or update the dotdrop repository (github auth is required for private repositories)
 DOTDROP_REPO="{{- .dotdrop.repo }}"
 DOTDROP_LOCAL_REPO="{{- .chezmoi.workingTree }}/dotdrop"
@@ -77,7 +76,6 @@ if dotdrop --version &>/dev/null; then
   log_task "Updating dotfiles for dotdrop"
   dotdrop --cfg="${HOME}/.config/dotdrop/config-user.yaml" -p "{{ .dotdrop.user_profile }}" install
 fi
-
 # {{ end }}
 
 # {{ end -}}
