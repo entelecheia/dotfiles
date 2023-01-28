@@ -21,7 +21,7 @@ if [[ ! -f "$CONFIG_FILE" ]]; then
 fi
 if command -v autorestic >/dev/null; then
   log_info "Restoring dotfiles from backup"
-  c autorestic -c "$CONFIG_FILE" restore -l "$LOCATION" --to "$RESTORE_TO"
+  c autorestic -c "$CONFIG_FILE" restore -l "$LOCATION" --to "$RESTORE_TO" --force || true
 else
   log_info "autorestic is not installed"
 fi
