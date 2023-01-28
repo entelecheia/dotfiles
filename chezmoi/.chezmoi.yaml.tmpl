@@ -62,7 +62,7 @@
 # {{- if eq (env "DOTFILES_USE_AUTORESTIC") "true" "True" "TRUE" "1" -}}
 # {{-   $use_autorestic = true -}}
 # {{- end -}}
-# {{- $autorestic_config_file := joinPath .chezmoi.homeDir ".config/autorestic/autorestic.yaml" -}}
+# {{- $autorestic_config_file := joinPath .chezmoi.homeDir ".config/autorestic/autorestic.yml" -}}
 # {{- $autorestic_backup_dotfiles := true -}}
 # {{- $autorestic_restore_dotfiles := true -}}
 # {{- $autorestic_location := "dotfiles" -}}
@@ -483,12 +483,6 @@
 # {{-   writeToStdout (printf "✅ dotdrop user profile set as '%s'\n" $dotdrop_user_profile) -}}
 # {{- end -}}
 
-# {{- if and (hasKey . "autorestic") (hasKey .autorestic "enabled") -}}
-# {{-   $use_autorestic = .autorestic.enabled -}}
-# {{- end -}}
-# {{- if and (hasKey . "autorestic") (hasKey .autorestic "config_file") -}}
-# {{-   $autorestic_config_file = .autorestic.config_file -}}
-# {{- end -}}
 # {{- if and $interactive ($minimum | not) -}}
 # {{-   $question := "❔ Do you want to use autorestic to backup your files" -}}
 # {{-   $use_autorestic = promptBool $question $use_autorestic -}}
