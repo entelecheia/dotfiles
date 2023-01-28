@@ -20,15 +20,14 @@ fi
 GNUPGHOME="{{ .gnupg.home }}"
 export GNUPGHOME="${GNUPGHOME}"
 GPG_KEY_ID_FILE="{{ .gnupg.key_id_file }}"
-
-if [ -f "${GPG_KEY_ID_FILE}" ]; then 
+if [ -e "${GPG_KEY_ID_FILE}" ]; then 
   GPG_KEY_ID=$(cat "${GPG_KEY_ID_FILE}")
   export GPG_KEY_ID="${GPG_KEY_ID}"
 fi
 
 # age key
 AGE_KEY_FILE="{{ .age.identity_file }}"
-if [ -f "${AGE_KEY_FILE}" ]; then
+if [ -e "${AGE_KEY_FILE}" ]; then
   export AGE_KEY_FILE="${AGE_KEY_FILE}"
   export SOPS_AGE_KEY_FILE="${AGE_KEY_FILE}"
   export PASSAGE_IDENTITIES_FILE="${AGE_KEY_FILE}"
@@ -37,7 +36,7 @@ if [ -f "${AGE_KEY_FILE}" ]; then
     export AGE_RECIPIENT="${AGE_RECIPIENT}"
   fi
 fi
-if [[ -f "${HOME}/.ssh/authorized_age_keys" ]]; then
+if [[ -e "${HOME}/.ssh/authorized_age_keys" ]]; then
   AGE_RECIPIENTS="$(sed -n '/^age1/p' "${HOME}/.ssh/authorized_age_keys" | sort -u | sed 'H;1h;$!d;x;y/\n/,/')"
   export AGE_RECIPIENTS="${AGE_RECIPIENTS}"
   export SOPS_AGE_RECIPIENTS="${AGE_RECIPIENTS}"
@@ -54,6 +53,8 @@ export APPLY_ROOTMOI="{{ .system.apply_rootmoi }}"
 export DOTFILES_VERBOSE="{{ .system.verbose }}"
 export DOTFILES_USE_AUTORESTIC="{{ .autorestic.enabled }}"
 export DOTFILES_USE_DOTDROP="{{ .dotdrop.enabled }}"
+export DOTFILES_USE_PASS="{{ .pass.enabled }}"
+export DOTFILES_USE_PASSAGE="{{ .passage.enabled }}"
 export DOTFILES_USE_1PASSWORD="{{ .op.enabled }}"
 export DOTFILES_USE_VAULT="{{ .vault.enabled }}"
 export DOTFILES_USE_MICROK8S="{{ .microk8s.enabled }}"

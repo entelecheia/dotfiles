@@ -36,6 +36,18 @@
 # {{- if eq (env "DOTFILES_USE_DOTDROP") "true" "True" "TRUE" "1" -}}
 # {{-   $use_dotdrop = true -}}
 # {{- end -}}
+# {{- $use_pass := false -}}
+# {{- if eq (env "DOTFILES_USE_PASS") "true" "True" "TRUE" "1" -}}
+# {{-   $use_pass = true -}}
+# {{- end -}}
+# {{- $pass_store_dir := or (env "PASSWORD_STORE_DIR") (joinPath .chezmoi.homeDir ".password-store") -}}
+# {{- $pass_repo := or (env "PASS_REPO") "" -}}
+# {{- $use_passage := false -}}
+# {{- if eq (env "DOTFILES_USE_PASSAGE") "true" "True" "TRUE" "1" -}}
+# {{-   $use_passage = true -}}
+# {{- end -}}
+# {{- $passage_store_dir := or (env "PASSAGE_DIR") (joinPath .chezmoi.homeDir ".passage") -}}
+# {{- $passage_repo := or (env "PASSAGE_REPO") "" -}}
 # {{- $use_1password := false -}}
 # {{- if eq (env "DOTFILES_USE_1PASSWORD") "true" "True" "TRUE" "1" -}}
 # {{-   $use_1password = true -}}
@@ -98,8 +110,8 @@
 # {{- if $minimum | not -}}
 # {{- writeToStdout (printf "📦  Use autorestic: %t\n" $use_autorestic) -}}
 # {{- writeToStdout (printf "🔖  Use dotdrop: %t\n" $use_dotdrop) -}}
+# {{- writeToStdout (printf "🔒  Use pass: %t\n" $use_pass) -}}
 # {{- writeToStdout (printf "🔑  Use 1password: %t\n" $use_1password) -}}
-# {{- writeToStdout (printf "🔒  Use vault: %t\n" $use_vault) -}}
 # {{- writeToStdout (printf "🚀  Use microk8s: %t\n" $use_microk8s) -}}
 # {{- end -}}
 # {{- writeToStdout (printf "🔬  Verbose: %t\n" $verbose) -}}
@@ -344,7 +356,7 @@
 # {{-   $gpg_gitsign = .gnupg.gitsign -}}
 # {{- end -}}
 # {{- if and $interactive ($minimum | not) -}}
-# {{-   $question := "❔ Do you want to use GPG to sign git commits globally" -}}
+# {{-   $question := "❔ Do you want to use GPG(or SSH) to sign git commits globally" -}}
 # {{-   $gpg_gitsign = promptBool $question $gpg_gitsign -}}
 # {{-   if $gpg_gitsign -}}
 # {{-     writeToStdout "✅ Git commits will be signed by GPG\n" -}}
@@ -353,8 +365,34 @@
 # {{-   end -}}
 # {{- end -}}
 
-# {{- if and (hasKey . "workspace") (hasKey .workspace "name") -}}
-# {{-   $workspace_name = .workspace.name -}}
+# {{- if and (hasKey . "github") (hasKey .github "clones") -}}
+# {{-   $github_clones = .github.clones -}}
+# {{- end -}}
+# {{- if and $interactive ($minimum | not) -}}
+# {{-   $question := "❔ What are your GitHub repositories to clone (input as comma separated list, ex: entelecheia/devcon,entelecheia/ekorpkit)" -}}
+# {{-   $answer := "" -}}
+# {{-   if $github_clones -}}
+# {{-     $answer = promptString $question $github_clones -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $github_clones = $answer -}}
+# {{-   writeToStdout (printf "✅ GitHub repositories to clone set as '%s'\n" $github_clones) -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "docker") (hasKey .dotdrop "repo") -}}
+# {{-   $dockerfiles_repo = .docker.repo -}}
+# {{- end -}}
+# {{- if and $interactive ($minimum | not) -}}
+# {{-   $question := "❔ What is your dockerfiles repository URL (ex: https://github.com/entelecheia/dockerfiles.git)" -}}
+# {{-   $answer := "" -}}
+# {{-   if $dockerfiles_repo -}}
+# {{-     $answer = promptString $question $dockerfiles_repo -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $dockerfiles_repo = $answer -}}
+# {{-   writeToStdout (printf "✅ dockerfiles repo set as '%s'\n" $dockerfiles_repo) -}}
 # {{- end -}}
 
 # {{- if $wsl | not -}}
@@ -400,6 +438,121 @@
 # {{- end -}}
 # {{- end -}}
 
+# {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "enabled") -}}
+# {{-   $use_dotdrop = .dotdrop.enabled -}}
+# {{- end -}}
+# {{- if and $interactive ($minimum | not) -}}
+# {{-   $question := "❔ Do you want to use dotdrop to manage your private dotfiles" -}}
+# {{-   $use_dotdrop = promptBool $question $use_dotdrop -}}
+# {{-   if $use_dotdrop -}}
+# {{-     writeToStdout "✅ Dotdrop enabled\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ Dotdrop disabled\n" -}}
+# {{-   end -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "repo") -}}
+# {{-   $dotdrop_repo = .dotdrop.repo -}}
+# {{- end -}}
+# {{- if and $interactive $use_dotdrop -}}
+# {{-   $question := "❔ What is your dotdrop files repository URL (ex: https://github.com/entelecheia/dotdrop-files.git)" -}}
+# {{-   $answer := "" -}}
+# {{-   if $dotdrop_repo -}}
+# {{-     $answer = promptString $question $dotdrop_repo -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $dotdrop_repo = $answer -}}
+# {{-   $use_dotdrop = $answer | not | not -}}
+# {{-   writeToStdout (printf "✅ dotdrop files repo set as '%s'\n" $dotdrop_repo) -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "user_profile") -}}
+# {{-   $dotdrop_user_profile = .dotdrop.user_profile -}}
+# {{- end -}}
+# {{- if and $interactive $use_dotdrop -}}
+# {{-   $question := "❔ What is your dotdrop user profile (ex: hostname)" -}}
+# {{-   $answer := "" -}}
+# {{-   if $dotdrop_user_profile -}}
+# {{-     $answer = promptString $question $dotdrop_user_profile -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $dotdrop_user_profile = $answer -}}
+# {{-   writeToStdout (printf "✅ dotdrop user profile set as '%s'\n" $dotdrop_user_profile) -}}
+# {{- end -}}
+
+# {{- if and $interactive ($minimum | not) -}}
+# {{-   $question := "❔ Do you want to use autorestic to backup your files" -}}
+# {{-   $use_autorestic = promptBool $question $use_autorestic -}}
+# {{-   if $use_autorestic -}}
+# {{-     writeToStdout "✅ autorestic enabled\n" -}}
+# {{-     writeToStdout (printf "✅ autorestic config path set as '%s'\n" $autorestic_config_file) -}}
+# {{-     writeToStdout (printf "✅ autorestic location for dotfiles set as '%s'\n" $autorestic_location) -}}
+# {{-     writeToStdout (printf "✅ autorestic restores dotfiles to '%s'\n" $autorestic_restore_to) -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ autorestic disabled\n" -}}
+# {{-   end -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "pass") (hasKey .pass "enabled") -}}
+# {{-   $use_pass = .pass.enabled -}}
+# {{- end -}}
+# {{- if and $interactive ($minimum | not) -}}
+# {{-   $question := "❔ Do you want to use pass to manage your passwords" -}}
+# {{-   $use_pass = promptBool $question $use_pass -}}
+# {{-   if $use_pass -}}
+# {{-     writeToStdout "✅ pass enabled\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ pass disabled\n" -}}
+# {{-   end -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "pass") (hasKey .pass "repo") -}}
+# {{-   $pass_repo = .pass.repo -}}
+# {{- end -}}
+# {{- if and $interactive $use_pass -}}
+# {{-   $question := "❔ What is your password store repository URL (ex: https://github.com/username/.password-store.git)" -}}
+# {{-   $answer := "" -}}
+# {{-   if $pass_repo -}}
+# {{-     $answer = promptString $question $pass_repo -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $pass_repo = $answer -}}
+# {{-   $use_pass = $answer | not | not -}}
+# {{-   writeToStdout (printf "✅ password store repo set as '%s'\n" $pass_repo) -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "passage") (hasKey .passage "enabled") -}}
+# {{-   $use_passage = .passage.enabled -}}
+# {{- end -}}
+# {{- if and $interactive ($minimum | not) -}}
+# {{-   $question := "❔ Do you want to use passage to manage your secrets" -}}
+# {{-   $use_passage = promptBool $question $use_passage -}}
+# {{-   if $use_passage -}}
+# {{-     writeToStdout "✅ passage enabled\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ passage disabled\n" -}}
+# {{-   end -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "passage") (hasKey .passage "repo") -}}
+# {{-   $passage_repo = .passage.repo -}}
+# {{- end -}}
+# {{- if and $interactive $use_passage -}}
+# {{-   $question := "❔ What is your passage repository URL (ex: https://github.com/usename/.passage.git)" -}}
+# {{-   $answer := "" -}}
+# {{-   if $passage_repo -}}
+# {{-     $answer = promptString $question $passage_repo -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $passage_repo = $answer -}}
+# {{-   $use_passage = $answer | not | not -}}
+# {{-   writeToStdout (printf "✅ passage repo set as '%s'\n" $passage_repo) -}}
+# {{- end -}}
+
 # {{- if and (hasKey . "op") (hasKey .op "enabled") -}}
 # {{-   $use_1password = .op.enabled -}}
 # {{- end -}}
@@ -437,93 +590,6 @@
 # {{-   else -}}
 # {{-     writeToStdout "✅ MicroK8s disabled\n" -}}
 # {{-   end -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "enabled") -}}
-# {{-   $use_dotdrop = .dotdrop.enabled -}}
-# {{- end -}}
-# {{- if and $interactive ($minimum | not) -}}
-# {{-   $question := "❔ Do you want to use dotdrop to manage your private dotfiles" -}}
-# {{-   $use_dotdrop = promptBool $question $use_dotdrop -}}
-# {{-   if $use_dotdrop -}}
-# {{-     writeToStdout "✅ Dotdrop enabled\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "✅ Dotdrop disabled\n" -}}
-# {{-   end -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "repo") -}}
-# {{-   $dotdrop_repo = .dotdrop.repo -}}
-# {{- end -}}
-# {{- if and $interactive $use_dotdrop -}}
-# {{-   $question := "❔ What is your dotdrop files repository URL (use your repo by forking https://github.com/entelecheia/dotdrop-files.git)" -}}
-# {{-   $answer := "" -}}
-# {{-   if $dotdrop_repo -}}
-# {{-     $answer = promptString $question $dotdrop_repo -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $dotdrop_repo = $answer -}}
-# {{-   $use_dotdrop = $answer | not | not -}}
-# {{-   writeToStdout (printf "✅ dotdrop files repo set as '%s'\n" $dotdrop_repo) -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "user_profile") -}}
-# {{-   $dotdrop_user_profile = .dotdrop.user_profile -}}
-# {{- end -}}
-# {{- if and $interactive $use_dotdrop -}}
-# {{-   $question := "❔ What is your dotdrop user profile (ex: hostname)" -}}
-# {{-   $answer := "" -}}
-# {{-   if $dotdrop_user_profile -}}
-# {{-     $answer = promptString $question $dotdrop_user_profile -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $dotdrop_user_profile = $answer -}}
-# {{-   writeToStdout (printf "✅ dotdrop user profile set as '%s'\n" $dotdrop_user_profile) -}}
-# {{- end -}}
-
-# {{- if and $interactive ($minimum | not) -}}
-# {{-   $question := "❔ Do you want to use autorestic to backup your files" -}}
-# {{-   $use_autorestic = promptBool $question $use_autorestic -}}
-# {{-   if $use_autorestic -}}
-# {{-     writeToStdout "✅ autorestic enabled\n" -}}
-# {{-     writeToStdout (printf "✅ autorestic config path set as '%s'\n" $autorestic_config_file) -}}
-# {{-     writeToStdout (printf "✅ autorestic location for dotfiles set as '%s'\n" $autorestic_location) -}}
-# {{-     writeToStdout (printf "✅ autorestic restore dotfiles to '%s'\n" $autorestic_restore_to) -}}
-# {{-   else -}}
-# {{-     writeToStdout "✅ autorestic disabled\n" -}}
-# {{-   end -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "docker") (hasKey .dotdrop "repo") -}}
-# {{-   $dockerfiles_repo = .docker.repo -}}
-# {{- end -}}
-# {{- if and $interactive ($minimum | not) -}}
-# {{-   $question := "❔ What is your dockerfiles repository URL (ex: https://github.com/entelecheia/dockerfiles.git)" -}}
-# {{-   $answer := "" -}}
-# {{-   if $dockerfiles_repo -}}
-# {{-     $answer = promptString $question $dockerfiles_repo -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $dockerfiles_repo = $answer -}}
-# {{-   writeToStdout (printf "✅ dockerfiles repo set as '%s'\n" $dockerfiles_repo) -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "github") (hasKey .github "clones") -}}
-# {{-   $github_clones = .github.clones -}}
-# {{- end -}}
-# {{- if and $interactive ($minimum | not) -}}
-# {{-   $question := "❔ What are your GitHub repositories to clone (input as comma separated list, ex: entelecheia/devcon,entelecheia/ekorpkit)" -}}
-# {{-   $answer := "" -}}
-# {{-   if $github_clones -}}
-# {{-     $answer = promptString $question $github_clones -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $github_clones = $answer -}}
-# {{-   writeToStdout (printf "✅ GitHub repositories to clone set as '%s'\n" $github_clones) -}}
 # {{- end -}}
 
 # {{- if $interactive -}}
@@ -601,6 +667,14 @@ data:
         enabled: {{ $use_microk8s }}
     vault:
         enabled: {{ $use_vault }}
+    pass:
+        enabled: {{ $use_pass }}
+        store_dir: {{ $pass_store_dir | quote }}
+        repo: {{ $pass_repo | quote }}
+    passage:
+        enabled: {{ $use_passage }}
+        store_dir: {{ $passage_store_dir | quote }}
+        repo: {{ $passage_repo | quote }}
     op:
         enabled: {{ $use_1password }}
     docker:

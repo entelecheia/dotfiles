@@ -171,6 +171,7 @@ fi
 # {{ end }}
 
 log_info "GPG key ID: ${GPG_KEY_ID}"
+export GPG_KEY_ID="${GPG_KEY_ID}"
 # add gpg key to gitconfig
 # if [ -n "${GPG_KEY_ID}" ]; then
 #     log_task "Adding GPG key to gitconfig"
