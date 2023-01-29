@@ -119,6 +119,10 @@ fi
 PASSAGE_REPO="{{ .passage.repo }}"
 PASSAGE_DIR="{{ .passage.store_dir }}"
 export PASSAGE_DIR="${PASSAGE_DIR}"
+if [ ! -d "${PASSAGE_DIR}" ]; then
+    log_task "Creating ${PASSAGE_DIR}"
+    mkdir -p "${PASSAGE_DIR}"
+fi
 # if git is not initialized, then initialize git
 if ! git -C "${PASSAGE_DIR}" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     log_task "Initializing git"
