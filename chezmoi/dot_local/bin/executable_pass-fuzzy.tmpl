@@ -1,0 +1,13 @@
+#!/bin/bash
+set -eou pipefail
+# if no pass-name is passed, exit
+if [[ $# -eq 0 ]]; then
+  echo "Usage: pass-fuzzy [pass options] [pass-name]"
+  exit 1
+fi
+PREFIX="${PASS_STORE_DIR:-$HOME/.password-store}"
+FZF_DEFAULT_OPTS=""
+name="$(find "$PREFIX" -type f -name '*.gpg' | \
+  sed -e "s|$PREFIX/||" -e 's|\.gpg$||' | \
+  fzf --height 40% --reverse --no-multi)"
+pass "${@}" "$name"

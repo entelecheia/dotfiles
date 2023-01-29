@@ -1,0 +1,21 @@
+#!/bin/bash
+set -eou pipefail
+# {{ template "scripts-library" }}
+
+# sync from pass to passage
+log_task "Syncing from pass to passage"
+cd "${PASSWORD_STORE_DIR:-$HOME/.password-store}"
+while read -r -d "" passfile; do
+  name="${passfile#./}"; name="${name%.gpg}"
+  [[ -f "${PASSAGE_DIR:-$HOME/.passage/store}/$name.age" ]] && continue
+  pass "$name" | passage insert -m "$name" || { echo "Exisintg... Skip to insert $name"; continue; }
+done < <(find . -path '*/.git' -prune -o -iname '*.gpg' -print0)
+
+# sync from passage to pass
+log_task "Syncing from passage to pass"
+cd "${PASSAGE_DIR:-$HOME/.passage/store}"
+while read -r -d "" passagefile; do
+  name="${passagefile#./}"; name="${name%.age}"
+  [[ -f "${PASSWORD_STORE_DIR:-$HOME/.password-store}/$name.gpg" ]] && continue
+  passage "$name" | pass insert -m "$name" || { echo "Exisintg... Skip to insert $name"; continue; }
+done < <(find . -path '*/.git' -prune -o -iname '*.age' -print0)
