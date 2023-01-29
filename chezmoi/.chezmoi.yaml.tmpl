@@ -79,8 +79,6 @@
 # {{- $autorestic_restore_dotfiles := true -}}
 # {{- $autorestic_location := "dotfiles" -}}
 # {{- $autorestic_restore_to := joinPath .chezmoi.homeDir ".local/share/autorestic" -}}
-# {{- $use_passwordstore := true -}}
-# {{- $passwordstore_repo := "" -}}
 
 # {{- $sudoer := true -}}
 # {{- $sudo_check := "" -}}
@@ -660,9 +658,6 @@ data:
         backup_dotfiles: {{ $autorestic_backup_dotfiles }}
         restore_dotfiles: {{ $autorestic_restore_dotfiles }}
         restore_to: {{ $autorestic_restore_to | quote }}
-    password_store:
-        enabled: {{ $use_passwordstore }}
-        repo: {{ $passwordstore_repo | quote }}
     microk8s:
         enabled: {{ $use_microk8s }}
     vault:
