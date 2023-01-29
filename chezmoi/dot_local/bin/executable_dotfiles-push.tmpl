@@ -21,3 +21,24 @@ if dotdrop --version &>/dev/null; then
   c git -C "$DOTDROP_REPO" add -A && git -C "$DOTDROP_REPO" commit -a -m "$COMMIT_MESSAGE" && git -C "$DOTDROP_REPO" push
 fi
 # {{ end }}
+
+# {{ if .pass.enabled }}
+if pass --version &>/dev/null; then
+  log_task "Committing pass changes and pushing to remote"
+  c pass git push
+fi
+# {{ end }}
+
+# {{ if .passage.enabled }}
+if passage --version &>/dev/null; then
+  log_task "Committing passage changes and pushing to remote"
+  c passage git push
+fi
+# {{ end }}
+
+# {{ if .autorestic.enabled }}
+if autorestic --version &>/dev/null; then
+  log_task "Backing up dotfiles"
+  c dotfiles-backup
+fi
+# {{ end }}
