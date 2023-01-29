@@ -70,6 +70,6 @@ export WORKSPACE_ROOT="{{ .workspace.root }}"
 # auto-update dotfiles
 if [ "${DOTFILES_AUTO_UPDATE}" = "true" ]; then
   if [ -x "${HOME}/.local/bin/dotu" ]; then
-    "${HOME}/.local/bin/dotu" --force
+    "${HOME}/.local/bin/dotfiles-update" --force
   fi
 fi

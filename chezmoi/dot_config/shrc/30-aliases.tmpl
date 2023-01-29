@@ -9,6 +9,11 @@ TMP_HOME="{{ .chezmoi.workingTree }}/tmp"
 # shellcheck disable=SC2139
 alias czdr="chezmoi apply --verbose --destination ${TMP_HOME} --dry-run"
 
+alias dotp="dotfiles-push"
+alias dotu="dotfiles-update"
+alias dotb="dotfiles-backup"
+alias dotr="dotfiles-restore"
+
 # shellcheck disable=SC2139
 alias dotdrop="dotdrop --cfg=${HOME}/.config/dotdrop/config-user.yaml -p {{ .dotdrop.user_profile }}"
 # shellcheck disable=SC2139
@@ -97,5 +102,3 @@ alias socrypt-inplace="socrypt --inplace"
 alias senc="socrypt"
 alias senci="socrypt-inplace"
 alias sdec="sops --decrypt"
-
-alias ds="dstow"
