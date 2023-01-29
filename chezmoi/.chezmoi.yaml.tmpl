@@ -46,7 +46,7 @@
 # {{- if eq (env "DOTFILES_USE_PASSAGE") "true" "True" "TRUE" "1" -}}
 # {{-   $use_passage = true -}}
 # {{- end -}}
-# {{- $passage_store_dir := or (env "PASSAGE_DIR") (joinPath .chezmoi.homeDir ".passage") -}}
+# {{- $passage_store_dir := or (env "PASSAGE_DIR") (joinPath .chezmoi.homeDir ".passage/store") -}}
 # {{- $passage_repo := or (env "PASSAGE_REPO") "" -}}
 # {{- $use_1password := false -}}
 # {{- if eq (env "DOTFILES_USE_1PASSWORD") "true" "True" "TRUE" "1" -}}
