@@ -1,0 +1,21 @@
+#!/bin/bash
+set -eou pipefail
+# {{ template "scripts-library" }}
+if [[ $# -eq 0 ]]; then
+  c pass --help
+  c passage --help
+fi  
+
+if passage --version &>/dev/null; then
+  passage "${@}" 
+fi
+
+PASSWORD_STORE_DIR="${PASSWORD_STORE_DIR:-$HOME/.password-store}"
+TARGET_DIR="${PASSAGE_DIR:-$HOME/.passage/store}"
+passagefile=$(find "$TARGET_DIR" -type f -path '*/.git' -prune -o -iname '*.age' -print0 | xargs -0 stat -f "%m %N" | sort -rn | head -1 | cut -f2- -d" ")
+if pass --version &>/dev/null; then
+  name="${passagefile#./}"; name="${name%.age}"
+  if [[ ! -f "${PASSWORD_STORE_DIR}/$name.gpg" ]]; then
+    passage "$name" | pass insert -m "$name" || echo "Exisintg... Skip to insert $name"
+  fi
+fi
