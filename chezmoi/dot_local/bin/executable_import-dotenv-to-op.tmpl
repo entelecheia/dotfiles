@@ -1,0 +1,44 @@
+#!/bin/bash
+# {{ template "scripts-library" }}
+
+set +u
+DOTENV_FILE="${1}"
+OP_TITLE="${2}"
+set -u
+
+OP_VAULT=${OP_VAULT:-"{{ .op.vault }}"}
+
+if [[ -z "${DOTENV_FILE}" ]] || [[ -z "${OP_TITLE}" ]]; then
+  log_info "Usage: $0 DOTENV_FILE OP_TITLE"
+  exit 0
+fi
+
+log_task "Importing dotenv file [${DOTENV_FILE}] to 1Password [${OP_TITLE}]"
+
+if [[ ! -f "${DOTENV_FILE}" ]]; then
+  log_error "File not found: ${DOTENV_FILE}"
+  exit 1
+fi
+
+isComment='^[[:space:]]*#'
+isBlank='^[[:space:]]*$'
+
+# read .env file ignoring comments
+while IFS= read -r line; do
+  [[ $line =~ $isComment ]] && continue
+  [[ $line =~ $isBlank ]] && continue
+  KEY=$(echo "$line" | cut -d '=' -f 1)
+  VALUE=$(echo "$line" | cut -d '=' -f 2-)
+  # if VLAUE starts with a quote, ignore after the ending quote
+  if [[ "${VALUE}" =~ ^\".* ]]; then
+    VALUE=$(echo "${VALUE}" | cut -d '"' -f 2- | cut -d '"' -f 1)
+  fi
+  log_info "Importing key [${KEY}] with value [${VALUE}]"
+  
+  # chek if item exists
+  if ! op item get "${OP_TITLE}" --vault="${OP_VAULT}" > /dev/null 2>&1; then
+    op item template get securenote | op item create --vault "${OP_VAULT}" --title "${OP_TITLE}" -
+  fi
+  op item edit "${OP_TITLE}" --vault="${OP_VAULT}" "${KEY}[text]=${VALUE}"
+  
+done < <( cat "${DOTENV_FILE}" )

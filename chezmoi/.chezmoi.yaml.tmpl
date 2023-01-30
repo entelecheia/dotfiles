@@ -52,6 +52,10 @@
 # {{- if eq (env "DOTFILES_USE_1PASSWORD") "true" "True" "TRUE" "1" -}}
 # {{-   $use_1password = true -}}
 # {{- end -}}
+# {{- $op_account := or (env "OP_ACCOUNT") "" -}}
+# {{- $op_vault := or (env "OP_VAULT") "dev" -}}
+# {{- $op_connect_host := or (env "OP_CONNECT_HOST") "" -}}
+# {{- $op_connect_token := or (env "OP_CONNECT_TOKEN") "" -}}
 # {{- $use_vault := false -}}
 # {{- if eq (env "DOTFILES_USE_VAULT") "true" "True" "TRUE" "1" -}}
 # {{-   $use_vault = true -}}
@@ -672,6 +676,10 @@ data:
         repo: {{ $passage_repo | quote }}
     op:
         enabled: {{ $use_1password }}
+        account: {{ $op_account | quote }}
+        vault: {{ $op_vault | quote }}
+        connect_host: {{ $op_connect_host | quote }}
+        connect_token: {{ $op_connect_token | quote }}
     docker:
         repo: {{ $dockerfiles_repo | quote }}
         username: {{ $docker_username | quote }}
