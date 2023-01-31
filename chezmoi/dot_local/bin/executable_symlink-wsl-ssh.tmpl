@@ -1,5 +1,5 @@
-{{- if .system.is_wsl }}
 #!/bin/bash
+# {{- if .system.is_wsl }}
 
 # {{ template "scripts-library" }}
 
@@ -27,4 +27,4 @@ if [[ -d "${WIN_HOME}" ]]; then
   c ln -s "${WIN_HOME}/.ssh" "${HOME}/.ssh"
 
 fi
-# {{ end -}}
+# {{ end }}
