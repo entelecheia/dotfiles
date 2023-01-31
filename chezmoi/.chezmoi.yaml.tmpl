@@ -68,8 +68,9 @@
 # {{- if eq (env "DOTFILES_VERBOSE") "true" "True" "TRUE" "1" -}}
 # {{-   $verbose = true -}}
 # {{- end -}}
+# {{- $ssh_homedir := or (joinPath .chezmoi.homeDir ".ssh") -}}
 # {{- $gpg_homedir := or (env "GNUPGHOME") (joinPath .chezmoi.homeDir ".gnupg") -}}
-# {{- $gpg_key_id_file := joinPath $gpg_homedir ".gpg-id" -}}
+# {{- $gpg_key_id_file := joinPath $ssh_homedir ".gpg-id" -}}
 # {{- $gpg_key_id := env "GPG_KEY_ID" -}}
 # {{- $gpg_passphrase := "" -}}
 # {{- $gpg_gitsign := false -}}
@@ -636,6 +637,7 @@ data:
             cores: {{ $cpuCores }}
             threads: {{ $cpuThreads }}
     ssh:
+        home: {{ $ssh_homedir | quote }}
         algorithm: {{ $ssh_algorithm | quote }}
         identity_file: {{ $ssh_keyfile | quote }}
     age:
