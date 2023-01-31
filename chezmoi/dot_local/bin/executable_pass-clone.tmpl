@@ -1,0 +1,41 @@
+#!/bin/bash
+# {{ template "scripts-library" }}
+
+# shellcheck source=/dev/null
+source "${HOME}/.config/shrc/00-dotfiles-export"
+
+# {{ if .pass.enabled }}
+# Clone or update the pass repository (github auth is required for private repositories)
+PASS_REPO="{{ .pass.repo }}"
+# ask if remove the existing password-store directory, if it exists
+if [ -d "${PASSWORD_STORE_DIR}" ]; then
+  read -r -p "Remove existing password-store directory? [y/N] " response
+  if [[ "${response}" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+    rm -rf "${PASSWORD_STORE_DIR}"
+  else
+    log_info "Skipping pass repository clone"
+  fi
+fi
+if [ ! -d "${PASSWORD_STORE_DIR}" ]; then
+  log_task "Cloning pass repository"
+  c git clone "${PASS_REPO}" "${PASSWORD_STORE_DIR}"
+fi
+# {{ end }}
+
+# {{ if .passage.enabled }}
+# Clone or update the passage repository (github auth is required for private repositories)
+PASSAGE_REPO="{{ .passage.repo }}"
+# ask if remove the existing passage directory, if it exists
+if [ -d "${PASSAGE_DIR}" ]; then
+  read -r -p "Remove existing passage directory? [y/N] " response
+  if [[ "${response}" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+    rm -rf "${PASSAGE_DIR}"
+  else
+    log_info "Skipping passage repository clone"
+  fi
+fi
+if [ ! -d "${PASSAGE_DIR}" ]; then
+  log_task "Cloning passage repository"
+  c git clone "${PASSAGE_REPO}" "${PASSAGE_DIR}"
+fi
+# {{ end }}
