@@ -88,7 +88,7 @@
 # {{- $sudoer := true -}}
 # {{- $sudo_check := "" -}}
 # {{- if eq .chezmoi.os "linux" -}}
-# {{-   $sudo_check = (output "sh" "-c" "sudo -l -n sudo &>/dev/null && echo sudo || echo false") | trim -}}
+# {{-   $sudo_check = (output "sh" "-c" "test -n \"$(ls /etc/sudoers.d | grep -w %s)\" && echo sudo || echo false") | trim -}}
 # {{- else -}}
 # {{-   $sudo_check = (output "sh" "-c" "test -n \"$(groups | grep -w admin)\" && echo sudo || echo false") | trim -}}
 # {{- end -}}
