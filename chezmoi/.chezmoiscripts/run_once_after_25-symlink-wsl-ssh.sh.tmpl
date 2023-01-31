@@ -1,7 +1,7 @@
-{{- if .system.is_wsl }}
 #!/bin/bash
+# {{ if .system.is_wsl }}
 
 # shellcheck source=/dev/null
 source "${HOME}/.local/bin/symlink-wsl-ssh"
 
-{{ end -}}
+# {{ end }}
