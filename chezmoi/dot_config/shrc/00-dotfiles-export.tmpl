@@ -67,3 +67,7 @@ if [[ -e "${SSH_HOME}/authorized_age_keys" ]]; then
   export PASSAGE_RECIPIENTS="${PASSAGE_RECIPIENTS}"
 fi
 
+USER_UID="$(id -u)"
+USER_GID="$(id -g)"
+export USER_UID
+export USER_GID

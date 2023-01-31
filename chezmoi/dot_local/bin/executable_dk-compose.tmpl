@@ -205,6 +205,10 @@ if [[ -n "$CONTAINER_NAME" ]]; then
   export CONTAINER_NAME
 fi
 export USERNAME
+USER_UID="$(id -u)"
+USER_GID="$(id -g)"
+export USER_UID
+export USER_GID
 ENV_PATH="${DOCKERFILE_PATH}/${ENV_FILE}"
 ENV_ARGS=""
 if [[ -f "$ENV_PATH" ]]; then
