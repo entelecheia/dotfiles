@@ -29,16 +29,4 @@ if pass --version &>/dev/null; then
 fi
 # {{ end }}
 
-# {{ if .passage.enabled }}
-if passage --version &>/dev/null; then
-  log_task "Committing passage changes and pushing to remote"
-  c passage git push
-fi
-# {{ end }}
-
-# {{ if .autorestic.enabled }}
-if autorestic --version &>/dev/null; then
-  log_task "Backing up dotfiles"
-  c dotfiles-backup
-fi
-# {{ end }}
+pass-push
