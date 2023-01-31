@@ -2,10 +2,6 @@
 set -eou pipefail
 # {{ template "scripts-library" }}
 
-# op item list --vault test-vault --format json --account agilebits | \
-#   op item get --format json --account agilebits - | \
-#     op item create --account work -
-
 # sync from pass to passage
 log_task "Syncing from pass to passage"
 cd "${PASSWORD_STORE_DIR:-$HOME/.password-store}"

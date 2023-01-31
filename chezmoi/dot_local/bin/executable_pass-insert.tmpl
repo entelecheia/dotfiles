@@ -1,0 +1,66 @@
+#!/bin/bash
+# {{ template "scripts-library" }}
+if [[ $# -eq 0 ]]; then
+  log_info "Usage: $0 pass-name [password]"
+  exit 0
+fi  
+
+set +u
+PASS_NAME="${1}"
+PASSWORD="${2:-}"
+set -u
+
+if [[ -z "${PASS_NAME}" ]]; then
+  log_info "Usage: $0 pass-name [password]"
+  exit 0
+fi
+
+pass-pull
+
+if pass --version &>/dev/null; then
+  # check if pass-name is already in the password-store
+  if pass "${PASS_NAME}" &>/dev/null; then
+    EXISTING_PASSWORD="$(pass "${PASS_NAME}")"
+    if [[ -n "${PASSWORD}" ]]; then
+      if [[ "${EXISTING_PASSWORD}" != "${PASSWORD}" ]]; then
+        log_task "Updating password for [${PASS_NAME}] in password-store"
+        echo "${PASSWORD}" | pass insert -m "${PASS_NAME}"
+      else
+        log_info "[${PASS_NAME}] already exists in password-store"
+      fi
+    fi
+  else
+    log_task "Inserting password of [${PASS_NAME}] into password-store"
+    if [[ -n "${PASSWORD}" ]]; then
+      echo "${PASSWORD}" | pass insert -m "${PASS_NAME}"
+    else
+      pass insert -m "${PASS_NAME}"
+    fi
+  fi
+  PASSWORD="$(pass "${PASS_NAME}")"
+fi
+
+if passage --version &>/dev/null; then
+  # check if pass-name is already in the passage store
+  if passage "${PASS_NAME}" &>/dev/null; then
+    EXISTING_PASSWORD="$(passage "${PASS_NAME}")"
+    if [[ -n "${PASSWORD}" ]]; then
+      if [[ "${EXISTING_PASSWORD}" != "${PASSWORD}" ]]; then
+        log_task "Updating password for [${PASS_NAME}] in passage store"
+        echo "${PASSWORD}" | passage insert -m "${PASS_NAME}"
+      else
+        log_info "[${PASS_NAME}] already exists in passage store"
+      fi
+    fi
+  else
+    log_task "Inserting password of [${PASS_NAME}] into passage store"
+    if [[ -n "${PASSWORD}" ]]; then
+      echo "${PASSWORD}" | passage insert -m "${PASS_NAME}"
+    else
+      passage insert -m "${PASS_NAME}"
+    fi
+  fi
+  PASSWORD="$(passage "${PASS_NAME}")"
+fi
+
+pass-push

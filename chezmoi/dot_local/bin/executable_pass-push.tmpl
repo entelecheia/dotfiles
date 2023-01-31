@@ -1,18 +1,14 @@
 #!/bin/bash
-set -eou pipefail
 # {{ template "scripts-library" }}
 
-# sync between pass and passage first
-c pass-sync
-
 # push pass changes to remote
-if pass --version &>/dev/null; then
+if git -C "${PASSWORD_STORE_DIR}" remote get-url origin >/dev/null 2>&1; then
   log_task "Committing pass changes and pushing to remote"
   c pass git push
 fi
 
 # push passage changes to remote
-if passage --version &>/dev/null; then
+if git -C "${PASSAGE_DIR}" remote get-url origin >/dev/null 2>&1; then
   log_task "Committing passage changes and pushing to remote"
   c passage git push
 fi

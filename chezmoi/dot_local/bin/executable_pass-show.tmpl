@@ -1,0 +1,9 @@
+#!/bin/bash
+pass-pull
+if pass --version &>/dev/null; then
+  pass
+fi
+if passage --version &>/dev/null; then
+  passage
+fi
+pass-push

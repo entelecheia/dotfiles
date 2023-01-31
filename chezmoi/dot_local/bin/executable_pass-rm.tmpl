@@ -1,0 +1,60 @@
+#!/bin/bash
+# {{ template "scripts-library" }}
+# arguments start with - or -- are options for pass
+# the first argument that is not an option is the pass-name
+# the rest of the arguments will be ignored
+# if no pass-name is provided, show usage
+if [[ $# -eq 0 ]]; then
+  log_info "Usage: $0 [--recursive,-r] [--force,-f] pass-name"
+  exit 0
+fi
+
+# check if options are provided, there can be multiple options
+PASS_NAME=""
+OPTIONS=() 
+# parse options
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+  -*)
+    OPTIONS+=("$1")
+    ;;
+  *)
+    PASS_NAME="$1"
+    break
+    ;;
+  esac
+  shift
+done
+
+if [[ -z "${PASS_NAME}" ]]; then
+  log_info "Usage: $0 [--recursive,-r] [--force,-f] pass-name"
+  exit 0
+fi
+
+pass-pull
+
+if pass --version &>/dev/null; then
+  if pass "${PASS_NAME}" &>/dev/null; then
+    if ((${#OPTIONS[@]})); then
+      c pass rm "${OPTIONS[@]}" "${PASS_NAME}"
+    else
+      c pass rm "${PASS_NAME}"
+    fi
+  else
+    log_info "[${PASS_NAME}] does not exist in password-store"
+  fi
+fi
+
+if passage --version &>/dev/null; then
+  if passage "${PASS_NAME}" &>/dev/null; then
+    if ((${#OPTIONS[@]})); then
+      c passage rm "${OPTIONS[@]}" "${PASS_NAME}"
+    else
+      c passage rm "${PASS_NAME}"
+    fi
+  else
+    log_info "[${PASS_NAME}] does not exist in passage store"
+  fi
+fi
+
+pass-push

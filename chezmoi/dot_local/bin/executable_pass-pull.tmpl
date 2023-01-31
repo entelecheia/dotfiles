@@ -1,0 +1,14 @@
+#!/bin/bash
+# {{ template "scripts-library" }}
+
+# pull pass changes from remote
+if git -C "${PASSWORD_STORE_DIR}" remote get-url origin >/dev/null 2>&1; then
+  log_task "Pulling pass changes from remote"
+  git -C "${PASSWORD_STORE_DIR}" pull
+fi
+
+# pull passage changes from remote
+if git -C "${PASSAGE_DIR}" remote get-url origin >/dev/null 2>&1; then
+  log_task "Pulling passage changes from remote"
+  git -C "${PASSAGE_DIR}" pull
+fi
