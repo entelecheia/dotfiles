@@ -63,12 +63,7 @@ if ! command -v passage >/dev/null; then
     log_task "Installing passage"
     PASSGE_PATH="${HOME}/.local/share/passage"
     c cd "${PASSGE_PATH}" || exit 1  
-# {{ if and (eq .chezmoi.os "darwin") }}
-    c make install PREFIX="$(brew --cellar)/passage/$(git describe --tags)"
-    c brew link passage
-# {{ else if eq .chezmoi.os "linux" }}
-    c sudo make install
-# {{ end }}
+    c make install PREFIX="${HOME}/.local"
 fi
 
 # Environment variables
