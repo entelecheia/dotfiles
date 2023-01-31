@@ -8,7 +8,7 @@ WIN_HOME="$(wslpath -a "$(wslvar USERPROFILE)")"
 if [[ -d "${WIN_HOME}" ]]; then
 
   # if ${HOME}/.ssh does not exist, create it
-  if [[ ! -d "${HOME}/.ssh" ]]; then
+  if [[ ! -e "${HOME}/.ssh" ]]; then
     log_task "Creating ${HOME}/.ssh"
     c mkdir "${HOME}/.ssh"
   fi

@@ -7,7 +7,7 @@
 # true || source ../.chezmoitemplates/scripts-library
 
 SSH_HOME="{{ .ssh.home }}"
-if [ ! -d "${SSH_HOME}" ]; then
+if [ ! -e "${SSH_HOME}" ]; then
     log_task "Creating ${SSH_HOME}"
     mkdir "${SSH_HOME}"
 fi
