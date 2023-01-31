@@ -23,11 +23,15 @@ ALGORITHM="{{ .ssh.algorithm }}"
 DATESTAMP=$(date +'%y.%m.%d')
 if [ ! -e "${SSH_KEY_FILE}" ]; then
     log_task "Generating SSH key"
-    ssh-keygen -t "${ALGORITHM}" -C "${EMAIL}" -f "${SSH_KEY_FILE}" -N ""
+    c ssh-keygen -t "${ALGORITHM}" -C "${EMAIL}" -f "${SSH_KEY_FILE}" -N ""
+else
+    # change chmod of SSH key files to prevent SSH from complaining
+    log_task "Changing SSH key file permissions"
+    c chmod 600 "${SSH_KEY_FILE}" || true
 fi
 
 # copy gitconfig from .config/git/gitconfig to .gitconfig
-cp "${HOME}/.config/git/gitconfig" "${HOME}/.gitconfig"
+c cp "${HOME}/.config/git/gitconfig" "${HOME}/.gitconfig"
 
 GPGSIGN="{{ .gnupg.gitsign }}"
 ALLOWED_SIGNERS_FILE="${SSH_HOME}/allowed_signers"
