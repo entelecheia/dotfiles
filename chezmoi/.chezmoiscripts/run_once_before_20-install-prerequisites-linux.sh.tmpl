@@ -72,30 +72,30 @@ if [[ ${#missing_packages[@]} -gt 0 ]]; then
   c "${apt_command[@]}" install --yes --no-install-recommends "${missing_packages[@]}"
 fi
 
-# if snap is not installed, exit
-if ! snap --version &>/dev/null; then
+# check if snap is installed
+if snap --version &>/dev/null; then
+
+  readonly wanted_sanp_packages=(
+    restic
+    helm
+  )
+
+  # {{   if eq .chezmoi.username "root" }}
+  snap_command=(snap)
+  # {{   else }}
+  snap_command=(sudo snap)
+  # {{   end }}
+
+  for package in "${wanted_sanp_packages[@]}"; do
+    if ! is_snap_package_installed "${package}"; then
+      log_task "Installing a package with snap: ${package}"
+      c "${snap_command[@]}" install "${package}" --classic
+    fi
+  done
+
+else
   log_manual_action "snap is not installed, skipping snap packages"
-  exit 0
 fi
-
-readonly wanted_sanp_packages=(
-  restic
-  helm
-)
-
-# This script also gets called when running rootmoi
-# {{   if eq .chezmoi.username "root" }}
-snap_command=(snap)
-# {{   else }}
-snap_command=(sudo snap)
-# {{   end }}
-
-for package in "${wanted_sanp_packages[@]}"; do
-  if ! is_snap_package_installed "${package}"; then
-    log_task "Installing a package with snap: ${package}"
-    c "${snap_command[@]}" install "${package}" --classic
-  fi
-done
 
 # install autorestic
 if ! autorestic --version &>/dev/null; then

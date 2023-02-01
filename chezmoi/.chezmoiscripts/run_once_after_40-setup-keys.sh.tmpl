@@ -190,9 +190,9 @@ if [ -n "${GPG_KEY_ID}" ]; then
         log_info "GPG public key already imported"
     fi
     log_task "Checking the GPG private key"
-    GPG_KEY_ID=$(gpg --list-secret-keys --with-colons | grep 'sec' | grep "${GPG_KEY_ID}" | cut -d':' -f5 || echo "")
+    GPG_SEC_KEY_ID=$(gpg --list-secret-keys --with-colons | grep 'sec' | grep "${GPG_KEY_ID}" | cut -d':' -f5 || echo "")
     # if GPG_KEY_ID is empty and private key file exists, import it
-    if [ -z "${GPG_KEY_ID}" ]; then
+    if [ -z "${GPG_SEC_KEY_ID}" ]; then
         if [ -e "${GPG_PRIVATE_KEY_FILE}" ]; then
             log_task "Importing the GPG private key"
             # {{ if .system.is_interactive }}
@@ -207,6 +207,7 @@ if [ -n "${GPG_KEY_ID}" ]; then
         log_info "GPG private key already imported"
     fi
 fi
+GPG_KEY_ID=$(gpg --list-secret-keys --with-colons | grep 'sec' | grep "${GPG_KEY_ID}" | cut -d':' -f5 || echo "")
 # {{ if .gnupg.passphrase }}
 # Create a batch file
 if [ -z "${GPG_KEY_ID}" ]; then
