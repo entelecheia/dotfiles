@@ -21,10 +21,10 @@ if [ -d "${PATH_ENTRY}" ] && [[ ":${PATH}:" != *":${PATH_ENTRY}:"* ]]; then
   export PATH="${PATH_ENTRY}:${PATH}"
 fi
 if [ -d "${HOME}/go/bin" ]; then
-  export GOROOT="${HOME}/go"
-  export GOPATH="${GOROOT}/packages"
-  if [[ ":${PATH}:" != *":${GOROOT}:"* ]]; then
-    export PATH="${GOROOT}:${PATH}"
+  export GOHOME="${HOME}/go"
+  export GOPATH="${GOHOME}/packages"
+  if [[ ":${PATH}:" != *":${GOHOME}:"* ]]; then
+    export PATH="${GOHOME}:${PATH}"
   fi
 fi
 # for Webi
