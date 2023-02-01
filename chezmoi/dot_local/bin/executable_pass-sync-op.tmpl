@@ -2,14 +2,29 @@
 set -eou pipefail
 # {{ template "scripts-library" }}
 
+set +u
+OP_TITLE="${1}"
+set -u
+
 OP_VAULT=${OP_VAULT:-"{{ .op.vault }}"}
 
 # sync from 1password to pass
 log_task "Syncing from 1password to pass"
-op item list --categories securenote --vault="${OP_VAULT}" --format=json | jq -r '.[].title' | while read -r title; do
-  log_info "Syncing $title"
-  op item get "$title" --vault="${OP_VAULT}" --format=json | jq -r '.fields[] | select(.label != "notesPlain" and .type == "STRING") | "\(.label) \(.value)"' | while read -r label value; do
-    log_info "Syncing $title/$label=$value"
-    pass-insert "$title/$label" "$value"
+if [[ -n "${OP_TITLE}" ]]; then
+  if ! op item get "$OP_TITLE" --vault="${OP_VAULT}" > /dev/null 2>&1; then
+    log_error "Item not found: $OP_TITLE"
+  else
+    op item get "$OP_TITLE" --vault="${OP_VAULT}" --format=json | jq -r '.fields[] | select(.label != "notesPlain" and .type == "STRING") | "\(.label) \(.value)"' | while read -r label value; do
+        log_info "Syncing $title/$label=$value"
+        pass-insert "$title/$label" "$value"
+    done
+  fi
+else
+  op item list --categories securenote --vault="${OP_VAULT}" --format=json | jq -r '.[].title' | while read -r title; do
+    log_info "Syncing $title"
+    op item get "$title" --vault="${OP_VAULT}" --format=json | jq -r '.fields[] | select(.label != "notesPlain" and .type == "STRING") | "\(.label) \(.value)"' | while read -r label value; do
+      log_info "Syncing $title/$label=$value"
+      pass-insert "$title/$label" "$value"
+    done
   done
-done
+fi
