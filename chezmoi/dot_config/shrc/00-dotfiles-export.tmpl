@@ -3,6 +3,21 @@ PATH_ENTRY="${HOME}/.local/bin"
 if [ -d "${PATH_ENTRY}" ] && [[ ":${PATH}:" != *":${PATH_ENTRY}:"* ]]; then
   export PATH="${PATH_ENTRY}:${PATH}"
 fi
+PATH_ENTRY="${HOME}/bin"
+if [ -d "${PATH_ENTRY}" ] && [[ ":${PATH}:" != *":${PATH_ENTRY}:"* ]]; then
+  export PATH="${PATH_ENTRY}:${PATH}"
+fi
+if [ -d "${HOME}/go/bin" ]; then
+  export GOROOT="${HOME}/go"
+  if [[ ":${PATH}:" != *":${GOROOT}:"* ]]; then
+    export PATH="${GOROOT}:${PATH}"
+  fi
+fi
+
+# for Webi
+# shellcheck disable=SC1091
+[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
+
 # {{ if eq .chezmoi.os "darwin" }}
 if [ -d "/opt/homebrew/bin" ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -16,6 +31,7 @@ elif [ -x "${HOME}/.linuxbrew/bin/brew" ]; then
   eval "$("${HOME}/.linuxbrew/bin/brew" shellenv)"
 fi
 # {{ end }}
+
 export DOTFILES_AUTO_UPDATE="{{ .system.auto_update }}"
 export USER_FULLNAME="{{ .name }}"
 export USER_EMAIL="{{ .email }}"

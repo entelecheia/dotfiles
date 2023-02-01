@@ -20,11 +20,11 @@ log_blue() {
 }
 
 log_task() {
-  log_blue "🔃" "$@"
+  log_blue "⏳" "$@"
 }
 
 log_error() {
-  log_red "❌" "$@"
+  log_red "🔴" "$@"
 }
 
 error() {

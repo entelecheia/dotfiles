@@ -23,20 +23,6 @@ if service docker status 2>&1 | grep -q "is not running"; then
 fi
 # {{ end }}
 
-# {{ if eq .chezmoi.os "darwin" }}
-if [ -d "/opt/homebrew/bin" ]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
-# {{ else if eq .chezmoi.os "linux" }}
-if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
-  # shellcheck disable=SC2312
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-elif [ -x "${HOME}/.linuxbrew/bin/brew" ]; then
-  # shellcheck disable=SC2312
-  eval "$("${HOME}/.linuxbrew/bin/brew" shellenv)"
-fi
-# {{ end }}
-
 if [ -d "${HOME}/.nvm" ]; then
   export NVM_DIR="$HOME/.nvm"
   # shellcheck disable=SC1091
@@ -45,19 +31,10 @@ if [ -d "${HOME}/.nvm" ]; then
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi
 
-
 if [ -r "${HOME}/.sdkman/bin/sdkman-init.sh" ]; then
   export SDKMAN_DIR="${HOME}/.sdkman"
   # shellcheck disable=SC1091
   . "${HOME}/.sdkman/bin/sdkman-init.sh"
-fi
-
-if [ -d "${HOME}/go/bin" ]; then
-  export PATH="${HOME}/go/bin:${PATH}"
-fi
-
-if [ -d "${HOME}/bin" ]; then
-  export PATH="${HOME}/bin:${PATH}"
 fi
 
 # if ${HOME}/.pyenv exists and pyenv is installed, then initialize pyenv
@@ -78,5 +55,3 @@ if op --version &>/dev/null; then
   fi
 fi
 
-# shellcheck disable=SC1091
-[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"

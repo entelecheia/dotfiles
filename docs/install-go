@@ -1,0 +1,71 @@
+#!/bin/sh
+# -e: exit on error
+# -u: exit on unset variables
+set -eu
+
+log_color() {
+  color_code="$1"
+  shift
+
+  printf "\033[${color_code}m%s\033[0m\n" "$*" >&2
+}
+
+log_red() {
+  log_color "0;31" "$@"
+}
+
+log_blue() {
+  log_color "0;34" "$@"
+}
+
+log_task() {
+  log_blue "⏳" "$@"
+}
+
+log_info() {
+  log_green "💡" "$@"
+}
+
+log_manual_action() {
+  log_red "🧑‍🔧" "$@"
+}
+
+log_error() {
+  log_red "🔴" "$@"
+}
+
+error() {
+  log_error "$@"
+  exit 1
+}
+
+# codenoid
+# https://gist.github.com/codenoid/4806365032bb4ed62f381d8a76ddb8e6
+log_task "Checking latest Go version...";
+LATEST_GO_VERSION="$(curl --silent https://go.dev/VERSION?m=text)";
+OS="$(uname)"
+# lowercase
+OS="$(echo "$OS" | tr '[:upper:]' '[:lower:]')"
+UNAME_MACHINE="$(uname -m)"
+# for linux, change x86_64 to amd64
+if [ "${OS}" = "linux" ]; then
+    if [ "${UNAME_MACHINE}" = "x86_64" ]; then
+        UNAME_MACHINE="amd64"
+    fi
+fi
+LATEST_GO_DOWNLOAD_URL="https://go.dev/dl/${LATEST_GO_VERSION}.${OS}-${UNAME_MACHINE}.tar.gz"
+
+log_task "Installing from ${LATEST_GO_DOWNLOAD_URL} ..."
+curl -L "${LATEST_GO_DOWNLOAD_URL}" -o "${LATEST_GO_VERSION}.${OS}-${UNAME_MACHINE}.tar.gz"
+tar -C "${HOME}" -xzf "${LATEST_GO_VERSION}.${OS}-${UNAME_MACHINE}.tar.gz"
+rm "${LATEST_GO_VERSION}.${OS}-${UNAME_MACHINE}.tar.gz"
+
+export GOROOT="${HOME}/go"
+export PATH="${PATH}:${GOROOT}/bin"
+
+log_manual_action "ADD (OR REPLACE) THIS LINE BELOW TO YOUR SHELL CONFIGURATION FILE (e.g. ~/.bashrc, ~/.zshrc, ~/.profile, etc.)"
+log_manual_action " > export GOROOT=${HOME}/go"
+log_manual_action " > export PATH=${PATH}:${GOROOT}/bin"
+
+log_info "You are ready to Go!"
+go version
