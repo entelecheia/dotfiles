@@ -3,16 +3,13 @@
 
 # check if --interactive or -f flag is set
 set +u 
-if [[ "${1}" == "--interactive" ]] || [[ "${1}" == "-f" ]]; then
+if [[ "${1}" == "--interactive" ]] || [[ "${1}" == "-i" ]]; then
     INTERACTIVE=true
 else
     INTERACTIVE=false
 fi
 set -u
 
-# {{ if .system.is_interactive }}
-INTERACTIVE=true
-# {{ end }}
 GITHUB_USERNAME=${GITHUB_USERNAME:-"{{ .github.username }}"}
 GITHUB_TOKEN=${GITHUB_TOKEN:-"{{ .github.token }}"}
 
