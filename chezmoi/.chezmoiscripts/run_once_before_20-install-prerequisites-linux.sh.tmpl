@@ -37,7 +37,7 @@ readonly wanted_packages=(
   tmux
   python3-pip
   python3-setuptools
-  golang
+  snapd
   gh
   fzf
   vim
@@ -76,6 +76,7 @@ fi
 if snap --version &>/dev/null; then
 
   readonly wanted_sanp_packages=(
+    go
     helm
   )
 
@@ -104,8 +105,6 @@ fi
 
 # {{ end -}}
 # {{ if and (eq .chezmoi.os "linux") -}}
-ensure_path_entry "/usr/local/go/bin"
-
 if ! go version &>/dev/null; then
   log_manual_action "go is not installed, skipping go packages"
   exit 0
