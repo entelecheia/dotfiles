@@ -60,6 +60,7 @@ fi
 LATEST_GO_DOWNLOAD_URL="https://go.dev/dl/${LATEST_GO_VERSION}.${OS}-${UNAME_MACHINE}.tar.gz"
 
 GOROOT="${HOME}/go"
+GOPATH="${GOROOT}/packages"
 if [ -d "${GOROOT}" ]; then
     log_info "Go is already installed in ${GOROOT}, removing it ..."
     rm -rf "${GOROOT}"
@@ -70,9 +71,12 @@ tar -C "${HOME}" -xzf "${LATEST_GO_VERSION}.${OS}-${UNAME_MACHINE}.tar.gz"
 rm "${LATEST_GO_VERSION}.${OS}-${UNAME_MACHINE}.tar.gz"
 
 export GOROOT
+export GOPATH
 export PATH="${PATH}:${GOROOT}/bin"
 
 log_manual_action "Add Go to your PATH by adding the following line to your ~/.bashrc or ~/.zshrc:"
-log_manual_action " > export GOROOT='${HOME}/go'"
+log_manual_action " > export GOROOT=\"${HOME}/go\""
+log_manual_action " > export GOPATH=\"${GOROOT}/packages\""
+log_manual_action " > export PATH=\"\${PATH}:\${GOROOT}/bin\""
 
 log_info "You are ready to Go!"

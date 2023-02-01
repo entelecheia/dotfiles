@@ -105,7 +105,7 @@ fi
 # {{ if and (eq .chezmoi.os "linux") -}}
 if ! go version &>/dev/null; then
   log_task "Installing go"
-  sh -c "$(curl -fsSL https://dotfiles.entelecheia.cc/install-go)";
+  c wget -qO - https://dotfiles.entelecheia.cc/install-go | bash
 fi
 
 # install age

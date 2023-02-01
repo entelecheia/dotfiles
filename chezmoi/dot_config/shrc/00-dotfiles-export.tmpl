@@ -9,6 +9,7 @@ if [ -d "${PATH_ENTRY}" ] && [[ ":${PATH}:" != *":${PATH_ENTRY}:"* ]]; then
 fi
 if [ -d "${HOME}/go/bin" ]; then
   export GOROOT="${HOME}/go"
+  export GOPATH="${GOROOT}/packages"
   if [[ ":${PATH}:" != *":${GOROOT}:"* ]]; then
     export PATH="${GOROOT}:${PATH}"
   fi
