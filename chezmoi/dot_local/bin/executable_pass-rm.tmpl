@@ -31,8 +31,6 @@ if [[ -z "${PASS_NAME}" ]]; then
   exit 0
 fi
 
-pass-pull
-
 if pass --version &>/dev/null; then
   if pass "${PASS_NAME}" &>/dev/null; then
     if ((${#OPTIONS[@]})); then
@@ -56,5 +54,3 @@ if passage --version &>/dev/null; then
     log_info "[${PASS_NAME}] does not exist in passage store"
   fi
 fi
-
-pass-push
