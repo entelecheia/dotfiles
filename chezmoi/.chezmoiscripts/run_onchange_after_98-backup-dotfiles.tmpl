@@ -1,29 +1,15 @@
 #!/bin/bash
 # {{ if and (eq .chezmoi.os "linux" "darwin") (.system.is_minimum | not) }}
 
-# {{ template "scripts-library" }}
-# {{ template "homebrew-library" }}
+# {{ if and (.autorestic.enabled) (.autorestic.backup_dotfiles) }}
 
-# The following line is for ShellCheck to correctly identify the above included library
-true || source ../.chezmoitemplates/scripts-library
-true || source ../.chezmoitemplates/homebrew-library
+# {{ template "homebrew-library" }}
 
 ensure_path_entry "${HOME}/.local/bin"
 
-# {{ if and (.autorestic.enabled) (.autorestic.backup_dotfiles) }}
-CONFIG_FILE="{{ .autorestic.config_file }}"
-LOCATION="{{ .autorestic.location }}"
+# shellcheck source=/dev/null
+source "${HOME}/.local/bin/dotfiles-backup"
 
-if [[ ! -f "$CONFIG_FILE" ]]; then
-  log_error "Autorestic config file not found: $CONFIG_FILE"
-  exit 0
-fi
-if command -v autorestic >/dev/null; then
-  log_info "Backing up dotfiles"
-  c autorestic -c "$CONFIG_FILE" backup -l "$LOCATION"
-else
-  log_info "autorestic is not installed"
-fi
 # {{ end }}
 
 # {{ end }}

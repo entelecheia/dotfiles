@@ -7,7 +7,7 @@ RESTORE_TO="{{ .autorestic.restore_to }}"
 
 if [[ ! -f "$CONFIG_FILE" ]]; then
   log_error "Autorestic config file not found: $CONFIG_FILE"
-  exit 1
+  exit 0
 fi
 if command -v autorestic >/dev/null; then
   log_info "Restoring dotfiles from backup"
