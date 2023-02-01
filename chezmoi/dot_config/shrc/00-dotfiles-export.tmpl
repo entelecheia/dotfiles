@@ -20,13 +20,11 @@ PATH_ENTRY="${HOME}/bin"
 if [ -d "${PATH_ENTRY}" ] && [[ ":${PATH}:" != *":${PATH_ENTRY}:"* ]]; then
   export PATH="${PATH_ENTRY}:${PATH}"
 fi
-if ! go version &>/dev/null; then
-  if [ -d "${HOME}/go/bin" ]; then
-    export GOROOT="${HOME}/go"
-    export GOPATH="${GOROOT}/packages"
-    if [[ ":${PATH}:" != *":${GOROOT}:"* ]]; then
-      export PATH="${GOROOT}:${PATH}"
-    fi
+if [ -d "${HOME}/go/bin" ]; then
+  export GOROOT="${HOME}/go"
+  export GOPATH="${GOROOT}/packages"
+  if [[ ":${PATH}:" != *":${GOROOT}:"* ]]; then
+    export PATH="${GOROOT}:${PATH}"
   fi
 fi
 # for Webi
