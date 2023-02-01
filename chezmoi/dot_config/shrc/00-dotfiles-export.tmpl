@@ -21,9 +21,16 @@ if [ -d "${PATH_ENTRY}" ] && [[ ":${PATH}:" != *":${PATH_ENTRY}:"* ]]; then
   export PATH="${PATH_ENTRY}:${PATH}"
 fi
 if [ -d "${HOME}/go/bin" ]; then
+  GOROOT="${HOME}/go"
+  PATH_ENTRY="${GOROOT}/bin"
+  if [[ ":${PATH}:" != *":${PATH_ENTRY}:"* ]]; then
+    export PATH="${PATH_ENTRY}:${PATH}"
+  fi
+fi
+if [ -d "${HOME}/go/packages" ]; then
   export GOROOT="${HOME}/go"
   export GOPATH="${GOROOT}/packages"
-  PATH_ENTRY="${GOROOT}/bin"
+  PATH_ENTRY="${GOPATH}/bin"
   if [[ ":${PATH}:" != *":${PATH_ENTRY}:"* ]]; then
     export PATH="${PATH_ENTRY}:${PATH}"
   fi
