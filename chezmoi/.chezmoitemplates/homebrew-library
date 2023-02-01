@@ -25,4 +25,7 @@ else
     readonly homebrew_prefix="${HOME}/.homebrew"
 fi
 
-ensure_path_entry "${homebrew_prefix}/bin"
+PATH_ENTRY="${homebrew_prefix}/bin"
+if [[ ":${PATH}:" != *":${PATH_ENTRY}:"* ]]; then
+  export PATH="${PATH_ENTRY}:${PATH}"
+fi
