@@ -104,8 +104,8 @@ fi
 # {{ end -}}
 # {{ if and (eq .chezmoi.os "linux") -}}
 if ! go version &>/dev/null; then
-  log_manual_action "go is not installed, skipping go packages"
-  exit 0
+  log_task "Installing go"
+  sh -c "$(curl -fsSL https://dotfiles.entelecheia.cc/install-go)"
 fi
 
 # install age

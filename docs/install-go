@@ -55,12 +55,17 @@ if [ "${OS}" = "linux" ]; then
 fi
 LATEST_GO_DOWNLOAD_URL="https://go.dev/dl/${LATEST_GO_VERSION}.${OS}-${UNAME_MACHINE}.tar.gz"
 
+GOROOT="${HOME}/go"
+if [ -d "${GOROOT}" ]; then
+    log_info "Go is already installed in ${GOROOT}, removing it ..."
+    rm -rf "${GOROOT}"
+fi
 log_task "Installing from ${LATEST_GO_DOWNLOAD_URL} ..."
 curl -L "${LATEST_GO_DOWNLOAD_URL}" -o "${LATEST_GO_VERSION}.${OS}-${UNAME_MACHINE}.tar.gz"
 tar -C "${HOME}" -xzf "${LATEST_GO_VERSION}.${OS}-${UNAME_MACHINE}.tar.gz"
 rm "${LATEST_GO_VERSION}.${OS}-${UNAME_MACHINE}.tar.gz"
 
-export GOROOT="${HOME}/go"
+export GOROOT
 export PATH="${PATH}:${GOROOT}/bin"
 
 log_manual_action "ADD (OR REPLACE) THIS LINE BELOW TO YOUR SHELL CONFIGURATION FILE (e.g. ~/.bashrc, ~/.zshrc, ~/.profile, etc.)"
