@@ -15,8 +15,8 @@ if [[ -n "${OP_TITLE}" ]]; then
     log_error "Item not found: $OP_TITLE"
   else
     op item get "$OP_TITLE" --vault="${OP_VAULT}" --format=json | jq -r '.fields[] | select(.label != "notesPlain" and .type == "STRING") | "\(.label) \(.value)"' | while read -r label value; do
-        log_info "Syncing $title/$label=$value"
-        pass-insert "$title/$label" "$value"
+        log_info "Syncing $OP_TITLE/$label=$value"
+        pass-insert "$OP_TITLE/$label" "$value"
     done
   fi
 else
