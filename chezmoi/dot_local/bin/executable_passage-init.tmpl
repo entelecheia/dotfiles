@@ -40,7 +40,7 @@ if ! git -C "${PASSAGE_DIR}" rev-parse --is-inside-work-tree >/dev/null 2>&1; th
 fi
 
 # set the remote passage repository (github auth is required for private repositories)
-PASSAGE_REPO=${PASSAGE_REPO:-"{{ .pass.repo }}"}
+PASSAGE_REPO=${PASSAGE_REPO:-"{{ .passage.repo }}"}
 if [ -z "${PASSAGE_REPO}" ]; then
     log_manual_action "Set PASSAGE_REPO to the remote passage repository"
     exit 0
