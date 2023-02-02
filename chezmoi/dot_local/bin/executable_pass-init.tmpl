@@ -30,7 +30,7 @@ if [ -d "${PASSWORD_STORE_DIR}" ] && [ -e "${PASSWORD_STORE_DIR}/.gpg-id" ]; the
             c pass init "${PASSWORD_STORE_KEY}"
         fi
     else
-        log_manual_task "Generate a gpg key and set PASSWORD_STORE_KEY to initialize pass"
+        log_manual_action "Generate a gpg key and set PASSWORD_STORE_KEY to initialize pass"
     fi
 else
     if [ -n "${PASSWORD_STORE_KEY}" ]; then
@@ -50,7 +50,7 @@ fi
 # set the remote pass repository (github auth is required for private repositories)
 PASS_REPO=${PASS_REPO:-"{{ .pass.repo }}"}
 if [ -z "${PASS_REPO}" ]; then
-    log_manual_task "Set PASS_REPO to the remote pass repository"
+    log_manual_action "Set PASS_REPO to the remote pass repository"
     exit 0
 fi
 # if the remote is not set, then set the remote
