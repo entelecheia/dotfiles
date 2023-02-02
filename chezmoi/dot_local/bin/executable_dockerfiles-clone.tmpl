@@ -1,0 +1,22 @@
+#!/bin/bash
+# {{ template "scripts-library" }}
+
+DOCKERFILES_REPO="{{- .docker.repo }}"
+if [[ -z "$DOCKERFILES_REPO" ]]; then
+  log_info "Dockerfiles repository not set"
+  exit 0
+fi
+
+DOCKERFILES_DIR="${HOME}/.local/share/dockerfiles"
+if [ -d "${DOCKERFILES_DIR}" ]; then
+  read -r -p "Remove existing dockerfiles directory? [y/N] " response
+  if [[ "${response}" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+    rm -rf "${DOCKERFILES_DIR}"
+  else
+    log_info "Skipping cloning dockerfiles repository"
+  fi
+fi
+if [ ! -d "${DOCKERFILES_DIR}" ]; then
+  log_task "Cloning dockerfiles repository"
+  c git clone "${DOCKERFILES_REPO}" "${DOCKERFILES_DIR}"
+fi
