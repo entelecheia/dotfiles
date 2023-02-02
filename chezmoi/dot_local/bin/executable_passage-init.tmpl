@@ -17,8 +17,6 @@ if ! command -v passage >/dev/null; then
     log_task "Installing passage"
     c cd "${PASSAGE_SHARE_DIR}"
     c make install PREFIX="${HOME}/.local" WITH_ZSHCOMP="yes"
-    fpath+="${HOME}/.local/share/zsh/site-functions"
-    compinit
 fi
 
 # Environment variables
