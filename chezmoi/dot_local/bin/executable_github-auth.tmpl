@@ -27,7 +27,6 @@ if [[ -n "${GITHUB_TOKEN}" ]]; then
     GITHUB_TOKEN="{{ .github.token }}"
     c gh config set -h github.com git_protocol ssh
     echo "${GITHUB_TOKEN}" | gh auth login --with-token
-    c gh auth setup-git
 else
   if [[ "${INTERACTIVE}" == "true" ]]; then
     log_info "Logging in to GitHub"
@@ -39,5 +38,7 @@ else
     log_manual_action "Log in manually, and add the SSH key to GitHub."
   fi
 fi
-# setup git authentication
-c gh auth setup-git
+if gh auth status &>/dev/null; then
+  # setup git authentication
+  c gh auth setup-git
+fi
