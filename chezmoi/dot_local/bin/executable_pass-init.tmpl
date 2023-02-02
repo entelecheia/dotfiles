@@ -33,8 +33,13 @@ if [ -d "${PASSWORD_STORE_DIR}" ] && [ -e "${PASSWORD_STORE_DIR}/.gpg-id" ]; the
         log_manual_task "Generate a gpg key and set PASSWORD_STORE_KEY to initialize pass"
     fi
 else
-    log_task "Initializing pass"
-    c pass init "${PASSWORD_STORE_KEY}"
+    if [ -n "${PASSWORD_STORE_KEY}" ]; then
+        log_task "Initializing pass"
+        c pass init "${PASSWORD_STORE_KEY}"
+    else
+        log_manual_action "Generate a gpg key and set PASSWORD_STORE_KEY to initialize pass"
+        exit 0
+    fi
 fi
 # if git is not initialized, then initialize git
 if ! git -C "${PASSWORD_STORE_DIR}" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
