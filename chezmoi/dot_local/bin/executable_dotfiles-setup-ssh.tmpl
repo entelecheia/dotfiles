@@ -1,0 +1,84 @@
+#!/bin/bash
+# {{ template "scripts-library" }}
+
+SSH_HOME="{{ .ssh.home }}"
+if [ ! -e "${SSH_HOME}" ]; then
+    log_task "Creating ${SSH_HOME}"
+    mkdir "${SSH_HOME}"
+fi
+
+# Check if we have a GitHub SSH key
+# If not, generate one and add it to GitHub
+SSH_KEY_FILE="{{ .ssh.identity_file }}"
+SSH_PUB_KEY_FILE="${SSH_KEY_FILE}.pub"
+USER="{{ .chezmoi.username }}"
+EMAIL="{{ .email }}"
+ALGORITHM="{{ .ssh.algorithm }}"
+if [ ! -e "${SSH_KEY_FILE}" ]; then
+    log_task "Generating SSH key"
+    c ssh-keygen -t "${ALGORITHM}" -C "${EMAIL}" -f "${SSH_KEY_FILE}" -N ""
+else
+    # change chmod of SSH key files to prevent SSH from complaining
+    log_task "Changing SSH key file permissions"
+    c chmod 600 "${SSH_KEY_FILE}" || true
+fi
+
+# copy gitconfig from .config/git/gitconfig to .gitconfig
+c cp "${HOME}/.config/git/gitconfig" "${HOME}/.gitconfig"
+
+GPGSIGN="{{ .gnupg.gitsign }}"
+ALLOWED_SIGNERS_FILE="${SSH_HOME}/allowed_signers"
+AUTHORIZED_KEYS_FILE="${SSH_HOME}/authorized_keys"
+# add ssh key to gitconfig for signing commits
+if [ -e "${SSH_PUB_KEY_FILE}" ]; then 
+    SSH_KEY_ID=$(cat "${SSH_PUB_KEY_FILE}")
+    SSH_PUB_KEY_ALGORITHM=$(echo "${SSH_KEY_ID}" | cut -d' ' -f1)
+    SSH_PUB_KEY_KEY=$(echo "${SSH_KEY_ID}" | cut -d' ' -f2)
+    SSH_KEY_ID="${SSH_PUB_KEY_ALGORITHM} ${SSH_PUB_KEY_KEY}"
+    SSH_SIGNER="${EMAIL} ${SSH_KEY_ID}"
+    # add SSH_SIGNER to allowed_signers
+    if [ -e "${ALLOWED_SIGNERS_FILE}" ]; then
+        if ! grep -q "${SSH_SIGNER}" "${ALLOWED_SIGNERS_FILE}"; then
+            log_task "Adding SSH key to allowed_signers"
+            c echo "${SSH_SIGNER}" >> "${ALLOWED_SIGNERS_FILE}"
+        fi
+    else
+        log_task "Adding SSH key to allowed_signers"
+        c echo "${SSH_SIGNER}" > "${ALLOWED_SIGNERS_FILE}"
+    fi
+    # add SSH_KEY_ID to authorized_keys
+    if [ -e "${AUTHORIZED_KEYS_FILE}" ]; then
+        if ! grep -q "${SSH_KEY_ID}" "${AUTHORIZED_KEYS_FILE}"; then
+            log_task "Adding SSH key to authorized_keys"
+            c echo "${SSH_KEY_ID}" >> "${AUTHORIZED_KEYS_FILE}"
+        else
+            log_info "SSH key already in authorized_keys"
+        fi
+    else
+        log_task "Adding SSH key to authorized_keys"
+        c echo "${SSH_KEY_ID}" > "${AUTHORIZED_KEYS_FILE}"
+    fi
+fi
+if [ -n "${SSH_KEY_ID}" ]; then
+    log_task "Adding SSH key to gitconfig for signing commits"
+    c git config --global user.signingkey "${SSH_PUB_KEY_FILE}"
+    if [[ "${GPGSIGN}" == "true" ]]; then
+        log_task "Enabling GPG signing for git commits"
+        c git config --global gpg.format ssh
+        c git config --global commit.gpgsign true
+        c git config --global gpg.ssh.allowedSignersFile "${ALLOWED_SIGNERS_FILE}"
+    fi
+fi
+
+# {{ if eq .chezmoi.os "darwin" }}
+
+# Add SSH key to macOS keychain
+log_task "Adding SSH key to macOS keychain"
+c ssh-add --apple-use-keychain "${SSH_KEY_FILE}"
+
+# {{ end }}
+
+if command -v ssh-agent &> /dev/null; then
+    log_task "Refreshing ssh-agent to load new keys"
+    c eval "$(ssh-agent -s)"
+fi

@@ -1,0 +1,38 @@
+#!/bin/bash
+# {{ template "scripts-library" }}
+
+SSH_HOME="{{ .ssh.home }}"
+if [ ! -e "${SSH_HOME}" ]; then
+    log_task "Creating ${SSH_HOME}"
+    mkdir "${SSH_HOME}"
+fi
+
+# Age encryption
+# if age is not installed, skip
+if command -v age-keygen &> /dev/null; then
+    AGE_KEY_FILE=${AGE_KEY_FILE:-"{{ .age.identity_file }}"}
+    AUTHORIZED_AGE_KEYS_FILE="${SSH_HOME}/authorized_age_keys"
+    if [ ! -e "${AGE_KEY_FILE}" ]; then
+        log_task "Generating age key"
+        c age-keygen -o "${AGE_KEY_FILE}"
+    fi
+    if [ -e "${AGE_KEY_FILE}" ]; then
+        AGE_RECIPIENT=$(age-keygen -y "${AGE_KEY_FILE}")
+        export AGE_RECIPIENT="${AGE_RECIPIENT}"
+        log_info "AGE_RECIPIENT: ${AGE_RECIPIENT}"
+        # add AGE_RECIPIENT to authorized_age_keys
+        if [ -e "${AUTHORIZED_AGE_KEYS_FILE}" ]; then
+            if ! grep -q "${AGE_RECIPIENT}" "${AUTHORIZED_AGE_KEYS_FILE}"; then
+                log_task "Adding age key to authorized_age_keys"
+                echo "${AGE_RECIPIENT}" >> "${AUTHORIZED_AGE_KEYS_FILE}"
+            else
+                log_info "age key already in authorized_age_keys"
+            fi
+        else
+            log_task "Adding age key to authorized_age_keys"
+            c echo "${AGE_RECIPIENT}" > "${AUTHORIZED_AGE_KEYS_FILE}"
+        fi
+    fi
+else
+    log_manual_action "Install age to generate age key"
+fi

@@ -25,7 +25,7 @@
 # {{- $name:= or (env "USER_FULLNAME") "Your Name" -}}
 # {{- $email:= or (env "USER_EMAIL") "your_email@your.domain.com" -}}
 # {{- $hostname := or (env "SYSTEM_HOSTNAME") .chezmoi.hostname -}}
-# {{- $dotdrop_user_profile := or (env "DOTDROP_USER_PROFILE") "user" -}}
+# {{- $dotdrop_user_profile := or (env "DOTDROP_PROFILE") "user" -}}
 # {{- $github_username := env "GITHUB_USERNAME" -}}
 # {{- $workspace_location := or (env "WORKSPACE_LOCATION") .chezmoi.homeDir -}}
 # {{- $apply_rootmoi := true -}}
@@ -36,6 +36,8 @@
 # {{- if eq (env "DOTFILES_USE_DOTDROP") "true" "True" "TRUE" "1" -}}
 # {{-   $use_dotdrop = true -}}
 # {{- end -}}
+# {{- $dotdrop_config_dir := or (env "DOTDROP_CONFIGDIR") (joinPath .chezmoi.homeDir ".config/dotdrop") -}}
+# {{- $dotdrop_config_file := or (env "DOTDROP_CONFIG") (joinPath $dotdrop_config_dir "config-user.yaml") -}}
 # {{- $use_pass := false -}}
 # {{- if eq (env "DOTFILES_USE_PASS") "true" "True" "TRUE" "1" -}}
 # {{-   $use_pass = true -}}
@@ -48,6 +50,7 @@
 # {{- end -}}
 # {{- $passage_store_dir := or (env "PASSAGE_DIR") (joinPath .chezmoi.homeDir ".passage/store") -}}
 # {{- $passage_repo := or (env "PASSAGE_REPO") "" -}}
+# {{- $passage_share_dir := or (env "PASSAGE_SHARE_DIR") (joinPath .chezmoi.homeDir ".local/share/passage") -}}
 # {{- $use_1password := false -}}
 # {{- if eq (env "DOTFILES_USE_1PASSWORD") "true" "True" "TRUE" "1" -}}
 # {{-   $use_1password = true -}}
@@ -653,6 +656,8 @@ data:
     dotdrop:
         enabled: {{ $use_dotdrop }}
         repo: {{ $dotdrop_repo | quote }}
+        config_dir: {{ $dotdrop_config_dir | quote }}
+        config_file: {{ $dotdrop_config_file | quote }}
         user_profile: {{ $dotdrop_user_profile | quote }}
         root_profile: "root"
     autorestic:
@@ -674,6 +679,8 @@ data:
         enabled: {{ $use_passage }}
         store_dir: {{ $passage_store_dir | quote }}
         repo: {{ $passage_repo | quote }}
+        share_dir: {{ $passage_share_dir | quote }}
+        share_repo: "https://github.com/FiloSottile/passage.git"
     op:
         enabled: {{ $use_1password }}
         account: {{ $op_account | quote }}

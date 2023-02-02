@@ -1,0 +1,63 @@
+#!/bin/bash
+# {{ template "scripts-library" }}
+
+# shellcheck source=/dev/null
+source "${HOME}/.config/shrc/00-dotfiles-export"
+
+log_task "Initializing passage"
+
+# install passage if not installed
+if ! command -v passage >/dev/null; then
+    PASSAGE_SHARE_DIR="{{ .passage.share_dir }}"
+    PASSAGE_SHARE_REPO="{{ .passage.share_repo }}"
+    if [ ! -d "${PASSAGE_SHARE_DIR}" ]; then
+        log_task "Cloning ${PASSAGE_SHARE_REPO}"
+        c git clone "${PASSAGE_SHARE_REPO}" "${PASSAGE_SHARE_DIR}"
+    fi
+    log_task "Installing passage"
+    c cd "${PASSAGE_SHARE_DIR}"
+    c make install PREFIX="${HOME}/.local" WITH_ZSHCOMP="yes"
+    fpath+="${HOME}/.local/share/zsh/site-functions"
+    compinit
+fi
+
+# Environment variables
+# ---------------------
+#   PASSAGE_DIR               Password store location
+#   PASSAGE_IDENTITIES_FILE   Identities file location
+#   PASSAGE_AGE               age binary (tested with age and rage)
+#   PASSAGE_RECIPIENTS_FILE   Override recipients for encryption operations
+#                             Passed to age with -R
+#   PASSAGE_RECIPIENTS        Override recipients for encryption operations
+#                             Space separated, each passed to age with -r
+
+if [ ! -d "${PASSAGE_DIR}" ]; then
+    log_task "Creating ${PASSAGE_DIR}"
+    mkdir -p "${PASSAGE_DIR}"
+fi
+# if git is not initialized, then initialize git
+if ! git -C "${PASSAGE_DIR}" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    log_task "Initializing git"
+    c passage git init
+fi
+
+# set the remote passage repository (github auth is required for private repositories)
+PASSAGE_REPO=${PASSAGE_REPO:-"{{ .pass.repo }}"}
+if [ -z "${PASSAGE_REPO}" ]; then
+    log_manual_task "Set PASSAGE_REPO to the remote passage repository"
+    exit 0
+fi
+
+# if the remote is not set, then set the remote
+if ! git -C "${PASSAGE_DIR}" remote get-url origin >/dev/null 2>&1; then
+    log_task "Setting remote"
+    c passage git remote add origin "${PASSAGE_REPO}"
+fi
+# fetch and checkout the main branch
+log_task "Fetching and checking out main branch"
+c passage git fetch
+c passage git checkout main
+# set upstream and pull
+log_task "Setting upstream and pulling"
+c passage git branch --set-upstream-to=origin/main main
+c passage git pull --rebase --autostash

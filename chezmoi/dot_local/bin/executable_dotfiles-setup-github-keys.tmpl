@@ -1,0 +1,46 @@
+#!/bin/bash
+# {{ template "scripts-library" }}
+
+GITHUB_USERNAME=${GITHUB_USERNAME:-"{{ .github.username }}"}
+
+if [[ -z "${GITHUB_USERNAME}" ]]; then
+  log_info "GITHUB_USERNAME environment variables are not set. Skipping GitHub authentication."
+  exit 0
+fi
+
+HOST="{{ .chezmoi.hostname }}"
+EMAIL="{{ .email }}"
+SSH_KEY_FILE="{{ .ssh.identity_file }}"
+SSH_PUB_KEY_FILE="${SSH_KEY_FILE}.pub"
+
+GPG_KEY_ID=${GPG_KEY_ID:-"{{ .gnupg.key_id }}"}
+GPG_PRIVATE_KEY_FILE="${SSH_HOME}/${GPG_KEY_ID}.key"
+GPG_PUB_KEY_FILE="${GPG_PRIVATE_KEY_FILE}.pub"
+GPG_PUB_ASC_KEY_FILE="${GPG_PUB_KEY_FILE}.asc"
+
+# "Adding SSH & GPG keys to GitHub after login"
+if command -v gh >/dev/null; then
+    if gh auth status &>/dev/null; then
+        if [ -e "${SSH_PUB_KEY_FILE}" ]; then
+            log_task "Adding SSH key to GitHub"
+            c gh ssh-key add "${SSH_PUB_KEY_FILE}" --title "${EMAIL} ${ALGORITHM} ${HOST}" || true
+        fi
+        # if [ -e "${GPG_PUB_ASC_KEY_FILE}" ]; then
+        #     log_task "Adding GPG key to GitHub"
+        #     c gh gpg-key add "${GPG_PUB_ASC_KEY_FILE}" || true
+        # fi
+        # setup git authentication
+        c gh auth setup-git
+    else
+        log_info "GitHub is not authenticated, skipping setting up GitHub keys."
+    fi
+else
+    log_info "gh is not installed"
+fi
+
+log_manual_action "If you want to add SSH key to GitHub for signing commits (github-cli does not support this yet), visit the following URL: "
+log_manual_action " > https://github.com/settings/ssh/new"
+if [ -e "${GPG_PUB_ASC_KEY_FILE}" ]; then
+    log_manual_action "If you want to add GPG key to GitHub for signing commits, run the following: "
+    log_manual_action " > gh gpg-key add ${GPG_PUB_ASC_KEY_FILE}"
+fi

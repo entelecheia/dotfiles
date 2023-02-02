@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Enable homebrew zsh completions
+if (( ${+commands[brew]} )); then
+  fpath+="$(brew --prefix)/share/zsh/site-functions"
+fi
+if [[ -d "${HOME}/.local/share/zsh/site-functions" ]]; then
+  fpath+="${HOME}/.local/share/zsh/site-functions"
+fi
+compinit

@@ -4,7 +4,8 @@
 # shellcheck source=/dev/null
 source "${HOME}/.config/shrc/00-dotfiles-export"
 
-# {{ if .pass.enabled }}
+log_task "Initializing pass"
+
 # Environment variables
 # ---------------------
 # PASSWORD_STORE_DIR                        Overrides the default password storage directory.
@@ -20,8 +21,6 @@ source "${HOME}/.config/shrc/00-dotfiles-export"
 # PASSWORD_STORE_EXTENSIONS_DIR             The location to look for executable extension files, by default PASSWORD_STORE_DIR/.extensions.
 # PASSWORD_STORE_SIGNING_KEY                If this environment variable is set, then all .gpg-id files and non-system extension files must be signed using a detached signature using the GPG key specified by the full 40 character upper-case fingerprint in this variable. If multiple fingerprints are specified, each separated by a whitespace character, then signatures must match at least one. The init command will keep signatures of .gpg-id files up to date.
 
-# Clone or update the pass repository (github auth is required for private repositories)
-PASS_REPO="{{ .pass.repo }}"
 # if gpg-id file exists in the password-store dir, then pass is already initialized
 # However, if the PASSWORD_STORE_KEY is different from the one in the gpg-id file, then reinitialize pass
 if [ -d "${PASSWORD_STORE_DIR}" ] && [ -e "${PASSWORD_STORE_DIR}/.gpg-id" ]; then
@@ -42,6 +41,13 @@ if ! git -C "${PASSWORD_STORE_DIR}" rev-parse --is-inside-work-tree >/dev/null 2
     log_task "Initializing git"
     c pass git init
 fi
+
+# set the remote pass repository (github auth is required for private repositories)
+PASS_REPO=${PASS_REPO:-"{{ .pass.repo }}"}
+if [ -z "${PASS_REPO}" ]; then
+    log_manual_task "Set PASS_REPO to the remote pass repository"
+    exit 0
+fi
 # if the remote is not set, then set the remote
 if ! git -C "${PASSWORD_STORE_DIR}" remote get-url origin >/dev/null 2>&1; then
     log_task "Setting remote"
@@ -55,47 +61,4 @@ c pass git checkout main
 log_task "Setting upstream and pulling"
 c pass git branch --set-upstream-to=origin/main main
 c pass git pull --rebase --autostash
-# {{ end -}}
 
-# {{ if .passage.enabled }}
-# install passage if not installed
-if ! command -v passage >/dev/null; then
-    log_task "Installing passage"
-    PASSGE_PATH="${HOME}/.local/share/passage"
-    c cd "${PASSGE_PATH}" || exit 1  
-    c make install PREFIX="${HOME}/.local"
-fi
-
-# Environment variables
-# ---------------------
-#   PASSAGE_DIR               Password store location
-#   PASSAGE_IDENTITIES_FILE   Identities file location
-#   PASSAGE_AGE               age binary (tested with age and rage)
-#   PASSAGE_RECIPIENTS_FILE   Override recipients for encryption operations
-#                             Passed to age with -R
-#   PASSAGE_RECIPIENTS        Override recipients for encryption operations
-#                             Space separated, each passed to age with -r
-PASSAGE_REPO="{{ .passage.repo }}"
-if [ ! -d "${PASSAGE_DIR}" ]; then
-    log_task "Creating ${PASSAGE_DIR}"
-    mkdir -p "${PASSAGE_DIR}"
-fi
-# if git is not initialized, then initialize git
-if ! git -C "${PASSAGE_DIR}" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    log_task "Initializing git"
-    c passage git init
-fi
-# if the remote is not set, then set the remote
-if ! git -C "${PASSAGE_DIR}" remote get-url origin >/dev/null 2>&1; then
-    log_task "Setting remote"
-    c passage git remote add origin "${PASSAGE_REPO}"
-fi
-# fetch and checkout the main branch
-log_task "Fetching and checking out main branch"
-c passage git fetch
-c passage git checkout main
-# set upstream and pull
-log_task "Setting upstream and pulling"
-c passage git branch --set-upstream-to=origin/main main
-c passage git pull --rebase --autostash
-# {{ end -}}
