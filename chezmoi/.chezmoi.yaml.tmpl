@@ -28,29 +28,34 @@
 # {{- $dotdrop_user_profile := or (env "DOTDROP_PROFILE") "user" -}}
 # {{- $github_username := env "GITHUB_USERNAME" -}}
 # {{- $workspace_location := or (env "WORKSPACE_LOCATION") .chezmoi.homeDir -}}
+
 # {{- $apply_rootmoi := true -}}
 # {{- if eq (env "APPLY_ROOTMOI") "false" "False" "FALSE" "0" -}}
 # {{-   $apply_rootmoi = false -}}
 # {{- end -}}
-# {{- $use_dotdrop := false -}}
-# {{- if eq (env "DOTFILES_USE_DOTDROP") "true" "True" "TRUE" "1" -}}
-# {{-   $use_dotdrop = true -}}
+
+# {{- $use_dotdrop := true -}}
+# {{- if eq (env "DOTFILES_USE_DOTDROP") "false" "False" "FALSE" "0" -}}
+# {{-   $use_dotdrop = false -}}
 # {{- end -}}
 # {{- $dotdrop_config_dir := or (env "DOTDROP_CONFIGDIR") (joinPath .chezmoi.homeDir ".config/dotdrop") -}}
 # {{- $dotdrop_config_file := or (env "DOTDROP_CONFIG") (joinPath $dotdrop_config_dir "config-user.yaml") -}}
-# {{- $use_pass := false -}}
-# {{- if eq (env "DOTFILES_USE_PASS") "true" "True" "TRUE" "1" -}}
-# {{-   $use_pass = true -}}
+
+# {{- $use_pass := true -}}
+# {{- if eq (env "DOTFILES_USE_PASS") "false" "False" "FALSE" "0" -}}
+# {{-   $use_pass = false -}}
 # {{- end -}}
 # {{- $pass_store_dir := or (env "PASSWORD_STORE_DIR") (joinPath .chezmoi.homeDir ".password-store") -}}
 # {{- $pass_repo := or (env "PASS_REPO") "" -}}
-# {{- $use_passage := false -}}
-# {{- if eq (env "DOTFILES_USE_PASSAGE") "true" "True" "TRUE" "1" -}}
-# {{-   $use_passage = true -}}
+
+# {{- $use_passage := true -}}
+# {{- if eq (env "DOTFILES_USE_PASSAGE") "false" "False" "FALSE" "0" -}}
+# {{-   $use_passage = false -}}
 # {{- end -}}
 # {{- $passage_store_dir := or (env "PASSAGE_DIR") (joinPath .chezmoi.homeDir ".passage/store") -}}
 # {{- $passage_repo := or (env "PASSAGE_REPO") "" -}}
 # {{- $passage_share_dir := or (env "PASSAGE_SHARE_DIR") (joinPath .chezmoi.homeDir ".local/share/passage") -}}
+
 # {{- $use_1password := false -}}
 # {{- if eq (env "DOTFILES_USE_1PASSWORD") "true" "True" "TRUE" "1" -}}
 # {{-   $use_1password = true -}}
@@ -59,18 +64,22 @@
 # {{- $op_vault := or (env "OP_VAULT") "dev" -}}
 # {{- $op_connect_host := or (env "OP_CONNECT_HOST") "" -}}
 # {{- $op_connect_token := or (env "OP_CONNECT_TOKEN") "" -}}
+
 # {{- $use_vault := false -}}
 # {{- if eq (env "DOTFILES_USE_VAULT") "true" "True" "TRUE" "1" -}}
 # {{-   $use_vault = true -}}
 # {{- end -}}
+
 # {{- $use_microk8s := false -}}
 # {{- if eq (env "DOTFILES_USE_MICROK8S") "true" "True" "TRUE" "1" -}}
 # {{-   $use_microk8s = true -}}
 # {{- end -}}
+
 # {{- $verbose := false -}}
 # {{- if eq (env "DOTFILES_VERBOSE") "true" "True" "TRUE" "1" -}}
 # {{-   $verbose = true -}}
 # {{- end -}}
+
 # {{- $ssh_homedir := or (joinPath .chezmoi.homeDir ".ssh") -}}
 # {{- $gpg_homedir := or (env "GNUPGHOME") (joinPath .chezmoi.homeDir ".gnupg") -}}
 # {{- $gpg_key_id_file := joinPath $ssh_homedir ".gpg-id" -}}
@@ -86,7 +95,7 @@
 # {{- $autorestic_backup_dotfiles := true -}}
 # {{- $autorestic_restore_dotfiles := true -}}
 # {{- $autorestic_location := "dotfiles" -}}
-# {{- $autorestic_restore_to := joinPath .chezmoi.homeDir ".local/share/autorestic" -}}
+# {{- $autorestic_restore_to := joinPath .chezmoi.homeDir ".local/backup/autorestic" -}}
 
 # {{- $sudoer := true -}}
 # {{- $sudo_check := "" -}}
@@ -444,19 +453,6 @@
 # {{- end -}}
 # {{- end -}}
 
-# {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "enabled") -}}
-# {{-   $use_dotdrop = .dotdrop.enabled -}}
-# {{- end -}}
-# {{- if and $interactive ($minimum | not) -}}
-# {{-   $question := "❔ Do you want to use dotdrop to manage your private dotfiles" -}}
-# {{-   $use_dotdrop = promptBool $question $use_dotdrop -}}
-# {{-   if $use_dotdrop -}}
-# {{-     writeToStdout "✅ Dotdrop enabled\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "✅ Dotdrop disabled\n" -}}
-# {{-   end -}}
-# {{- end -}}
-
 # {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "repo") -}}
 # {{-   $dotdrop_repo = .dotdrop.repo -}}
 # {{- end -}}
@@ -501,19 +497,6 @@
 # {{-   end -}}
 # {{- end -}}
 
-# {{- if and (hasKey . "pass") (hasKey .pass "enabled") -}}
-# {{-   $use_pass = .pass.enabled -}}
-# {{- end -}}
-# {{- if and $interactive ($minimum | not) -}}
-# {{-   $question := "❔ Do you want to use pass to manage your passwords" -}}
-# {{-   $use_pass = promptBool $question $use_pass -}}
-# {{-   if $use_pass -}}
-# {{-     writeToStdout "✅ pass enabled\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "✅ pass disabled\n" -}}
-# {{-   end -}}
-# {{- end -}}
-
 # {{- if and (hasKey . "pass") (hasKey .pass "repo") -}}
 # {{-   $pass_repo = .pass.repo -}}
 # {{- end -}}
@@ -527,19 +510,6 @@
 # {{-   end -}}
 # {{-   $pass_repo = $answer -}}
 # {{-   writeToStdout (printf "✅ password store repo set as '%s'\n" $pass_repo) -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "passage") (hasKey .passage "enabled") -}}
-# {{-   $use_passage = .passage.enabled -}}
-# {{- end -}}
-# {{- if and $interactive ($minimum | not) -}}
-# {{-   $question := "❔ Do you want to use passage to manage your secrets" -}}
-# {{-   $use_passage = promptBool $question $use_passage -}}
-# {{-   if $use_passage -}}
-# {{-     writeToStdout "✅ passage enabled\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "✅ passage disabled\n" -}}
-# {{-   end -}}
 # {{- end -}}
 
 # {{- if and (hasKey . "passage") (hasKey .passage "repo") -}}
