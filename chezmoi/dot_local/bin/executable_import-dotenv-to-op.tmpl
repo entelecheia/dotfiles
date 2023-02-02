@@ -1,10 +1,8 @@
 #!/bin/bash
 # {{ template "scripts-library" }}
 
-set +u
-DOTENV_FILE="${1}"
-OP_TITLE="${2}"
-set -u
+DOTENV_FILE=${1:-""}
+OP_TITLE=${2:-""}
 
 OP_VAULT=${OP_VAULT:-"{{ .op.vault }}"}
 

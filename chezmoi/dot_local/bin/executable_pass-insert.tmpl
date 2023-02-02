@@ -5,10 +5,8 @@ if [[ $# -eq 0 ]]; then
   exit 0
 fi  
 
-set +u
-PASS_NAME="${1}"
-PASSWORD="${2:-}"
-set -u
+PASS_NAME=${1:-""}
+PASSWORD=${2:-""}
 
 if [[ -z "${PASS_NAME}" ]]; then
   log_info "Usage: $0 pass-name [password]"

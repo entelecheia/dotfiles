@@ -2,10 +2,7 @@
 set -eou pipefail
 # {{ template "scripts-library" }}
 
-set +u
-OP_TITLE="${1}"
-set -u
-
+OP_TITLE=${1:-""}
 OP_VAULT=${OP_VAULT:-"{{ .op.vault }}"}
 
 # sync from 1password to pass
