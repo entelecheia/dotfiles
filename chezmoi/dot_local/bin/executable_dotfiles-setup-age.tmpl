@@ -4,10 +4,14 @@
 ensure_path_entry "${HOME}/.local/bin"
 
 GOROOT=${GOROOT:-"${HOME}/go"}
+GOPATH=${GOPATH:-"${GOROOT}/packages"}
 
 if [ -d "${GOROOT}/bin" ]; then
     ensure_path_entry "${GOROOT}/bin"
 fi 
+if [ -d "${GOPATH}/bin" ]; then
+    ensure_path_entry "${GOPATH}/bin"
+fi
 
 SSH_HOME=${SSH_HOME:-"{{ .ssh.home }}"}
 
