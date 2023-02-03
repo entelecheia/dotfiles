@@ -58,6 +58,12 @@ if ! git -C "${PASSWORD_STORE_DIR}" remote get-url origin >/dev/null 2>&1; then
     log_task "Setting remote"
     c pass git remote add origin "${PASS_REPO}"
 fi
+
+if ! gh auth status &>/dev/null; then
+  log_info "GitHub is not authenticated, skipping fetching and checking out main branch"
+  exit 0
+fi
+
 # fetch and checkout the main branch
 log_task "Fetching and checking out main branch"
 c pass git fetch
@@ -66,4 +72,3 @@ c pass git checkout main
 log_task "Setting upstream and pulling"
 c pass git branch --set-upstream-to=origin/main main
 c pass git pull --rebase --autostash
-
