@@ -5,9 +5,7 @@
 # code here must be compatible with bash and zsh.
 
 alias cz="chezmoi"
-TMP_HOME="{{ .chezmoi.workingTree }}/tmp"
-# shellcheck disable=SC2139
-alias czdr="chezmoi apply --verbose --destination ${TMP_HOME} --dry-run"
+alias czdr="chezmoi apply --verbose --destination {{ .chezmoi.workingTree }}/tmp --dry-run"
 
 alias dotp="dotfiles-push"
 alias dotu="dotfiles-update"
@@ -24,10 +22,8 @@ alias pssop="pass-sync-op"
 alias pss="pass-show"
 alias d2op="import-dotenv-to-op"
 
-# shellcheck disable=SC2139
-alias dotdrop="dotdrop --cfg=${HOME}/.config/dotdrop/config-user.yaml -p {{ .dotdrop.user_profile }}"
-# shellcheck disable=SC2139
-alias rootdrop="dotdrop --cfg=${HOME}/.config/dotdrop/config-root.yaml -p {{ .dotdrop.root_profile }}"
+alias dotdrop="dotdrop --cfg={{ .dotdrop.config_file }} -p {{ .dotdrop.user_profile }}"
+alias rootdrop="dotdrop --cfg={{ .dotdrop.root_config_file }} -p {{ .dotdrop.root_profile }}"
 
 alias mkctl="microk8s kubectl"
 

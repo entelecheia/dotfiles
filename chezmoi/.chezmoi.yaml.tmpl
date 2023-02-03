@@ -40,6 +40,7 @@
 # {{- end -}}
 # {{- $dotdrop_config_dir := or (env "DOTDROP_CONFIGDIR") (joinPath .chezmoi.homeDir ".config/dotdrop") -}}
 # {{- $dotdrop_config_file := or (env "DOTDROP_CONFIG") (joinPath $dotdrop_config_dir "config-user.yaml") -}}
+# {{- $dotdrop_root_config_file := or (env "DOTDROP_ROOT_CONFIG") (joinPath $dotdrop_config_dir "config-root.yaml") -}}
 
 # {{- $use_pass := true -}}
 # {{- if eq (env "DOTFILES_USE_PASS") "false" "False" "FALSE" "0" -}}
@@ -629,6 +630,7 @@ data:
         repo: {{ $dotdrop_repo | quote }}
         config_dir: {{ $dotdrop_config_dir | quote }}
         config_file: {{ $dotdrop_config_file | quote }}
+        root_config_file: {{ $dotdrop_root_config_file | quote }}
         user_profile: {{ $dotdrop_user_profile | quote }}
         root_profile: "root"
     autorestic:
