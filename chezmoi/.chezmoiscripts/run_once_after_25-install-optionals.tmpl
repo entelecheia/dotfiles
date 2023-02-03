@@ -85,4 +85,12 @@ elif brew --version &>/dev/null; then
 fi
 # {{ end }}
 
+if ! command -v dotdrop >/dev/null; then
+  log_task "Install dotdrop with pip3"
+  c /usr/bin/pip3 install wheel
+  c /usr/bin/pip3 install dotdrop --user
+  # Add ~/.local/bin to PATH in order to use dotdrop before finishing the installation
+  export PATH="$HOME/.local/bin:$PATH"
+fi
+
 # {{ end }}
