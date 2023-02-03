@@ -29,6 +29,13 @@ fi
 #   PASSAGE_RECIPIENTS        Override recipients for encryption operations
 #                             Space separated, each passed to age with -r
 
+AGE_KEY_FILE=${AGE_KEY_FILE:-"{{ .age.identity_file }}"}
+
+if [ ! -e "${AGE_KEY_FILE}" ]; then
+    log_manual_action "Generate age key with \`age-keygen\`"
+    exit 0
+fi
+
 if [ ! -d "${PASSAGE_DIR}" ]; then
     log_task "Creating ${PASSAGE_DIR}"
     mkdir -p "${PASSAGE_DIR}"

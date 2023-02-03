@@ -2,10 +2,16 @@
 # {{ template "scripts-library" }}
 
 SSH_HOME=${SSH_HOME:-"{{ .ssh.home }}"}
+
 if [ ! -e "${SSH_HOME}" ]; then
     log_task "Creating ${SSH_HOME}"
     mkdir "${SSH_HOME}"
 fi
+
+if ! go version &>/dev/null; then
+    GOROOT=${GOROOT:-"${HOME}/go"}
+    ensure_path_entry "${GOROOT}/bin"
+fi 
 
 # Age encryption
 # if age is not installed, skip
