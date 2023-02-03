@@ -1,13 +1,15 @@
 #!/bin/bash
 # {{ template "scripts-library" }}
 
-DOCKERFILES_REPO="{{- .docker.repo }}"
+DOCKERFILES_REPO=${DOCKERFILES_REPO:-"{{- .docker.repo }}"}
+DOCKERFILES_DIR=${DOCKERFILES_DIR:-"{{- .docker.share_dir }}"}
+
 if [[ -z "$DOCKERFILES_REPO" ]]; then
   log_info "Dockerfiles repository not set"
   exit 0
 fi
 
-DOCKERFILES_DIR="${HOME}/.local/share/dockerfiles"
+
 if [ -d "${DOCKERFILES_DIR}" ]; then
   read -r -p "Remove existing dockerfiles directory? [y/N] " response
   if [[ "${response}" =~ ^([yY][eE][sS]|[yY])$ ]]; then

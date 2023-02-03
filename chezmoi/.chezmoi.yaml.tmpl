@@ -137,6 +137,7 @@
 # {{- $github_token := "" -}}
 # {{- $dotdrop_repo := "" -}}
 # {{- $dockerfiles_repo := "https://github.com/entelecheia/dockerfiles.git" -}}
+# {{- $dockerfiles_share_dir := joinPath .chezmoi.homeDir ".local/share/dockerfiles" -}}
 # {{- $ssh_algorithm := "ed25519" -}}
 # {{- $workspace_name := "workspace" -}}
 # {{- $workspace_root := joinPath .chezmoi.homeDir $workspace_name -}}
@@ -659,6 +660,7 @@ data:
         connect_token: {{ $op_connect_token | quote }}
     docker:
         repo: {{ $dockerfiles_repo | quote }}
+        share_dir: {{ $dockerfiles_share_dir | quote }}
         username: {{ $docker_username | quote }}
     workspace:
         name: {{ $workspace_name | quote }}
