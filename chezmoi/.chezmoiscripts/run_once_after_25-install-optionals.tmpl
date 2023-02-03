@@ -85,25 +85,4 @@ elif brew --version &>/dev/null; then
 fi
 # {{ end }}
 
-if ! command -v dotdrop >/dev/null; then
-  log_task "Install dotdrop with pip3"
-  c /usr/bin/pip3 install wheel
-  c /usr/bin/pip3 install dotdrop --user
-  # Add ~/.local/bin to PATH in order to use dotdrop before finishing the installation
-  export PATH="$HOME/.local/bin:$PATH"
-fi
-
-# install passage if not installed
-if ! command -v passage >/dev/null; then
-    PASSAGE_SHARE_DIR="{{ .passage.share_dir }}"
-    PASSAGE_SHARE_REPO="{{ .passage.share_repo }}"
-    if [ ! -d "${PASSAGE_SHARE_DIR}" ]; then
-        log_task "Cloning ${PASSAGE_SHARE_REPO}"
-        c git clone "${PASSAGE_SHARE_REPO}" "${PASSAGE_SHARE_DIR}"
-    fi
-    log_task "Installing passage"
-    c cd "${PASSAGE_SHARE_DIR}"
-    c make install PREFIX="${HOME}/.local" WITH_ZSHCOMP="yes"
-fi
-
 # {{ end }}
