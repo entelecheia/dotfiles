@@ -2,7 +2,7 @@
 
 # ARG_OPTIONAL_REPEATED([variant],[v],[The variant of the test to run. Possible values: devcontainer, wsl, and gnome. Default: devcontainer.],[])
 # ARG_OPTIONAL_REPEATED([os],[o],[The OS to run the tests against. The list of possible values can be found at https://mcr.microsoft.com/v2/devcontainers/base/tags/list. Examples: ubuntu-18.04, ubuntu-22.04, and alpine. Default: ubuntu-20.04.],[])
-# ARG_OPTIONAL_BOOLEAN([debug],[d],[Whether to enable debug logs or not],[on])
+# ARG_OPTIONAL_BOOLEAN([debug],[d],[Whether to enable debug logs or not],[off])
 # ARG_OPTIONAL_SINGLE([pre-script],[],[The custom script to run before the installation],[])
 # ARG_HELP([Tests the installation of the dotfiles in differents scenarios],[])
 # ARGBASH_SET_INDENT([  ])
@@ -28,7 +28,7 @@ begins_with_short_option() {
 # THE DEFAULTS INITIALIZATION - OPTIONALS
 _arg_variant=()
 _arg_os=()
-_arg_debug="on"
+_arg_debug="off"
 _arg_pre_script=
 
 print_help() {
