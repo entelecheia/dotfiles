@@ -2,7 +2,7 @@
 # {{ template "scripts-library" }}
 
 if ! gh auth status &>/dev/null; then
-  log_info "GitHub CLI not authenticated, skipping pass and passage pull"
+  log_info "GitHub is not authenticated"
   exit 0
 fi
 

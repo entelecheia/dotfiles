@@ -8,8 +8,9 @@ if [ ! -e "${SSH_HOME}" ]; then
     mkdir "${SSH_HOME}"
 fi
 
-if ! go version &>/dev/null; then
-    GOROOT=${GOROOT:-"${HOME}/go"}
+GOROOT=${GOROOT:-"${HOME}/go"}
+
+if [ -e "${GOROOT}/bin/age" ]; then
     ensure_path_entry "${GOROOT}/bin"
 fi 
 
