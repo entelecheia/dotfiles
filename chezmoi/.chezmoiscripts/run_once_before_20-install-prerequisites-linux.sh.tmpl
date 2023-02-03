@@ -1,9 +1,7 @@
 #!/bin/bash
-# {{ template "scripts-library" }}
-# The following line is for ShellCheck to correctly identify the above included library
-# true || source ../.chezmoitemplates/scripts-library
-
 # {{ if and (eq .chezmoi.os "linux") (.system.is_sudoer) }}
+
+# {{ template "scripts-library" }}
 
 # prepare to install githubcli
 KEYRING_FILE="/usr/share/keyrings/githubcli-archive-keyring.gpg"
@@ -125,4 +123,4 @@ if ! sops --version &>/dev/null; then
   c go install go.mozilla.org/sops/v3/cmd/sops@latest
 fi
 
-# {{ end -}}
+# {{- end -}}
