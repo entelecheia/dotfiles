@@ -1,18 +1,20 @@
 #!/bin/bash
 # {{ template "scripts-library" }}
 
+ensure_path_entry "${HOME}/.local/bin"
+
+GOROOT=${GOROOT:-"${HOME}/go"}
+
+if [ -d "${GOROOT}/bin" ]; then
+    ensure_path_entry "${GOROOT}/bin"
+fi 
+
 SSH_HOME=${SSH_HOME:-"{{ .ssh.home }}"}
 
 if [ ! -e "${SSH_HOME}" ]; then
     log_task "Creating ${SSH_HOME}"
-    mkdir "${SSH_HOME}"
+    c mkdir "${SSH_HOME}"
 fi
-
-GOROOT=${GOROOT:-"${HOME}/go"}
-
-if [ -e "${GOROOT}/bin/age" ]; then
-    ensure_path_entry "${GOROOT}/bin"
-fi 
 
 # Age encryption
 # if age is not installed, skip

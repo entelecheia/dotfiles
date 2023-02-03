@@ -5,7 +5,7 @@ SSH_HOME=${SSH_HOME:-"{{ .ssh.home }}"}
 
 if [ ! -e "${SSH_HOME}" ]; then
     log_task "Creating ${SSH_HOME}"
-    mkdir "${SSH_HOME}"
+    c mkdir "${SSH_HOME}"
 fi
 
 # Check if we have a GitHub SSH key

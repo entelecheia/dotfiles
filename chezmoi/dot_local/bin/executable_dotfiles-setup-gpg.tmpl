@@ -7,7 +7,7 @@ export GNUPGHOME="${GNUPGHOME}"
 
 if [ ! -e "${SSH_HOME}" ]; then
     log_task "Creating ${SSH_HOME}"
-    mkdir "${SSH_HOME}"
+    c mkdir "${SSH_HOME}"
 fi
 
 # set eviroment variable GNUPGHOME to ~/.gnupg if not set
