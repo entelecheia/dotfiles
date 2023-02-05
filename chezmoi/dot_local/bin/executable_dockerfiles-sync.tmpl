@@ -123,7 +123,7 @@ else
     copy_dockerfiles "${SOURCE_DIR}/${DOCKER_NAME}" "${DESTINATION_DIR}/${DOCKER_NAME}"
   else
     # if DOCKER_NAME is not provided, copy dockerfiles from all project directories
-    for docker_dir in "${DOCKERFILES_DIR}"/*; do
+    for docker_dir in "${DOCKERFILES_SHARE_DIR}"/*; do
       if [[ -d "$docker_dir" ]]; then
         DOCKER_NAME=$(basename "$docker_dir")
         copy_dockerfiles "${SOURCE_DIR}/${DOCKER_NAME}" "${DESTINATION_DIR}/${DOCKER_NAME}"
