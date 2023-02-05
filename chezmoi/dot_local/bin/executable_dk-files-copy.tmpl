@@ -6,11 +6,11 @@
 true || source ../../.chezmoitemplates/scripts-library
 
 # arguments usage
-USAGE="DOCKER_NAME [-b|--build-path BUILD_PATH] [-d|--dockerfile-path DOCKERFILE_PATH] [-h|--help]"
+USAGE="DOCKER_NAME [--project-directory PROJECT_DIR] [--dockerfiles-directory DOCKERFILES_DIR] [-h|--help]"
 
 # declare arguments
-BUILD_PATH=""
-DOCKERFILE_PATH=""
+PROJECT_DIR=""
+DOCKERFILES_DIR=""
 ADDITIONAL_ARGS=""
 
 set +u
@@ -30,19 +30,19 @@ fi
 # parse options
 while [[ $# -gt 0 ]]; do
   case "$1" in
-  -b | --build-path)
-    BUILD_PATH="$2"
+  --project-directory)
+    PROJECT_DIR="$2"
     shift
     ;;
-  --build-path=*)
-    BUILD_PATH="${1#*=}"
+  --project-directory=*)
+    PROJECT_DIR="${1#*=}"
     ;;
-  -d | --dockerfile-path)
-    DOCKERFILE_PATH="$2"
+  --dockerfiles-directory)
+    DOCKERFILES_DIR="$2"
     shift
     ;;
-  --dockerfile-path=*)
-    DOCKERFILE_PATH="${1#*=}"
+  --dockerfiles-directory=*)
+    DOCKERFILES_DIR="${1#*=}"
     ;;
   -h | --help)
     echo "Usage: $0 $USAGE" >&2    
@@ -100,9 +100,9 @@ log_task "Copying dockerfiles"
 PROJECT_DIR="${WORKSPACE_ROOT}/projects"
 DOCKERFILE_DIR="${HOME}/.local/share/dockerfiles"
 
-# if both BUILD_PATH and DOCKERFILE_PATH are provided, copy dockerfiles
-if [[ -n "$BUILD_PATH" ]] && [[ -n "$DOCKERFILE_PATH" ]]; then
-  copy_dockerfiles "$BUILD_PATH" "$DOCKERFILE_PATH"
+# if both PROJECT_DIR and DOCKERFILES_DIR are provided, copy dockerfiles
+if [[ -n "$PROJECT_DIR" ]] && [[ -n "$DOCKERFILES_DIR" ]]; then
+  copy_dockerfiles "$PROJECT_DIR" "$DOCKERFILES_DIR"
 else
   # if DOCKER_NAME is provided, copy dockerfiles from project directory
   if [[ -n "$DOCKER_NAME" ]]; then
