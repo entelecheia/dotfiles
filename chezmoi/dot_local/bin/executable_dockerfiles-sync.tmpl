@@ -2,15 +2,15 @@
 
 # {{ template "scripts-library" }}
 
-# The following line is for ShellCheck to correctly identify the above include
-true || source ../../.chezmoitemplates/scripts-library
-
 # arguments usage
-USAGE="DOCKER_NAME [--project-directory PROJECT_DIR] [--dockerfiles-directory DOCKERFILES_DIR] [-h|--help]"
+USAGE="DOCKER_NAME [--from-project] [--project-directory PROJECT_DIR] [--dockerfiles-directory DOCKERFILES_DIR] [-h|--help]"
 
 # declare arguments
+PROJECT_ROOT_DIR=${PROJECT_ROOT_DIR:-"${WORKSPACE_ROOT}/projects"}
+DOCKERFILES_SHARE_DIR=${DOCKERFILES_SHARE_DIR:-"{{- .docker.share_dir }}"}
 PROJECT_DIR=""
 DOCKERFILES_DIR=""
+FROM_PROJECT="false"
 ADDITIONAL_ARGS=""
 
 set +u
@@ -33,6 +33,9 @@ while [[ $# -gt 0 ]]; do
   --project-directory)
     PROJECT_DIR="$2"
     shift
+    ;;
+  --from-project)
+    FROM_PROJECT="true"
     ;;
   --project-directory=*)
     PROJECT_DIR="${1#*=}"
@@ -97,22 +100,33 @@ function copy_dockerfiles() {
 
 log_task "Copying dockerfiles"
 
-PROJECT_DIR="${WORKSPACE_ROOT}/projects"
-DOCKERFILE_DIR="${HOME}/.local/share/dockerfiles"
-
 # if both PROJECT_DIR and DOCKERFILES_DIR are provided, copy dockerfiles
 if [[ -n "$PROJECT_DIR" ]] && [[ -n "$DOCKERFILES_DIR" ]]; then
-  copy_dockerfiles "$PROJECT_DIR" "$DOCKERFILES_DIR"
+  if [[ "$FROM_PROJECT" == "true" ]]; then
+    SOURCE_DIR="$PROJECT_DIR"
+    DESTINATION_DIR="$DOCKERFILES_DIR"
+  else
+    SOURCE_DIR="$DOCKERFILES_DIR"
+    DESTINATION_DIR="$PROJECT_DIR"
+  fi
+  copy_dockerfiles "$SOURCE_DIR" "$DESTINATION_DIR"
 else
+  if [[ "$FROM_PROJECT" == "true" ]]; then
+    SOURCE_DIR="$PROJECT_ROOT_DIR"
+    DESTINATION_DIR="$DOCKERFILES_SHARE_DIR"
+  else
+    SOURCE_DIR="$DOCKERFILES_SHARE_DIR"
+    DESTINATION_DIR="$PROJECT_ROOT_DIR"
+  fi
   # if DOCKER_NAME is provided, copy dockerfiles from project directory
   if [[ -n "$DOCKER_NAME" ]]; then
-    copy_dockerfiles "${PROJECT_DIR}/${DOCKER_NAME}" "${DOCKERFILE_DIR}/${DOCKER_NAME}"
+    copy_dockerfiles "${SOURCE_DIR}/${DOCKER_NAME}" "${DESTINATION_DIR}/${DOCKER_NAME}"
   else
     # if DOCKER_NAME is not provided, copy dockerfiles from all project directories
-    for docker_dir in "${DOCKERFILE_DIR}"/*; do
+    for docker_dir in "${DOCKERFILES_DIR}"/*; do
       if [[ -d "$docker_dir" ]]; then
         DOCKER_NAME=$(basename "$docker_dir")
-        copy_dockerfiles "${PROJECT_DIR}/${DOCKER_NAME}" "${DOCKERFILE_DIR}/${DOCKER_NAME}"
+        copy_dockerfiles "${SOURCE_DIR}/${DOCKER_NAME}" "${DESTINATION_DIR}/${DOCKER_NAME}"
       fi
     done
   fi  

@@ -155,7 +155,7 @@ elif [[ "$VERSION" == "pre*" ]] || [[ "$VERSION" == "night*" ]]; then
 fi
 export VERSION
 
-DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
+DOCKERFILES_SHARE_DIR="{{- .docker.share_dir }}"
 if [[ -n "$TAG" ]]; then
   # {base_name}-{TAG}.{ext}
   if [[ -z "$COMPOSE_FILENAME" ]]; then
@@ -180,7 +180,7 @@ if [[ -z "$PROJECT_DIR" ]]; then
 fi
 # if project directory does not exist or FROM_PROJECT is false, use dockerfile repo path
 if [[ ! -d "$PROJECT_DIR" ]] || [[ "$FROM_PROJECT" != "false" ]]; then
-  PROJECT_DIR="${DOCKERFILES_REPO_DIR}/${DOCKER_NAME}"
+  PROJECT_DIR="${DOCKERFILES_SHARE_DIR}/${DOCKER_NAME}"
 fi
 # if it still does not exist, exit
 if [[ ! -d "$PROJECT_DIR" ]]; then
@@ -189,7 +189,7 @@ if [[ ! -d "$PROJECT_DIR" ]]; then
 fi
 
 if [[ -z "$DOCKERFILES_DIR" ]]; then
-  # DOCKERFILES_DIR="${DOCKERFILES_REPO_DIR}/${DOCKER_NAME}/.docker"
+  # DOCKERFILES_DIR="${DOCKERFILES_SHARE_DIR}/${DOCKER_NAME}/.docker"
   DOCKERFILES_DIR="${PROJECT_DIR}/.docker"
 fi
 COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
