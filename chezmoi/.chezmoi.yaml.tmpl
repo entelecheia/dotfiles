@@ -507,7 +507,7 @@
 # {{- if and (hasKey . "code") (hasKey .code "enabled") -}}
 # {{-   $use_code = .code.enabled -}}
 # {{- end -}}
-# {{- if and $interactive $sudoer ($minimum | not) -}}
+# {{- if and $interactive $sudoer -}}
 # {{-   $question := "❔ Do you want to use visual studio code" -}}
 # {{-   $use_code = promptBool $question $use_code -}}
 # {{-   if $use_code -}}
