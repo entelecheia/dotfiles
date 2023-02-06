@@ -57,6 +57,11 @@
 # {{- $passage_repo := or (env "PASSAGE_REPO") "" -}}
 # {{- $passage_share_dir := or (env "PASSAGE_SHARE_DIR") (joinPath .chezmoi.homeDir ".local/share/passage") -}}
 
+# {{- $use_code := false -}}
+# {{- if eq (env "DOTFILES_USE_CODE") "true" "True" "TRUE" "1" -}}
+# {{-   $use_code = true -}}
+# {{- end -}}
+
 # {{- $use_1password := false -}}
 # {{- if eq (env "DOTFILES_USE_1PASSWORD") "true" "True" "TRUE" "1" -}}
 # {{-   $use_1password = true -}}
@@ -499,6 +504,19 @@
 # {{-   end -}}
 # {{- end -}}
 
+# {{- if and (hasKey . "code") (hasKey .code "enabled") -}}
+# {{-   $use_code = .code.enabled -}}
+# {{- end -}}
+# {{- if and $interactive $sudoer ($minimum | not) -}}
+# {{-   $question := "❔ Do you want to use visual studio code" -}}
+# {{-   $use_code = promptBool $question $use_code -}}
+# {{-   if $use_code -}}
+# {{-     writeToStdout "✅ visual studio code enabled\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ visual studio code disabled\n" -}}
+# {{-   end -}}
+# {{- end -}}
+
 # {{- if and (hasKey . "pass") (hasKey .pass "repo") -}}
 # {{-   $pass_repo = .pass.repo -}}
 # {{- end -}}
@@ -633,6 +651,22 @@ data:
         root_config_file: {{ $dotdrop_root_config_file | quote }}
         user_profile: {{ $dotdrop_user_profile | quote }}
         root_profile: "root"
+    docker:
+        repo: {{ $dockerfiles_repo | quote }}
+        share_dir: {{ $dockerfiles_share_dir | quote }}
+        username: {{ $docker_username | quote }}
+    pass:
+        enabled: {{ $use_pass }}
+        store_dir: {{ $pass_store_dir | quote }}
+        repo: {{ $pass_repo | quote }}
+    passage:
+        enabled: {{ $use_passage }}
+        store_dir: {{ $passage_store_dir | quote }}
+        repo: {{ $passage_repo | quote }}
+        share_dir: {{ $passage_share_dir | quote }}
+        share_repo: "https://github.com/FiloSottile/passage.git"
+    code:
+        enabled: {{ $use_code }}
     autorestic:
         enabled: {{ $use_autorestic }}
         config_file: {{ $autorestic_config_file | quote }}
@@ -644,26 +678,12 @@ data:
         enabled: {{ $use_microk8s }}
     vault:
         enabled: {{ $use_vault }}
-    pass:
-        enabled: {{ $use_pass }}
-        store_dir: {{ $pass_store_dir | quote }}
-        repo: {{ $pass_repo | quote }}
-    passage:
-        enabled: {{ $use_passage }}
-        store_dir: {{ $passage_store_dir | quote }}
-        repo: {{ $passage_repo | quote }}
-        share_dir: {{ $passage_share_dir | quote }}
-        share_repo: "https://github.com/FiloSottile/passage.git"
     op:
         enabled: {{ $use_1password }}
         account: {{ $op_account | quote }}
         vault: {{ $op_vault | quote }}
         connect_host: {{ $op_connect_host | quote }}
         connect_token: {{ $op_connect_token | quote }}
-    docker:
-        repo: {{ $dockerfiles_repo | quote }}
-        share_dir: {{ $dockerfiles_share_dir | quote }}
-        username: {{ $docker_username | quote }}
     workspace:
         name: {{ $workspace_name | quote }}
         location: {{ $workspace_location | quote }}

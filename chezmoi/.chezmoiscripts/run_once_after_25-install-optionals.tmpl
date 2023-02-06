@@ -94,3 +94,26 @@ if ! command -v dotdrop >/dev/null; then
 fi
 
 # {{ end }}
+
+# {{ if and .system.is_sudoer .code.enabled }}
+
+# install code if not installed
+if ! command -v code >/dev/null; then
+  log_task "Installing VSCode"
+
+  KEYRING_FILE="/usr/share/keyrings/packages.microsoft.gpg"
+  if [[ ! -e "${KEYRING_FILE}" ]]; then
+    c wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o "${KEYRING_FILE}"
+  fi
+  SOURCE_LIST_FILE="/etc/apt/sources.list.d/vscode.list"
+  if [[ ! -e "${SOURCE_LIST_FILE}" ]]; then
+    c sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+  fi
+  package="code"
+  if ! is_apt_package_installed "${package}"; then
+    c sudo apt update
+    c sudo apt install code
+  fi
+fi
+
+# {{- end -}}
