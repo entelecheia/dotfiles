@@ -25,7 +25,10 @@ alias d2op="import-dotenv-to-op"
 alias dotdrop="dotdrop --cfg={{ .dotdrop.config_file }} -p {{ .dotdrop.user_profile }}"
 alias rootdrop="dotdrop --cfg={{ .dotdrop.root_config_file }} -p {{ .dotdrop.root_profile }}"
 
-alias cdsvr="code tunnel --accept-server-license-terms"
+alias cdt="code tunnel --accept-server-license-terms"
+alias cdtsi="code tunnel service install"
+alias cdtsu="code tunnel service uninstall"
+alias cdtsl="code tunnel service log"
 
 alias mkctl="microk8s kubectl"
 
