@@ -99,13 +99,13 @@ fi
 if ! command -v code >/dev/null; then
   log_task "Installing VSCode"
 
-  KEYRING_FILE="/usr/share/keyrings/packages.microsoft.gpg"
-  if [[ ! -e "${KEYRING_FILE}" ]]; then
-    c wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o "${KEYRING_FILE}"
-  fi
   SOURCE_LIST_FILE="/etc/apt/sources.list.d/vscode.list"
   if [[ ! -e "${SOURCE_LIST_FILE}" ]]; then
-    c sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+    c sudo apt-get install wget gpg
+    c wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+    c sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+    c sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+    c rm -f packages.microsoft.gpg
   fi
   package="code"
   if ! is_apt_package_installed "${package}"; then
