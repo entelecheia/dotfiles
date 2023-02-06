@@ -93,8 +93,6 @@ if ! command -v dotdrop >/dev/null; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
 
-# {{ end }}
-
 # {{ if and .system.is_sudoer .code.enabled }}
 
 # install code if not installed
@@ -115,5 +113,7 @@ if ! command -v code >/dev/null; then
     c sudo apt install code
   fi
 fi
+
+# {{ end }}
 
 # {{- end -}}
