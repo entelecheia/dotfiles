@@ -99,6 +99,12 @@ fi
 if ! command -v code >/dev/null; then
   log_task "Installing VSCode"
 
+# {{ if eq .chezmoi.os "darwin" }}
+  package="code-cli"
+  if ! is_brew_package_installed "${package}"; then
+    c brew install "${package}"
+  fi
+# {{ else if eq .chezmoi.os "linux" }}
   SOURCE_LIST_FILE="/etc/apt/sources.list.d/vscode.list"
   if [[ ! -e "${SOURCE_LIST_FILE}" ]]; then
     c sudo apt-get install wget gpg
@@ -112,6 +118,8 @@ if ! command -v code >/dev/null; then
     c sudo apt update
     c sudo apt install code
   fi
+# {{ end }}
+
 fi
 
 # {{ end }}
