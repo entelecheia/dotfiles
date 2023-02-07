@@ -1,17 +1,29 @@
 #!/bin/bash
 # {{ template "scripts-library" }}
 
+# check if --interactive or -f flag is set
+set +u 
+if [[ "${1}" == "--interactive" ]] || [[ "${1}" == "-i" ]]; then
+    INTERACTIVE=true
+else
+    INTERACTIVE=false
+fi
+set -u
+
 GPG_KEY_ID=${GPG_KEY_ID:-""}
 GNUPGHOME=${GNUPGHOME:-"{{ .gnupg.home }}"}
 export GNUPGHOME="${GNUPGHOME}"
+GPG_KEY_ID_FILE="{{ .gnupg.key_id_file }}"
+USER_FULLNAME=${USER_FULLNAME:-"{{ .name }}"}
+USER_EMAIL=${USER_EMAIL:-"{{ .email }}"}
+GPG_PASSPHRASE=${GPG_PASSPHRASE:-"{{ .gnupg.passphrase }}"}
+
+SSH_HOME=${SSH_HOME:-"{{ .ssh.home }}"}
 
 if [ ! -e "${SSH_HOME}" ]; then
     log_task "Creating ${SSH_HOME}"
     c mkdir "${SSH_HOME}"
 fi
-
-# set eviroment variable GNUPGHOME to ~/.gnupg if not set
-GPG_KEY_ID_FILE="{{ .gnupg.key_id_file }}"
 
 if [ -z "${GPG_KEY_ID}" ] && [ -e "${GPG_KEY_ID_FILE}" ]; then 
     GPG_KEY_ID=$(cat "${GPG_KEY_ID_FILE}")
@@ -38,11 +50,11 @@ if [ -n "${GPG_KEY_ID}" ]; then
     if [ -z "${GPG_SEC_KEY_ID}" ]; then
         if [ -e "${GPG_PRIVATE_KEY_FILE}" ]; then
             log_task "Importing the GPG private key"
-            # {{ if .system.is_interactive }}
-            c gpg --allow-secret-key-import --import "${GPG_PRIVATE_KEY_FILE}"
-            # {{ else }}
-            c gpg --batch --pinentry-mode=loopback --yes --passphrase "{{ .gnupg.passphrase }}" --import "${GPG_PRIVATE_KEY_FILE}"
-            # {{ end }}
+            if [ "${INTERACTIVE}" = true ]; then
+                c gpg --allow-secret-key-import --import "${GPG_PRIVATE_KEY_FILE}"
+            else
+                c gpg --batch --pinentry-mode=loopback --yes --passphrase "{{ .gnupg.passphrase }}" --import "${GPG_PRIVATE_KEY_FILE}"
+            fi
         else
             log_info "GPG private key not found"
         fi
@@ -51,71 +63,72 @@ if [ -n "${GPG_KEY_ID}" ]; then
     fi
 fi
 GPG_KEY_ID=$(gpg --list-secret-keys --with-colons | grep 'sec' | grep "${GPG_KEY_ID}" | cut -d':' -f5 || echo "")
-# {{ if .gnupg.passphrase }}
-# Create a batch file
-if [ -z "${GPG_KEY_ID}" ]; then
-    log_task "Generating GPG key"
 
-    # Generate a GPG key
-    # https://www.gnupg.org/documentation/manuals/gnupg/Unattended-GPG-key-generation.html
-    cat > .tmp_gpg_batch <<EOF
-        %echo Generating a basic OpenPGP key
-        Key-Type: EDDSA
-        Key-Length: 1024
-        Key-Curve: ed25519
-        Subkey-Type: ECDH
-        Subkey-Curve: cv25519
-        Name-Real: {{ .name }}
-        Name-Email: {{ .email }}
-        Expire-Date: 0
-        Passphrase: {{ .gnupg.passphrase }}
-        # Do a commit here, so that we can later print "done" :-)
-        %commit
-        %echo done
+if [ -n "${GPG_PASSPHRASE}" ]; then
+    # Create a batch file
+    if [ -z "${GPG_KEY_ID}" ]; then
+        log_task "Generating GPG key"
+
+        # Generate a GPG key
+        # https://www.gnupg.org/documentation/manuals/gnupg/Unattended-GPG-key-generation.html
+        cat > .tmp_gpg_batch <<EOF
+            %echo Generating a basic OpenPGP key
+            Key-Type: EDDSA
+            Key-Length: 1024
+            Key-Curve: ed25519
+            Subkey-Type: ECDH
+            Subkey-Curve: cv25519
+            Name-Real: ${USER_FULLNAME}
+            Name-Email: ${USER_EMAIL}
+            Expire-Date: 0
+            Passphrase: ${GPG_PASSPHRASE}
+            # Do a commit here, so that we can later print "done" :-)
+            %commit
+            %echo done
 EOF
-    c gpg --batch --generate-key .tmp_gpg_batch
-    rm .tmp_gpg_batch
+        c gpg --batch --generate-key .tmp_gpg_batch
+        rm .tmp_gpg_batch
 
-    GPG_KEY_ID=$(gpg --list-secret-keys --with-colons | grep 'sec' | tail -n 1 | cut -d':' -f5)
-    GPG_PRIVATE_KEY_FILE="${SSH_HOME}/${GPG_KEY_ID}.key"
-    GPG_PRIVATE_ASC_KEY_FILE="${GPG_PRIVATE_KEY_FILE}.asc"
-    GPG_PUB_KEY_FILE="${GPG_PRIVATE_KEY_FILE}.pub"
-    GPG_PUB_ASC_KEY_FILE="${GPG_PUB_KEY_FILE}.asc"
-    # Save public key to a file
-    log_task "Exporting GPG public key"
-    c gpg --export --armor  "${GPG_KEY_ID}" > "${GPG_PUB_ASC_KEY_FILE}"
-    c gpg --export "${GPG_KEY_ID}" > "${GPG_PUB_KEY_FILE}"
-    # Save private key to a file
-    log_task "Exporting GPG private key"
-    c gpg --batch --pinentry-mode=loopback --yes --passphrase "{{ .gnupg.passphrase }}" --export-secret-keys --armor "${GPG_KEY_ID}" > "${GPG_PRIVATE_ASC_KEY_FILE}"
-    c gpg --batch --pinentry-mode=loopback --yes --passphrase "{{ .gnupg.passphrase }}" --export-secret-keys "${GPG_KEY_ID}" > "${GPG_PRIVATE_KEY_FILE}"
-fi
-# {{ else }}
-# {{   if .system.is_interactive }}
-if [ -z "${GPG_KEY_ID}" ]; then
-    log_task "Generating GPG key"
-    c gpg --full-generate-key
+        GPG_KEY_ID=$(gpg --list-secret-keys --with-colons | grep 'sec' | tail -n 1 | cut -d':' -f5)
+        GPG_PRIVATE_KEY_FILE="${SSH_HOME}/${GPG_KEY_ID}.key"
+        GPG_PRIVATE_ASC_KEY_FILE="${GPG_PRIVATE_KEY_FILE}.asc"
+        GPG_PUB_KEY_FILE="${GPG_PRIVATE_KEY_FILE}.pub"
+        GPG_PUB_ASC_KEY_FILE="${GPG_PUB_KEY_FILE}.asc"
+        # Save public key to a file
+        log_task "Exporting GPG public key"
+        c gpg --export --armor  "${GPG_KEY_ID}" > "${GPG_PUB_ASC_KEY_FILE}"
+        c gpg --export "${GPG_KEY_ID}" > "${GPG_PUB_KEY_FILE}"
+        # Save private key to a file
+        log_task "Exporting GPG private key"
+        c gpg --batch --pinentry-mode=loopback --yes --passphrase "{{ .gnupg.passphrase }}" --export-secret-keys --armor "${GPG_KEY_ID}" > "${GPG_PRIVATE_ASC_KEY_FILE}"
+        c gpg --batch --pinentry-mode=loopback --yes --passphrase "{{ .gnupg.passphrase }}" --export-secret-keys "${GPG_KEY_ID}" > "${GPG_PRIVATE_KEY_FILE}"
+    fi
+else
+    if [ "${INTERACTIVE}" = true ]; then
+        if [ -z "${GPG_KEY_ID}" ]; then
+            log_task "Generating GPG key"
+            c gpg --full-generate-key
 
-    GPG_KEY_ID=$(gpg --list-secret-keys --with-colons | grep 'sec' | tail -n 1 | cut -d':' -f5)
-    GPG_PRIVATE_KEY_FILE="${SSH_HOME}/${GPG_KEY_ID}.key"
-    GPG_PRIVATE_ASC_KEY_FILE="${GPG_PRIVATE_KEY_FILE}.asc"
-    GPG_PUB_KEY_FILE="${GPG_PRIVATE_KEY_FILE}.pub"
-    GPG_PUB_ASC_KEY_FILE="${GPG_PUB_KEY_FILE}.asc"
-    # Save public key to a file
-    log_task "Exporting GPG public key"
-    c gpg --export --armor  "${GPG_KEY_ID}" > "${GPG_PUB_ASC_KEY_FILE}"
-    c gpg --export "${GPG_KEY_ID}" > "${GPG_PUB_KEY_FILE}"
-    # Save private key to a file
-    log_task "Exporting GPG private key"
-    c gpg --export-secret-keys --armor "${GPG_KEY_ID}" > "${GPG_PRIVATE_ASC_KEY_FILE}"
-    c gpg --export-secret-keys "${GPG_KEY_ID}" > "${GPG_PRIVATE_KEY_FILE}"
+            GPG_KEY_ID=$(gpg --list-secret-keys --with-colons | grep 'sec' | tail -n 1 | cut -d':' -f5)
+            GPG_PRIVATE_KEY_FILE="${SSH_HOME}/${GPG_KEY_ID}.key"
+            GPG_PRIVATE_ASC_KEY_FILE="${GPG_PRIVATE_KEY_FILE}.asc"
+            GPG_PUB_KEY_FILE="${GPG_PRIVATE_KEY_FILE}.pub"
+            GPG_PUB_ASC_KEY_FILE="${GPG_PUB_KEY_FILE}.asc"
+            # Save public key to a file
+            log_task "Exporting GPG public key"
+            c gpg --export --armor  "${GPG_KEY_ID}" > "${GPG_PUB_ASC_KEY_FILE}"
+            c gpg --export "${GPG_KEY_ID}" > "${GPG_PUB_KEY_FILE}"
+            # Save private key to a file
+            log_task "Exporting GPG private key"
+            c gpg --export-secret-keys --armor "${GPG_KEY_ID}" > "${GPG_PRIVATE_ASC_KEY_FILE}"
+            c gpg --export-secret-keys "${GPG_KEY_ID}" > "${GPG_PRIVATE_KEY_FILE}"
+        fi
+    else
+        if [ -z "${GPG_KEY_ID}" ]; then
+            log_manual_action "Generate GPG key"
+        fi
+    fi
 fi
-# {{   else }}
-if [ -z "${GPG_KEY_ID}" ]; then
-    log_manual_action "Generate GPG key"
-fi
-# {{   end }}
-# {{ end }}
 
 log_info "GPG key ID: ${GPG_KEY_ID}"
 # Save the key ID to a file if it's different or if the file doesn't exist

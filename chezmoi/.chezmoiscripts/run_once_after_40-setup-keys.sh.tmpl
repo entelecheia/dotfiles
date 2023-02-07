@@ -19,8 +19,13 @@ source "${HOME}/.local/bin/dotfiles-setup-ssh"
 # shellcheck source=/dev/null
 source "${HOME}/.local/bin/dotfiles-setup-age"
 
+# {{ if .system.is_interactive }}
+# shellcheck source=/dev/null
+source "${HOME}/.local/bin/dotfiles-setup-gpg" --interactive
+# {{ else }}
 # shellcheck source=/dev/null
 source "${HOME}/.local/bin/dotfiles-setup-gpg"
+# {{ end }}
 
 # shellcheck source=/dev/null
 source "${HOME}/.local/bin/dotfiles-setup-github-keys"
