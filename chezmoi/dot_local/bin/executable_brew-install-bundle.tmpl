@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# {{ template "scripts-library" }}
+# {{ template "homebrew-library" }}
+
+readonly BREWFILE=${1:-"${HOME}/.config/brew/brewfile"}
+
+c brew update --force
+
+if [[ -f "${BREWFILE}" ]]; then
+  log_task "Installing packages from Brewfile"
+
+  c brew bundle --file="${BREWFILE}" --no-lock --no-upgrade --verbose
+else
+  log_error "Brewfile not found: ${BREWFILE}"
+fi
