@@ -22,8 +22,12 @@ GPG_PUB_ASC_KEY_FILE="${GPG_PUB_KEY_FILE}.asc"
 if command -v gh >/dev/null; then
     if gh auth status &>/dev/null; then
         if [ -e "${SSH_PUB_KEY_FILE}" ]; then
-            log_task "Adding SSH key to GitHub"
-            c gh ssh-key add "${SSH_PUB_KEY_FILE}" --title "${EMAIL} ${ALGORITHM} ${HOST}" || true
+            if gh ssh-key list | grep -q "$(cut -d' ' -f2 "${SSH_PUB_KEY_FILE}")"; then
+                log_info "SSH key already added to GitHub"
+            else
+                log_task "Adding SSH key to GitHub"
+                c gh ssh-key add "${SSH_PUB_KEY_FILE}" --title "${EMAIL} ${ALGORITHM} ${HOST}" || true
+            fi
         fi
         # if [ -e "${GPG_PUB_ASC_KEY_FILE}" ]; then
         #     log_task "Adding GPG key to GitHub"
