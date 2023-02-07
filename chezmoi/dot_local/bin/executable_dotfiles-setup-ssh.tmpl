@@ -27,9 +27,9 @@ fi
 # copy gitconfig from .config/git/gitconfig to .gitconfig
 c cp "${HOME}/.config/git/gitconfig" "${HOME}/.gitconfig"
 
-GPGSIGN="{{ .gnupg.gitsign }}"
-ALLOWED_SIGNERS_FILE="${SSH_HOME}/allowed_signers"
-AUTHORIZED_KEYS_FILE="${SSH_HOME}/authorized_keys"
+GPGSIGN="{{ .git.gpgsign }}"
+ALLOWED_SIGNERS_FILE="${SSH_HOME}/{{ .git.ssh_allowed_signers }}"
+AUTHORIZED_KEYS_FILE="${SSH_HOME}/{{ .ssh.authorized_keys }}"
 # add ssh key to gitconfig for signing commits
 if [ -e "${SSH_PUB_KEY_FILE}" ]; then 
     SSH_KEY_ID=$(cat "${SSH_PUB_KEY_FILE}")

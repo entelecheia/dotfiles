@@ -24,7 +24,7 @@ fi
 # if age is not installed, skip
 if command -v age-keygen &> /dev/null; then
     AGE_KEY_FILE=${AGE_KEY_FILE:-"{{ .age.identity_file }}"}
-    AUTHORIZED_AGE_KEYS_FILE="${SSH_HOME}/authorized_age_keys"
+    AUTHORIZED_AGE_KEYS_FILE="${SSH_HOME}/{{ .age.authorized_age_keys }}"
     if [ ! -e "${AGE_KEY_FILE}" ]; then
         log_task "Generating age key"
         c age-keygen -o "${AGE_KEY_FILE}"

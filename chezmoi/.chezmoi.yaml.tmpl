@@ -631,14 +631,20 @@ data:
         home: {{ $ssh_homedir | quote }}
         algorithm: {{ $ssh_algorithm | quote }}
         identity_file: {{ $ssh_keyfile | quote }}
+        authorized_keys: "authorized_keys"
     age:
         identity_file: {{ $age_keyfile | quote }}
+        authorized_age_keys: "authorized_age_keys"
     gnupg:
         home: {{ $gpg_homedir | quote }}
         key_id_file: {{ $gpg_key_id_file | quote }}
         key_id: {{ $gpg_key_id | quote }}
         passphrase: {{ $gpg_passphrase | quote }}
         gitsign: {{ $gpg_gitsign }}
+    git:
+        gpgsign: {{ $gpg_gitsign }}
+        gpg_format: ssh
+        ssh_allowed_signers: "allowed_signers"
     github:
         username: {{ $github_username | quote }}
         token: {{ $github_token | quote }}

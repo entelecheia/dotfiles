@@ -85,8 +85,9 @@ if [ -e "${AGE_KEY_FILE}" ]; then
     export AGE_RECIPIENT="${AGE_RECIPIENT}"
   fi
 fi
-if [[ -e "${SSH_HOME}/authorized_age_keys" ]]; then
-  AGE_RECIPIENTS="$(sed -n '/^age1/p' "${SSH_HOME}/authorized_age_keys" | sort -u | sed 'H;1h;$!d;x;y/\n/,/')"
+AUTHORIZED_AGE_KEYS_FILE="${SSH_HOME}/{{ .age.authorized_age_keys }}"
+if [[ -e "${AUTHORIZED_AGE_KEYS_FILE}" ]]; then
+  AGE_RECIPIENTS="$(sed -n '/^age1/p' "${AUTHORIZED_AGE_KEYS_FILE}" | sort -u | sed 'H;1h;$!d;x;y/\n/,/')"
   export AGE_RECIPIENTS="${AGE_RECIPIENTS}"
   export SOPS_AGE_RECIPIENTS="${AGE_RECIPIENTS}"
   # replace commas with spaces from AGE_RECIPIENTS

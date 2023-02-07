@@ -1,6 +1,8 @@
 #!/bin/bash
 # {{ template "scripts-library" }}
 
+# ensure_path_entry "${HOME}/.local/bin"
+
 # Clone or update the dotdrop repository (github auth is required for private repositories)
 DOTDROP_REPO="{{- .dotdrop.repo }}"
 DOTDROP_LOCAL_REPO="{{- .chezmoi.workingTree }}/dotdrop"
