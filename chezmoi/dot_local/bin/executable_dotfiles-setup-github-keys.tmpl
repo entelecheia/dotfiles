@@ -10,6 +10,7 @@ fi
 
 HOST="{{ .chezmoi.hostname }}"
 EMAIL="{{ .email }}"
+ALGORITHM="{{ .ssh.algorithm }}"
 SSH_KEY_FILE="{{ .ssh.identity_file }}"
 SSH_PUB_KEY_FILE="${SSH_KEY_FILE}.pub"
 
@@ -22,7 +23,9 @@ GPG_PUB_ASC_KEY_FILE="${GPG_PUB_KEY_FILE}.asc"
 if command -v gh >/dev/null; then
     if gh auth status &>/dev/null; then
         if [ -e "${SSH_PUB_KEY_FILE}" ]; then
-            if gh ssh-key list | grep -q "$(cut -d' ' -f2 "${SSH_PUB_KEY_FILE}")"; then
+            SSH_PUB_KEY=$(cat "${SSH_PUB_KEY_FILE}")
+            SSH_PUB_KEY_KEY=$(echo "${SSH_PUB_KEY}" | cut -d' ' -f2)
+            if gh ssh-key list | grep "${SSH_PUB_KEY_KEY}" >/dev/null; then
                 log_info "SSH key already added to GitHub"
             else
                 log_task "Adding SSH key to GitHub"
