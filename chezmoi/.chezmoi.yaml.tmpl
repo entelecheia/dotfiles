@@ -30,7 +30,7 @@
 # {{- $workspace_location := or (env "WORKSPACE_LOCATION") .chezmoi.homeDir -}}
 
 # {{- $apply_rootmoi := true -}}
-# {{- if eq (env "APPLY_ROOTMOI") "false" "False" "FALSE" "0" -}}
+# {{- if eq (env "DOTFILES_APPLY_ROOTMOI") "false" "False" "FALSE" "0" -}}
 # {{-   $apply_rootmoi = false -}}
 # {{- end -}}
 

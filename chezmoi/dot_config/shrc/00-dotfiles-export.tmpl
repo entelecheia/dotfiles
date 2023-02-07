@@ -39,11 +39,11 @@ fi
 # shellcheck disable=SC1091
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
 
-export DOTFILES_AUTO_UPDATE="{{ .system.auto_update }}"
 export USER_FULLNAME="{{ .name }}"
 export USER_EMAIL="{{ .email }}"
 export SYSTEM_HOSTNAME="{{ .system.hostname }}"
-export APPLY_ROOTMOI="{{ .system.apply_rootmoi }}"
+export DOTFILES_AUTO_UPDATE="{{ .system.auto_update }}"
+export DOTFILES_APPLY_ROOTMOI="{{ .system.apply_rootmoi }}"
 export DOTFILES_VERBOSE="{{ .system.verbose }}"
 export DOTFILES_USE_AUTORESTIC="{{ .autorestic.enabled }}"
 export DOTFILES_USE_DOTDROP="{{ .dotdrop.enabled }}"
@@ -54,12 +54,19 @@ export DOTFILES_USE_1PASSWORD="{{ .op.enabled }}"
 export DOTFILES_USE_VAULT="{{ .vault.enabled }}"
 export DOTFILES_USE_MICROK8S="{{ .microk8s.enabled }}"
 export DOTDROP_PROFILE="{{ .dotdrop.user_profile }}"
-export DTODROP_CONFIGDIR="{{ .dotdrop.config_dir }}"
+export DOTDROP_CONFIGDIR="{{ .dotdrop.config_dir }}"
 export DOTDROP_CONFIG="{{ .dotdrop.config_file }}"
 export GITHUB_USERNAME="{{ .github.username }}"
 export DOCKER_USERNAME="{{ .docker.username }}"
 export WORKSPACE_LOCATION="{{ .workspace.location }}"
 export WORKSPACE_ROOT="{{ .workspace.root }}"
+
+export VISUAL="{{ .editor }}"
+export EDITOR="{{ .editor }}"
+# {{ if .system.is_wsl }}
+export BROWSER="wslview"
+# {{ end }}
+
 export SSH_HOME="{{ .ssh.home }}"
 export GNUPGHOME="{{ .gnupg.home }}"
 export PASSWORD_STORE_DIR="{{ .pass.store_dir }}"
@@ -73,6 +80,10 @@ if [ -e "${GPG_KEY_ID_FILE}" ]; then
   export GPG_KEY_ID="${GPG_KEY_ID}"
   export PASSWORD_STORE_KEY="${GPG_KEY_ID}"
 fi
+# {{ if .gnupg.gitsign }}
+GPG_TTY=$(tty)
+export GPG_TTY
+# {{ end }}
 
 # age key
 AGE_KEY_FILE="{{ .age.identity_file }}"
@@ -96,6 +107,6 @@ if [[ -e "${AUTHORIZED_AGE_KEYS_FILE}" ]]; then
 fi
 
 USER_UID="$(id -u)"
-USER_GID="$(id -g)"
+USER_GID="$(id -u)"
 export USER_UID
 export USER_GID
