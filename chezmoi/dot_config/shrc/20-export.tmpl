@@ -6,15 +6,6 @@ export LC_CTYPE='en_US.UTF-8'
 export LC_COLLATE='en_US.UTF-8'
 export LC_MESSAGES='en_US.UTF-8'
 export TERM=xterm-256color
-# {{ if .gnupg.gitsign }}
-GPG_TTY=$(tty)
-export GPG_TTY
-# {{ end }}
-export VISUAL="{{ .editor }}"
-export EDITOR="{{ .editor }}"
-# {{ if .system.is_wsl }}
-export BROWSER="wslview"
-# {{ end }}
 
 # {{ if .system.is_wsl }}
 # The boot.systemd in /etc/wsl.conf is only for Windows 11, so this workaround is needed
