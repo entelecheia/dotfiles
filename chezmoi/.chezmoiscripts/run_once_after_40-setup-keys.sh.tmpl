@@ -19,6 +19,7 @@ source "${HOME}/.local/bin/dotfiles-setup-ssh"
 # shellcheck source=/dev/null
 source "${HOME}/.local/bin/dotfiles-setup-age"
 
+export GPG_PASSPHRASE="{{ .gnupg.passphrase }}"
 # {{ if .system.is_interactive }}
 # shellcheck source=/dev/null
 source "${HOME}/.local/bin/dotfiles-setup-gpg" --interactive

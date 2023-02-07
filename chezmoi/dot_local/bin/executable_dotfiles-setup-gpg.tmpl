@@ -16,7 +16,7 @@ export GNUPGHOME="${GNUPGHOME}"
 GPG_KEY_ID_FILE="{{ .gnupg.key_id_file }}"
 USER_FULLNAME=${USER_FULLNAME:-"{{ .name }}"}
 USER_EMAIL=${USER_EMAIL:-"{{ .email }}"}
-GPG_PASSPHRASE=${GPG_PASSPHRASE:-"{{ .gnupg.passphrase }}"}
+GPG_PASSPHRASE=${GPG_PASSPHRASE:-""}
 
 SSH_HOME=${SSH_HOME:-"{{ .ssh.home }}"}
 
@@ -64,9 +64,9 @@ if [ -n "${GPG_KEY_ID}" ]; then
 fi
 GPG_KEY_ID=$(gpg --list-secret-keys --with-colons | grep 'sec' | grep "${GPG_KEY_ID}" | cut -d':' -f5 || echo "")
 
-if [ -n "${GPG_PASSPHRASE}" ]; then
+if [ -z "${GPG_KEY_ID}" ]; then
+    if [ -n "${GPG_PASSPHRASE}" ]; then
     # Create a batch file
-    if [ -z "${GPG_KEY_ID}" ]; then
         log_task "Generating GPG key"
 
         # Generate a GPG key
@@ -102,10 +102,8 @@ EOF
         log_task "Exporting GPG private key"
         c gpg --batch --pinentry-mode=loopback --yes --passphrase "{{ .gnupg.passphrase }}" --export-secret-keys --armor "${GPG_KEY_ID}" > "${GPG_PRIVATE_ASC_KEY_FILE}"
         c gpg --batch --pinentry-mode=loopback --yes --passphrase "{{ .gnupg.passphrase }}" --export-secret-keys "${GPG_KEY_ID}" > "${GPG_PRIVATE_KEY_FILE}"
-    fi
-else
-    if [ "${INTERACTIVE}" = true ]; then
-        if [ -z "${GPG_KEY_ID}" ]; then
+    else
+        if [ "${INTERACTIVE}" = true ]; then
             log_task "Generating GPG key"
             c gpg --full-generate-key
 
@@ -122,10 +120,10 @@ else
             log_task "Exporting GPG private key"
             c gpg --export-secret-keys --armor "${GPG_KEY_ID}" > "${GPG_PRIVATE_ASC_KEY_FILE}"
             c gpg --export-secret-keys "${GPG_KEY_ID}" > "${GPG_PRIVATE_KEY_FILE}"
-        fi
-    else
-        if [ -z "${GPG_KEY_ID}" ]; then
-            log_manual_action "Generate GPG key"
+        else
+            if [ -z "${GPG_KEY_ID}" ]; then
+                log_manual_action "Generate GPG key"
+            fi
         fi
     fi
 fi

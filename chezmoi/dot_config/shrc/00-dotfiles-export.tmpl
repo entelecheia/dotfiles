@@ -65,7 +65,8 @@ export GNUPGHOME="{{ .gnupg.home }}"
 export PASSWORD_STORE_DIR="{{ .pass.store_dir }}"
 export PASSAGE_DIR="{{ .passage.store_dir }}"
 
-# set eviroment variable GNUPGHOME to ~/.gnupg if not set
+# gpg key
+export GPG_PASSPHRASE="{{ .gnupg.passphrase }}"
 GPG_KEY_ID_FILE="{{ .gnupg.key_id_file }}"
 if [ -e "${GPG_KEY_ID_FILE}" ]; then 
   GPG_KEY_ID=$(cat "${GPG_KEY_ID_FILE}")
