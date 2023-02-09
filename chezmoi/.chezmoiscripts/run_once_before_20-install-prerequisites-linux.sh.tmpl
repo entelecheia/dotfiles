@@ -1,5 +1,5 @@
 #!/bin/bash
-# {{ if and (eq .chezmoi.os "linux") (.system.is_sudoer) }}
+# {{ if and (eq .chezmoi.os "linux") .system.is_sudoer }}
 
 # {{ template "scripts-library" }}
 
@@ -115,7 +115,7 @@ fi
 # {{ end -}}
 
 
-# {{ if and (eq .chezmoi.os "linux") }}
+# {{ if eq .chezmoi.os "linux" }}
 
 # install go
 if ! go version &>/dev/null; then
