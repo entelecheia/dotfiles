@@ -34,7 +34,7 @@ ENV USER_EMAIL=$USER_EMAIL
 ENV GITHUB_USERNAME=$GITHUB_USERNAME
 ENV SYSTEM_HOSTNAME=$SYSTEM_HOSTNAME
 ENV WORKSPACE_LOCATION="/"
-ENV APPLY_ROOTMOI=0
+ENV DOTFILES_APPLY_ROOTMOI=0
 ENV REMOTE_CONTAINERS=1
 
 RUN sh -c "$(wget -qO- https://dotfiles.entelecheia.cc/install)"
@@ -50,7 +50,7 @@ USER_EMAIL="john.doe@email.com" \
 GITHUB_USERNAME="john-doe" \
 SYSTEM_HOSTNAME="devcon-arm64" \
 WORKSPACE_LOCATION="/" \
-APPLY_ROOTMOI=0 \
+DOTFILES_APPLY_ROOTMOI=0 \
 REMOTE_CONTAINERS=1 \
 sh -c "$(wget -qO- https://dotfiles.entelecheia.cc/install)"
 ```
@@ -64,6 +64,13 @@ chezmoi init --apply
 ```
 
 ![initialize dotfiles](./docs/figs/initialize_dotfiles.png)
+
+## Repositories and repository templates for setting up your own dotfiles
+
+- [dockerfiles](https://github.com/entelecheia/dockerfiles)
+- [dotdrop-files](https://github.com/entelecheia/dotdrop-files)
+- [password-store](https://github.com/entelecheia/password-store)
+- [passage-store](https://github.com/entelecheia/passage-store)
 
 ## Installing the font on **Windows**
 
