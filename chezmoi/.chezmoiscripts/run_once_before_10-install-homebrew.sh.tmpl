@@ -1,8 +1,8 @@
 #!/bin/bash
 # {{ if and (eq .chezmoi.os "darwin") (.system.is_sudoer) }}
-
 # {{ template "scripts-library" }}
 # {{ template "homebrew-library" }}
+log_task "Installing Homebrew"
 
 function is_homebrew_prefix_writable() {
   if [[ -d "${homebrew_prefix}" ]]; then

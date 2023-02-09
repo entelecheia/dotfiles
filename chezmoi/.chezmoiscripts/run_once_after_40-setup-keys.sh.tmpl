@@ -1,7 +1,7 @@
 #!/bin/bash
 # {{ if eq .chezmoi.os "linux" "darwin" }}
-
 # {{ template "scripts-library" }}
+log_task "Setting up SSH, AGE, and GPG keys"
 
 # before generating SSH keys, you can install them from the dotdrop repository
 # {{ if .dotdrop.enabled }}

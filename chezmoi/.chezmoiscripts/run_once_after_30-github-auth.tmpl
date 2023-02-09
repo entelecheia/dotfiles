@@ -1,12 +1,12 @@
 #!/bin/bash
 # {{ if eq .chezmoi.os "linux" "darwin" }}
+# {{ template "scripts-library" }}
+log_task "Authenticating with GitHub"
 
 # {{ if .system.is_interactive }}
-# shellcheck source=/dev/null
-source "${HOME}/.local/bin/github-auth" --interactive
+"${HOME}/.local/bin/github-auth" --interactive
 # {{ else }}
-# shellcheck source=/dev/null
-source "${HOME}/.local/bin/github-auth"
+"${HOME}/.local/bin/github-auth"
 # {{ end }}
 
 # {{ end -}}

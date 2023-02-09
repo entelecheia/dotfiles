@@ -1,7 +1,8 @@
 #!/bin/bash
 # {{ if eq .chezmoi.os "darwin" -}}
+# {{ template "scripts-library" }}
+log_task "Installing Homebrew from bundle"
 
-# shellcheck source=/dev/null
-source "${HOME}/.local/bin/brew-install-bundle"
+"${HOME}/.local/bin/brew-install-bundle"
 
 # {{ end -}}

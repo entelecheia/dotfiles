@@ -1,7 +1,8 @@
 #!/bin/bash
 # {{ if eq .chezmoi.os "darwin" "linux" -}}
+# {{ template "scripts-library" }}
+log_task "Setting up passage"
 
-# shellcheck source=/dev/null
-source "${HOME}/.local/bin/passage-init"
+"${HOME}/.local/bin/passage-init"
 
 # {{ end -}}

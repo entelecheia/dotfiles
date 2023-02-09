@@ -1,7 +1,8 @@
 #!/bin/bash
 # {{ if eq .chezmoi.os "darwin" "linux" -}}
+# {{ template "scripts-library" }}
+log_task "Setting up password store"
 
-# shellcheck source=/dev/null
-source "${HOME}/.local/bin/pass-init"
+"${HOME}/.local/bin/pass-init"
 
 # {{ end -}}

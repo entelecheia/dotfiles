@@ -1,6 +1,7 @@
 #!/bin/bash
 # {{ if and (eq .chezmoi.os "linux") .system.is_sudoer }}
 # {{ template "scripts-library" }}
+log_task "Installing prerequisites for Linux"
 
 # prepare to install githubcli
 KEYRING_FILE="/usr/share/keyrings/githubcli-archive-keyring.gpg"

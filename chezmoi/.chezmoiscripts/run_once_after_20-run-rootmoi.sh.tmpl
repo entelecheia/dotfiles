@@ -1,10 +1,7 @@
 #!/bin/bash
 # {{ if and (eq .chezmoi.os "linux") (.system.apply_rootmoi) (.system.is_sudoer) -}}
-
 # {{ template "scripts-library" }}
-
-# The following line is for ShellCheck to correctly identify the above include
-true || source ../.chezmoitemplates/scripts-library
+log_task "Applying root dotfiles with rootmoi"
 
 # shellcheck disable=all
 original_args=({{ range (rest .chezmoi.args) }} {{ . | quote }}{{ end }})

@@ -1,10 +1,5 @@
 #!/bin/bash
-
 # {{ template "scripts-library" }}
-
-# The following line is for ShellCheck to correctly identify the above included library
-true || source ../.chezmoitemplates/scripts-library
-
 log_green "✅ Dotfiles installation finished successfully"
 
 # {{ if .system.is_gnome }}

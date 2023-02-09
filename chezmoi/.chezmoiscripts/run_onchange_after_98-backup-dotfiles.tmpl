@@ -1,12 +1,11 @@
 #!/bin/bash
 # {{ if and (eq .chezmoi.os "linux" "darwin") (.system.is_minimum | not) }}
+# {{ template "scripts-library" }}
+log_task "Backing up dotfiles with autorestic"
 
 # {{ if and (.autorestic.enabled) (.autorestic.backup_dotfiles) }}
 
-# {{ template "homebrew-library" }}
-
-# shellcheck source=/dev/null
-source "${HOME}/.local/bin/dotfiles-backup"
+"${HOME}/.local/bin/dotfiles-backup"
 
 # {{ end }}
 

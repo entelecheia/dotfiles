@@ -1,9 +1,9 @@
 #!/bin/bash
 # {{ if and (eq .chezmoi.os "linux" "darwin") (.system.is_minimum | not) }}
-
 # {{ template "scripts-library" }}
 # {{ $cache := dict "chezmoi" .chezmoi }}
 # {{ template "read-versions-and-revisions-cache" $cache }}
+log_task "Installing optional packages"
 
 ensure_path_entry "${HOME}/.local/bin"
 

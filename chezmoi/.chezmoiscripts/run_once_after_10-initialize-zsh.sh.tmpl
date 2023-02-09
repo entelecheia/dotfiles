@@ -1,11 +1,7 @@
 #!/bin/bash
-
-# {{ template "scripts-library" }}
-
-# The following line is for ShellCheck to correctly identify the above include
-true || source ../.chezmoitemplates/scripts-library
-
 # {{ if and (eq .chezmoi.os "linux") }}
+# {{ template "scripts-library" }}
+log_task "Initializing ZSH"
 
 zsh_path="/bin/zsh"
 
