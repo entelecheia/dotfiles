@@ -86,7 +86,7 @@ cdp() {
   cd "${WORKSPACE_ROOT}/projects/${repo}"
 }
 
-alias cdws="cd {{ .workspace.root }}"
+alias cdw="cd {{ .workspace.root }}"
 
 gcdp () {
   local repo="${1:-}"
@@ -113,7 +113,7 @@ gsudo() {
     gsudo.exe wsl -d "${WSL_DISTRO_NAME?}" -e "${shell}" "-c" "$*"
 }
 
-cdw() {
+cdwin() {
   local user_profile
   local win_home
 
