@@ -10,11 +10,6 @@ if [[ -z "${keys}" ]]; then
   keys=''
 fi
 
-# read from ${HOME}/.config/ssh/authorized_keys if it exists
-# if [[ -f "${HOME}/.config/ssh/authorized_keys" ]]; then
-#   keys="${keys}\n$(cat "${HOME}/.config/ssh/authorized_keys")"
-# fi
-
 # {{ if .github.username }}
 # {{ range gitHubKeys .github.username }}
 keys="${keys}\n{{ .Key }}"

@@ -38,6 +38,7 @@
 # {{- if eq (env "DOTFILES_USE_DOTDROP") "false" "False" "FALSE" "0" -}}
 # {{-   $use_dotdrop = false -}}
 # {{- end -}}
+# {{- $dotdrop_repo := "" -}}
 # {{- $dotdrop_config_dir := or (env "DOTDROP_CONFIGDIR") (joinPath .chezmoi.homeDir ".config/dotdrop") -}}
 # {{- $dotdrop_config_file := or (env "DOTDROP_CONFIG") (joinPath $dotdrop_config_dir "config-user.yaml") -}}
 # {{- $dotdrop_root_config_file := or (env "DOTDROP_ROOT_CONFIG") (joinPath $dotdrop_config_dir "config-root.yaml") -}}
@@ -141,7 +142,6 @@
 # {{- $age_recipients:= or (env "AGE_RECIPIENTS") "" -}}
 # {{- $docker_username := "" -}}
 # {{- $github_token := "" -}}
-# {{- $dotdrop_repo := "" -}}
 # {{- $dockerfiles_repo := "https://github.com/entelecheia/dockerfiles.git" -}}
 # {{- $dockerfiles_share_dir := joinPath .chezmoi.homeDir ".local/share/dockerfiles" -}}
 # {{- $ssh_algorithm := "ed25519" -}}
@@ -387,21 +387,6 @@
 # {{-   end -}}
 # {{- end -}}
 
-# {{- if and (hasKey . "github") (hasKey .github "clones") -}}
-# {{-   $github_clones = .github.clones -}}
-# {{- end -}}
-# {{- if and $interactive ($minimum | not) -}}
-# {{-   $question := "❔ What are your GitHub repositories to clone (input as comma separated list, ex: entelecheia/devcon,entelecheia/ekorpkit)" -}}
-# {{-   $answer := "" -}}
-# {{-   if $github_clones -}}
-# {{-     $answer = promptString $question $github_clones -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $github_clones = $answer -}}
-# {{-   writeToStdout (printf "✅ GitHub repositories to clone set as '%s'\n" $github_clones) -}}
-# {{- end -}}
-
 # {{- if and (hasKey . "docker") (hasKey .dotdrop "repo") -}}
 # {{-   $dockerfiles_repo = .docker.repo -}}
 # {{- end -}}
@@ -584,6 +569,21 @@
 # {{-   else -}}
 # {{-     writeToStdout "✅ MicroK8s disabled\n" -}}
 # {{-   end -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "github") (hasKey .github "clones") -}}
+# {{-   $github_clones = .github.clones -}}
+# {{- end -}}
+# {{- if and $interactive ($minimum | not) -}}
+# {{-   $question := "❔ What are your GitHub repositories to clone (input as comma separated list, ex: entelecheia/devcon,entelecheia/ekorpkit)" -}}
+# {{-   $answer := "" -}}
+# {{-   if $github_clones -}}
+# {{-     $answer = promptString $question $github_clones -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $github_clones = $answer -}}
+# {{-   writeToStdout (printf "✅ GitHub repositories to clone set as '%s'\n" $github_clones) -}}
 # {{- end -}}
 
 # {{- if $interactive -}}

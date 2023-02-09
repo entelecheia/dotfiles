@@ -24,7 +24,12 @@ else
     c chmod 600 "${SSH_KEY_FILE}" || true
 fi
 
-# copy gitconfig from .config/git/gitconfig to .gitconfig
+SSH_CONFIG_FILE="${SSH_HOME}/config"
+if [ ! -e "${SSH_CONFIG_FILE}" ]; then
+    log_task "Copying SSH config to ${SSH_CONFIG_FILE}"
+    c cp "${HOME}/.config/ssh/config" "${SSH_CONFIG_FILE}"
+fi
+log_task "Copying gitconfig to .gitconfig"
 c cp "${HOME}/.config/git/gitconfig" "${HOME}/.gitconfig"
 
 GPGSIGN="{{ .git.gpgsign }}"
@@ -48,16 +53,15 @@ if [ -e "${SSH_PUB_KEY_FILE}" ]; then
         c echo "${SSH_SIGNER}" > "${ALLOWED_SIGNERS_FILE}"
     fi
     # add SSH_KEY_ID to authorized_keys
-    if [ -e "${AUTHORIZED_KEYS_FILE}" ]; then
-        if ! grep -q "${SSH_KEY_ID}" "${AUTHORIZED_KEYS_FILE}"; then
-            log_task "Adding SSH key to authorized_keys"
-            c echo "${SSH_KEY_ID}" >> "${AUTHORIZED_KEYS_FILE}"
-        else
-            log_info "SSH key already in authorized_keys"
-        fi
-    else
+    if [ ! -e "${AUTHORIZED_KEYS_FILE}" ]; then
+        log_task "Copying authorized_keys to ${AUTHORIZED_KEYS_FILE}"
+        c cp "${HOME}/.config/ssh/authorized_keys" "${AUTHORIZED_KEYS_FILE}"
+    fi
+    if ! grep -q "${SSH_KEY_ID}" "${AUTHORIZED_KEYS_FILE}"; then
         log_task "Adding SSH key to authorized_keys"
-        c echo "${SSH_KEY_ID}" > "${AUTHORIZED_KEYS_FILE}"
+        c echo "${SSH_KEY_ID}" >> "${AUTHORIZED_KEYS_FILE}"
+    else
+        log_info "SSH key already in authorized_keys"
     fi
 fi
 if [ -n "${SSH_KEY_ID}" ]; then
