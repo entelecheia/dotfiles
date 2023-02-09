@@ -111,7 +111,7 @@
 # {{- else -}}
 # {{-   $sudo_check = (output "sh" "-c" "test -n \"$(groups | grep -w admin)\" && echo sudo || echo false") | trim -}}
 # {{- end -}}
-# {{- if or (eq $sudo_check "sudo") (eq .chezmoi.username "root") -}}
+# {{- if or (eq $sudo_check "sudo") (eq .chezmoi.username "root") ($wsl) -}}
 # {{-   $sudoer = true -}}
 # {{- else -}}
 # {{-   $sudoer = false -}}
