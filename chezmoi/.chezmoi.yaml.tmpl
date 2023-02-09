@@ -387,7 +387,38 @@
 # {{-   end -}}
 # {{- end -}}
 
-# {{- if and (hasKey . "docker") (hasKey .dotdrop "repo") -}}
+# {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "repo") -}}
+# {{-   $dotdrop_repo = .dotdrop.repo -}}
+# {{- end -}}
+# {{- if and $interactive $use_dotdrop -}}
+# {{-   $question := "❔ What is your dotdrop files repository URL (ex: https://github.com/entelecheia/dotdrop-files.git)" -}}
+# {{-   $answer := "" -}}
+# {{-   if $dotdrop_repo -}}
+# {{-     $answer = promptString $question $dotdrop_repo -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $dotdrop_repo = $answer -}}
+# {{-   $use_dotdrop = $answer | not | not -}}
+# {{-   writeToStdout (printf "✅ dotdrop files repo set as '%s'\n" $dotdrop_repo) -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "user_profile") -}}
+# {{-   $dotdrop_user_profile = .dotdrop.user_profile -}}
+# {{- end -}}
+# {{- if and $interactive $use_dotdrop -}}
+# {{-   $question := "❔ What is your dotdrop user profile (ex: hostname)" -}}
+# {{-   $answer := "" -}}
+# {{-   if $dotdrop_user_profile -}}
+# {{-     $answer = promptString $question $dotdrop_user_profile -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $dotdrop_user_profile = $answer -}}
+# {{-   writeToStdout (printf "✅ dotdrop user profile set as '%s'\n" $dotdrop_user_profile) -}}
+# {{- end -}}
+
+# {{- if and (hasKey . "docker") (hasKey .docker "repo") -}}
 # {{-   $dockerfiles_repo = .docker.repo -}}
 # {{- end -}}
 # {{- if and $interactive ($minimum | not) -}}
@@ -443,37 +474,6 @@
 # {{-     writeToStdout "✅ Colab workspace will not be symlinked\n" -}}
 # {{-   end -}}
 # {{- end -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "repo") -}}
-# {{-   $dotdrop_repo = .dotdrop.repo -}}
-# {{- end -}}
-# {{- if and $interactive $use_dotdrop -}}
-# {{-   $question := "❔ What is your dotdrop files repository URL (ex: https://github.com/entelecheia/dotdrop-files.git)" -}}
-# {{-   $answer := "" -}}
-# {{-   if $dotdrop_repo -}}
-# {{-     $answer = promptString $question $dotdrop_repo -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $dotdrop_repo = $answer -}}
-# {{-   $use_dotdrop = $answer | not | not -}}
-# {{-   writeToStdout (printf "✅ dotdrop files repo set as '%s'\n" $dotdrop_repo) -}}
-# {{- end -}}
-
-# {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "user_profile") -}}
-# {{-   $dotdrop_user_profile = .dotdrop.user_profile -}}
-# {{- end -}}
-# {{- if and $interactive $use_dotdrop -}}
-# {{-   $question := "❔ What is your dotdrop user profile (ex: hostname)" -}}
-# {{-   $answer := "" -}}
-# {{-   if $dotdrop_user_profile -}}
-# {{-     $answer = promptString $question $dotdrop_user_profile -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $dotdrop_user_profile = $answer -}}
-# {{-   writeToStdout (printf "✅ dotdrop user profile set as '%s'\n" $dotdrop_user_profile) -}}
 # {{- end -}}
 
 # {{- if and $interactive ($minimum | not) -}}
