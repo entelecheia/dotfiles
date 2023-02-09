@@ -1,0 +1,29 @@
+#!/bin/bash
+# {{ if eq .chezmoi.os "linux" "darwin" }}
+# {{ template "scripts-library" }}
+
+# install go
+if ! go version &>/dev/null; then
+  export GOROOT="${HOME}/go"
+  export GOPATH="${GOROOT}/packages"
+  ensure_path_entry "${GOROOT}/bin"
+
+  if ! go version &>/dev/null; then
+    log_task "Installing go"
+    c wget -qO - https://dotfiles.entelecheia.cc/install-go | bash
+  fi
+fi
+
+# install age
+if ! age --version &>/dev/null; then
+  log_task "Installing age"
+  c go install filippo.io/age/cmd/...@latest
+fi
+
+# install sops
+if ! sops --version &>/dev/null; then
+  log_task "Installing sops"
+  c go install go.mozilla.org/sops/v3/cmd/sops@latest
+fi
+
+# {{- end -}}

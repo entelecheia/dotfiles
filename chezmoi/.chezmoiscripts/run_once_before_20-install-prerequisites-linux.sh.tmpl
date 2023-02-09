@@ -1,7 +1,6 @@
 #!/bin/bash
-# {{ template "scripts-library" }}
-
 # {{ if and (eq .chezmoi.os "linux") .system.is_sudoer }}
+# {{ template "scripts-library" }}
 
 # prepare to install githubcli
 KEYRING_FILE="/usr/share/keyrings/githubcli-archive-keyring.gpg"
@@ -113,29 +112,3 @@ if ! autorestic --version &>/dev/null; then
 fi
 
 # {{ end -}}
-
-
-# {{ if eq .chezmoi.os "linux" }}
-
-# install go
-if ! go version &>/dev/null; then
-  log_task "Installing go"
-  c wget -qO - https://dotfiles.entelecheia.cc/install-go | bash
-  export GOROOT="${HOME}/go"
-  export GOPATH="${GOROOT}/packages"
-  ensure_path_entry "${GOROOT}/bin"
-fi
-
-# install age
-if ! age --version &>/dev/null; then
-  log_task "Installing age"
-  c go install filippo.io/age/cmd/...@latest
-fi
-
-# install sops
-if ! sops --version &>/dev/null; then
-  log_task "Installing sops"
-  c go install go.mozilla.org/sops/v3/cmd/sops@latest
-fi
-
-# {{- end -}}
