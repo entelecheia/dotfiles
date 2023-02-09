@@ -7,7 +7,7 @@ keys=$(cat /dev/stdin)
 
 # if authorized_keys is empty, set it to empty string
 if [[ -z "${keys}" ]]; then
-  keys=''
+  keys="# list of authorized keys for the user"
 fi
 
 # {{ if .github.username }}

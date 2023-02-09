@@ -2,4 +2,4 @@ Host *
     IgnoreUnknown UseKeychain,AddKeysToAgent
     UseKeychain yes
     AddKeysToAgent yes
-	IdentityFile "{{ .ssh.identity_file }}"
+	IdentityFile "{{ .ssh.identity_file | replace .chezmoi.homeDir "~" }}"
