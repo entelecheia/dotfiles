@@ -10,12 +10,6 @@ if [[ -z "${keys}" ]]; then
   keys="# list of authorized keys for the user"
 fi
 
-# {{ if .github.username }}
-# {{ range gitHubKeys .github.username }}
-keys="${keys}\n{{ .Key }}"
-# {{ end }}
-# {{ end }}
-
 # remove empty lines
 keys=$(echo -e "${keys}" | sed '/^$/d')
 
