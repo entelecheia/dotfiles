@@ -26,6 +26,35 @@ if [[ ! -f "${SOURCE_LIST_FILE}" ]]; then
   # {{   end }}
 fi
 
+# {{ if .op.enabled }}
+SOURCE_LIST_FILE="/etc/apt/sources.list.d/1password.list"
+if [[ ! -e "${SOURCE_LIST_FILE}" ]]; then
+  log_task "Adding 1password repository"
+  curl -sS https://downloads.1password.com/linux/keys/1password.asc | \
+    sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" |
+    sudo tee "$SOURCE_LIST_FILE"
+  sudo mkdir -p /etc/debsig/policies/AC2D62742012EA22/
+  curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol | \
+    sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol
+  sudo mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22
+  curl -sS https://downloads.1password.com/linux/keys/1password.asc | \
+    sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
+fi
+# {{ end }}
+
+# {{ if .code.enabled }}
+  SOURCE_LIST_FILE="/etc/apt/sources.list.d/vscode.list"
+  if [[ ! -e "${SOURCE_LIST_FILE}" ]]; then
+    c sudo apt-get install wget gpg
+    c wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+    c sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+    c sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+    c rm -f packages.microsoft.gpg
+  fi
+# {{ end }}
+
+
 readonly wanted_packages=(
   apt-transport-https
   build-essential
@@ -44,10 +73,16 @@ readonly wanted_packages=(
   pass
   gnupg # used to decrypt the gpg keys of the apt repositories
   pinentry-curses
-  # {{   if not .system.is_devcontainer }}
+  # {{ if not .system.is_devcontainer }}
   gpa 
   seahorse
-  # {{   end }}
+  # {{ end }}
+  # {{ if .op.enabled }}
+  1password-cli
+  # {{ end }}
+  # {{ if .code.enabled }}
+  code
+  # {{ end }}
 )
 missing_packages=()
 
@@ -71,30 +106,6 @@ if [[ ${#missing_packages[@]} -gt 0 ]]; then
   c "${apt_command[@]}" install --yes --no-install-recommends "${missing_packages[@]}"
 fi
 
-# check if snap is installed
-if snap --version &>/dev/null; then
-
-  readonly wanted_sanp_packages=(
-    helm
-  )
-
-  # {{   if eq .chezmoi.username "root" }}
-  snap_command=(snap)
-  # {{   else }}
-  snap_command=(sudo snap)
-  # {{   end }}
-
-  for package in "${wanted_sanp_packages[@]}"; do
-    if ! is_snap_package_installed "${package}"; then
-      log_task "Installing a package with snap: ${package}"
-      c "${snap_command[@]}" install "${package}" --classic
-    fi
-  done
-
-else
-  log_manual_action "snap is not installed, skipping snap packages"
-fi
-
 # install autorestic
 if ! autorestic --version &>/dev/null; then
   log_task "Installing autorestic"
@@ -102,6 +113,8 @@ if ! autorestic --version &>/dev/null; then
 fi
 
 # {{ end -}}
+
+
 # {{ if and (eq .chezmoi.os "linux") }}
 
 # install go

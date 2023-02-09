@@ -54,6 +54,12 @@ readonly wanted_packages=(
   # {{ if .vault.enabled }}
   hashicorp/tap/vault
   # {{ end }}
+  # {{ if .code.enabled }}
+  code-cli
+  # {{ end }}
+  # {{ if .microk8s.enabled }}
+  microk8s
+  # {{ end }}
 )
 missing_packages=()
 
@@ -70,11 +76,13 @@ if [[ ${#missing_packages[@]} -gt 0 ]]; then
   c "${brew_command[@]}" install "${missing_packages[@]}"
 fi
 
-
 readonly wanted_cask_packages=(
   gpg-suite
   font-fira-code
   font-fira-code-nerd-font
+  # {{ if .op.enabled }}
+  1password/tap/1password-cli
+  # {{ end }}
 )
 
 # get installed cask packages with brew list --casks

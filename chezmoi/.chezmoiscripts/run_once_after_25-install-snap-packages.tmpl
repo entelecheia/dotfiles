@@ -1,0 +1,41 @@
+#!/bin/bash
+# {{ if and (eq .chezmoi.os "linux") .system.is_sudoer }}
+
+# {{ template "scripts-library" }}
+
+# check if snap is installed
+if ! command -v snap >/dev/null; then
+
+  log_manual_action "snap is not installed, skipping snap packages"
+
+else
+
+  readonly wanted_sanp_packages=(
+    helm
+    # {{ if .microk8s.enabled }}
+    microk8s
+    # {{ end }}
+  )
+
+  # {{ if eq .chezmoi.username "root" }}
+  snap_command=(snap)
+  # {{ else }}
+  snap_command=(sudo snap)
+  # {{ end }}
+
+  for package in "${wanted_sanp_packages[@]}"; do
+    if ! is_snap_package_installed "${package}"; then
+      log_task "Installing a package with snap: ${package}"
+      c "${snap_command[@]}" install "${package}" --classic
+    fi
+  done
+  # {{ if .microk8s.enabled }}
+  if id -nG "{{ .chezmoi.username }}" | grep -qw microk8s; then
+      log_info "User {{ .chezmoi.username }} is already in the microk8s group"
+  else
+    c sudo usermod -a -G microk8s "{{ .chezmoi.username }}"
+  fi
+  # {{ end }}
+fi
+
+# {{- end -}}
