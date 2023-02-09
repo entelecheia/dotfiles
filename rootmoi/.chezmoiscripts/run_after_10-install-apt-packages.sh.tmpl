@@ -15,8 +15,10 @@ readonly wanted_packages=(
   docker-ce-cli
   containerd.io
   docker-compose-plugin
+  # {{ if .system.is_minimum | not }}
   snapd
   helm
+  # {{ end }}
   # skopeo
   openssh-server
   # {{ if .system.is_wsl }}
