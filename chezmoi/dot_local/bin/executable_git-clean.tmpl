@@ -1,0 +1,23 @@
+#!/bin/bash
+# {{ template "scripts-library" }}
+
+repo_dir=${1:-""}
+repo_url=${2:-""}
+branch=${3:-"main"}
+
+if [[ -z "${repo_dir}" ]]; then
+  log_info "Usage: $0 <repo_dir> <repo_url> [<branch>]"
+  exit 1
+fi
+if [[ -z "${repo_url}" ]]; then
+  log_error "Missing repo_url repository address"
+  exit 1
+fi
+repo_dir=$(realrepo_dir "${repo_dir}")
+
+log_task "Cleaning '${repo_dir}' with '${repo_url}' at branch '${branch}'"
+git="c git -C ${repo_dir}"
+${git} checkout -B "${branch}"
+${git} fetch "${repo_url}" "${branch}"
+${git} reset --hard FETCH_HEAD
+${git} clean -fdx
