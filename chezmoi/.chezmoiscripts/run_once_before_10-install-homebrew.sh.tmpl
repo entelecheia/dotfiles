@@ -4,10 +4,6 @@
 # {{ template "scripts-library" }}
 # {{ template "homebrew-library" }}
 
-# The following line is for ShellCheck to correctly identify the above include
-true || source ../.chezmoitemplates/scripts-library
-true || source ../.chezmoitemplates/homebrew-library
-
 function is_homebrew_prefix_writable() {
   if [[ -d "${homebrew_prefix}" ]]; then
     return 0
