@@ -176,7 +176,7 @@ fi
 
 # check PATHs
 if [[ -z "$PROJECT_DIR" ]]; then
-  PROJECT_DIR="${WORKSPACE_ROOT}/projects/${DOCKER_NAME}"
+  PROJECT_DIR="${WORKSPACE_PROJECT_DIR}/${DOCKER_NAME}"
 fi
 # if project directory does not exist or FROM_PROJECT is false, use dockerfile repo path
 if [[ ! -d "$PROJECT_DIR" ]] || [[ "$FROM_PROJECT" != "false" ]]; then

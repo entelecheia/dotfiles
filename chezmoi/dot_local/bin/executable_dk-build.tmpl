@@ -135,7 +135,7 @@ fi
 
 # check PATHs
 if [[ -z "$BUILD_PATH" ]]; then
-  BUILD_PATH="${WORKSPACE_ROOT}/projects/${DOCKER_NAME}"
+  BUILD_PATH="${WORKSPACE_PROJECT_DIR}/${DOCKER_NAME}"
 fi
 if [[ -z "$DOCKERFILE_PATH" ]]; then
   DOCKERFILE_PATH="${BUILD_PATH}/Dockerfile.${RELEASE_TYPE}"

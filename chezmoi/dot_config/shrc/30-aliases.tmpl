@@ -83,18 +83,32 @@ mcd() {
 cdp() {
   local repo="${1:-}"
 
-  cd "${WORKSPACE_ROOT}/projects/${repo}"
+  cd "${WORKSPACE_PROJECT_DIR}/${repo}"
+}
+cdr() {
+  local repo="${1:-}"
+
+  cd "${WORKSPACE_REFERENCE_DIR}/${repo}"
 }
 
 alias cdw="cd {{ .workspace.root }}"
 
-gcdp () {
+gcdp() {
   local repo="${1:-}"
   local dir="${repo##*/}"
-  dir="${dir%.git}" 
+  dir="${dir%.git}"
 
-  command git clone "${repo}" "${WORKSPACE_ROOT}/projects/${dir}" &&
-    cd "${WORKSPACE_ROOT}/projects/${dir}"
+  command git clone "${repo}" "${WORKSPACE_PROJECT_DIR}/${dir}" &&
+    cd "${WORKSPACE_PROJECT_DIR}/${dir}"
+}
+
+gcdr() {
+  local repo="${1:-}"
+  local dir="${repo##*/}"
+  dir="${dir%.git}"
+
+  command git clone "${repo}" "${WORKSPACE_REFERENCE_DIR}/${dir}" &&
+    cd "${WORKSPACE_REFERENCE_DIR}/${dir}"
 }
 
 # See: https://github.com/twpayne/chezmoi/issues/854#issuecomment-675160348

@@ -27,7 +27,13 @@
 # {{- $hostname := or (env "SYSTEM_HOSTNAME") .chezmoi.hostname -}}
 # {{- $dotdrop_user_profile := or (env "DOTDROP_PROFILE") "user" -}}
 # {{- $github_username := env "GITHUB_USERNAME" -}}
-# {{- $workspace_location := or (env "WORKSPACE_LOCATION") .chezmoi.homeDir -}}
+# {{- $workspace_location := "" -}}
+# {{- if $wsl -}}
+# {{-   $win_home = (output "sh" "-c" "wslpath -a $(wslvar USERPROFILE)") | trim -}}
+# {{-   $workspace_location = or (env "WORKSPACE_LOCATION") $win_home -}}
+# {{- else -}}
+# {{-   $workspace_location = or (env "WORKSPACE_LOCATION") .chezmoi.homeDir -}}
+# {{- end -}}
 
 # {{- $apply_rootmoi := true -}}
 # {{- if eq (env "DOTFILES_APPLY_ROOTMOI") "false" "False" "FALSE" "0" -}}
@@ -156,9 +162,11 @@
 # {{- $dockerfiles_share_dir := joinPath .chezmoi.homeDir ".local/share/dockerfiles" -}}
 # {{- $ssh_algorithm := "ed25519" -}}
 # {{- $workspace_name := "workspace" -}}
-# {{- $workspace_root := joinPath .chezmoi.homeDir $workspace_name -}}
+# {{- $workspace_root := joinPath $workspace_location $workspace_name -}}
+# {{- $workspace_home := $workspace_root -}}
 # {{- $symlink_colab_workspace := false -}}
 # {{- $symlink_to_home := true -}}
+
 # {{- $github_clones := "" -}}
 # {{- $auto_update := false -}}
 
@@ -440,7 +448,6 @@
 # {{-   writeToStdout (printf "✅ dockerfiles repo set as '%s'\n" $dockerfiles_repo) -}}
 # {{- end -}}
 
-# {{- if $wsl | not -}}
 # {{- if and (hasKey . "workspace") (hasKey .workspace "location") -}}
 # {{-   $workspace_location = .workspace.location -}}
 # {{- end -}}
@@ -454,13 +461,17 @@
 # {{-   end -}}
 # {{-   $workspace_location = $answer -}}
 # {{-   writeToStdout (printf "✅ Worksapce location set as '%s'\n" $workspace_location) -}}
-# {{-   if $symlink_to_home -}}
-# {{-     $workspace_root := joinPath .chezmoi.homeDir $workspace_name -}}
-# {{-   else -}}
-# {{-     $workspace_root := joinPath $workspace_location $workspace_name -}}
-# {{-   end -}}
-# {{-   writeToStdout (printf "✅ Worksapce root set as '%s'\n" $workspace_root) -}}
 # {{- end -}}
+# {{- $workspace_root = joinPath $workspace_location $workspace_name -}}
+# {{- if $symlink_to_home -}}
+# {{-   $workspace_home = joinPath .chezmoi.homeDir $workspace_name -}}
+# {{- else -}}
+# {{-   $workspace_home = joinPath $workspace_location $workspace_name -}}
+# {{- end -}}
+# {{- $project_dir := joinPath $workspace_home "projects" -}}
+# {{- $reference_dir := joinPath $workspace_home "references" -}}
+# {{- if $interactive -}}
+# {{-   writeToStdout (printf "✅ Worksapce root set as '%s'\n" $workspace_root) -}}
 # {{- end -}}
 
 # {{- if not $sudoer -}}
@@ -701,10 +712,13 @@ data:
         name: {{ $workspace_name | quote }}
         location: {{ $workspace_location | quote }}
         root: {{ $workspace_root | quote }}
+        home: {{ $workspace_home | quote }}
         move_existing: true
         symlink_to_home: {{ $symlink_to_home }}
         symlink_colab_workspace: {{ $symlink_colab_workspace }}
         colab_drive: "/content/drive/MyDrive"
+        project_dir: {{ $project_dir | quote }}
+        reference_dir: {{ $reference_dir | quote }}
     github_repos:
 # {{- if $github_clones -}}
 # {{- range (split "," $github_clones) -}} #

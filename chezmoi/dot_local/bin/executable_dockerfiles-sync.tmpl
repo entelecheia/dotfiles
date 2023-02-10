@@ -6,8 +6,8 @@
 USAGE="DOCKER_NAME [--from-project] [--project-directory PROJECT_DIR] [--dockerfiles-directory DOCKERFILES_DIR] [-h|--help]"
 
 # declare arguments
-PROJECT_ROOT_DIR=${PROJECT_ROOT_DIR:-"${WORKSPACE_ROOT}/projects"}
-DOCKERFILES_SHARE_DIR=${DOCKERFILES_SHARE_DIR:-"{{- .docker.share_dir }}"}
+WORKSPACE_PROJECT_DIR=${WORKSPACE_PROJECT_DIR:-"{{ .workspace.project_dir }}"}
+DOCKERFILES_SHARE_DIR=${DOCKERFILES_SHARE_DIR:-"{{ .docker.share_dir }}"}
 PROJECT_DIR=""
 DOCKERFILES_DIR=""
 FROM_PROJECT="false"
@@ -112,11 +112,11 @@ if [[ -n "$PROJECT_DIR" ]] && [[ -n "$DOCKERFILES_DIR" ]]; then
   copy_dockerfiles "$SOURCE_DIR" "$DESTINATION_DIR"
 else
   if [[ "$FROM_PROJECT" == "true" ]]; then
-    SOURCE_DIR="$PROJECT_ROOT_DIR"
+    SOURCE_DIR="$WORKSPACE_PROJECT_DIR"
     DESTINATION_DIR="$DOCKERFILES_SHARE_DIR"
   else
     SOURCE_DIR="$DOCKERFILES_SHARE_DIR"
-    DESTINATION_DIR="$PROJECT_ROOT_DIR"
+    DESTINATION_DIR="$WORKSPACE_PROJECT_DIR"
   fi
   # if DOCKER_NAME is provided, copy dockerfiles from project directory
   if [[ -n "$DOCKER_NAME" ]]; then
