@@ -63,8 +63,6 @@ if [ -e "${SSH_PUB_KEY_FILE}" ]; then
     else
         log_info "SSH key already in authorized_keys"
     fi
-fi
-if [ -n "${SSH_KEY_ID}" ]; then
     log_task "Adding SSH key to gitconfig for signing commits"
     c git config --global user.signingkey "${SSH_PUB_KEY_FILE}"
     if [[ "${GPGSIGN}" == "true" ]]; then
