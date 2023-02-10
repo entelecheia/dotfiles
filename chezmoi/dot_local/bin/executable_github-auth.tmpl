@@ -14,7 +14,7 @@ GITHUB_USERNAME=${GITHUB_USERNAME:-"{{ .github.username }}"}
 GITHUB_TOKEN=${GITHUB_TOKEN:-"{{ .github.token }}"}
 
 if [[ -z "${GITHUB_USERNAME}" ]]; then
-  log_info "GITHUB_USERNAME environment variables are not set. Skipping GitHub authentication."
+  log_info "GITHUB_USERNAME environment variable is not set. Skipping GitHub authentication."
   exit 0
 fi
 if ! command -v gh >/dev/null; then
