@@ -92,7 +92,16 @@
 # {{- $gpg_key_id_file := joinPath $ssh_homedir ".gpg-id" -}}
 # {{- $gpg_key_id := env "GPG_KEY_ID" -}}
 # {{- $gpg_passphrase := "" -}}
-# {{- $gpg_gitsign := false -}}
+
+# {{- $git_commit_gpgsign := false -}}
+# {{- if and (hasKey . "gnupg") (hasKey .gnupg "gitsign") -}}
+# {{-   $git_commit_gpgsign = .gnupg.gitsign -}}
+# {{- end -}}
+# {{- if eq (env "GIT_COMMIT_GPGSIGN") "true" "True" "TRUE" "1" -}}
+# {{-   $git_commit_gpgsign = true -}}
+# {{- else -}}
+# {{-   $git_commit_gpgsign = false -}}
+# {{- end -}}
 
 # {{- $use_autorestic := false -}}
 # {{- if eq (env "DOTFILES_USE_AUTORESTIC") "true" "True" "TRUE" "1" -}}
@@ -374,16 +383,13 @@
 # {{-   writeToStdout (printf "✅ GPG passphrase set as '%s'\n" $gpg_passphrase) -}}
 # {{- end -}}
 
-# {{- if and (hasKey . "gnupg") (hasKey .gnupg "gitsign") -}}
-# {{-   $gpg_gitsign = .gnupg.gitsign -}}
-# {{- end -}}
 # {{- if and $interactive ($minimum | not) -}}
 # {{-   $question := "❔ Do you want to use GPG(or SSH) to sign git commits globally" -}}
-# {{-   $gpg_gitsign = promptBool $question $gpg_gitsign -}}
-# {{-   if $gpg_gitsign -}}
-# {{-     writeToStdout "✅ Git commits will be signed by GPG\n" -}}
+# {{-   $git_commit_gpgsign = promptBool $question $git_commit_gpgsign -}}
+# {{-   if $git_commit_gpgsign -}}
+# {{-     writeToStdout "✅ Git commits will be signed by GPG(or SSH)\n" -}}
 # {{-   else -}}
-# {{-     writeToStdout "✅ Git comiits will not be signed by GPG\n" -}}
+# {{-     writeToStdout "✅ Git comiits will not be signed by GPG(or SSH)\n" -}}
 # {{-   end -}}
 # {{- end -}}
 
@@ -640,9 +646,9 @@ data:
         key_id_file: {{ $gpg_key_id_file | quote }}
         key_id: {{ $gpg_key_id | quote }}
         passphrase: {{ $gpg_passphrase | quote }}
-        gitsign: {{ $gpg_gitsign }}
+        gitsign: {{ $git_commit_gpgsign }}
     git:
-        gpgsign: {{ $gpg_gitsign }}
+        gpgsign: {{ $git_commit_gpgsign }}
         gpg_format: ssh
         ssh_allowed_signers: "allowed_signers"
     github:
