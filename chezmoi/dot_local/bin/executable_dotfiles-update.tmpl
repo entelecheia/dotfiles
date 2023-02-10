@@ -1,9 +1,12 @@
 #!/bin/bash
-
 # {{ template "scripts-library" }}
 
-# The following line is for ShellCheck to correctly identify the above include
-true || source ../../.chezmoitemplates/scripts-library
+if command -v gh >/dev/null; then
+  if gh auth status &>/dev/null; then
+    # setup git authentication
+    gh auth setup-git
+  fi
+fi
 
 if chezmoi --version &>/dev/null; then
   log_task "Pulling latest changes from dotfiles repo"
