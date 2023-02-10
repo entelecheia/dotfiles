@@ -176,12 +176,12 @@
 # {{- if $interactive -}}
 # {{-   $question := "❔ Do you want to install in minimum mode (see README)" -}}
 # {{-   $minimum = promptBool $question $minimum -}}
+# {{- end -}}
 # {{-   if $minimum -}}
 # {{-     writeToStdout "✅ Minimum mode enabled\n" -}}
 # {{-   else -}}
 # {{-     writeToStdout "✅ Minimum mode disabled\n" -}}
 # {{-   end -}}
-# {{- end -}}
 
 # {{- if and (hasKey . "system") (hasKey .system "auto_update") -}}
 # {{-   $auto_update = .system.auto_update -}}
@@ -189,12 +189,12 @@
 # {{- if $interactive -}}
 # {{-   $question := "❔ Do you want to update dotfiles automatically" -}}
 # {{-   $auto_update = promptBool $question $auto_update -}}
+# {{- end -}}
 # {{-   if $auto_update -}}
 # {{-     writeToStdout "✅ Auto update enabled\n" -}}
 # {{-   else -}}
 # {{-     writeToStdout "✅ Auto update disabled\n" -}}
 # {{-   end -}}
-# {{- end -}}
 
 # {{- if and (hasKey . "system") (hasKey .system "verbose") -}}
 # {{-   $verbose = .system.verbose -}}
@@ -202,12 +202,12 @@
 # {{- if $interactive -}}
 # {{-   $question := "❔ Do you want to enable verbose mode" -}}
 # {{-   $verbose = promptBool $question $verbose -}}
+# {{- end -}}
 # {{-   if $verbose -}}
 # {{-     writeToStdout "✅ Verbose mode enabled\n" -}}
 # {{-   else -}}
 # {{-     writeToStdout "✅ Verbose mode disabled\n" -}}
 # {{-   end -}}
-# {{- end -}}
 
 # {{- if eq .chezmoi.os "darwin" -}}
 # {{-   $apply_rootmoi := false -}}
@@ -218,18 +218,15 @@
 # {{-   if $interactive -}}
 # {{-       $question := "❔ Do you want to install dotfiles for the root user" -}}
 # {{-       $apply_rootmoi = promptBool $question $apply_rootmoi -}}
+# {{-   end -}}
+# {{- else -}}
+# {{-   $apply_rootmoi := false -}}
+# {{- end -}}
 # {{-       if $apply_rootmoi -}}
 # {{-           writeToStdout "✅ Dotfiles will be installed for the root user\n" -}}
 # {{-       else -}}
 # {{-           writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
 # {{-       end -}}
-# {{-   end -}}
-# {{- else -}}
-# {{-   $apply_rootmoi := false -}}
-# {{-   if $interactive -}}
-# {{-       writeToStdout "✅ Dotfiles will not be installed for the root user\n" -}}
-# {{-   end -}}
-# {{- end -}}
 
 # {{- if hasKey . "name" -}}
 # {{-   $name = .name -}}
@@ -245,7 +242,6 @@
 # {{-     end -}}
 # {{-     if regexMatch "^[A-Z][-' a-zA-Z]+$" $answer -}}
 # {{-       $name = $answer -}}
-# {{-       writeToStdout (printf "✅ Name set as '%s'\n" $name) -}}
 # {{-       break -}}
 # {{-     end -}}
 # {{-     writeToStdout (printf "❌ '%s' is an invalid name\n" $answer) -}}
@@ -255,6 +251,7 @@
 # {{-     end -}}
 # {{-   end -}}
 # {{- end -}}
+# {{-       writeToStdout (printf "✅ Name set as '%s'\n" $name) -}}
 
 # {{- if and (hasKey . "github") (hasKey .github "username") -}}
 # {{-   $github_username = .github.username -}}
@@ -268,8 +265,8 @@
 # {{-     $answer = promptString $question -}}
 # {{-   end -}}
 # {{-   $github_username = $answer -}}
-# {{-   writeToStdout (printf "✅ GitHub username set as '%s'\n" $github_username) -}}
 # {{- end -}}
+# {{-   writeToStdout (printf "✅ GitHub username set as '%s'\n" $github_username) -}}
 
 # {{- if and (hasKey . "docker") (hasKey .docker "username") -}}
 # {{-   $docker_username = .docker.username -}}
@@ -283,8 +280,8 @@
 # {{-     $answer = promptString $question -}}
 # {{-   end -}}
 # {{-   $docker_username = $answer -}}
-# {{-   writeToStdout (printf "✅ Docker username set as '%s'\n" $docker_username) -}}
 # {{- end -}}
+# {{-   writeToStdout (printf "✅ Docker username set as '%s'\n" $docker_username) -}}
 
 # {{- if hasKey . "email" -}}
 # {{-   $email = .email -}}
@@ -301,7 +298,6 @@
 # {{-     $answer = lower $answer -}}
 # {{-     if regexMatch "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$" $answer -}}
 # {{-       $email = $answer -}}
-# {{-       writeToStdout (printf "✅ Email set as '%s'\n" $email) -}}
 # {{-       break -}}
 # {{-     end -}}
 # {{-     writeToStdout (printf "❌ '%s' is an invalid email\n" $answer) -}}
@@ -311,6 +307,7 @@
 # {{-     end -}}
 # {{-   end -}}
 # {{- end -}}
+# {{-       writeToStdout (printf "✅ Email set as '%s'\n" $email) -}}
 
 # {{- if and (hasKey . "system") (hasKey .system "hostname") -}}
 # {{-   $hostname = .system.hostname -}}
@@ -326,7 +323,6 @@
 # {{-     end -}}
 # {{-     if regexMatch "^[A-Za-z0-9._-]+$" $answer -}}
 # {{-       $hostname = $answer -}}
-# {{-       writeToStdout (printf "✅ Hostname set as '%s'\n" $hostname) -}}
 # {{-       break -}}
 # {{-     end -}}
 # {{-     writeToStdout (printf "❌ '%s' is an invalid hostname\n" $answer) -}}
@@ -336,6 +332,7 @@
 # {{-     end -}}
 # {{-   end -}}
 # {{- end -}}
+# {{-       writeToStdout (printf "✅ Hostname set as '%s'\n" $hostname) -}}
 
 # {{- if and (hasKey . "ssh") (hasKey .ssh "algorithm") -}}
 # {{-   $ssh_algorithm = .ssh.algorithm -}}
@@ -349,18 +346,14 @@
 # {{-     $answer = promptString $question -}}
 # {{-   end -}}
 # {{-   $ssh_algorithm = $answer -}}
-# {{-   writeToStdout (printf "✅ SSH algorithm set as '%s'\n" $ssh_algorithm) -}}
 # {{- end -}}
+# {{-   writeToStdout (printf "✅ SSH algorithm set as '%s'\n" $ssh_algorithm) -}}
 
 # {{- $ssh_keyfile := joinPath .chezmoi.homeDir (printf ".ssh/id_%s_%s" $ssh_algorithm $github_username) -}}
-# {{- if $interactive -}}
 # {{-   writeToStdout (printf "✅ SSH key filename set as '%s'\n" $ssh_keyfile) -}}
-# {{- end -}}
 
 # {{- $age_keyfile := joinPath .chezmoi.homeDir (printf ".ssh/age_key_%s" $github_username) -}}
-# {{- if $interactive -}}
 # {{-   writeToStdout (printf "✅ Age key filename set as '%s'\n" $age_keyfile) -}}
-# {{- end -}}
 
 # {{- if and (hasKey . "github") (hasKey .github "token") -}}
 # {{-   $github_token = .github.token -}}
@@ -374,8 +367,8 @@
 # {{-     $answer = promptString $question -}}
 # {{-   end -}}
 # {{-   $github_token = $answer -}}
-# {{-   writeToStdout (printf "✅ GitHub Token set as '%s'\n" $github_token) -}}
 # {{- end -}}
+# {{-   writeToStdout (printf "✅ GitHub Token set as '%s'\n" $github_token) -}}
 
 # {{- if and (hasKey . "gnupg") (hasKey .gnupg "passphrase") -}}
 # {{-   $gpg_passphrase = .gnupg.passphrase -}}
@@ -389,18 +382,18 @@
 # {{-     $answer = promptString $question -}}
 # {{-   end -}}
 # {{-   $gpg_passphrase = $answer -}}
-# {{-   writeToStdout (printf "✅ GPG passphrase set as '%s'\n" $gpg_passphrase) -}}
 # {{- end -}}
+# {{-   writeToStdout (printf "✅ GPG passphrase set as '%s'\n" $gpg_passphrase) -}}
 
 # {{- if and $interactive ($minimum | not) -}}
 # {{-   $question := "❔ Do you want to use GPG(or SSH) to sign git commits globally" -}}
 # {{-   $git_commit_gpgsign = promptBool $question $git_commit_gpgsign -}}
+# {{- end -}}
 # {{-   if $git_commit_gpgsign -}}
 # {{-     writeToStdout "✅ Git commits will be signed by GPG(or SSH)\n" -}}
 # {{-   else -}}
 # {{-     writeToStdout "✅ Git comiits will not be signed by GPG(or SSH)\n" -}}
 # {{-   end -}}
-# {{- end -}}
 
 # {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "repo") -}}
 # {{-   $dotdrop_repo = .dotdrop.repo -}}
@@ -415,8 +408,8 @@
 # {{-   end -}}
 # {{-   $dotdrop_repo = $answer -}}
 # {{-   $use_dotdrop = $answer | not | not -}}
-# {{-   writeToStdout (printf "✅ dotdrop files repo set as '%s'\n" $dotdrop_repo) -}}
 # {{- end -}}
+# {{-   writeToStdout (printf "✅ dotdrop files repo set as '%s'\n" $dotdrop_repo) -}}
 
 # {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "user_profile") -}}
 # {{-   $dotdrop_user_profile = .dotdrop.user_profile -}}
@@ -430,8 +423,8 @@
 # {{-     $answer = promptString $question -}}
 # {{-   end -}}
 # {{-   $dotdrop_user_profile = $answer -}}
-# {{-   writeToStdout (printf "✅ dotdrop user profile set as '%s'\n" $dotdrop_user_profile) -}}
 # {{- end -}}
+# {{-   writeToStdout (printf "✅ dotdrop user profile set as '%s'\n" $dotdrop_user_profile) -}}
 
 # {{- if and (hasKey . "docker") (hasKey .docker "repo") -}}
 # {{-   $dockerfiles_repo = .docker.repo -}}
@@ -445,8 +438,8 @@
 # {{-     $answer = promptString $question -}}
 # {{-   end -}}
 # {{-   $dockerfiles_repo = $answer -}}
-# {{-   writeToStdout (printf "✅ dockerfiles repo set as '%s'\n" $dockerfiles_repo) -}}
 # {{- end -}}
+# {{-   writeToStdout (printf "✅ dockerfiles repo set as '%s'\n" $dockerfiles_repo) -}}
 
 # {{- if and (hasKey . "workspace") (hasKey .workspace "location") -}}
 # {{-   $workspace_location = .workspace.location -}}
@@ -460,8 +453,9 @@
 # {{-     $answer = promptString $question -}}
 # {{-   end -}}
 # {{-   $workspace_location = $answer -}}
-# {{-   writeToStdout (printf "✅ Worksapce location set as '%s'\n" $workspace_location) -}}
 # {{- end -}}
+# {{-   writeToStdout (printf "✅ Worksapce location set as '%s'\n" $workspace_location) -}}
+
 # {{- $workspace_root = joinPath $workspace_location $workspace_name -}}
 # {{- if $symlink_to_home -}}
 # {{-   $workspace_home = joinPath .chezmoi.homeDir $workspace_name -}}
@@ -470,15 +464,10 @@
 # {{- end -}}
 # {{- $project_dir := joinPath $workspace_home "projects" -}}
 # {{- $reference_dir := joinPath $workspace_home "references" -}}
-# {{- if $interactive -}}
 # {{-   writeToStdout (printf "✅ Worksapce root set as '%s'\n" $workspace_root) -}}
-# {{- end -}}
 
 # {{- if not $sudoer -}}
 # {{-   $symlink_colab_workspace := false -}}
-# {{-   if $interactive -}}
-# {{-     writeToStdout "✅ Colab workspace will not be symlinked\n" -}}
-# {{-   end -}}
 # {{- else -}}
 # {{- if and (hasKey . "workspace") (hasKey .workspace "symlink_colab_workspace") -}}
 # {{-   $symlink_colab_workspace = .workspace.symlink_colab_workspace -}}
@@ -486,17 +475,18 @@
 # {{- if and $interactive ($minimum | not) -}}
 # {{-   $question := "❔ Do you want to symlink workspace to colab default google drive directory to maintain persistence across sessions" -}}
 # {{-   $symlink_colab_workspace = promptBool $question $symlink_colab_workspace -}}
+# {{- end -}}
+# {{- end -}}
 # {{-   if $symlink_colab_workspace -}}
 # {{-     writeToStdout "✅ Colab workspace will be symlinked to workspace root\n" -}}
 # {{-   else -}}
 # {{-     writeToStdout "✅ Colab workspace will not be symlinked\n" -}}
 # {{-   end -}}
-# {{- end -}}
-# {{- end -}}
 
 # {{- if and $interactive ($minimum | not) -}}
 # {{-   $question := "❔ Do you want to use autorestic to backup your files" -}}
 # {{-   $use_autorestic = promptBool $question $use_autorestic -}}
+# {{- end -}}
 # {{-   if $use_autorestic -}}
 # {{-     writeToStdout "✅ autorestic enabled\n" -}}
 # {{-     writeToStdout (printf "✅ autorestic config path set as '%s'\n" $autorestic_config_file) -}}
@@ -505,7 +495,6 @@
 # {{-   else -}}
 # {{-     writeToStdout "✅ autorestic disabled\n" -}}
 # {{-   end -}}
-# {{- end -}}
 
 # {{- if and (hasKey . "code") (hasKey .code "enabled") -}}
 # {{-   $use_code = .code.enabled -}}
@@ -513,12 +502,12 @@
 # {{- if and $interactive $sudoer -}}
 # {{-   $question := "❔ Do you want to use visual studio code" -}}
 # {{-   $use_code = promptBool $question $use_code -}}
+# {{- end -}}
 # {{-   if $use_code -}}
 # {{-     writeToStdout "✅ visual studio code enabled\n" -}}
 # {{-   else -}}
 # {{-     writeToStdout "✅ visual studio code disabled\n" -}}
 # {{-   end -}}
-# {{- end -}}
 
 # {{- if and (hasKey . "pass") (hasKey .pass "repo") -}}
 # {{-   $pass_repo = .pass.repo -}}
@@ -532,8 +521,8 @@
 # {{-     $answer = promptString $question -}}
 # {{-   end -}}
 # {{-   $pass_repo = $answer -}}
-# {{-   writeToStdout (printf "✅ password store repo set as '%s'\n" $pass_repo) -}}
 # {{- end -}}
+# {{-   writeToStdout (printf "✅ password store repo set as '%s'\n" $pass_repo) -}}
 
 # {{- if and (hasKey . "passage") (hasKey .passage "repo") -}}
 # {{-   $passage_repo = .passage.repo -}}
@@ -547,8 +536,8 @@
 # {{-     $answer = promptString $question -}}
 # {{-   end -}}
 # {{-   $passage_repo = $answer -}}
-# {{-   writeToStdout (printf "✅ passage repo set as '%s'\n" $passage_repo) -}}
 # {{- end -}}
+# {{-   writeToStdout (printf "✅ passage repo set as '%s'\n" $passage_repo) -}}
 
 # {{- if and (hasKey . "op") (hasKey .op "enabled") -}}
 # {{-   $use_1password = .op.enabled -}}
@@ -556,12 +545,12 @@
 # {{- if and $interactive $sudoer ($minimum | not) -}}
 # {{-   $question := "❔ Do you want to use 1password for secrets" -}}
 # {{-   $use_1password = promptBool $question $use_1password -}}
+# {{- end -}}
 # {{-   if $use_1password -}}
 # {{-     writeToStdout "✅ 1password enabled\n" -}}
 # {{-   else -}}
 # {{-     writeToStdout "✅ 1password disabled\n" -}}
 # {{-   end -}}
-# {{- end -}}
 
 # {{- if and (hasKey . "vault") (hasKey .vault "enabled") -}}
 # {{-   $use_vault = .vault.enabled -}}
@@ -569,12 +558,12 @@
 # {{- if and $interactive $sudoer ($minimum | not) -}}
 # {{-   $question := "❔ Do you want to use vault for secrets" -}}
 # {{-   $use_vault = promptBool $question $use_vault -}}
+# {{- end -}}
 # {{-   if $use_vault -}}
 # {{-     writeToStdout "✅ Vault enabled\n" -}}
 # {{-   else -}}
 # {{-     writeToStdout "✅ Vault disabled\n" -}}
 # {{-   end -}}
-# {{- end -}}
 
 # {{- if and (hasKey . "microk8s") (hasKey .microk8s "enabled") -}}
 # {{-   $use_microk8s = .microk8s.enabled -}}
@@ -582,12 +571,12 @@
 # {{- if and $interactive $sudoer ($minimum | not) -}}
 # {{-   $question := "❔ Do you want to use MicroK8s for Kubernetes" -}}
 # {{-   $use_microk8s = promptBool $question $use_microk8s -}}
+# {{- end -}}
 # {{-   if $use_microk8s -}}
 # {{-     writeToStdout "✅ MicroK8s enabled\n" -}}
 # {{-   else -}}
 # {{-     writeToStdout "✅ MicroK8s disabled\n" -}}
 # {{-   end -}}
-# {{- end -}}
 
 # {{- if and (hasKey . "github") (hasKey .github "clones") -}}
 # {{-   $github_clones = .github.clones -}}
@@ -601,12 +590,10 @@
 # {{-     $answer = promptString $question -}}
 # {{-   end -}}
 # {{-   $github_clones = $answer -}}
+# {{- end -}}
 # {{-   writeToStdout (printf "✅ GitHub repositories to clone set as '%s'\n" $github_clones) -}}
-# {{- end -}}
 
-# {{- if $interactive -}}
 # {{-   writeToStdout "\n💡 Tip: you can always make chezmoi ask this again by running `chezmoi init` without `--force`.\n" -}}
-# {{- end -}}
 
 # {{- /* This retains the value passed with --source on chezmoi init, which is used in the ../install.sh script */ -}} #
 sourceDir: "{{ .chezmoi.workingTree }}"
