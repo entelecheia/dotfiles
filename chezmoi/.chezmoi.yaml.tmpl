@@ -29,7 +29,7 @@
 # {{- $github_username := env "GITHUB_USERNAME" -}}
 # {{- $workspace_location := "" -}}
 # {{- if $wsl -}}
-# {{-   $win_home = (output "sh" "-c" "wslpath -a $(wslvar USERPROFILE)") | trim -}}
+# {{-   $win_home := (output "sh" "-c" "wslpath -a $(wslvar USERPROFILE)") | trim -}}
 # {{-   $workspace_location = or (env "WORKSPACE_LOCATION") $win_home -}}
 # {{- else -}}
 # {{-   $workspace_location = or (env "WORKSPACE_LOCATION") .chezmoi.homeDir -}}
