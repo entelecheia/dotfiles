@@ -31,7 +31,7 @@
 # {{- $winhome := or (env "WINHOME") (output "sh" "-c" "command -v wslpath > /dev/null && command -v wslvar > /dev/null && wslpath $(wslvar USERPROFILE) || echo ''" | trim) -}}
 # {{- $winhome_symlink := joinPath .chezmoi.homeDir "winhome" -}}
 # {{- if and $wsl ($winhome | not | not) -}}
-# {{-   writeToStdout (printf "\n🪟 WSL detected, running with Windows Home directory: %s" $winhome) -}}
+# {{-   writeToStdout (printf "\n🪟 WSL detected, running with Windows Home directory: %s\n\n" $winhome) -}}
 # {{-   $workspace_location = or (env "WORKSPACE_LOCATION") $winhome -}}
 # {{- else -}}
 # {{-   $workspace_location = or (env "WORKSPACE_LOCATION") .chezmoi.homeDir -}}
