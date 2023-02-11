@@ -31,6 +31,7 @@
 # {{- $winhome := or (env "WINHOME") (output "sh" "-c" "command -v wslpath > /dev/null && command -v wslvar > /dev/null && wslpath $(wslvar USERPROFILE) || echo ''") -}}
 # {{- if and $wsl ($winhome | not | not) -}}
 # {{-   writeToStdout (printf "\n🪟 WSL detected, running with Windows Home directory: %s" $winhome) -}}
+# {{-   $workspace_location = or (env "WORKSPACE_LOCATION") $winhome -}}
 # {{- else -}}
 # {{-   $workspace_location = or (env "WORKSPACE_LOCATION") .chezmoi.homeDir -}}
 # {{- end -}}
@@ -398,7 +399,7 @@
 # {{-   if $git_commit_gpgsign -}}
 # {{-     writeToStdout "✅ Git commits will be signed by GPG(or SSH)\n" -}}
 # {{-   else -}}
-# {{-     writeToStdout "✅ Git comiits will not be signed by GPG(or SSH)\n" -}}
+# {{-     writeToStdout "✅ Git commits will not be signed by GPG(or SSH)\n" -}}
 # {{-   end -}}
 
 # {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "repo") -}}

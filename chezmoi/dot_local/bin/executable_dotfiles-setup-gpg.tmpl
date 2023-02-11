@@ -121,9 +121,7 @@ EOF
             c gpg --export-secret-keys --armor "${GPG_KEY_ID}" > "${GPG_PRIVATE_ASC_KEY_FILE}"
             c gpg --export-secret-keys "${GPG_KEY_ID}" > "${GPG_PRIVATE_KEY_FILE}"
         else
-            if [ -z "${GPG_KEY_ID}" ]; then
-                log_manual_action "Generate GPG key"
-            fi
+            log_manual_action "Generate GPG key by running 'gpg --full-generate-key'"
         fi
     fi
 fi
