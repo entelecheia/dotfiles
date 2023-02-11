@@ -1,2 +1,5 @@
 .oh-my-zsh/cache/*
 **/*.zwc
+{{ if not .system.is_wsl -}}
+.local/bin/copy-wsl-ssh-to-win
+{{- end }}

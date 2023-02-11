@@ -28,10 +28,9 @@
 # {{- $dotdrop_user_profile := or (env "DOTDROP_PROFILE") "user" -}}
 # {{- $github_username := env "GITHUB_USERNAME" -}}
 # {{- $workspace_location := "" -}}
-# {{- $win_home := "" -}}
-# {{- if $wsl -}}
-# {{-   $win_home = (output "sh" "-c" "wslpath -u $(wslvar USERPROFILE)") | trim -}}
-# {{-   $workspace_location = or (env "WORKSPACE_LOCATION") $win_home -}}
+# {{- $winhome := or (env "WINHOME") (output "sh" "-c" "command -v wslpath > /dev/null && command -v wslvar > /dev/null && wslpath $(wslvar USERPROFILE) || echo ''") -}}
+# {{- if and $wsl ($winhome | not | not) -}}
+# {{-   writeToStdout "🪟 WSL detected, using Windows home directory: $winhome\n\n" -}}
 # {{- else -}}
 # {{-   $workspace_location = or (env "WORKSPACE_LOCATION") .chezmoi.homeDir -}}
 # {{- end -}}
@@ -154,7 +153,7 @@
 # {{- if $minimum | not -}}
 # {{- writeToStdout (printf "📦  Use autorestic: %t\n" $use_autorestic) -}}
 # {{- writeToStdout (printf "🔖  Use dotdrop: %t\n" $use_dotdrop) -}}
-# {{- writeToStdout (printf "🔒  Use pass: %t\n" $use_pass) -}}
+# {{- writeToStdout (printf "🔑  Use pass: %t\n" $use_pass) -}}
 # {{- writeToStdout (printf "🔑  Use 1password: %t\n" $use_1password) -}}
 # {{- writeToStdout (printf "🚀  Use microk8s: %t\n" $use_microk8s) -}}
 # {{- end -}}
@@ -464,14 +463,15 @@
 # {{-   writeToStdout (printf "✅ Worksapce location set as '%s'\n" $workspace_location) -}}
 
 # {{- $workspace_root = joinPath $workspace_location $workspace_name -}}
+# {{-   writeToStdout (printf "✅ Worksapce root set as '%s'\n" $workspace_root) -}}
 # {{- if $symlink_to_home -}}
 # {{-   $workspace_home = joinPath .chezmoi.homeDir $workspace_name -}}
 # {{- else -}}
 # {{-   $workspace_home = joinPath $workspace_location $workspace_name -}}
 # {{- end -}}
+# {{-   writeToStdout (printf "✅ Worksapce root symlinked to '%s'\n" $workspace_home) -}}
 # {{- $project_dir := joinPath $workspace_home "projects" -}}
 # {{- $reference_dir := joinPath $workspace_home "references" -}}
-# {{-   writeToStdout (printf "✅ Worksapce root set as '%s'\n" $workspace_root) -}}
 
 # {{- if not $sudoer -}}
 # {{-   $symlink_colab_workspace := false -}}
@@ -485,9 +485,9 @@
 # {{- end -}}
 # {{- end -}}
 # {{-   if $symlink_colab_workspace -}}
-# {{-     writeToStdout "✅ Colab workspace will be symlinked to workspace root\n" -}}
+# {{-     writeToStdout "✅ Colab workspace symlinked to workspace root\n" -}}
 # {{-   else -}}
-# {{-     writeToStdout "✅ Colab workspace will not be symlinked\n" -}}
+# {{-     writeToStdout "✅ Colab workspace not symlinked\n" -}}
 # {{-   end -}}
 
 # {{- if and $interactive ($minimum | not) -}}
@@ -714,7 +714,7 @@ data:
         project_dir: {{ $project_dir | quote }}
         reference_dir: {{ $reference_dir | quote }}
 # {{ if $wsl }}
-        win_home: {{ $win_home | quote }}
+        winhome: {{ $winhome | quote }}
 # {{ end }}
     github_repos:
 # {{- if $github_clones -}}

@@ -69,7 +69,21 @@ export VISUAL="{{ .editor }}"
 export EDITOR="{{ .editor }}"
 # {{ if .system.is_wsl }}
 export BROWSER="wslview"
-export WIN_HOME="{{ .workspace.win_home }}"
+WINHOME="{{ .workspace.winhome }}"
+if [[ -z "${WINHOME}" ]]; then
+  if command -v wslpath >/dev/null; then
+    if command -v wslvar >/dev/null; then
+      WINHOME=$(wslpath "$(wslvar USERPROFILE)")
+    else
+      WINHOME=$(wslpath "$(powershell.exe -noprofile -noninteractive -command '& {(gci env:USERPROFILE).Value}')")
+    fi
+  else
+    WINHOME="/mnt/c/Users/$(whoami)"
+  fi
+fi
+if [[ -e "${WINHOME}" ]]; then
+  export WINHOME="${WINHOME}"
+fi
 # {{ end }}
 
 export SSH_HOME="{{ .ssh.home }}"

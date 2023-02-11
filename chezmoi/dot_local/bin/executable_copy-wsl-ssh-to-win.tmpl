@@ -3,19 +3,33 @@
 # {{ template "scripts-library" }}
 log_task "Copying SSH keys from WSL to Windows"
 
-WIN_HOME="{{ .workspace.win_home }}}}"
-
-if [[ ! -e "${WIN_HOME}/.ssh" ]]; then
-  log_task "Creating ${WIN_HOME}/.ssh"
-  c mkdir "${WIN_HOME}/.ssh"
+WINHOME=${WINHOME:-"{{ .workspace.winhome }}"}
+if [[ -z "${WINHOME}" ]]; then
+  if command -v wslpath >/dev/null; then
+    if command -v wslvar >/dev/null; then
+      WINHOME=$(wslpath "$(wslvar USERPROFILE)")
+    else
+      WINHOME=$(wslpath "$(powershell.exe -noprofile -noninteractive -command '& {(gci env:USERPROFILE).Value}')")
+    fi
+  else
+    WINHOME="/mnt/c/Users/$(whoami)"
+  fi
 fi
+if [[ -d "${WINHOME}" ]] && [[ "${WINHOME}" != "${HOME}" ]]; then
 
-# if ${HOME}/.ssh does not exist, create it
-if [[ ! -e "${HOME}/.ssh" ]]; then
-  log_task "Creating ${HOME}/.ssh"
-  c mkdir "${HOME}/.ssh"
+  if [[ ! -e "${WINHOME}/.ssh" ]]; then
+    log_task "Creating ${WINHOME}/.ssh"
+    c mkdir "${WINHOME}/.ssh"
+  fi
+  # if ${HOME}/.ssh does not exist, create it
+  if [[ ! -e "${HOME}/.ssh" ]]; then
+    log_task "Creating ${HOME}/.ssh"
+    c mkdir "${HOME}/.ssh"
+  fi
+
+  log_task "Copying files from ${HOME}/.ssh to ${WINHOME}/.ssh"
+  c cp -f "${HOME}/.ssh"/* "${WINHOME}/.ssh"
+else
+  log_info "Skipping copying SSH keys from WSL to Windows"
 fi
-
-log_task "Copying files from ${HOME}/.ssh to ${WIN_HOME}/.ssh"
-c cp -f "${HOME}/.ssh"/* "${WIN_HOME}/.ssh"
 # {{ end }}
