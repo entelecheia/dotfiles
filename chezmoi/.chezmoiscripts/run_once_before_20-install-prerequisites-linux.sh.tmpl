@@ -112,7 +112,7 @@ fi
 # Set up locale
 if command -v localedef &>/dev/null; then
   log_task "Setting up locale"
-  c localedef -v -c -i en_US -f UTF-8 en_US.UTF-8 || true
+  c sudo localedef -v -c -i en_US -f UTF-8 en_US.UTF-8 || true
 fi
 
 # install autorestic
