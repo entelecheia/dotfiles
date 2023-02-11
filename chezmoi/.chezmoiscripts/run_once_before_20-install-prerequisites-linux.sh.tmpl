@@ -58,6 +58,9 @@ fi
 readonly wanted_packages=(
   apt-transport-https
   build-essential
+  tzdata
+  locales
+  locales-all
   procps
   file
   jq
@@ -104,6 +107,12 @@ if [[ ${#missing_packages[@]} -gt 0 ]]; then
 
   c "${apt_command[@]}" update
   c "${apt_command[@]}" install --yes --no-install-recommends "${missing_packages[@]}"
+fi
+
+# Set up locale
+if command -v localedef &>/dev/null; then
+  log_task "Setting up locale"
+  c localedef -v -c -i en_US -f UTF-8 en_US.UTF-8 || true
 fi
 
 # install autorestic
