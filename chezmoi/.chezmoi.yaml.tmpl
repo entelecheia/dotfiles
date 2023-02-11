@@ -28,7 +28,7 @@
 # {{- $dotdrop_user_profile := or (env "DOTDROP_PROFILE") "user" -}}
 # {{- $github_username := env "GITHUB_USERNAME" -}}
 # {{- $workspace_location := "" -}}
-# {{- $winhome := or (env "WINHOME") (output "sh" "-c" "command -v wslpath > /dev/null && command -v wslvar > /dev/null && wslpath $(wslvar USERPROFILE) || echo ''") -}}
+# {{- $winhome := or (env "WINHOME") (output "sh" "-c" "command -v wslpath > /dev/null && command -v wslvar > /dev/null && wslpath $(wslvar USERPROFILE) || echo ''" | trim) -}}
 # {{- $winhome_symlink := joinPath .chezmoi.homeDir "winhome" -}}
 # {{- if and $wsl ($winhome | not | not) -}}
 # {{-   writeToStdout (printf "\n🪟 WSL detected, running with Windows Home directory: %s" $winhome) -}}
