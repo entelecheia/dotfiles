@@ -88,9 +88,14 @@
 # {{-   $use_microk8s = true -}}
 # {{- end -}}
 
-# {{- $verbose := false -}}
-# {{- if eq (env "DOTFILES_VERBOSE") "true" "True" "TRUE" "1" -}}
-# {{-   $verbose = true -}}
+# {{- $verbose := "1" -}}
+# {{- if and (hasKey . "system") (hasKey .system "verbose") -}}
+# {{-   $verbose = .system.verbose | toString -}}
+# {{- else -}}
+# {{-   $verbose = or (env "DOTFILES_VERBOSE") "False" -}}
+# {{- end -}}
+# {{- if eq $verbose "f" "F" "false" "False" "FALSE" "0" -}}
+# {{-   $verbose = "0" -}}
 # {{- end -}}
 
 # {{- $ssh_homedir := or (joinPath .chezmoi.homeDir ".ssh") -}}
@@ -152,7 +157,7 @@
 # {{- writeToStdout (printf "🔑  Use 1password: %t\n" $use_1password) -}}
 # {{- writeToStdout (printf "🚀  Use microk8s: %t\n" $use_microk8s) -}}
 # {{- end -}}
-# {{- writeToStdout (printf "🔬  Verbose: %t\n" $verbose) -}}
+# {{- writeToStdout (printf "🔬  Verbose: %t\n" ($verbose | not | not)) -}}
 # {{- writeToStdout "---\n" -}}
 
 # {{- $age_recipients:= or (env "AGE_RECIPIENTS") "" -}}
@@ -196,17 +201,15 @@
 # {{-     writeToStdout "✅ Auto update disabled\n" -}}
 # {{-   end -}}
 
-# {{- if and (hasKey . "system") (hasKey .system "verbose") -}}
-# {{-   $verbose = .system.verbose -}}
-# {{- end -}}
 # {{- if $interactive -}}
-# {{-   $question := "❔ Do you want to enable verbose mode" -}}
-# {{-   $verbose = promptBool $question $verbose -}}
+# {{-   $question := "❔ Do you want to enable verbose mode (0/1/f/F/t/T)" -}}
+# {{-   $verbose = promptString $question $verbose -}}
 # {{- end -}}
-# {{-   if $verbose -}}
-# {{-     writeToStdout "✅ Verbose mode enabled\n" -}}
-# {{-   else -}}
+# {{-   if eq $verbose "f" "F" "false" "False" "FALSE" "0" -}}
+# {{-     $verbose = "0" -}}
 # {{-     writeToStdout "✅ Verbose mode disabled\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "✅ Verbose mode enabled\n" -}}
 # {{-   end -}}
 
 # {{- if eq .chezmoi.os "darwin" -}}
@@ -598,7 +601,7 @@
 # {{- /* This retains the value passed with --source on chezmoi init, which is used in the ../install.sh script */ -}} #
 sourceDir: "{{ .chezmoi.workingTree }}"
 
-verbose: {{ $verbose }}
+verbose: {{ $verbose | not | not }}
 
 diff:
     exclude:

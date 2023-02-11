@@ -91,7 +91,7 @@ cdr() {
   cd "${WORKSPACE_REFERENCE_DIR}/${repo}"
 }
 
-alias cdw="cd {{ .workspace.root }}"
+alias cdw="cd {{ .workspace.home }}"
 
 gcdp() {
   local repo="${1:-}"
