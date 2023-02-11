@@ -7,10 +7,9 @@ log_task "Setting up workspace"
 # symlink_colab_workspace: true
 # colab_drive: "/content/drive/MyDrive"
 WORKSPACE_NAME="{{ .workspace.name }}"
-WORKSPACE_LOCATION="{{ .workspace.location }}"
 # {{ if .system.is_wsl }}
 WINHOME=${WINHOME:-"{{ .system.winhome }}"}
-if [[ -z "${WINHOME}" ]]; then
+if [[ ! -d "${WINHOME}" ]]; then
   if command -v wslpath >/dev/null; then
     if command -v wslvar >/dev/null; then
       WINHOME=$(wslpath "$(wslvar USERPROFILE)")
@@ -21,7 +20,7 @@ if [[ -z "${WINHOME}" ]]; then
     WINHOME="/mnt/c/Users/$(whoami)"
   fi
 fi
-if [[ -e "${WINHOME}" ]]; then
+if [[ -d "${WINHOME}" ]]; then
   WORKSPACE_LOCATION="${WINHOME}"
 else
   WORKSPACE_LOCATION="${HOME}"
