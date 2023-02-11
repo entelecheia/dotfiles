@@ -70,7 +70,7 @@ export EDITOR="{{ .editor }}"
 # {{ if .system.is_wsl }}
 export BROWSER="wslview"
 WINHOME="{{ .system.winhome }}"
-if [[ -z "${WINHOME}" ]]; then
+if [[ ! -d "${WINHOME}" ]]; then
   if command -v wslpath >/dev/null; then
     if command -v wslvar >/dev/null; then
       WINHOME=$(wslpath "$(wslvar USERPROFILE)")

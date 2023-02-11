@@ -8,7 +8,7 @@ log_task "Setting up workspace"
 # colab_drive: "/content/drive/MyDrive"
 WORKSPACE_NAME="{{ .workspace.name }}"
 # {{ if .system.is_wsl }}
-WINHOME=${WINHOME:-"{{ .system.winhome }}"}
+WINHOME="{{ .system.winhome }}"
 if [[ ! -d "${WINHOME}" ]]; then
   if command -v wslpath >/dev/null; then
     if command -v wslvar >/dev/null; then
@@ -89,14 +89,14 @@ fi
 
 # create project dir if it doesn't exist
 WORKSPACE_PROJECT_DIR="{{ .workspace.project_dir }}"
-if [[ ! -e "${WORKSPACE_PROJECT_DIR}" ]]; then
+if [[ ! -d "${WORKSPACE_PROJECT_DIR}" ]]; then
   log_task "Creating workspace project directory: ${WORKSPACE_PROJECT_DIR}"
   c mkdir -p "${WORKSPACE_PROJECT_DIR}"
 fi
 
 # create reference dir if it doesn't exist
 WORKSPACE_REFERENCE_DIR="{{ .workspace.reference_dir }}"
-if [[ ! -e "${WORKSPACE_REFERENCE_DIR}" ]]; then
+if [[ ! -d "${WORKSPACE_REFERENCE_DIR}" ]]; then
   log_task "Creating workspace reference directory: ${WORKSPACE_REFERENCE_DIR}"
   c mkdir -p "${WORKSPACE_REFERENCE_DIR}"
 fi
