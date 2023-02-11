@@ -27,10 +27,16 @@ else
   WORKSPACE_LOCATION="${HOME}"
 fi
 log_info "WSL detected, setting workspace location to: ${WORKSPACE_LOCATION}"
-# symlik WINHOME to ${HOME}/WINHOME
-if [[ ! -e "${HOME}/winhome" ]] && [[ "${WINHOME}" != "${HOME}" ]]; then
-  log_task "Symlinking windows home ${WINHOME} to ${HOME}/winhome"
-  c ln -s "${WINHOME}" "${HOME}/winhome"
+# symlik WINHOME to ${HOME}/winhome
+WINHOME_SYMLINK="{{ .system.winhome_symlink }}"
+if [[ "${WINHOME}" != "${HOME}" ]]; then
+  # if symlink exists, remove it
+  if [[ -L "${WINHOME_SYMLINK}" ]]; then
+    log_task "Removing existing symlink: ${WINHOME_SYMLINK}"
+    c rm "${WINHOME_SYMLINK}"
+  fi
+  log_task "Symlinking windows home ${WINHOME} to ${WINHOME_SYMLINK}"
+  c ln -s "${WINHOME}" "${WINHOME_SYMLINK}"
 fi
 # {{ else }}
 WORKSPACE_LOCATION="{{ .workspace.location }}"

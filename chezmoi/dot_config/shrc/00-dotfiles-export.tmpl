@@ -83,6 +83,7 @@ if [[ -z "${WINHOME}" ]]; then
 fi
 if [[ -e "${WINHOME}" ]]; then
   export WINHOME="${WINHOME}"
+  export WINHOME_SYMLINK="{{ .system.winhome_symlink }}"
 fi
 # {{ end }}
 
