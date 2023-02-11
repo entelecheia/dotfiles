@@ -127,14 +127,7 @@ gsudo() {
     gsudo.exe wsl -d "${WSL_DISTRO_NAME?}" -e "${shell}" "-c" "$*"
 }
 
-cdwin() {
-  local user_profile
-  local win_home
-
-  user_profile=$(wslvar USERPROFILE) &&
-    win_home=$(wslpath "${user_profile}") &&
-    cd "${win_home}"
-}
+alias cdwin="cd {{ .system.win_home }}"
 # {{ end }}
 
 alias socrypt-inplace="socrypt --inplace"

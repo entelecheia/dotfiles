@@ -28,8 +28,9 @@
 # {{- $dotdrop_user_profile := or (env "DOTDROP_PROFILE") "user" -}}
 # {{- $github_username := env "GITHUB_USERNAME" -}}
 # {{- $workspace_location := "" -}}
+# {{- $win_home := "" -}}
 # {{- if $wsl -}}
-# {{-   $win_home := (output "sh" "-c" "wslpath -a $(wslvar USERPROFILE)") | trim -}}
+# {{-   $win_home = (output "sh" "-c" "wslpath -u $(wslvar USERPROFILE)") | trim -}}
 # {{-   $workspace_location = or (env "WORKSPACE_LOCATION") $win_home -}}
 # {{- else -}}
 # {{-   $workspace_location = or (env "WORKSPACE_LOCATION") .chezmoi.homeDir -}}
@@ -712,6 +713,9 @@ data:
         colab_drive: "/content/drive/MyDrive"
         project_dir: {{ $project_dir | quote }}
         reference_dir: {{ $reference_dir | quote }}
+# {{ if $wsl }}
+        win_home: {{ $win_home | quote }}
+# {{ end }}
     github_repos:
 # {{- if $github_clones -}}
 # {{- range (split "," $github_clones) -}} #

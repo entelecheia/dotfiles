@@ -69,6 +69,7 @@ export VISUAL="{{ .editor }}"
 export EDITOR="{{ .editor }}"
 # {{ if .system.is_wsl }}
 export BROWSER="wslview"
+export WIN_HOME="{{ .system.win_home }}"
 # {{ end }}
 
 export SSH_HOME="{{ .ssh.home }}"

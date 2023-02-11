@@ -6,14 +6,6 @@ log_task "Cloning git repos"
 # root: /home/yj.lee/workspace
 # symlink_colab_workspace: true
 # colab_drive: "/content/drive/MyDrive"
-# {{ if and .system.is_wsl (eq .workspace.location .chezmoi.homeDir ) }}
-WORKSPACE_LOCATION="$(wslpath -a "$(wslvar USERPROFILE)")"
-if [[ ! -d "${WORKSPACE_LOCATION}" ]]; then
-  WORKSPACE_LOCATION="{{ .workspace.location }}"
-fi
-# {{ else }}
-WORKSPACE_LOCATION="{{ .workspace.location }}"
-# {{ end }}
 WORKSPACE_PROJECT_DIR="{{ .workspace.project_dir }}"
 
 # clone git repos into workspace project_dir

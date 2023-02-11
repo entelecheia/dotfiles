@@ -1,0 +1,21 @@
+#!/bin/bash
+# {{- if .system.is_wsl }}
+# {{ template "scripts-library" }}
+log_task "Copying SSH keys from WSL to Windows"
+
+WIN_HOME="{{ .system.win_home }}}}"
+
+if [[ ! -e "${WIN_HOME}/.ssh" ]]; then
+  log_task "Creating ${WIN_HOME}/.ssh"
+  c mkdir "${WIN_HOME}/.ssh"
+fi
+
+# if ${HOME}/.ssh does not exist, create it
+if [[ ! -e "${HOME}/.ssh" ]]; then
+  log_task "Creating ${HOME}/.ssh"
+  c mkdir "${HOME}/.ssh"
+fi
+
+log_task "Copying files from ${HOME}/.ssh to ${WIN_HOME}/.ssh"
+c cp -f "${HOME}/.ssh"/* "${WIN_HOME}/.ssh"
+# {{ end }}
