@@ -3,7 +3,7 @@
 # {{ template "scripts-library" }}
 log_task "Copying SSH keys from WSL to Windows"
 
-WINHOME=${WINHOME:-"{{ .workspace.winhome }}"}
+WINHOME=${WINHOME:-"{{ .system.winhome }}"}
 if [[ -z "${WINHOME}" ]]; then
   if command -v wslpath >/dev/null; then
     if command -v wslvar >/dev/null; then

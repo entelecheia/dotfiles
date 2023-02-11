@@ -639,6 +639,9 @@ data:
         cpu:
             cores: {{ $cpuCores }}
             threads: {{ $cpuThreads }}
+# {{ if $wsl }}
+        winhome: {{ $winhome | quote }}
+# {{ end }}
     ssh:
         home: {{ $ssh_homedir | quote }}
         algorithm: {{ $ssh_algorithm | quote }}
@@ -713,9 +716,6 @@ data:
         colab_drive: "/content/drive/MyDrive"
         project_dir: {{ $project_dir | quote }}
         reference_dir: {{ $reference_dir | quote }}
-# {{ if $wsl }}
-        winhome: {{ $winhome | quote }}
-# {{ end }}
     github_repos:
 # {{- if $github_clones -}}
 # {{- range (split "," $github_clones) -}} #

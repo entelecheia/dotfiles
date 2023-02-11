@@ -9,7 +9,7 @@ log_task "Setting up workspace"
 WORKSPACE_NAME="{{ .workspace.name }}"
 WORKSPACE_LOCATION="{{ .workspace.location }}"
 # {{ if .system.is_wsl }}
-WINHOME=${WINHOME:-"{{ .workspace.winhome }}"}
+WINHOME=${WINHOME:-"{{ .system.winhome }}"}
 if [[ -z "${WINHOME}" ]]; then
   if command -v wslpath >/dev/null; then
     if command -v wslvar >/dev/null; then

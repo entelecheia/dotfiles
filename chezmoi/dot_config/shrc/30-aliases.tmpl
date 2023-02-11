@@ -127,7 +127,7 @@ gsudo() {
     gsudo.exe wsl -d "${WSL_DISTRO_NAME?}" -e "${shell}" "-c" "$*"
 }
 
-alias cdwin="cd {{ .workspace.winhome }}"
+alias cdwin="cd {{ .system.winhome }}"
 # {{ end }}
 
 alias socrypt-inplace="socrypt --inplace"
