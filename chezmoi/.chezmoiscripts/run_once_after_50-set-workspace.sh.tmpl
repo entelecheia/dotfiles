@@ -86,4 +86,13 @@ if [[ "${SYMLINK_COLAB}" == "true" ]]; then
   fi
 fi
 
+# {{ if .system.is_wsl }}
+# symlik win_home to ${HOME}/win_home
+WIN_HOME="{{ .workspace.win_home }}"
+if [[ ! -e "${HOME}/win_home" ]]; then
+  log_task "Symlinking win_home: ${WIN_HOME}"
+  c ln -s "${WIN_HOME}" "${HOME}/win_home"
+fi
+# {{ end }}
+
 # {{ end -}}

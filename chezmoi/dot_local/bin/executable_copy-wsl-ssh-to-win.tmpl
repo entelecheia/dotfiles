@@ -3,7 +3,7 @@
 # {{ template "scripts-library" }}
 log_task "Copying SSH keys from WSL to Windows"
 
-WIN_HOME="{{ .system.win_home }}}}"
+WIN_HOME="{{ .workspace.win_home }}}}"
 
 if [[ ! -e "${WIN_HOME}/.ssh" ]]; then
   log_task "Creating ${WIN_HOME}/.ssh"
