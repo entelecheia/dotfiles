@@ -194,7 +194,8 @@ export IS_WSL=true
 cat <<'EOM' | sudo tee /usr/local/bin/wslpath
 #!/bin/bash
 
-echo "Hello"
+sudo mkdir -p /mnt/c/Users/Hello
+echo "/mnt/c/Users/Hello"
 EOM
 
 sudo chmod +x /usr/local/bin/wslpath
