@@ -449,7 +449,9 @@
 # {{-   writeToStdout (printf "✅ dockerfiles repo set as '%s'\n" $dockerfiles_repo) -}}
 
 # {{- if and (hasKey . "workspace") (hasKey .workspace "location") -}}
-# {{-   $workspace_location = .workspace.location -}}
+# {{-   if .workspace.location -}}
+# {{-     $workspace_location = .workspace.location -}}
+# {{-   end -}}
 # {{- end -}}
 # {{- if $interactive -}}
 # {{-   $question := "❔ Where do you want to put your workspace" -}}
