@@ -7,6 +7,7 @@ log_task "Setting up workspace"
 # symlink_colab_workspace: true
 # colab_drive: "/content/drive/MyDrive"
 WORKSPACE_NAME="{{ .workspace.name }}"
+WORKSPACE_LOCATION="{{ .workspace.location }}"
 # {{ if .system.is_wsl }}
 WINHOME="{{ .system.winhome }}"
 if [[ ! -d "${WINHOME}" ]]; then
@@ -20,10 +21,8 @@ if [[ ! -d "${WINHOME}" ]]; then
     WINHOME="/mnt/c/Users/$(whoami)"
   fi
 fi
-if [[ -d "${WINHOME}" ]]; then
+if [[ -d "${WINHOME}" ]] && [[ "${WORKSPACE_LOCATION}" == "${HOME}" ]]; then
   WORKSPACE_LOCATION="${WINHOME}"
-else
-  WORKSPACE_LOCATION="${HOME}"
 fi
 log_info "WSL detected, setting workspace location to: ${WORKSPACE_LOCATION}"
 # symlik WINHOME to ${HOME}/winhome
@@ -37,8 +36,6 @@ if [[ "${WINHOME}" != "${HOME}" ]]; then
   log_task "Symlinking windows home ${WINHOME} to ${WINHOME_SYMLINK}"
   c ln -s "${WINHOME}" "${WINHOME_SYMLINK}"
 fi
-# {{ else }}
-WORKSPACE_LOCATION="{{ .workspace.location }}"
 # {{ end }}
 COLAB_DRIVE="{{ .workspace.colab_drive }}"
 SYMLINK_COLAB="{{ .workspace.symlink_colab_workspace }}"

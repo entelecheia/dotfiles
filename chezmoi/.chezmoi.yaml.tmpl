@@ -449,10 +449,24 @@
 # {{- end -}}
 # {{-   writeToStdout (printf "✅ dockerfiles repo set as '%s'\n" $dockerfiles_repo) -}}
 
+# {{- $winhome_existing := "" -}}
+# {{- $workspace_existing := "" -}}
+# {{- if and (hasKey . "system") (hasKey .system "winhome") -}}
+# {{-   $winhome_existing = .system.winhome -}}
+# {{- end -}}
 # {{- if and (hasKey . "workspace") (hasKey .workspace "location") -}}
-# {{-   if .workspace.location -}}
-# {{-     $workspace_location = .workspace.location -}}
+# {{-   $workspace_existing = .workspace.location -}}
+# {{- end -}}
+# {{- if $workspace_existing -}}
+# {{- if $wsl -}}
+# {{-   if eq $winhome_existing $winhome -}}
+# {{-     $workspace_location = $workspace_existing -}}
+# {{-   else -}}
+# {{-     $workspace_location = $winhome -}}
 # {{-   end -}}
+# {{- else -}}
+# {{-   $workspace_location = $workspace_existing -}}
+# {{- end -}}
 # {{- end -}}
 # {{- if $interactive -}}
 # {{-   $question := "❔ Where do you want to put your workspace" -}}
