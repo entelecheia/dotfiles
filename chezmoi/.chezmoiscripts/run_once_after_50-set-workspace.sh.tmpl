@@ -26,6 +26,12 @@ if [[ -e "${WINHOME}" ]]; then
 else
   WORKSPACE_LOCATION="${HOME}"
 fi
+log_info "WSL detected, setting workspace location to: ${WORKSPACE_LOCATION}"
+# symlik WINHOME to ${HOME}/WINHOME
+if [[ ! -e "${HOME}/winhome" ]] && [[ "${WINHOME}" != "${HOME}" ]]; then
+  log_task "Symlinking windows home ${WINHOME} to ${HOME}/winhome"
+  c ln -s "${WINHOME}" "${HOME}/winhome"
+fi
 # {{ else }}
 WORKSPACE_LOCATION="{{ .workspace.location }}"
 # {{ end }}
@@ -37,8 +43,8 @@ SYMLINK_TO_HOME="{{ .workspace.symlink_to_home }}"
 USER="{{ .chezmoi.username }}"
 SODOER="{{ .system.is_sudoer }}"
 
-log_task "Creating workspace directory: ${WORKSPACE_DIR}"
 if [[ ! -d "${WORKSPACE_DIR}" ]]; then
+  log_task "Creating workspace directory: ${WORKSPACE_DIR}"
   if [[ "${SODOER}" == "true" ]]; then
     c sudo mkdir -p "${WORKSPACE_DIR}"
     c sudo chown "${USER}" "${WORKSPACE_DIR}"
@@ -51,7 +57,7 @@ fi
 
 # symlink to home
 if [[ "${WORKSPACE_LOCATION}" == "${HOME}" ]]; then
-  log_info "Workspace location is home directory: ${WORKSPACE_LOCATION}"
+  log_info "Workspace location is same as home directory, skipping symlink"
 else
   if [[ "${SYMLINK_TO_HOME}" == "true" ]]; then
     log_task "Symlinking workspace to home directory: ${WORKSPACE_DIR} -> ${HOME}/${WORKSPACE_NAME}"
@@ -106,14 +112,5 @@ if [[ "${SYMLINK_COLAB}" == "true" ]]; then
     log_info "Colab workspace already exists: ${COLAB_WORKSPACE}"
   fi
 fi
-
-# {{ if .system.is_wsl }}
-# symlik WINHOME to ${HOME}/WINHOME
-WINHOME="{{ .workspace.winhome }}"
-if [[ ! -e "${HOME}/winhome" ]]; then
-  log_task "Symlinking windows home ${WINHOME} to ${HOME}/winhome"
-  c ln -s "${WINHOME}" "${HOME}/winhome"
-fi
-# {{ end }}
 
 # {{ end -}}
