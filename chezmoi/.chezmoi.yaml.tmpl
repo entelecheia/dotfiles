@@ -208,6 +208,9 @@
 # {{-   if eq $verbose "f" "F" "false" "False" "FALSE" "0" -}}
 # {{-     $verbose = "0" -}}
 # {{-     writeToStdout "✅ Verbose mode disabled\n" -}}
+# {{-   else if eq $verbose "t" "T" "true" "True" "TRUE" "1" -}}
+# {{-     $verbose = "1" -}}
+# {{-     writeToStdout "✅ Verbose mode enabled\n" -}}
 # {{-   else -}}
 # {{-     writeToStdout "✅ Verbose mode enabled\n" -}}
 # {{-   end -}}
