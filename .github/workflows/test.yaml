@@ -16,14 +16,12 @@ jobs:
       matrix:
         variant: [devcontainer, wsl, gnome]
         os: [ubuntu-20.04, ubuntu-22.04]
-        exclude:
-          - variant: wsl
-            os: ubuntu-22.04
+        # exclude:
+        #   - variant: wsl
+        #     os: ubuntu-22.04
         include:
           - variant: darwin
             os: macos-latest
-          - variant: devcontainer
-            os: ubuntu-20.04
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
