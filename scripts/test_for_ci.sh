@@ -217,7 +217,7 @@ EOF
         # shellcheck disable=SC2312
         cat <<'EOF'
 sudo apt update --yes
-sudo apt install -y --no-install-recommends gnome-shell
+sudo apt install -qq -y --no-install-recommends gnome-shell
 EOF
       )"
       ;;
