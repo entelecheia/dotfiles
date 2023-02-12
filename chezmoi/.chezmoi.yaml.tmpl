@@ -376,7 +376,12 @@
 # {{-   end -}}
 # {{-   $github_token = $answer -}}
 # {{- end -}}
-# {{-   writeToStdout (printf "✅ GitHub Token set as '%s'\n" $github_token) -}}
+# {{- if $github_token -}}
+# {{-   writeToStdout "✅ GitHub Token set as '***'\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "✅ GitHub Token not set\n" -}}
+# {{- end -}}
+
 
 # {{- if and (hasKey . "gnupg") (hasKey .gnupg "passphrase") -}}
 # {{-   $gpg_passphrase = .gnupg.passphrase -}}
@@ -391,7 +396,11 @@
 # {{-   end -}}
 # {{-   $gpg_passphrase = $answer -}}
 # {{- end -}}
-# {{-   writeToStdout (printf "✅ GPG passphrase set as '%s'\n" $gpg_passphrase) -}}
+# {{- if $gpg_passphrase -}}
+# {{-   writeToStdout "✅ GPG passphrase set as '***'\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "✅ GPG passphrase not set\n" -}}
+# {{- end -}}
 
 # {{- if and $interactive ($minimum | not) -}}
 # {{-   $question := "❔ Do you want to use GPG(or SSH) to sign git commits globally" -}}
