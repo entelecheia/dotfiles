@@ -1,0 +1,13 @@
+#!/bin/bash
+# {{ template "scripts-library" }}
+
+readonly unwanted_packages=(
+  docker
+)
+
+for package in "${unwanted_packages[@]}"; do
+  if is_apt_package_installed "${package}"; then
+    log_task "Removing unwanted package '${package}' installed with APT"
+    c apt remove --yes -qq -o=Dpkg::Use-Pty=0 "${package}"
+  fi
+done

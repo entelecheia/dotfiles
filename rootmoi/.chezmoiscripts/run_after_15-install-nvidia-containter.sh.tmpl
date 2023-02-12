@@ -1,9 +1,5 @@
 #!/bin/bash
-
 # {{ template "scripts-library" }}
-
-# The following line is for ShellCheck to correctly identify the above included library
-true || source ../.chezmoitemplates/scripts-library
 
 KEYRING_FILE="/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg"
 if [[ ! -f "${KEYRING_FILE}" ]]; then

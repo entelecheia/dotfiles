@@ -27,9 +27,9 @@ fi
 
 if apt --version &>/dev/null; then
   log_task "Updating apt packages"
-  c sudo apt update --yes
-  c sudo apt upgrade --yes
-  c sudo apt autoremove --yes
+  c sudo apt update --yes -qq -o=Dpkg::Use-Pty=0
+  c sudo apt upgrade --yes -qq -o=Dpkg::Use-Pty=0
+  c sudo apt autoremove --yes -qq -o=Dpkg::Use-Pty=0
 fi
 
 if npm --version &>/dev/null; then

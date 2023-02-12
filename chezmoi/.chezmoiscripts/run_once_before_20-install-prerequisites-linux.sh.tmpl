@@ -105,8 +105,8 @@ if [[ ${#missing_packages[@]} -gt 0 ]]; then
   apt_command=(sudo apt)
   # {{   end }}
 
-  c "${apt_command[@]}" update
-  c "${apt_command[@]}" install --yes --no-install-recommends "${missing_packages[@]}"
+  c "${apt_command[@]}" update --yes -qq -o=Dpkg::Use-Pty=0
+  c "${apt_command[@]}" install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends "${missing_packages[@]}"
 fi
 
 # Set up locale
