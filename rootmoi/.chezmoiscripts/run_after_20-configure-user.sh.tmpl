@@ -9,9 +9,9 @@ if [[ ! -f "${file}" ]] || ! grep -q "${file_contents}" "${file}"; then
   log_task 'Configuring passwordless sudo for {{ .non_root_user }}'
   echo "${file_contents}" >"${file}"
 fi
-unset file file_contents
 log_task 'Setting permissions on sudoers.d/{{ .non_root_user }}'
 c chmod 0440 "${file}"
+unset file file_contents
 
 # shellcheck disable=SC2312
 if ! getent group docker | grep -q '\b{{ .non_root_user }}\b'; then
