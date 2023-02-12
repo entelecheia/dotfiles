@@ -3,8 +3,7 @@
 log_green "✅ Dotfiles installation finished successfully"
 
 # {{ if .system.is_gnome }}
-log_info "If this is a first time installation, please logout and log back in" "to get started. You can temporarily preview the changes by running:"
-# {{ else }}
-log_info "If this is a first time installation, get started by running:"
+log_info "If this is your first time running this script, you need to restart your computer to apply all changes."
 # {{ end }}
-log_c "exec zsh"
+log_info "If you want to reload your shell, run:"
+c exec zsh
