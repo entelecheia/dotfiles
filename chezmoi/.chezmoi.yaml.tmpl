@@ -187,7 +187,7 @@
 # {{-   if $minimum -}}
 # {{-     writeToStdout "✅ Minimum mode enabled\n" -}}
 # {{-   else -}}
-# {{-     writeToStdout "❎ Minimum mode disabled\n" -}}
+# {{-     writeToStdout "☑️  Minimum mode disabled\n" -}}
 # {{-   end -}}
 
 # {{- if and (hasKey . "system") (hasKey .system "auto_update") -}}
@@ -200,7 +200,7 @@
 # {{-   if $auto_update -}}
 # {{-     writeToStdout "✅ Auto update enabled\n" -}}
 # {{-   else -}}
-# {{-     writeToStdout "❎ Auto update disabled\n" -}}
+# {{-     writeToStdout "☑️  Auto update disabled\n" -}}
 # {{-   end -}}
 
 # {{- if $interactive -}}
@@ -209,7 +209,7 @@
 # {{- end -}}
 # {{-   if eq $verbose "f" "F" "false" "False" "FALSE" "0" -}}
 # {{-     $verbose = "0" -}}
-# {{-     writeToStdout "❎ Verbose mode disabled\n" -}}
+# {{-     writeToStdout "☑️  Verbose mode disabled\n" -}}
 # {{-   else if eq $verbose "t" "T" "true" "True" "TRUE" "1" -}}
 # {{-     $verbose = "1" -}}
 # {{-     writeToStdout "✅ Verbose mode enabled\n" -}}
@@ -233,7 +233,7 @@
 # {{-       if $apply_rootmoi -}}
 # {{-           writeToStdout "✅ Dotfiles will be installed for the root user\n" -}}
 # {{-       else -}}
-# {{-           writeToStdout "❎ Dotfiles will not be installed for the root user\n" -}}
+# {{-           writeToStdout "☑️  Dotfiles will not be installed for the root user\n" -}}
 # {{-       end -}}
 
 # {{- if hasKey . "name" -}}
@@ -277,7 +277,7 @@
 # {{- if $github_username -}}
 # {{-   writeToStdout (printf "✅ GitHub username set as '%s'\n" $github_username) -}}
 # {{- else -}}
-# {{-   writeToStdout "❎ GitHub username not set\n" -}}
+# {{-   writeToStdout "☑️  GitHub username not set\n" -}}
 # {{- end -}}
 
 # {{- if and (hasKey . "docker") (hasKey .docker "username") -}}
@@ -296,7 +296,7 @@
 # {{- if $docker_username -}}
 # {{-   writeToStdout (printf "✅ Docker username set as '%s'\n" $docker_username) -}}
 # {{- else -}}
-# {{-   writeToStdout "❎ Docker username not set\n" -}}
+# {{-   writeToStdout "☑️  Docker username not set\n" -}}
 # {{- end -}}
 
 # {{- if hasKey . "email" -}}
@@ -387,7 +387,7 @@
 # {{- if $github_token -}}
 # {{-   writeToStdout "✅ GitHub Token set as '***'\n" -}}
 # {{- else -}}
-# {{-   writeToStdout "❎ GitHub Token not set\n" -}}
+# {{-   writeToStdout "☑️  GitHub Token not set\n" -}}
 # {{- end -}}
 
 
@@ -407,7 +407,7 @@
 # {{- if $gpg_passphrase -}}
 # {{-   writeToStdout "✅ GPG passphrase set as '***'\n" -}}
 # {{- else -}}
-# {{-   writeToStdout "❎ GPG passphrase not set\n" -}}
+# {{-   writeToStdout "☑️  GPG passphrase not set\n" -}}
 # {{- end -}}
 
 # {{- if and $interactive ($minimum | not) -}}
@@ -417,7 +417,7 @@
 # {{-   if $git_commit_gpgsign -}}
 # {{-     writeToStdout "✅ Git commits will be signed by GPG(or SSH)\n" -}}
 # {{-   else -}}
-# {{-     writeToStdout "❎ Git commits will not be signed by GPG(or SSH)\n" -}}
+# {{-     writeToStdout "☑️  Git commits will not be signed by GPG(or SSH)\n" -}}
 # {{-   end -}}
 
 # {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "repo") -}}
@@ -437,7 +437,7 @@
 # {{- if $dotdrop_repo -}}
 # {{-   writeToStdout (printf "✅ dotdrop files repo set as '%s'\n" $dotdrop_repo) -}}
 # {{- else -}}
-# {{-   writeToStdout "❎ dotdrop files repo not set\n" -}}
+# {{-   writeToStdout "☑️  dotdrop files repo not set\n" -}}
 # {{- end -}}
 
 # {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "user_profile") -}}
@@ -526,7 +526,7 @@
 # {{-   if $symlink_colab_workspace -}}
 # {{-     writeToStdout "✅ Colab workspace symlinked to workspace root\n" -}}
 # {{-   else -}}
-# {{-     writeToStdout "❎ Colab workspace not symlinked\n" -}}
+# {{-     writeToStdout "☑️  Colab workspace not symlinked\n" -}}
 # {{-   end -}}
 
 # {{- if and $interactive ($minimum | not) -}}
@@ -539,7 +539,7 @@
 # {{-     writeToStdout (printf "✅ autorestic location for dotfiles set as '%s'\n" $autorestic_location) -}}
 # {{-     writeToStdout (printf "✅ autorestic restores dotfiles to '%s'\n" $autorestic_restore_to) -}}
 # {{-   else -}}
-# {{-     writeToStdout "❎ autorestic disabled\n" -}}
+# {{-     writeToStdout "☑️  autorestic disabled\n" -}}
 # {{-   end -}}
 
 # {{- if and (hasKey . "code") (hasKey .code "enabled") -}}
@@ -552,7 +552,7 @@
 # {{-   if $use_code -}}
 # {{-     writeToStdout "✅ visual studio code enabled\n" -}}
 # {{-   else -}}
-# {{-     writeToStdout "❎ visual studio code disabled\n" -}}
+# {{-     writeToStdout "☑️  visual studio code disabled\n" -}}
 # {{-   end -}}
 
 # {{- if and (hasKey . "pass") (hasKey .pass "repo") -}}
@@ -571,7 +571,7 @@
 # {{- if $pass_repo -}}
 # {{-   writeToStdout (printf "✅ password store repo set as '%s'\n" $pass_repo) -}}
 # {{- else -}}
-# {{-   writeToStdout "❎ password store repo not set\n" -}}
+# {{-   writeToStdout "☑️  password store repo not set\n" -}}
 # {{- end -}}
 
 
@@ -591,7 +591,7 @@
 # {{- if $passage_repo -}}
 # {{-   writeToStdout (printf "✅ passage repo set as '%s'\n" $passage_repo) -}}
 # {{- else -}}
-# {{-   writeToStdout "❎ passage repo not set\n" -}}
+# {{-   writeToStdout "☑️  passage repo not set\n" -}}
 # {{- end -}}
 
 # {{- if and (hasKey . "op") (hasKey .op "enabled") -}}
@@ -604,7 +604,7 @@
 # {{-   if $use_1password -}}
 # {{-     writeToStdout "✅ 1password enabled\n" -}}
 # {{-   else -}}
-# {{-     writeToStdout "❎ 1password disabled\n" -}}
+# {{-     writeToStdout "☑️  1password disabled\n" -}}
 # {{-   end -}}
 
 # {{- if and (hasKey . "vault") (hasKey .vault "enabled") -}}
@@ -617,7 +617,7 @@
 # {{-   if $use_vault -}}
 # {{-     writeToStdout "✅ Vault enabled\n" -}}
 # {{-   else -}}
-# {{-     writeToStdout "❎ Vault disabled\n" -}}
+# {{-     writeToStdout "☑️  Vault disabled\n" -}}
 # {{-   end -}}
 
 # {{- if and (hasKey . "microk8s") (hasKey .microk8s "enabled") -}}
@@ -630,7 +630,7 @@
 # {{-   if $use_microk8s -}}
 # {{-     writeToStdout "✅ MicroK8s enabled\n" -}}
 # {{-   else -}}
-# {{-     writeToStdout "❎ MicroK8s disabled\n" -}}
+# {{-     writeToStdout "☑️  MicroK8s disabled\n" -}}
 # {{-   end -}}
 
 # {{- if and (hasKey . "github") (hasKey .github "clones") -}}
@@ -649,7 +649,7 @@
 # {{- if $github_clones -}}
 # {{-   writeToStdout (printf "✅ GitHub repositories to clone set as '%s'\n" $github_clones) -}}
 # {{- else -}}
-# {{-   writeToStdout "❎ GitHub repositories to clone not set\n" -}}
+# {{-   writeToStdout "☑️  GitHub repositories to clone not set\n" -}}
 # {{- end -}}
 
 # {{-   writeToStdout "\n💡 Tip: you can always make chezmoi ask this again by running `chezmoi init` without `--force`.\n" -}}
