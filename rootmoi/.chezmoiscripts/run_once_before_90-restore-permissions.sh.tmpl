@@ -1,4 +1,6 @@
 #!/bin/bash
+# {{ template "scripts-library" }}
+log_task "090. Restoring permissions"
 
 # We need to remove execution permission from this file before letting
 # chezmoi try to install it. Otherwise, it will identify a difference.

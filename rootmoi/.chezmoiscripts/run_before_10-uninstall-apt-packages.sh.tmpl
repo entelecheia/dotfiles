@@ -1,5 +1,7 @@
 #!/bin/bash
 # {{ template "scripts-library" }}
+log_task "010. Uninstalling unwanted packages installed with APT"
+
 function is_apt_pkg_installed() {
   local package="$1"
 

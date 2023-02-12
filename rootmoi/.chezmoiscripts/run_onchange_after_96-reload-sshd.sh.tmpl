@@ -1,5 +1,6 @@
 #!/bin/bash
 # {{ template "scripts-library" }}
+log_task "96. Reloading SSH daemon"
 
 # custom_sshd_config.conf hash: {{ include "/etc/ssh/sshd_config.d/custom_sshd_config.conf" | sha256sum }}
 

@@ -1,5 +1,6 @@
 #!/bin/bash
 # {{ template "scripts-library" }}
+log_task "15. Installing nvidia-container-toolkit"
 
 KEYRING_FILE="/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg"
 if [[ ! -f "${KEYRING_FILE}" ]]; then

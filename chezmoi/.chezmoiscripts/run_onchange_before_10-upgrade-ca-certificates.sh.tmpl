@@ -1,7 +1,7 @@
 #!/bin/bash
-# {{ if and (eq .chezmoi.os "linux") (.system.is_sudoer) (.system.is_devcontainer | not) -}}
+# {{ if and (eq .chezmoi.os "linux") (.system.is_sudoer) (.system.is_devcontainer | not) }}
 # {{ template "scripts-library" }}
-log_task "Upgrading ca-certificates"
+log_task "010. Upgrading ca-certificates"
 
 # We need to install ca-certificates before we add the APT repos, because some of them
 # may use newer CAs.
@@ -16,4 +16,4 @@ else
 fi
 c sudo apt install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends ca-certificates
 
-# {{ end -}}
+# {{ end }}

@@ -1,7 +1,7 @@
 #!/bin/bash
 # {{ if eq .chezmoi.os "linux" "darwin" }}
 # {{ template "scripts-library" }}
-log_task "Authenticating with GitHub"
+log_task "30. Authenticating with GitHub"
 
 # {{ if .system.is_interactive }}
 "${HOME}/.local/bin/github-auth" --interactive

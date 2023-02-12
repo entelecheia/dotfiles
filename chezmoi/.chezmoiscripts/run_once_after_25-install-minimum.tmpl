@@ -1,7 +1,7 @@
 #!/bin/bash
 # {{ if eq .chezmoi.os "linux" "darwin" }}
 # {{ template "scripts-library" }}
-log_task "Installing minimum packages"
+log_task "25. Installing minimum packages"
 
 # install go
 if ! go version &>/dev/null; then

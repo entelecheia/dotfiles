@@ -1,3 +1,5 @@
 #!/bin/bash
+# {{ template "scripts-library" }}
+log_task "90. Fixing rootmoi files ownership"
 
 chown --recursive '{{ .non_root_user }}' '{{ dir .chezmoi.configFile }}' '{{ .chezmoi.cacheDir }}'
