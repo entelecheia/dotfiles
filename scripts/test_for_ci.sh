@@ -216,8 +216,8 @@ EOF
       run_test "${os}" "$(
         # shellcheck disable=SC2312
         cat <<'EOF'
-sudo apt update --yes
-sudo apt install -qq -y --no-install-recommends gnome-shell
+sudo apt update --yes -qq -o=Dpkg::Use-Pty=0
+sudo apt install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends gnome-shell
 EOF
       )"
       ;;

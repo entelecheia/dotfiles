@@ -75,8 +75,8 @@ DOTFILES_DIR="${HOME}/.dotfiles"
 
 if ! command -v git >/dev/null 2>&1; then
   log_task "Installing git"
-  sudo apt update --yes
-  sudo apt install git curl wget --yes -qq
+  sudo apt update --yes -qq -o=Dpkg::Use-Pty=0
+  sudo apt install --yes -qq -o=Dpkg::Use-Pty=0 git curl wget
 fi
 
 if [ -d "${DOTFILES_DIR}" ]; then

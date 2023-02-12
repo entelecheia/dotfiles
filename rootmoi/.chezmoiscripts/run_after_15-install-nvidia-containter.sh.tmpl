@@ -23,6 +23,6 @@ package="nvidia-docker2"
 if ! is_apt_package_installed "${package}"; then
   log_task "Installing missing packages with APT: ${package}"
 
-  c apt update --yes
-  c apt install -qq --yes "${package}"
+  c apt update --yes -qq -o=Dpkg::Use-Pty=0
+  c apt install --yes -qq -o=Dpkg::Use-Pty=0 "${package}"
 fi
