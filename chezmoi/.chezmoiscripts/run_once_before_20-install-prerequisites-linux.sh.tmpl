@@ -110,10 +110,15 @@ if [[ ${#missing_packages[@]} -gt 0 ]]; then
   c "${apt_command[@]}" install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends "${missing_packages[@]}"
 fi
 
-# Set up locale
-if command -v localedef &>/dev/null; then
-  log_task "Setting up locale"
+# Set up locales
+# check if locale is already set up by running locale | grep LC_ALL | grep en_US.UTF-8
+if ! locale | grep LC_ALL | grep -q en_US.UTF-8; then
+  log_task "Setting up locales"
+  # {{   if eq .chezmoi.username "root" }}
+  c localedef -v -c -i en_US -f UTF-8 en_US.UTF-8 || true
+  # {{   else }}
   c sudo localedef -v -c -i en_US -f UTF-8 en_US.UTF-8 || true
+  # {{   end }}
 fi
 
 # install autorestic
