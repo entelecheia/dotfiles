@@ -298,7 +298,6 @@
 # {{- if and (eq .chezmoi.os "linux") -}}
 # {{- writeToStdout (printf "🦸  DOTFILES_APPLY_ROOTMOI: %t\n" $apply_rootmoi) -}}
 # {{- end -}}
-# 🧭👙
 # {{- if $minimum | not -}}
 # {{- writeToStdout (printf "📦  DOTFILES_USE_AUTORESTIC: %t\n" $use_autorestic) -}}
 # {{- writeToStdout (printf "🔖  DOTFILES_USE_DOTDROP: %t\n" $use_dotdrop) -}}
