@@ -1,0 +1,8 @@
+#!/bin/bash
+# {{ template "scripts-library" }}
+NGROK_CONFIG=${NGROK_CONFIG:-"{{ .ngrok.config_file }}"}
+
+log_task "Installing ngrok service"
+c sudo ngrok service install --config="${NGROK_CONFIG}" || true
+log_task "Starting ngrok service"
+c sudo ngrok service start || true

@@ -3,3 +3,6 @@
 {{ if not .system.is_wsl -}}
 .local/bin/copy-wsl-ssh-to-win
 {{- end }}
+{{ if not .ngrok.enabled -}}
+.config/ngrok/*
+{{- end }}

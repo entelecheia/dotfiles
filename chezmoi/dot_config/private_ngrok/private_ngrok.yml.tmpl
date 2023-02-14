@@ -1,0 +1,6 @@
+version: "2"
+authtoken: "{{ .ngrok.authtoken }}"
+tunnels:
+  ssh-access:
+    addr: {{ .ngrok.ssh_port }}
+    proto: tcp
