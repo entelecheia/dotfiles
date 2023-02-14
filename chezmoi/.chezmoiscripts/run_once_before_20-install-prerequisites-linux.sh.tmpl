@@ -44,16 +44,22 @@ fi
 # {{ end }}
 
 # {{ if .code.enabled }}
-  SOURCE_LIST_FILE="/etc/apt/sources.list.d/vscode.list"
-  if [[ ! -e "${SOURCE_LIST_FILE}" ]]; then
-    c sudo apt-get install wget gpg
-    c wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-    c sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
-    c sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
-    c rm -f packages.microsoft.gpg
-  fi
+SOURCE_LIST_FILE="/etc/apt/sources.list.d/vscode.list"
+if [[ ! -e "${SOURCE_LIST_FILE}" ]]; then
+  c wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+  c sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+  c sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+  c rm -f packages.microsoft.gpg
+fi
 # {{ end }}
 
+# {{ if .ngrok.enabled }}
+SOURCE_LIST_FILE="/etc/apt/sources.list.d/nginx.list"
+if [[ ! -e "${SOURCE_LIST_FILE}" ]]; then
+  c curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null
+  c echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | sudo tee /etc/apt/sources.list.d/ngrok.list
+fi
+# {{ end }}
 
 readonly wanted_packages=(
   apt-transport-https
@@ -86,6 +92,9 @@ readonly wanted_packages=(
   # {{ end }}
   # {{ if .code.enabled }}
   code
+  # {{ end }}
+  # {{ if .ngrok.enabled }}
+  ngrok
   # {{ end }}
 )
 missing_packages=()

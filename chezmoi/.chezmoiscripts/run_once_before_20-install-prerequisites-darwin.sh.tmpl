@@ -80,6 +80,9 @@ readonly wanted_cask_packages=(
   # {{ if .op.enabled }}
   1password-cli
   # {{ end }}
+  # {{ if .ngrok.enabled }}
+  ngrok
+  # {{ end }}
 )
 
 # get installed cask packages with brew list --casks

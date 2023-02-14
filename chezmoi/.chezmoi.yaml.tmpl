@@ -4,7 +4,6 @@
 # {{- $wsl := or (env "WSL_DISTRO_NAME") (env "IS_WSL") | not | not -}}
 # {{- $devcontainer := or (env "REMOTE_CONTAINERS") (env "CODESPACES") (env "VSCODE_REMOTE_CONTAINERS_SESSION") (env "GITPOD_HOST") | not | not -}}
 # {{- $gnome := lookPath "gnome-shell" | not | not -}}
-
 # {{- $cpuCores := 1 -}}
 # {{- $cpuThreads := 1 -}}
 # {{- if eq .chezmoi.os "darwin" -}}
@@ -18,99 +17,24 @@
 # {{-   $cpuThreads = (output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "(Get-CimInstance -ClassName 'Win32_Processor').NumberOfLogicalProcessors") | trim | atoi -}}
 # {{- end -}}
 
+
+
 # {{- $minimum := $devcontainer -}}
-# {{- if eq (env "DOTFILES_MINIMUM") "true" "True" "TRUE" "1" -}}
-# {{-   $minimum = true -}}
-# {{- end -}}
-# {{- $name:= or (env "USER_FULLNAME") "Your Name" -}}
-# {{- $email:= or (env "USER_EMAIL") "your_email@your.domain.com" -}}
-# {{- $hostname := or (env "SYSTEM_HOSTNAME") .chezmoi.hostname -}}
-# {{- $dotdrop_user_profile := or (env "DOTDROP_PROFILE") "user" -}}
-# {{- $github_username := env "GITHUB_USERNAME" -}}
-# {{- $workspace_location := "" -}}
-# {{- $winhome := or (env "WINHOME") (output "sh" "-c" "command -v wslpath > /dev/null && command -v wslvar > /dev/null && wslpath $(wslvar USERPROFILE) || echo ''" | trim) -}}
-# {{- $winhome_symlink := joinPath .chezmoi.homeDir "winhome" -}}
-# {{- if and $wsl ($winhome | not | not) -}}
-# {{-   writeToStdout (printf "\n🪟 WSL detected, running with Windows Home directory: %s\n\n" $winhome) -}}
-# {{-   $workspace_location = or (env "WORKSPACE_LOCATION") $winhome -}}
+# {{- if and (hasKey . "system") (hasKey .system "is_minimum") -}}
+# {{-   $minimum = .system.is_minimum -}}
 # {{- else -}}
-# {{-   $workspace_location = or (env "WORKSPACE_LOCATION") .chezmoi.homeDir -}}
+# {{-   if eq (env "DOTFILES_MINIMUM") "true" "True" "TRUE" "1" -}}
+# {{-     $minimum = true -}}
+# {{-   end -}}
 # {{- end -}}
 
-# {{- $apply_rootmoi := true -}}
-# {{- if eq (env "DOTFILES_APPLY_ROOTMOI") "false" "False" "FALSE" "0" -}}
-# {{-   $apply_rootmoi = false -}}
-# {{- end -}}
-
-# {{- $sudoer := false -}}
-# {{- if eq (env "DOTFILES_SUDOER") "true" "True" "TRUE" "1" -}}
-# {{-   $sudoer = true -}}
-# {{- end -}}
-
-# {{- if not $sudoer -}}
-# {{- $sudo_check := "" -}}
-# {{- if eq .chezmoi.os "linux" -}}
-# {{-   $sudo_check = (output "sh" "-c" (printf "test -n \"$(ls /etc/sudoers.d | grep -w %s)\" && echo sudo || echo false" .chezmoi.username)) | trim -}}
+# {{- $auto_update := false -}}
+# {{- if and (hasKey . "system") (hasKey .system "auto_update") -}}
+# {{-   $auto_update = .system.auto_update -}}
 # {{- else -}}
-# {{-   $sudo_check = (output "sh" "-c" "test -n \"$(groups | grep -w admin)\" && echo sudo || echo false") | trim -}}
-# {{- end -}}
-# {{- if or (eq $sudo_check "sudo") (eq .chezmoi.username "root") ($wsl) -}}
-# {{-   $sudoer = true -}}
-# {{- else -}}
-# {{-   $sudoer = false -}}
-# {{- end -}}
-# {{- end -}}
-
-# {{- if not $sudoer -}}
-# {{-   $apply_rootmoi = false -}}
-# {{- end -}}
-
-# {{- $use_dotdrop := true -}}
-# {{- if eq (env "DOTFILES_USE_DOTDROP") "false" "False" "FALSE" "0" -}}
-# {{-   $use_dotdrop = false -}}
-# {{- end -}}
-# {{- $dotdrop_repo := "" -}}
-# {{- $dotdrop_config_dir := or (env "DOTDROP_CONFIGDIR") (joinPath .chezmoi.homeDir ".config/dotdrop") -}}
-# {{- $dotdrop_config_file := or (env "DOTDROP_CONFIG") (joinPath $dotdrop_config_dir "config-user.yaml") -}}
-# {{- $dotdrop_root_config_file := or (env "DOTDROP_ROOT_CONFIG") (joinPath $dotdrop_config_dir "config-root.yaml") -}}
-
-# {{- $use_pass := true -}}
-# {{- if eq (env "DOTFILES_USE_PASS") "false" "False" "FALSE" "0" -}}
-# {{-   $use_pass = false -}}
-# {{- end -}}
-# {{- $pass_store_dir := or (env "PASSWORD_STORE_DIR") (joinPath .chezmoi.homeDir ".password-store") -}}
-# {{- $pass_repo := or (env "PASS_REPO") "" -}}
-
-# {{- $use_passage := true -}}
-# {{- if eq (env "DOTFILES_USE_PASSAGE") "false" "False" "FALSE" "0" -}}
-# {{-   $use_passage = false -}}
-# {{- end -}}
-# {{- $passage_store_dir := or (env "PASSAGE_DIR") (joinPath .chezmoi.homeDir ".passage/store") -}}
-# {{- $passage_repo := or (env "PASSAGE_REPO") "" -}}
-# {{- $passage_share_dir := or (env "PASSAGE_SHARE_DIR") (joinPath .chezmoi.homeDir ".local/share/passage") -}}
-
-# {{- $use_code := false -}}
-# {{- if eq (env "DOTFILES_USE_CODE") "true" "True" "TRUE" "1" -}}
-# {{-   $use_code = true -}}
-# {{- end -}}
-
-# {{- $use_1password := false -}}
-# {{- if eq (env "DOTFILES_USE_1PASSWORD") "true" "True" "TRUE" "1" -}}
-# {{-   $use_1password = true -}}
-# {{- end -}}
-# {{- $op_account := or (env "OP_ACCOUNT") "" -}}
-# {{- $op_vault := or (env "OP_VAULT") "dev" -}}
-# {{- $op_connect_host := or (env "OP_CONNECT_HOST") "" -}}
-# {{- $op_connect_token := or (env "OP_CONNECT_TOKEN") "" -}}
-
-# {{- $use_vault := false -}}
-# {{- if eq (env "DOTFILES_USE_VAULT") "true" "True" "TRUE" "1" -}}
-# {{-   $use_vault = true -}}
-# {{- end -}}
-
-# {{- $use_microk8s := false -}}
-# {{- if eq (env "DOTFILES_USE_MICROK8S") "true" "True" "TRUE" "1" -}}
-# {{-   $use_microk8s = true -}}
+# {{-   if eq (env "DOTFILES_AUTO_UPDATE") "true" "True" "TRUE" "1" -}}
+# {{-     $auto_update = true -}}
+# {{-   end -}}
 # {{- end -}}
 
 # {{- $verbose := "1" -}}
@@ -123,26 +47,157 @@
 # {{-   $verbose = "0" -}}
 # {{- end -}}
 
+# {{- $apply_rootmoi := true -}}
+# {{- if and (hasKey . "system") (hasKey .system "apply_rootmoi") -}}
+# {{-   $apply_rootmoi = .system.apply_rootmoi -}}
+# {{- else -}}
+# {{-   if eq (env "DOTFILES_APPLY_ROOTMOI") "false" "False" "FALSE" "0" -}}
+# {{-     $apply_rootmoi = false -}}
+# {{-   end -}}
+# {{- end -}}
+
+# {{- $sudoer := false -}}
+# {{- if and (hasKey . "system") (hasKey .system "is_sudoer") -}}
+# {{-   $sudoer = .system.is_sudoer -}}
+# {{- else -}}
+# {{-   if eq (env "DOTFILES_SUDOER") "true" "True" "TRUE" "1" -}}
+# {{-     $sudoer = true -}}
+# {{-   end -}}
+# {{- end -}}
+
+# {{- if not $sudoer -}}
+# {{-   $sudo_check := "" -}}
+# {{-   if eq .chezmoi.os "linux" -}}
+# {{-     $sudo_check = (output "sh" "-c" (printf "test -n \"$(ls /etc/sudoers.d | grep -w %s)\" && echo sudo || echo false" .chezmoi.username)) | trim -}}
+# {{-   else -}}
+# {{-     $sudo_check = (output "sh" "-c" "test -n \"$(groups | grep -w admin)\" && echo sudo || echo false") | trim -}}
+# {{-   end -}}
+# {{-   if or (eq $sudo_check "sudo") (eq .chezmoi.username "root") ($wsl) -}}
+# {{-     $sudoer = true -}}
+# {{-   else -}}
+# {{-     $sudoer = false -}}
+# {{-   end -}}
+# {{- end -}}
+
+# {{- if not $sudoer -}}
+# {{-   $apply_rootmoi = false -}}
+# {{- end -}}
+
+# {{- $name:= or (env "USER_FULLNAME") "Your Name" -}}
+# {{- if and (hasKey . "name") .name -}}
+# {{-   $name = .name -}}
+# {{- end -}}
+
+# {{- $github_username := env "GITHUB_USERNAME" -}}
+# {{- if and (hasKey . "github") (hasKey .github "username") .github.username -}}
+# {{-   $github_username = .github.username -}}
+# {{- end -}}
+
+# {{- $docker_username := env "DOCKER_USERNAME" -}}
+# {{- if and (hasKey . "docker") (hasKey .docker "username") .docker.username -}}
+# {{-   $docker_username = .docker.username -}}
+# {{- end -}}
+
+# {{- $email:= or (env "USER_EMAIL") "your_email@your.domain.com" -}}
+# {{- if and (hasKey . "email") .email -}}
+# {{-   $email = .email -}}
+# {{- end -}}
+
+# {{- $hostname := or (env "SYSTEM_HOSTNAME") .chezmoi.hostname -}}
+# {{- if and (hasKey . "system") (hasKey .system "hostname") .system.hostname -}}
+# {{-   $hostname = .system.hostname -}}
+# {{- end -}}
+
+# {{- $ssh_algorithm := "ed25519" -}}
+# {{- if and (hasKey . "ssh") (hasKey .ssh "algorithm") .ssh.algorithm -}}
+# {{-   $ssh_algorithm = .ssh.algorithm -}}
+# {{- end -}}
+
+# {{- $github_token := env "GITHUB_TOKEN" -}}
+# {{- if and (hasKey . "github") (hasKey .github "token") .github.token -}}
+# {{-   $github_token = .github.token -}}
+# {{- end -}}
+
+# {{- $gpg_passphrase := env "GPG_PASSPHRASE" -}}
+# {{- if and (hasKey . "gnupg") (hasKey .gnupg "passphrase") -}}
+# {{-   $gpg_passphrase = .gnupg.passphrase -}}
+# {{- end -}}
+
+# {{- $age_recipients:= or (env "AGE_RECIPIENTS") "" -}}
 # {{- $ssh_homedir := or (joinPath .chezmoi.homeDir ".ssh") -}}
 # {{- $gpg_homedir := or (env "GNUPGHOME") (joinPath .chezmoi.homeDir ".gnupg") -}}
 # {{- $gpg_key_id_file := joinPath $ssh_homedir ".gpg-id" -}}
 # {{- $gpg_key_id := env "GPG_KEY_ID" -}}
-# {{- $gpg_passphrase := "" -}}
-
 # {{- $git_commit_gpgsign := false -}}
+# {{- if eq (env "GIT_COMMIT_GPGSIGN") "true" "True" "TRUE" "1" -}}
+# {{-   $git_commit_gpgsign = true -}}
+# {{- end -}}
 # {{- if and (hasKey . "gnupg") (hasKey .gnupg "gitsign") -}}
 # {{-   $git_commit_gpgsign = .gnupg.gitsign -}}
+# {{- end -}}
+
+# {{- $use_dotdrop := true -}}
+# {{- if eq (env "DOTFILES_USE_DOTDROP") "false" "False" "FALSE" "0" -}}
+# {{-   $use_dotdrop = false -}}
+# {{- end -}}
+# {{- $dotdrop_config_dir := or (env "DOTDROP_CONFIGDIR") (joinPath .chezmoi.homeDir ".config/dotdrop") -}}
+# {{- $dotdrop_config_file := or (env "DOTDROP_CONFIG") (joinPath $dotdrop_config_dir "config-user.yaml") -}}
+# {{- $dotdrop_root_config_file := or (env "DOTDROP_ROOT_CONFIG") (joinPath $dotdrop_config_dir "config-root.yaml") -}}
+
+# {{- $dotdrop_repo := "" -}}
+# {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "repo") -}}
+# {{-   $dotdrop_repo = .dotdrop.repo -}}
+# {{- end -}}
+
+# {{- $dotdrop_user_profile := or (env "DOTDROP_PROFILE") "user" -}}
+# {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "user_profile") -}}
+# {{-   $dotdrop_user_profile = .dotdrop.user_profile -}}
+# {{- end -}}
+
+# {{- $dockerfiles_share_dir := joinPath .chezmoi.homeDir ".local/share/dockerfiles" -}}
+# {{- $dockerfiles_repo := "https://github.com/entelecheia/dockerfiles.git" -}}
+# {{- if and (hasKey . "docker") (hasKey .docker "repo") -}}
+# {{-   $dockerfiles_repo = .docker.repo -}}
+# {{- end -}}
+
+# {{- $workspace_location := "" -}}
+# {{- $winhome := or (env "WINHOME") (output "sh" "-c" "command -v wslpath > /dev/null && command -v wslvar > /dev/null && wslpath $(wslvar USERPROFILE) || echo ''" | trim) -}}
+# {{- if and $wsl ($winhome | not | not) -}}
+# {{-   writeToStdout (printf "\n🪟 WSL detected, running with Windows Home directory: %s\n\n" $winhome) -}}
+# {{-   $workspace_location = or (env "WORKSPACE_LOCATION") $winhome -}}
 # {{- else -}}
-# {{-   if eq (env "GIT_COMMIT_GPGSIGN") "true" "True" "TRUE" "1" -}}
-# {{-       $git_commit_gpgsign = true -}}
-# {{-   else -}}
-# {{-       $git_commit_gpgsign = false -}}
+# {{-   $workspace_location = or (env "WORKSPACE_LOCATION") .chezmoi.homeDir -}}
+# {{- end -}}
+# {{- $workspace_name := "workspace" -}}
+# {{- $workspace_root := joinPath $workspace_location $workspace_name -}}
+# {{- $workspace_home := $workspace_root -}}
+
+# {{- $winhome_existing := "" -}}
+# {{- $workspace_existing := "" -}}
+# {{- if and (hasKey . "system") (hasKey .system "winhome") -}}
+# {{-   $winhome_existing = .system.winhome -}}
+# {{- end -}}
+# {{- if and (hasKey . "workspace") (hasKey .workspace "location") -}}
+# {{-   $workspace_existing = .workspace.location -}}
+# {{- end -}}
+
+# {{- $symlink_colab_workspace := false -}}
+# {{- if not $sudoer -}}
+# {{-   $symlink_colab_workspace = false -}}
+# {{- else -}}
+# {{-   if and (hasKey . "workspace") (hasKey .workspace "symlink_colab_workspace") -}}
+# {{-     $symlink_colab_workspace = .workspace.symlink_colab_workspace -}}
 # {{-   end -}}
 # {{- end -}}
+# {{- $symlink_to_home := true -}}
+# {{- $winhome_symlink := joinPath .chezmoi.homeDir "winhome" -}}
 
 # {{- $use_autorestic := false -}}
 # {{- if eq (env "DOTFILES_USE_AUTORESTIC") "true" "True" "TRUE" "1" -}}
 # {{-   $use_autorestic = true -}}
+# {{- end -}}
+# {{- if and (hasKey . "autorestic") (hasKey .autorestic "enabled") -}}
+# {{-   $use_autorestic = .autorestic.enabled -}}
 # {{- end -}}
 # {{- $autorestic_config_file := joinPath .chezmoi.homeDir ".config/autorestic/autorestic.yml" -}}
 # {{- $autorestic_backup_dotfiles := true -}}
@@ -150,88 +205,138 @@
 # {{- $autorestic_location := "dotfiles" -}}
 # {{- $autorestic_restore_to := joinPath .chezmoi.homeDir ".local/backup/autorestic" -}}
 
-# {{- writeToStdout "---\n" -}}
-# {{- writeToStdout "🖥️  Information found from your environment:\n\n" -}}
-# {{- writeToStdout (printf "👤  Name: %s\n" $name) -}}
-# {{- writeToStdout (printf "📧  Email: %s\n" $email) -}}
-# {{- writeToStdout (printf "🏠  Hostname: %s\n" $hostname) -}}
-# {{- writeToStdout (printf "🐙  GitHub username: %s\n" $github_username) -}}
-# {{- writeToStdout (printf "📁  Workspace location: %s\n" $workspace_location) -}}
-# {{- writeToStdout (printf "🔐  Have admin rights: %t\n" $sudoer) -}}
-# {{- if and (eq .chezmoi.os "linux") -}}
-# {{- writeToStdout (printf "🦸  Apply rootmoi: %t\n" $apply_rootmoi) -}}
+# {{- $use_code := false -}}
+# {{- if eq (env "DOTFILES_USE_CODE") "true" "True" "TRUE" "1" -}}
+# {{-   $use_code = true -}}
 # {{- end -}}
-# {{- if $minimum | not -}}
-# {{- writeToStdout (printf "📦  Use autorestic: %t\n" $use_autorestic) -}}
-# {{- writeToStdout (printf "🔖  Use dotdrop: %t\n" $use_dotdrop) -}}
-# {{- writeToStdout (printf "🔑  Use pass: %t\n" $use_pass) -}}
-# {{- writeToStdout (printf "🔑  Use 1password: %t\n" $use_1password) -}}
-# {{- writeToStdout (printf "🚀  Use microk8s: %t\n" $use_microk8s) -}}
+# {{- if and (hasKey . "code") (hasKey .code "enabled") -}}
+# {{-   $use_code = .code.enabled -}}
 # {{- end -}}
-# {{- writeToStdout (printf "🔬  Verbose: %t\n" ($verbose | not | not)) -}}
-# {{- writeToStdout "---\n" -}}
 
-# {{- $age_recipients:= or (env "AGE_RECIPIENTS") "" -}}
-# {{- $docker_username := "" -}}
-# {{- $github_token := "" -}}
-# {{- $dockerfiles_repo := "https://github.com/entelecheia/dockerfiles.git" -}}
-# {{- $dockerfiles_share_dir := joinPath .chezmoi.homeDir ".local/share/dockerfiles" -}}
-# {{- $ssh_algorithm := "ed25519" -}}
-# {{- $workspace_name := "workspace" -}}
-# {{- $workspace_root := joinPath $workspace_location $workspace_name -}}
-# {{- $workspace_home := $workspace_root -}}
-# {{- $symlink_colab_workspace := false -}}
-# {{- $symlink_to_home := true -}}
+# {{- $use_pass := true -}}
+# {{- if eq (env "DOTFILES_USE_PASS") "false" "False" "FALSE" "0" -}}
+# {{-   $use_pass = false -}}
+# {{- end -}}
+# {{- $pass_store_dir := or (env "PASSWORD_STORE_DIR") (joinPath .chezmoi.homeDir ".password-store") -}}
+# {{- $pass_repo := or (env "PASS_REPO") "" -}}
+# {{- if and (hasKey . "pass") (hasKey .pass "repo") -}}
+# {{-   $pass_repo = .pass.repo -}}
+# {{- end -}}
+
+# {{- $use_passage := true -}}
+# {{- if eq (env "DOTFILES_USE_PASSAGE") "false" "False" "FALSE" "0" -}}
+# {{-   $use_passage = false -}}
+# {{- end -}}
+# {{- $passage_store_dir := or (env "PASSAGE_DIR") (joinPath .chezmoi.homeDir ".passage/store") -}}
+# {{- $passage_repo := or (env "PASSAGE_REPO") "" -}}
+# {{- $passage_share_dir := or (env "PASSAGE_SHARE_DIR") (joinPath .chezmoi.homeDir ".local/share/passage") -}}
+# {{- if and (hasKey . "passage") (hasKey .passage "repo") -}}
+# {{-   $passage_repo = .passage.repo -}}
+# {{- end -}}
+
+# {{- $use_1password := false -}}
+# {{- if eq (env "DOTFILES_USE_1PASSWORD") "true" "True" "TRUE" "1" -}}
+# {{-   $use_1password = true -}}
+# {{- end -}}
+# {{- $op_account := or (env "OP_ACCOUNT") "" -}}
+# {{- $op_vault := or (env "OP_VAULT") "dev" -}}
+# {{- $op_connect_host := or (env "OP_CONNECT_HOST") "" -}}
+# {{- $op_connect_token := or (env "OP_CONNECT_TOKEN") "" -}}
+# {{- if and (hasKey . "op") (hasKey .op "enabled") -}}
+# {{-   $use_1password = .op.enabled -}}
+# {{- end -}}
+
+# {{- $use_vault := false -}}
+# {{- if eq (env "DOTFILES_USE_VAULT") "true" "True" "TRUE" "1" -}}
+# {{-   $use_vault = true -}}
+# {{- end -}}
+# {{- if and (hasKey . "vault") (hasKey .vault "enabled") -}}
+# {{-   $use_vault = .vault.enabled -}}
+# {{- end -}}
+
+# {{- $use_microk8s := false -}}
+# {{- if eq (env "DOTFILES_USE_MICROK8S") "true" "True" "TRUE" "1" -}}
+# {{-   $use_microk8s = true -}}
+# {{- end -}}
+# {{- if and (hasKey . "microk8s") (hasKey .microk8s "enabled") -}}
+# {{-   $use_microk8s = .microk8s.enabled -}}
+# {{- end -}}
+
+# {{- $use_ngrok := false -}}
+# {{- if eq (env "DOTFILES_USE_NGROK") "true" "True" "TRUE" "1" -}}
+# {{-   $use_ngrok = true -}}
+# {{- end -}}
+# {{- $ngrok_authtoken := or (env "NGROK_AUTHTOKEN") "" -}}
 
 # {{- $github_clones := "" -}}
-# {{- $auto_update := false -}}
-
-# {{- if and (hasKey . "system") (hasKey .system "is_minimum") -}}
-# {{-   $minimum = .system.is_minimum -}}
+# {{- if and (hasKey . "github") (hasKey .github "clones") -}}
+# {{-   $github_clones = .github.clones -}}
 # {{- end -}}
+
+
+# {{- writeToStdout "---\n" -}}
+# {{- writeToStdout "🖥️  Information found in your system environment variables:\n\n" -}}
+# {{- writeToStdout (printf "👤  USER_FULLNAME: %s\n" $name) -}}
+# {{- writeToStdout (printf "📧  USER_EMAIL: %s\n" $email) -}}
+# {{- writeToStdout (printf "🏠  SYSTEM_HOSTNAME: %s\n" $hostname) -}}
+# {{- writeToStdout (printf "🐙  GITHUB_USERNAME: %s\n" $github_username) -}}
+# {{- writeToStdout (printf "🐳  DOCKER_USERNAME: %s\n" $docker_username) -}}
+# {{- writeToStdout (printf "📁  WORKSPACE_LOCATION: %s\n" $workspace_location) -}}
+# {{- writeToStdout (printf "📎  DOTFILES_MINIMUM: %t\n" $minimum) -}}
+# {{- writeToStdout (printf "🔐  DOTFILES_SUDOER: %t\n" $sudoer) -}}
+# {{- if and (eq .chezmoi.os "linux") -}}
+# {{- writeToStdout (printf "🦸  DOTFILES_APPLY_ROOTMOI: %t\n" $apply_rootmoi) -}}
+# {{- end -}}
+# 🧭👙
+# {{- if $minimum | not -}}
+# {{- writeToStdout (printf "📦  DOTFILES_USE_AUTORESTIC: %t\n" $use_autorestic) -}}
+# {{- writeToStdout (printf "🔖  DOTFILES_USE_DOTDROP: %t\n" $use_dotdrop) -}}
+# {{- writeToStdout (printf "🔑  DOTFILES_USE_PASS: %t\n" $use_pass) -}}
+# {{- writeToStdout (printf "🔏  DOTFILES_USE_1PASSWORD: %t\n" $use_1password) -}}
+# {{- writeToStdout (printf "🚀  DOTFILES_USE_MICROK8S: %t\n" $use_microk8s) -}}
+# {{- writeToStdout (printf "🛠  DOTFILES_USE_CODE: %t\n" $use_code) -}}
+# {{- writeToStdout (printf "🚇  DOTFILES_USE_NGROK: %t\n" $use_ngrok) -}}
+# {{- end -}}
+# {{- writeToStdout (printf "🔬  DOTFILES_VERBOSE: %t\n" ($verbose | not | not)) -}}
+# {{- writeToStdout "---\n" -}}
+
 # {{- if $interactive -}}
 # {{-   $question := "❔ Do you want to install in minimum mode (see README)" -}}
 # {{-   $minimum = promptBool $question $minimum -}}
 # {{- end -}}
 # {{-   if $minimum -}}
-# {{-     writeToStdout "✅ Minimum mode enabled\n" -}}
+# {{-     writeToStdout "✅  Minimum mode enabled\n" -}}
 # {{-   else -}}
-# {{-     writeToStdout "❎ Minimum mode disabled\n" -}}
+# {{-     writeToStdout "❎  Minimum mode disabled\n" -}}
 # {{-   end -}}
 
-# {{- if and (hasKey . "system") (hasKey .system "auto_update") -}}
-# {{-   $auto_update = .system.auto_update -}}
-# {{- end -}}
 # {{- if $interactive -}}
 # {{-   $question := "❔ Do you want to update dotfiles automatically" -}}
 # {{-   $auto_update = promptBool $question $auto_update -}}
 # {{- end -}}
-# {{-   if $auto_update -}}
-# {{-     writeToStdout "✅ Auto update enabled\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "❎ Auto update disabled\n" -}}
-# {{-   end -}}
+# {{- if $auto_update -}}
+# {{-   writeToStdout "✅  Auto update enabled\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  Auto update disabled\n" -}}
+# {{- end -}}
 
 # {{- if $interactive -}}
 # {{-   $question := "❔ Do you want to enable verbose mode (0/1/f/F/t/T)" -}}
 # {{-   $verbose = promptString $question $verbose -}}
 # {{- end -}}
-# {{-   if eq $verbose "f" "F" "false" "False" "FALSE" "0" -}}
-# {{-     $verbose = "0" -}}
-# {{-     writeToStdout "❎ Verbose mode disabled\n" -}}
-# {{-   else if eq $verbose "t" "T" "true" "True" "TRUE" "1" -}}
-# {{-     $verbose = "1" -}}
-# {{-     writeToStdout "✅ Verbose mode enabled\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "✅ Verbose mode enabled\n" -}}
-# {{-   end -}}
+# {{- if eq $verbose "f" "F" "false" "False" "FALSE" "0" -}}
+# {{-   $verbose = "0" -}}
+# {{-   writeToStdout "❎  Verbose mode disabled\n" -}}
+# {{- else if eq $verbose "t" "T" "true" "True" "TRUE" "1" -}}
+# {{-   $verbose = "1" -}}
+# {{-   writeToStdout "✅  Verbose mode enabled\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "✅  Verbose mode enabled\n" -}}
+# {{- end -}}
 
 # {{- if eq .chezmoi.os "darwin" -}}
 # {{-   $apply_rootmoi := false -}}
 # {{- else if $sudoer -}}
-# {{-   if and (hasKey . "system") (hasKey .system "apply_rootmoi") -}}
-# {{-       $apply_rootmoi = .system.apply_rootmoi -}}
-# {{-   end -}}
 # {{-   if $interactive -}}
 # {{-       $question := "❔ Do you want to install dotfiles for the root user" -}}
 # {{-       $apply_rootmoi = promptBool $question $apply_rootmoi -}}
@@ -239,15 +344,12 @@
 # {{- else -}}
 # {{-   $apply_rootmoi := false -}}
 # {{- end -}}
-# {{-       if $apply_rootmoi -}}
-# {{-           writeToStdout "✅ Dotfiles will be installed for the root user\n" -}}
-# {{-       else -}}
-# {{-           writeToStdout "❎ Dotfiles will not be installed for the root user\n" -}}
-# {{-       end -}}
-
-# {{- if hasKey . "name" -}}
-# {{-   $name = .name -}}
+# {{- if $apply_rootmoi -}}
+# {{-   writeToStdout "✅  Dotfiles will be installed for the root user\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  Dotfiles will not be installed for the root user\n" -}}
 # {{- end -}}
+
 # {{- if $interactive -}}
 # {{-   range $i := until 99 -}}
 # {{-     $question := "❔ What is your full name" -}}
@@ -268,11 +370,8 @@
 # {{-     end -}}
 # {{-   end -}}
 # {{- end -}}
-# {{-       writeToStdout (printf "✅ Name set as '%s'\n" $name) -}}
+# {{- writeToStdout (printf "✅  Name set as '%s'\n" $name) -}}
 
-# {{- if and (hasKey . "github") (hasKey .github "username") -}}
-# {{-   $github_username = .github.username -}}
-# {{- end -}}
 # {{- if $interactive -}}
 # {{-   $question := "❔ What is your GitHub username" -}}
 # {{-   $answer := "" -}}
@@ -284,14 +383,11 @@
 # {{-   $github_username = $answer -}}
 # {{- end -}}
 # {{- if $github_username -}}
-# {{-   writeToStdout (printf "✅ GitHub username set as '%s'\n" $github_username) -}}
+# {{-   writeToStdout (printf "✅  GitHub username set as '%s'\n" $github_username) -}}
 # {{- else -}}
-# {{-   writeToStdout "❎ GitHub username not set\n" -}}
+# {{-   writeToStdout "❎  GitHub username not set\n" -}}
 # {{- end -}}
 
-# {{- if and (hasKey . "docker") (hasKey .docker "username") -}}
-# {{-   $docker_username = .docker.username -}}
-# {{- end -}}
 # {{- if $interactive -}}
 # {{-   $question := "❔ What is your Docker username" -}}
 # {{-   $answer := "" -}}
@@ -303,14 +399,11 @@
 # {{-   $docker_username = $answer -}}
 # {{- end -}}
 # {{- if $docker_username -}}
-# {{-   writeToStdout (printf "✅ Docker username set as '%s'\n" $docker_username) -}}
+# {{-   writeToStdout (printf "✅  Docker username set as '%s'\n" $docker_username) -}}
 # {{- else -}}
-# {{-   writeToStdout "❎ Docker username not set\n" -}}
+# {{-   writeToStdout "❎  Docker username not set\n" -}}
 # {{- end -}}
 
-# {{- if hasKey . "email" -}}
-# {{-   $email = .email -}}
-# {{- end -}}
 # {{- if $interactive -}}
 # {{-   range $i := until 99 -}}
 # {{-     $question := "❔ What is your email" -}}
@@ -332,11 +425,8 @@
 # {{-     end -}}
 # {{-   end -}}
 # {{- end -}}
-# {{-       writeToStdout (printf "✅ Email set as '%s'\n" $email) -}}
+# {{- writeToStdout (printf "✅  Email set as '%s'\n" $email) -}}
 
-# {{- if and (hasKey . "system") (hasKey .system "hostname") -}}
-# {{-   $hostname = .system.hostname -}}
-# {{- end -}}
 # {{- if $interactive -}}
 # {{-   range $i := until 99 -}}
 # {{-     $question := "❔ What is hostname" -}}
@@ -357,32 +447,14 @@
 # {{-     end -}}
 # {{-   end -}}
 # {{- end -}}
-# {{-       writeToStdout (printf "✅ Hostname set as '%s'\n" $hostname) -}}
+# {{- writeToStdout (printf "✅  Hostname set as '%s'\n" $hostname) -}}
 
-# {{- if and (hasKey . "ssh") (hasKey .ssh "algorithm") -}}
-# {{-   $ssh_algorithm = .ssh.algorithm -}}
-# {{- end -}}
-# {{- if and $interactive ($minimum | not) -}}
-# {{-   $question := "❔ Which SSH algorithm do you want to use" -}}
-# {{-   $answer := "" -}}
-# {{-   if $ssh_algorithm -}}
-# {{-     $answer = promptString $question $ssh_algorithm -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $ssh_algorithm = $answer -}}
-# {{- end -}}
-# {{-   writeToStdout (printf "✅ SSH algorithm set as '%s'\n" $ssh_algorithm) -}}
-
+# {{- writeToStdout (printf "✅  SSH algorithm set as '%s'\n" $ssh_algorithm) -}}
 # {{- $ssh_keyfile := joinPath .chezmoi.homeDir (printf ".ssh/id_%s_%s" $ssh_algorithm $github_username) -}}
-# {{-   writeToStdout (printf "✅ SSH key filename set as '%s'\n" $ssh_keyfile) -}}
-
+# {{- writeToStdout (printf "✅  SSH key filename set as '%s'\n" $ssh_keyfile) -}}
 # {{- $age_keyfile := joinPath .chezmoi.homeDir (printf ".ssh/age_key_%s" $github_username) -}}
-# {{-   writeToStdout (printf "✅ Age key filename set as '%s'\n" $age_keyfile) -}}
+# {{- writeToStdout (printf "✅  Age key filename set as '%s'\n" $age_keyfile) -}}
 
-# {{- if and (hasKey . "github") (hasKey .github "token") -}}
-# {{-   $github_token = .github.token -}}
-# {{- end -}}
 # {{- if $interactive -}}
 # {{-   $question := "❔ What is GitHub Token (If not set, you will be prompted to authenticate)" -}}
 # {{-   $answer := "" -}}
@@ -394,15 +466,12 @@
 # {{-   $github_token = $answer -}}
 # {{- end -}}
 # {{- if $github_token -}}
-# {{-   writeToStdout "✅ GitHub Token set as '***'\n" -}}
+# {{-   writeToStdout "✅  GitHub Token set as '***'\n" -}}
 # {{- else -}}
-# {{-   writeToStdout "❎ GitHub Token not set\n" -}}
+# {{-   writeToStdout "❎  GitHub Token not set\n" -}}
 # {{- end -}}
 
 
-# {{- if and (hasKey . "gnupg") (hasKey .gnupg "passphrase") -}}
-# {{-   $gpg_passphrase = .gnupg.passphrase -}}
-# {{- end -}}
 # {{- if and $interactive ($minimum | not) -}}
 # {{-   $question := "❔ What passphrase do you want to use for your GPG key" -}}
 # {{-   $answer := "" -}}
@@ -414,9 +483,9 @@
 # {{-   $gpg_passphrase = $answer -}}
 # {{- end -}}
 # {{- if $gpg_passphrase -}}
-# {{-   writeToStdout "✅ GPG passphrase set as '***'\n" -}}
+# {{-   writeToStdout "✅  GPG passphrase set as '***'\n" -}}
 # {{- else -}}
-# {{-   writeToStdout "❎ GPG passphrase not set\n" -}}
+# {{-   writeToStdout "❎  GPG passphrase not set\n" -}}
 # {{- end -}}
 
 # {{- if and $interactive ($minimum | not) -}}
@@ -424,14 +493,11 @@
 # {{-   $git_commit_gpgsign = promptBool $question $git_commit_gpgsign -}}
 # {{- end -}}
 # {{-   if $git_commit_gpgsign -}}
-# {{-     writeToStdout "✅ Git commits will be signed by GPG(or SSH)\n" -}}
+# {{-     writeToStdout "✅  Git commits will be signed by GPG(or SSH)\n" -}}
 # {{-   else -}}
-# {{-     writeToStdout "❎ Git commits will not be signed by GPG(or SSH)\n" -}}
+# {{-     writeToStdout "❎  Git commits will not be signed by GPG(or SSH)\n" -}}
 # {{-   end -}}
 
-# {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "repo") -}}
-# {{-   $dotdrop_repo = .dotdrop.repo -}}
-# {{- end -}}
 # {{- if and $interactive $use_dotdrop -}}
 # {{-   $question := "❔ What is your dotdrop files repository URL (ex: https://github.com/entelecheia/dotdrop-files.git)" -}}
 # {{-   $answer := "" -}}
@@ -444,14 +510,11 @@
 # {{-   $use_dotdrop = $answer | not | not -}}
 # {{- end -}}
 # {{- if $dotdrop_repo -}}
-# {{-   writeToStdout (printf "✅ dotdrop files repo set as '%s'\n" $dotdrop_repo) -}}
+# {{-   writeToStdout (printf "✅  dotdrop files repo set as '%s'\n" $dotdrop_repo) -}}
 # {{- else -}}
-# {{-   writeToStdout "❎ dotdrop files repo not set\n" -}}
+# {{-   writeToStdout "❎  dotdrop files repo not set\n" -}}
 # {{- end -}}
 
-# {{- if and (hasKey . "dotdrop") (hasKey .dotdrop "user_profile") -}}
-# {{-   $dotdrop_user_profile = .dotdrop.user_profile -}}
-# {{- end -}}
 # {{- if and $interactive $use_dotdrop -}}
 # {{-   $question := "❔ What is your dotdrop user profile (ex: hostname)" -}}
 # {{-   $answer := "" -}}
@@ -462,11 +525,8 @@
 # {{-   end -}}
 # {{-   $dotdrop_user_profile = $answer -}}
 # {{- end -}}
-# {{-   writeToStdout (printf "✅ dotdrop user profile set as '%s'\n" $dotdrop_user_profile) -}}
+# {{- writeToStdout (printf "✅  dotdrop user profile set as '%s'\n" $dotdrop_user_profile) -}}
 
-# {{- if and (hasKey . "docker") (hasKey .docker "repo") -}}
-# {{-   $dockerfiles_repo = .docker.repo -}}
-# {{- end -}}
 # {{- if and $interactive ($minimum | not) -}}
 # {{-   $question := "❔ What is your dockerfiles repository URL (ex: https://github.com/entelecheia/dockerfiles.git)" -}}
 # {{-   $answer := "" -}}
@@ -477,16 +537,8 @@
 # {{-   end -}}
 # {{-   $dockerfiles_repo = $answer -}}
 # {{- end -}}
-# {{-   writeToStdout (printf "✅ dockerfiles repo set as '%s'\n" $dockerfiles_repo) -}}
+# {{- writeToStdout (printf "✅  dockerfiles repo set as '%s'\n" $dockerfiles_repo) -}}
 
-# {{- $winhome_existing := "" -}}
-# {{- $workspace_existing := "" -}}
-# {{- if and (hasKey . "system") (hasKey .system "winhome") -}}
-# {{-   $winhome_existing = .system.winhome -}}
-# {{- end -}}
-# {{- if and (hasKey . "workspace") (hasKey .workspace "location") -}}
-# {{-   $workspace_existing = .workspace.location -}}
-# {{- end -}}
 # {{- if $workspace_existing -}}
 # {{- if $wsl -}}
 # {{-   if eq $winhome_existing $winhome -}}
@@ -508,65 +560,52 @@
 # {{-   end -}}
 # {{-   $workspace_location = $answer -}}
 # {{- end -}}
-# {{-   writeToStdout (printf "✅ Worksapce location set as '%s'\n" $workspace_location) -}}
+# {{- writeToStdout (printf "✅  Worksapce location set as '%s'\n" $workspace_location) -}}
 
 # {{- $workspace_root = joinPath $workspace_location $workspace_name -}}
-# {{-   writeToStdout (printf "✅ Worksapce root set as '%s'\n" $workspace_root) -}}
+# {{-   writeToStdout (printf "✅  Worksapce root set as '%s'\n" $workspace_root) -}}
 # {{- if $symlink_to_home -}}
 # {{-   $workspace_home = joinPath .chezmoi.homeDir $workspace_name -}}
 # {{- else -}}
 # {{-   $workspace_home = joinPath $workspace_location $workspace_name -}}
 # {{- end -}}
-# {{-   writeToStdout (printf "✅ Worksapce root symlinked to '%s'\n" $workspace_home) -}}
+# {{-   writeToStdout (printf "✅  Worksapce root symlinked to '%s'\n" $workspace_home) -}}
 # {{- $project_dir := joinPath $workspace_home "projects" -}}
 # {{- $reference_dir := joinPath $workspace_home "references" -}}
 
-# {{- if not $sudoer -}}
-# {{-   $symlink_colab_workspace := false -}}
-# {{- else -}}
-# {{- if and (hasKey . "workspace") (hasKey .workspace "symlink_colab_workspace") -}}
-# {{-   $symlink_colab_workspace = .workspace.symlink_colab_workspace -}}
-# {{- end -}}
 # {{- if and $interactive ($minimum | not) -}}
 # {{-   $question := "❔ Do you want to symlink workspace to colab default google drive directory to maintain persistence across sessions" -}}
 # {{-   $symlink_colab_workspace = promptBool $question $symlink_colab_workspace -}}
 # {{- end -}}
+# {{- if $symlink_colab_workspace -}}
+# {{-   writeToStdout "✅  Colab workspace symlinked to workspace root\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  Colab workspace not symlinked\n" -}}
 # {{- end -}}
-# {{-   if $symlink_colab_workspace -}}
-# {{-     writeToStdout "✅ Colab workspace symlinked to workspace root\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "❎ Colab workspace not symlinked\n" -}}
-# {{-   end -}}
 
 # {{- if and $interactive ($minimum | not) -}}
 # {{-   $question := "❔ Do you want to use autorestic to backup your files" -}}
 # {{-   $use_autorestic = promptBool $question $use_autorestic -}}
 # {{- end -}}
 # {{-   if $use_autorestic -}}
-# {{-     writeToStdout "✅ autorestic enabled\n" -}}
-# {{-     writeToStdout (printf "✅ autorestic config path set as '%s'\n" $autorestic_config_file) -}}
-# {{-     writeToStdout (printf "✅ autorestic location for dotfiles set as '%s'\n" $autorestic_location) -}}
-# {{-     writeToStdout (printf "✅ autorestic restores dotfiles to '%s'\n" $autorestic_restore_to) -}}
+# {{-     writeToStdout "✅  autorestic enabled\n" -}}
+# {{-     writeToStdout (printf "✅  autorestic config path set as '%s'\n" $autorestic_config_file) -}}
+# {{-     writeToStdout (printf "✅  autorestic location for dotfiles set as '%s'\n" $autorestic_location) -}}
+# {{-     writeToStdout (printf "✅  autorestic restores dotfiles to '%s'\n" $autorestic_restore_to) -}}
 # {{-   else -}}
-# {{-     writeToStdout "❎ autorestic disabled\n" -}}
+# {{-     writeToStdout "❎  autorestic disabled\n" -}}
 # {{-   end -}}
 
-# {{- if and (hasKey . "code") (hasKey .code "enabled") -}}
-# {{-   $use_code = .code.enabled -}}
-# {{- end -}}
 # {{- if and $interactive $sudoer -}}
 # {{-   $question := "❔ Do you want to use visual studio code" -}}
 # {{-   $use_code = promptBool $question $use_code -}}
 # {{- end -}}
-# {{-   if $use_code -}}
-# {{-     writeToStdout "✅ visual studio code enabled\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "❎ visual studio code disabled\n" -}}
-# {{-   end -}}
-
-# {{- if and (hasKey . "pass") (hasKey .pass "repo") -}}
-# {{-   $pass_repo = .pass.repo -}}
+# {{- if $use_code -}}
+# {{-   writeToStdout "✅  visual studio code enabled\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  visual studio code disabled\n" -}}
 # {{- end -}}
+
 # {{- if and $interactive $use_pass -}}
 # {{-   $question := "❔ What is your password store repository URL (ex: https://github.com/username/.password-store.git)" -}}
 # {{-   $answer := "" -}}
@@ -578,15 +617,11 @@
 # {{-   $pass_repo = $answer -}}
 # {{- end -}}
 # {{- if $pass_repo -}}
-# {{-   writeToStdout (printf "✅ password store repo set as '%s'\n" $pass_repo) -}}
+# {{-   writeToStdout (printf "✅  password store repo set as '%s'\n" $pass_repo) -}}
 # {{- else -}}
-# {{-   writeToStdout "❎ password store repo not set\n" -}}
+# {{-   writeToStdout "❎  password store repo not set\n" -}}
 # {{- end -}}
 
-
-# {{- if and (hasKey . "passage") (hasKey .passage "repo") -}}
-# {{-   $passage_repo = .passage.repo -}}
-# {{- end -}}
 # {{- if and $interactive $use_passage -}}
 # {{-   $question := "❔ What is your passage repository URL (ex: https://github.com/usename/.passage.git)" -}}
 # {{-   $answer := "" -}}
@@ -598,53 +633,66 @@
 # {{-   $passage_repo = $answer -}}
 # {{- end -}}
 # {{- if $passage_repo -}}
-# {{-   writeToStdout (printf "✅ passage repo set as '%s'\n" $passage_repo) -}}
+# {{-   writeToStdout (printf "✅  passage repo set as '%s'\n" $passage_repo) -}}
 # {{- else -}}
-# {{-   writeToStdout "❎ passage repo not set\n" -}}
+# {{-   writeToStdout "❎  passage repo not set\n" -}}
 # {{- end -}}
 
-# {{- if and (hasKey . "op") (hasKey .op "enabled") -}}
-# {{-   $use_1password = .op.enabled -}}
-# {{- end -}}
 # {{- if and $interactive $sudoer ($minimum | not) -}}
 # {{-   $question := "❔ Do you want to use 1password for secrets" -}}
 # {{-   $use_1password = promptBool $question $use_1password -}}
 # {{- end -}}
-# {{-   if $use_1password -}}
-# {{-     writeToStdout "✅ 1password enabled\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "❎ 1password disabled\n" -}}
-# {{-   end -}}
-
-# {{- if and (hasKey . "vault") (hasKey .vault "enabled") -}}
-# {{-   $use_vault = .vault.enabled -}}
+# {{- if $use_1password -}}
+# {{-   writeToStdout "✅  1password enabled\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  1password disabled\n" -}}
 # {{- end -}}
+
 # {{- if and $interactive $sudoer ($minimum | not) -}}
 # {{-   $question := "❔ Do you want to use vault for secrets" -}}
 # {{-   $use_vault = promptBool $question $use_vault -}}
 # {{- end -}}
-# {{-   if $use_vault -}}
-# {{-     writeToStdout "✅ Vault enabled\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "❎ Vault disabled\n" -}}
-# {{-   end -}}
-
-# {{- if and (hasKey . "microk8s") (hasKey .microk8s "enabled") -}}
-# {{-   $use_microk8s = .microk8s.enabled -}}
+# {{- if $use_vault -}}
+# {{-   writeToStdout "✅  Vault enabled\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  Vault disabled\n" -}}
 # {{- end -}}
+
 # {{- if and $interactive $sudoer ($minimum | not) -}}
 # {{-   $question := "❔ Do you want to use MicroK8s for Kubernetes" -}}
 # {{-   $use_microk8s = promptBool $question $use_microk8s -}}
 # {{- end -}}
-# {{-   if $use_microk8s -}}
-# {{-     writeToStdout "✅ MicroK8s enabled\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "❎ MicroK8s disabled\n" -}}
-# {{-   end -}}
-
-# {{- if and (hasKey . "github") (hasKey .github "clones") -}}
-# {{-   $github_clones = .github.clones -}}
+# {{- if $use_microk8s -}}
+# {{-   writeToStdout "✅  MicroK8s enabled\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  MicroK8s disabled\n" -}}
 # {{- end -}}
+
+# {{- if and $interactive $sudoer ($minimum | not) -}}
+# {{-   $question := "❔ Do you want to use ngrok for local development" -}}
+# {{-   $use_ngrok = promptBool $question $use_ngrok -}}
+# {{- end -}}
+# {{- if $use_ngrok -}}
+# {{-   writeToStdout "✅  ngrok enabled\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  ngrok disabled\n" -}}
+# {{- end -}}
+# {{- if and $interactive $use_ngrok -}}
+# {{-   $question := "❔ What is your ngrok authtoken" -}}
+# {{-   $answer := "" -}}
+# {{-   if $ngrok_authtoken -}}
+# {{-     $answer = promptString $question $ngrok_authtoken -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $ngrok_authtoken = $answer -}}
+# {{- end -}}
+# {{- if $ngrok_authtoken -}}
+# {{-   writeToStdout "✅  ngrok authtoken set as '***'\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  ngrok authtoken not set\n" -}}
+# {{- end -}}
+
 # {{- if and $interactive ($minimum | not) -}}
 # {{-   $question := "❔ What are your GitHub repositories to clone (input as comma separated list, ex: entelecheia/devcon,entelecheia/ekorpkit)" -}}
 # {{-   $answer := "" -}}
@@ -656,9 +704,9 @@
 # {{-   $github_clones = $answer -}}
 # {{- end -}}
 # {{- if $github_clones -}}
-# {{-   writeToStdout (printf "✅ GitHub repositories to clone set as '%s'\n" $github_clones) -}}
+# {{-   writeToStdout (printf "✅  GitHub repositories to clone set as '%s'\n" $github_clones) -}}
 # {{- else -}}
-# {{-   writeToStdout "❎ GitHub repositories to clone not set\n" -}}
+# {{-   writeToStdout "❎  GitHub repositories to clone not set\n" -}}
 # {{- end -}}
 
 # {{-   writeToStdout "\n💡 Tip: you can always make chezmoi ask this again by running `chezmoi init` without `--force`.\n" -}}
@@ -767,6 +815,9 @@ data:
         vault: {{ $op_vault | quote }}
         connect_host: {{ $op_connect_host | quote }}
         connect_token: {{ $op_connect_token | quote }}
+    ngrok:
+        enabled: {{ $use_ngrok }}
+        authtoken: {{ $ngrok_authtoken | quote }}
     workspace:
         name: {{ $workspace_name | quote }}
         location: {{ $workspace_location | quote }}
