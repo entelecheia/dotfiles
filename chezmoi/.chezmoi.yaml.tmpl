@@ -211,7 +211,7 @@
 # {{- if and (hasKey . "ngrok") (hasKey .ngrok "authtoken") -}}
 # {{-   $ngrok_authtoken = .ngrok.authtoken -}}
 # {{- end -}}
-# {{- $ngrok_ssh_port := or (env "NGROK_SSH_PORT") "2121" -}}
+# {{- $ngrok_ssh_port := or (env "NGROK_SSH_PORT") "22" -}}
 # {{- if and (hasKey . "ngrok") (hasKey .ngrok "ssh_port") -}}
 # {{-   $ngrok_ssh_port = .ngrok.ssh_port -}}
 # {{- end -}}
