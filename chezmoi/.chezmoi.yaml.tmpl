@@ -192,19 +192,6 @@
 # {{- $symlink_to_home := true -}}
 # {{- $winhome_symlink := joinPath .chezmoi.homeDir "winhome" -}}
 
-# {{- $use_autorestic := false -}}
-# {{- if eq (env "DOTFILES_USE_AUTORESTIC") "true" "True" "TRUE" "1" -}}
-# {{-   $use_autorestic = true -}}
-# {{- end -}}
-# {{- if and (hasKey . "autorestic") (hasKey .autorestic "enabled") -}}
-# {{-   $use_autorestic = .autorestic.enabled -}}
-# {{- end -}}
-# {{- $autorestic_config_file := joinPath .chezmoi.homeDir ".config/autorestic/autorestic.yml" -}}
-# {{- $autorestic_backup_dotfiles := true -}}
-# {{- $autorestic_restore_dotfiles := true -}}
-# {{- $autorestic_location := "dotfiles" -}}
-# {{- $autorestic_restore_to := joinPath .chezmoi.homeDir ".local/backup/autorestic" -}}
-
 # {{- $use_code := false -}}
 # {{- if eq (env "DOTFILES_USE_CODE") "true" "True" "TRUE" "1" -}}
 # {{-   $use_code = true -}}
@@ -212,6 +199,15 @@
 # {{- if and (hasKey . "code") (hasKey .code "enabled") -}}
 # {{-   $use_code = .code.enabled -}}
 # {{- end -}}
+
+# {{- $use_ngrok := false -}}
+# {{- if eq (env "DOTFILES_USE_NGROK") "true" "True" "TRUE" "1" -}}
+# {{-   $use_ngrok = true -}}
+# {{- end -}}
+# {{- if and (hasKey . "ngrok") (hasKey .ngrok "enabled") -}}
+# {{-   $use_ngrok = .ngrok.enabled -}}
+# {{- end -}}
+# {{- $ngrok_authtoken := or (env "NGROK_AUTHTOKEN") "" -}}
 
 # {{- $use_pass := true -}}
 # {{- if eq (env "DOTFILES_USE_PASS") "false" "False" "FALSE" "0" -}}
@@ -254,6 +250,19 @@
 # {{-   $use_vault = .vault.enabled -}}
 # {{- end -}}
 
+# {{- $use_autorestic := false -}}
+# {{- if eq (env "DOTFILES_USE_AUTORESTIC") "true" "True" "TRUE" "1" -}}
+# {{-   $use_autorestic = true -}}
+# {{- end -}}
+# {{- if and (hasKey . "autorestic") (hasKey .autorestic "enabled") -}}
+# {{-   $use_autorestic = .autorestic.enabled -}}
+# {{- end -}}
+# {{- $autorestic_config_file := joinPath .chezmoi.homeDir ".config/autorestic/autorestic.yml" -}}
+# {{- $autorestic_backup_dotfiles := true -}}
+# {{- $autorestic_restore_dotfiles := true -}}
+# {{- $autorestic_location := "dotfiles" -}}
+# {{- $autorestic_restore_to := joinPath .chezmoi.homeDir ".local/backup/autorestic" -}}
+
 # {{- $use_microk8s := false -}}
 # {{- if eq (env "DOTFILES_USE_MICROK8S") "true" "True" "TRUE" "1" -}}
 # {{-   $use_microk8s = true -}}
@@ -261,12 +270,6 @@
 # {{- if and (hasKey . "microk8s") (hasKey .microk8s "enabled") -}}
 # {{-   $use_microk8s = .microk8s.enabled -}}
 # {{- end -}}
-
-# {{- $use_ngrok := false -}}
-# {{- if eq (env "DOTFILES_USE_NGROK") "true" "True" "TRUE" "1" -}}
-# {{-   $use_ngrok = true -}}
-# {{- end -}}
-# {{- $ngrok_authtoken := or (env "NGROK_AUTHTOKEN") "" -}}
 
 # {{- $github_clones := "" -}}
 # {{- if and (hasKey . "github") (hasKey .github "clones") -}}
@@ -294,7 +297,7 @@
 # {{- writeToStdout (printf "🔑  DOTFILES_USE_PASS: %t\n" $use_pass) -}}
 # {{- writeToStdout (printf "🔏  DOTFILES_USE_1PASSWORD: %t\n" $use_1password) -}}
 # {{- writeToStdout (printf "🚀  DOTFILES_USE_MICROK8S: %t\n" $use_microk8s) -}}
-# {{- writeToStdout (printf "🛠  DOTFILES_USE_CODE: %t\n" $use_code) -}}
+# {{- writeToStdout (printf "🔧  DOTFILES_USE_CODE: %t\n" $use_code) -}}
 # {{- writeToStdout (printf "🚇  DOTFILES_USE_NGROK: %t\n" $use_ngrok) -}}
 # {{- end -}}
 # {{- writeToStdout (printf "🔬  DOTFILES_VERBOSE: %t\n" ($verbose | not | not)) -}}
@@ -583,19 +586,6 @@
 # {{-   writeToStdout "❎  Colab workspace not symlinked\n" -}}
 # {{- end -}}
 
-# {{- if and $interactive ($minimum | not) -}}
-# {{-   $question := "❔ Do you want to use autorestic to backup your files" -}}
-# {{-   $use_autorestic = promptBool $question $use_autorestic -}}
-# {{- end -}}
-# {{-   if $use_autorestic -}}
-# {{-     writeToStdout "✅  autorestic enabled\n" -}}
-# {{-     writeToStdout (printf "✅  autorestic config path set as '%s'\n" $autorestic_config_file) -}}
-# {{-     writeToStdout (printf "✅  autorestic location for dotfiles set as '%s'\n" $autorestic_location) -}}
-# {{-     writeToStdout (printf "✅  autorestic restores dotfiles to '%s'\n" $autorestic_restore_to) -}}
-# {{-   else -}}
-# {{-     writeToStdout "❎  autorestic disabled\n" -}}
-# {{-   end -}}
-
 # {{- if and $interactive $sudoer -}}
 # {{-   $question := "❔ Do you want to use visual studio code" -}}
 # {{-   $use_code = promptBool $question $use_code -}}
@@ -604,6 +594,31 @@
 # {{-   writeToStdout "✅  visual studio code enabled\n" -}}
 # {{- else -}}
 # {{-   writeToStdout "❎  visual studio code disabled\n" -}}
+# {{- end -}}
+
+# {{- if and $interactive $sudoer ($minimum | not) -}}
+# {{-   $question := "❔ Do you want to use ngrok for local development" -}}
+# {{-   $use_ngrok = promptBool $question $use_ngrok -}}
+# {{- end -}}
+# {{- if $use_ngrok -}}
+# {{-   writeToStdout "✅  ngrok enabled\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  ngrok disabled\n" -}}
+# {{- end -}}
+# {{- if and $interactive $use_ngrok -}}
+# {{-   $question := "❔ What is your ngrok authtoken" -}}
+# {{-   $answer := "" -}}
+# {{-   if $ngrok_authtoken -}}
+# {{-     $answer = promptString $question $ngrok_authtoken -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $ngrok_authtoken = $answer -}}
+# {{- end -}}
+# {{- if $ngrok_authtoken -}}
+# {{-   writeToStdout "✅  ngrok authtoken set as '***'\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  ngrok authtoken not set\n" -}}
 # {{- end -}}
 
 # {{- if and $interactive $use_pass -}}
@@ -658,6 +673,19 @@
 # {{-   writeToStdout "❎  Vault disabled\n" -}}
 # {{- end -}}
 
+# {{- if and $interactive ($minimum | not) -}}
+# {{-   $question := "❔ Do you want to use autorestic to backup your files" -}}
+# {{-   $use_autorestic = promptBool $question $use_autorestic -}}
+# {{- end -}}
+# {{-   if $use_autorestic -}}
+# {{-     writeToStdout "✅  autorestic enabled\n" -}}
+# {{-     writeToStdout (printf "✅  autorestic config path set as '%s'\n" $autorestic_config_file) -}}
+# {{-     writeToStdout (printf "✅  autorestic location for dotfiles set as '%s'\n" $autorestic_location) -}}
+# {{-     writeToStdout (printf "✅  autorestic restores dotfiles to '%s'\n" $autorestic_restore_to) -}}
+# {{-   else -}}
+# {{-     writeToStdout "❎  autorestic disabled\n" -}}
+# {{-   end -}}
+
 # {{- if and $interactive $sudoer ($minimum | not) -}}
 # {{-   $question := "❔ Do you want to use MicroK8s for Kubernetes" -}}
 # {{-   $use_microk8s = promptBool $question $use_microk8s -}}
@@ -666,31 +694,6 @@
 # {{-   writeToStdout "✅  MicroK8s enabled\n" -}}
 # {{- else -}}
 # {{-   writeToStdout "❎  MicroK8s disabled\n" -}}
-# {{- end -}}
-
-# {{- if and $interactive $sudoer ($minimum | not) -}}
-# {{-   $question := "❔ Do you want to use ngrok for local development" -}}
-# {{-   $use_ngrok = promptBool $question $use_ngrok -}}
-# {{- end -}}
-# {{- if $use_ngrok -}}
-# {{-   writeToStdout "✅  ngrok enabled\n" -}}
-# {{- else -}}
-# {{-   writeToStdout "❎  ngrok disabled\n" -}}
-# {{- end -}}
-# {{- if and $interactive $use_ngrok -}}
-# {{-   $question := "❔ What is your ngrok authtoken" -}}
-# {{-   $answer := "" -}}
-# {{-   if $ngrok_authtoken -}}
-# {{-     $answer = promptString $question $ngrok_authtoken -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $ngrok_authtoken = $answer -}}
-# {{- end -}}
-# {{- if $ngrok_authtoken -}}
-# {{-   writeToStdout "✅  ngrok authtoken set as '***'\n" -}}
-# {{- else -}}
-# {{-   writeToStdout "❎  ngrok authtoken not set\n" -}}
 # {{- end -}}
 
 # {{- if and $interactive ($minimum | not) -}}
