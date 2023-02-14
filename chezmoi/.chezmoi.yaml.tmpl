@@ -623,10 +623,12 @@
 # {{-   end -}}
 # {{-   $ngrok_authtoken = $answer -}}
 # {{- end -}}
-# {{- if $ngrok_authtoken -}}
-# {{-   writeToStdout "✅  ngrok authtoken set as '***'\n" -}}
-# {{- else -}}
-# {{-   writeToStdout "❎  ngrok authtoken not set\n" -}}
+# {{- if $use_ngrok -}}
+# {{-   if $ngrok_authtoken -}}
+# {{-     writeToStdout "✅  ngrok authtoken set as '***'\n" -}}
+# {{-   else -}}
+# {{-     writeToStdout "❎  ngrok authtoken not set\n" -}}
+# {{-   end -}}
 # {{- end -}}
 
 # {{- if and $interactive $use_ngrok -}}
@@ -639,10 +641,12 @@
 # {{-   end -}}
 # {{-   $ngrok_ssh_port = $answer -}}
 # {{- end -}}
-# {{- if $ngrok_ssh_port -}}
-# {{-   writeToStdout (printf "✅  ngrok ssh port set as '%s'\n" $ngrok_ssh_port) -}}
-# {{- else -}}
-# {{-   writeToStdout "❎  ngrok ssh port not set\n" -}}
+# {{- if $use_ngrok -}}
+# {{-   if $ngrok_ssh_port -}}
+# {{-     writeToStdout (printf "✅  ngrok ssh port set as '%s'\n" $ngrok_ssh_port) -}}
+# {{-   else -}}
+# {{-     writeToStdout "❎  ngrok ssh port not set\n" -}}
+# {{-   end -}}
 # {{- end -}}
 
 # {{- if and $interactive $use_pass -}}
@@ -701,14 +705,14 @@
 # {{-   $question := "❔ Do you want to use autorestic to backup your files" -}}
 # {{-   $use_autorestic = promptBool $question $use_autorestic -}}
 # {{- end -}}
-# {{-   if $use_autorestic -}}
-# {{-     writeToStdout "✅  autorestic enabled\n" -}}
-# {{-     writeToStdout (printf "✅  autorestic config path set as '%s'\n" $autorestic_config_file) -}}
-# {{-     writeToStdout (printf "✅  autorestic location for dotfiles set as '%s'\n" $autorestic_location) -}}
-# {{-     writeToStdout (printf "✅  autorestic restores dotfiles to '%s'\n" $autorestic_restore_to) -}}
-# {{-   else -}}
-# {{-     writeToStdout "❎  autorestic disabled\n" -}}
-# {{-   end -}}
+# {{- if $use_autorestic -}}
+# {{-   writeToStdout "✅  autorestic enabled\n" -}}
+# {{-   writeToStdout (printf "✅  autorestic config path set as '%s'\n" $autorestic_config_file) -}}
+# {{-   writeToStdout (printf "✅  autorestic location for dotfiles set as '%s'\n" $autorestic_location) -}}
+# {{-   writeToStdout (printf "✅  autorestic restores dotfiles to '%s'\n" $autorestic_restore_to) -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  autorestic disabled\n" -}}
+# {{- end -}}
 
 # {{- if and $interactive $sudoer ($minimum | not) -}}
 # {{-   $question := "❔ Do you want to use MicroK8s for Kubernetes" -}}
@@ -846,7 +850,7 @@ data:
         enabled: {{ $use_ngrok }}
         authtoken: {{ $ngrok_authtoken | quote }}
         config_file: {{ $ngrok_config_file | quote }}
-        ssh_port: {{ $ngrok_ssh_port }}
+        ssh_port: {{ $ngrok_ssh_port | quote }}
     workspace:
         name: {{ $workspace_name | quote }}
         location: {{ $workspace_location | quote }}
