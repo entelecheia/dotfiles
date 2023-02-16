@@ -3,6 +3,11 @@
 # {{ template "scripts-library" }}
 log_task "40. Setting up SSH, AGE, and GPG keys"
 
+GITHUB_USERNAME=${GITHUB_USERNAME:-"{{ .github.username }}"}
+GITHUB_TOKEN=${GITHUB_TOKEN:-"{{ .github.token }}"}
+export GITHUB_USERNAME
+export GITHUB_TOKEN
+
 # before generating SSH keys, you can install them from the dotdrop repository
 # {{ if .dotdrop.enabled }}
 
