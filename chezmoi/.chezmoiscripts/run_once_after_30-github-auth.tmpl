@@ -3,6 +3,11 @@
 # {{ template "scripts-library" }}
 log_task "30. Authenticating with GitHub"
 
+GITHUB_USERNAME=${GITHUB_USERNAME:-"{{ .github.username }}"}
+GITHUB_TOKEN=${GITHUB_TOKEN:-"{{ .github.token }}"}
+export GITHUB_USERNAME
+export GITHUB_TOKEN
+
 # {{ if .system.is_interactive }}
 "${HOME}/.local/bin/github-auth" --interactive
 # {{ else }}
