@@ -32,7 +32,7 @@ fi
 # install pipx
 if ! pipx --version &>/dev/null; then
   log_task "Installing pipx"
-  c python3 -m pip install --user pipx
+  c /usr/bin/pip3 install --user pipx
 fi
 
 # install poetry
@@ -49,9 +49,9 @@ fi
 # fi
 
 # install commitizen
-if ! command -v commitizen &>/dev/null; then
+if ! command -v cz &>/dev/null; then
   log_task "Installing commitizen"
-  c pipx install commitizen
+  c /usr/bin/pip3 install --user commitizen
 fi
 
 # {{- end -}}
