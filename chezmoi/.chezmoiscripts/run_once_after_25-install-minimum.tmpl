@@ -41,4 +41,17 @@ if ! poetry --version &>/dev/null; then
   c curl -sSL https://install.python-poetry.org | python3 -
 fi
 
+# install task
+# if ! command -v task &>/dev/null; then
+#   log_task "Installing task"
+#   c sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
+#   # c curl -sS https://install.doctor/task | bash -s -- -b ~/.local/bin
+# fi
+
+# install commitizen
+if ! command -v commitizen &>/dev/null; then
+  log_task "Installing commitizen"
+  c npm install -g commitizen
+fi
+
 # {{- end -}}
