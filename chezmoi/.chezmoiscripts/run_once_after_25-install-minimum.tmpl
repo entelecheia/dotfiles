@@ -29,4 +29,10 @@ if ! sops --version &>/dev/null; then
   c go install go.mozilla.org/sops/v3/cmd/sops@latest
 fi
 
+# install poetry
+if ! poetry --version &>/dev/null; then
+  log_task "Installing poetry"
+  c curl -sSL https://install.python-poetry.org | python3 -
+fi
+
 # {{- end -}}
