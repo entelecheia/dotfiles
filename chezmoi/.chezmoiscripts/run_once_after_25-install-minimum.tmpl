@@ -48,16 +48,10 @@ fi
 #   # c curl -sS https://install.doctor/task | bash -s -- -b ~/.local/bin
 # fi
 
-if [ -d "${HOME}/.nvm" ]; then
-  export NVM_DIR="$HOME/.nvm"
-  # shellcheck disable=SC1091
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-fi
-
 # install commitizen
 if ! command -v commitizen &>/dev/null; then
   log_task "Installing commitizen"
-  c npm install -g commitizen
+  c pipx install commitizen
 fi
 
 # {{- end -}}
