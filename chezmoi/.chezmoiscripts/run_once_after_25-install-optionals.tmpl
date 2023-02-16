@@ -35,16 +35,33 @@ fi
 # install syncthing if not installed
 if ! command -v syncthing >/dev/null; then
   log_task "Installing syncthing"
-  c webi syncthing 
+  c webi syncthing
 fi
 
 # install dotdrop if not installed
 if ! command -v dotdrop >/dev/null; then
   log_task "Install dotdrop with pip3"
-  c /usr/bin/pip3 install wheel
+  if pip3 list | grep -q wheel; then
+    log_task "wheel already installed"
+  else
+    log_task "Installing wheel"
+    c /usr/bin/pip3 install wheel
+  fi
   c /usr/bin/pip3 install dotdrop --user
   # Add ~/.local/bin to PATH in order to use dotdrop before finishing the installation
-  export PATH="$HOME/.local/bin:$PATH"
 fi
+
+# install rust
+if ! rustc --version &>/dev/null; then
+  log_task "Installing rust"
+  c curl https://sh.rustup.rs -sSf | sh -s -- -y --profile=minimal
+fi
+
+# install git-workspace
+# if ! git workspace --version &>/dev/null; then
+#   log_task "Installing git-workspace"
+#   url="https://github.com/orf/git-workspace/releases/download/v{{- template "get-github-latest-version" list "orf/git-workspace" $cache -}}/git-workspace-{{- .chezmoi.os | title -}}-x86_64.tar.gz"
+#   c curl -L "${url}" | tar -xz -C "${HOME}/.local/bin" && chmod +x "${HOME}/.local/bin/git-workspace"
+# fi
 
 # {{- end -}}

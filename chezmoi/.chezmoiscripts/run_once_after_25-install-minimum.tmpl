@@ -3,6 +3,8 @@
 # {{ template "scripts-library" }}
 log_task "25. Installing minimum packages"
 
+ensure_path_entry "${HOME}/.local/bin"
+
 # install go
 if ! go version &>/dev/null; then
   export GOROOT="${HOME}/go"

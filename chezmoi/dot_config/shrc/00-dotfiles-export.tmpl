@@ -1,4 +1,15 @@
 #!/bin/bash
+
+function ensure_path_entry() {
+  local entries=("$@")
+
+  for entry in "${entries[@]}"; do
+    if [[ ":${PATH}:" != *":${entry}:"* ]] && [ -d "${entry}" ]; then
+      export PATH="${entry}:${PATH}"
+    fi
+  done
+}
+
 # {{ if eq .chezmoi.os "darwin" }}
 if [ -d "/opt/homebrew/bin" ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -12,32 +23,16 @@ elif [ -x "${HOME}/.linuxbrew/bin/brew" ]; then
   eval "$("${HOME}/.linuxbrew/bin/brew" shellenv)"
 fi
 # {{ end }}
-PATH_ENTRY="${HOME}/.local/bin"
-if [ -d "${PATH_ENTRY}" ] && [[ ":${PATH}:" != *":${PATH_ENTRY}:"* ]]; then
-  export PATH="${PATH_ENTRY}:${PATH}"
-fi
-PATH_ENTRY="${HOME}/bin"
-if [ -d "${PATH_ENTRY}" ] && [[ ":${PATH}:" != *":${PATH_ENTRY}:"* ]]; then
-  export PATH="${PATH_ENTRY}:${PATH}"
-fi
-if [ -d "${HOME}/go/bin" ]; then
-  GOROOT="${HOME}/go"
-  PATH_ENTRY="${GOROOT}/bin"
-  if [[ ":${PATH}:" != *":${PATH_ENTRY}:"* ]]; then
-    export PATH="${PATH_ENTRY}:${PATH}"
-  fi
-fi
+# for Webi
+# shellcheck disable=SC1091
+# [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
+
+ensure_path_entry "${HOME}/.local/bin" "${HOME}/bin" "${HOME}/go/bin" "${HOME}/.cargo/bin"
 if [ -d "${HOME}/go/packages" ]; then
   export GOROOT="${HOME}/go"
   export GOPATH="${GOROOT}/packages"
-  PATH_ENTRY="${GOPATH}/bin"
-  if [[ ":${PATH}:" != *":${PATH_ENTRY}:"* ]]; then
-    export PATH="${PATH_ENTRY}:${PATH}"
-  fi
+  ensure_path_entry "${GOPATH}/bin"
 fi
-# for Webi
-# shellcheck disable=SC1091
-[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
 
 export USER_FULLNAME="{{ .name }}"
 export USER_EMAIL="{{ .email }}"
@@ -65,6 +60,7 @@ export WORKSPACE_LOCATION="{{ .workspace.location }}"
 export WORKSPACE_ROOT="{{ .workspace.root }}"
 export WORKSPACE_HOME="{{ .workspace.home }}"
 export WORKSPACE_PROJECT_DIR="{{ .workspace.project_dir }}"
+export GIT_WORKSPACE="${WORKSPACE_PROJECT_DIR}"
 export WORKSPACE_REFERENCE_DIR="{{ .workspace.reference_dir }}"
 export GIT_COMMIT_GPGSIGN="{{ .git.gpgsign }}"
 
@@ -98,7 +94,7 @@ export PASSAGE_DIR="{{ .passage.store_dir }}"
 # gpg key
 export GPG_PASSPHRASE="{{ .gnupg.passphrase }}"
 GPG_KEY_ID_FILE="{{ .gnupg.key_id_file }}"
-if [ -e "${GPG_KEY_ID_FILE}" ]; then 
+if [ -e "${GPG_KEY_ID_FILE}" ]; then
   GPG_KEY_ID=$(cat "${GPG_KEY_ID_FILE}")
   export GPG_KEY_ID="${GPG_KEY_ID}"
   export PASSWORD_STORE_KEY="${GPG_KEY_ID}"
