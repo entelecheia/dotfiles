@@ -690,16 +690,6 @@
 # {{-   writeToStdout "❎  1password disabled\n" -}}
 # {{- end -}}
 
-# {{- if and $interactive $sudoer ($minimum | not) -}}
-# {{-   $question := "❔ Do you want to use vault for secrets" -}}
-# {{-   $use_vault = promptBool $question $use_vault -}}
-# {{- end -}}
-# {{- if $use_vault -}}
-# {{-   writeToStdout "✅  Vault enabled\n" -}}
-# {{- else -}}
-# {{-   writeToStdout "❎  Vault disabled\n" -}}
-# {{- end -}}
-
 # {{- if and $interactive ($minimum | not) -}}
 # {{-   $question := "❔ Do you want to use autorestic to backup your files" -}}
 # {{-   $use_autorestic = promptBool $question $use_autorestic -}}
