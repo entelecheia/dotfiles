@@ -3,6 +3,14 @@
 # {{ template "scripts-library" }}
 log_task "25. Installing minimum packages"
 
+# {{ if eq .chezmoi.os "linux" }}
+# install yq
+if ! yq --version &>/dev/null; then
+  log_task "Installing yq"
+  c wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq && chmod +x /usr/bin/yq
+fi
+# {{ end }}
+
 ensure_path_entry "${HOME}/.local/bin"
 
 # install go
@@ -60,5 +68,6 @@ if ! command -v gitmojify &>/dev/null; then
   log_task "Installing cz-conventional-gitmoji"
   c pipx install cz-conventional-gitmoji || c /usr/bin/pip3 install --user cz-conventional-gitmoji
 fi
+
 
 # {{- end -}}

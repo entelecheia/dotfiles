@@ -30,15 +30,15 @@ fi
 SOURCE_LIST_FILE="/etc/apt/sources.list.d/1password.list"
 if [[ ! -e "${SOURCE_LIST_FILE}" ]]; then
   log_task "Adding 1password repository"
-  curl -sS https://downloads.1password.com/linux/keys/1password.asc | \
+  curl -sS https://downloads.1password.com/linux/keys/1password.asc |
     sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" |
     sudo tee "$SOURCE_LIST_FILE"
   sudo mkdir -p /etc/debsig/policies/AC2D62742012EA22/
-  curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol | \
+  curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol |
     sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol
   sudo mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22
-  curl -sS https://downloads.1password.com/linux/keys/1password.asc | \
+  curl -sS https://downloads.1password.com/linux/keys/1password.asc |
     sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
 fi
 # {{ end }}
@@ -46,7 +46,7 @@ fi
 # {{ if .code.enabled }}
 SOURCE_LIST_FILE="/etc/apt/sources.list.d/vscode.list"
 if [[ ! -e "${SOURCE_LIST_FILE}" ]]; then
-  c wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+  c wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor >packages.microsoft.gpg
   c sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
   c sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
   c rm -f packages.microsoft.gpg
@@ -85,7 +85,7 @@ readonly wanted_packages=(
   gnupg # used to decrypt the gpg keys of the apt repositories
   pinentry-curses
   # {{ if not .system.is_devcontainer }}
-  gpa 
+  gpa
   seahorse
   # {{ end }}
   # {{ if .op.enabled }}
@@ -135,6 +135,12 @@ fi
 if ! autorestic --version &>/dev/null; then
   log_task "Installing autorestic"
   c wget -qO - https://raw.githubusercontent.com/cupcakearmy/autorestic/master/install.sh | sudo bash
+fi
+
+# install yq
+if ! yq --version &>/dev/null; then
+  log_task "Installing yq"
+  c sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
 fi
 
 # {{ end -}}

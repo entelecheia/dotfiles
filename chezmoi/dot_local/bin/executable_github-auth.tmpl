@@ -22,6 +22,7 @@ if ! command -v gh >/dev/null; then
   exit 0
 fi
 
+c gh config set -h github.com git_protocol https
 if [[ "${INTERACTIVE}" == "true" ]]; then
   log_info "Logging in to GitHub"
   log_info "If you choose to login with a web browser and the device page is not displayed, please open the following URL in your browser: "
@@ -31,8 +32,7 @@ else
   if [[ -n "${GITHUB_TOKEN}" ]]; then
       log_info "Logging in to GitHub"
       GITHUB_TOKEN="{{ .github.token }}"
-      c gh config set -h github.com git_protocol ssh
-      echo "${GITHUB_TOKEN}" | gh auth login --with-token
+      echo "${GITHUB_TOKEN}" | gh auth login --with-token || true
   else
     log_manual_action "GITHUB_TOKEN environment variable is not set. Run this again with the --interactive flag to login to GitHub."
   fi

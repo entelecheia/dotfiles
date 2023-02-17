@@ -64,6 +64,14 @@ export GIT_WORKSPACE="${WORKSPACE_PROJECT_DIR}"
 export WORKSPACE_REFERENCE_DIR="{{ .workspace.reference_dir }}"
 export GIT_COMMIT_GPGSIGN="{{ .git.gpgsign }}"
 
+GITHUB_TOKEN="{{ .github.token }}"
+GH_HOST_CONFIG_FILE="${HOME}/.config/gh/hosts.yml"
+if [ -e "${GH_HOST_CONFIG_FILE}" ]; then
+  GH_TOKEN=$(yq e '.github.com.oauth_token' "${GH_HOST_CONFIG_FILE}")
+fi
+export GITHUB_TOKEN="${GITHUB_TOKEN:-${GH_TOKEN}}"
+export GH_TOKEN="${GITHUB_TOKEN}"
+
 export VISUAL="{{ .editor }}"
 export EDITOR="{{ .editor }}"
 # {{ if .system.is_wsl }}
