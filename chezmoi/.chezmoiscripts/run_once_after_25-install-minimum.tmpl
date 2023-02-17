@@ -43,18 +43,25 @@ if ! pipx --version &>/dev/null; then
   c /usr/bin/pip3 install --user pipx
 fi
 
+# install task
+if ! command -v task &>/dev/null; then
+  log_task "Installing task"
+  c sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
+fi
+
+# followings are for the python projects
+
 # install poetry
 if ! poetry --version &>/dev/null; then
   log_task "Installing poetry"
   c curl -sSL https://install.python-poetry.org | python3 -
 fi
 
-# install task
-# if ! command -v task &>/dev/null; then
-#   log_task "Installing task"
-#   c sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
-#   # c curl -sS https://install.doctor/task | bash -s -- -b ~/.local/bin
-# fi
+# install pre-commit
+if ! command -v pre-commit &>/dev/null; then
+  log_task "Installing pre-commit"
+  c pipx install pre-commit || c /usr/bin/pip3 install --user pre-commit
+fi
 
 # install commitizen
 if ! command -v cz &>/dev/null; then
@@ -69,5 +76,10 @@ if ! command -v gitmojify &>/dev/null; then
   c pipx install cz-conventional-gitmoji || c /usr/bin/pip3 install --user cz-conventional-gitmoji
 fi
 
+# install mypy
+if ! command -v dmypy &>/dev/null; then
+  log_task "Installing mypy"
+  c pipx install mypy || c /usr/bin/pip3 install --user mypy
+fi
 
 # {{- end -}}
