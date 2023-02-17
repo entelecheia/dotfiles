@@ -67,7 +67,7 @@ export GIT_COMMIT_GPGSIGN="{{ .git.gpgsign }}"
 GITHUB_TOKEN="{{ .github.token }}"
 GH_HOST_CONFIG_FILE="${HOME}/.config/gh/hosts.yml"
 if [ -e "${GH_HOST_CONFIG_FILE}" ]; then
-  GH_TOKEN=$(yq e '.github.com.oauth_token' "${GH_HOST_CONFIG_FILE}")
+  GH_TOKEN=$(yq e '.github.com.oauth_token' "${GH_HOST_CONFIG_FILE}" || echo "")
 fi
 export GITHUB_TOKEN="${GITHUB_TOKEN:-${GH_TOKEN}}"
 export GH_TOKEN="${GITHUB_TOKEN}"

@@ -7,7 +7,7 @@ log_task "25. Installing minimum packages"
 # install yq
 if ! yq --version &>/dev/null; then
   log_task "Installing yq"
-  c wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq && chmod +x /usr/bin/yq
+  c wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O "${HOME}/.local/bin/yq" && chmod +x "${HOME}/.local/bin/yq"
 fi
 # {{ end }}
 
