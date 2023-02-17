@@ -54,7 +54,7 @@ fi
 # {{ end }}
 
 # {{ if .ngrok.enabled }}
-SOURCE_LIST_FILE="/etc/apt/sources.list.d/nginx.list"
+SOURCE_LIST_FILE="/etc/apt/sources.list.d/ngrok.list"
 if [[ ! -e "${SOURCE_LIST_FILE}" ]]; then
   c curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null
   c echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | sudo tee /etc/apt/sources.list.d/ngrok.list
@@ -74,6 +74,7 @@ readonly wanted_packages=(
   tmux
   python3-pip
   python3-setuptools
+  python3-venv
   gh
   fzf
   direnv
