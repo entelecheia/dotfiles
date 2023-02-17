@@ -51,7 +51,7 @@ fi
 # install commitizen
 if ! command -v cz &>/dev/null; then
   log_task "Installing commitizen"
-  c /usr/bin/pip3 install --user commitizen
+  c pipx install commitizen
 fi
 
 # install cz-conventional-gitmoji
