@@ -11,6 +11,8 @@ if ! pipx --version &>/dev/null; then
   c /usr/bin/pip3 install --user pipx
 fi
 
+# {{ if .python_tools.enabled }}
+
 # install poetry
 if ! poetry --version &>/dev/null; then
   log_task "Installing poetry"
@@ -57,5 +59,7 @@ if ! command -v nox &>/dev/null; then
     c /usr/bin/pip3 install --user nox nox-poetry
   fi
 fi
+
+# {{- end -}}
 
 # {{- end -}}
