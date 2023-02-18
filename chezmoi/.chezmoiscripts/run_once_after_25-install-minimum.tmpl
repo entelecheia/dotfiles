@@ -37,55 +37,10 @@ if ! sops --version &>/dev/null; then
   c go install go.mozilla.org/sops/v3/cmd/sops@latest
 fi
 
-# install pipx
-if ! pipx --version &>/dev/null; then
-  log_task "Installing pipx"
-  c /usr/bin/pip3 install --user pipx
-fi
-
 # install task
 if ! command -v task &>/dev/null; then
   log_task "Installing task"
   c sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
-fi
-
-# followings are for the python projects
-
-# install poetry
-if ! poetry --version &>/dev/null; then
-  log_task "Installing poetry"
-  c curl -sSL https://install.python-poetry.org | python3 -
-fi
-
-# install pre-commit
-if ! command -v pre-commit &>/dev/null; then
-  log_task "Installing pre-commit"
-  c pipx install pre-commit || c /usr/bin/pip3 install --user pre-commit
-fi
-
-# install commitizen
-if ! command -v cz &>/dev/null; then
-  log_task "Installing commitizen"
-  # try pipx install commitizen. if it fails, try pip3 install --user commitizen
-  c pipx install commitizen || c /usr/bin/pip3 install --user commitizen
-fi
-
-# install cz-conventional-gitmoji
-if ! command -v gitmojify &>/dev/null; then
-  log_task "Installing cz-conventional-gitmoji"
-  c pipx install cz-conventional-gitmoji || c /usr/bin/pip3 install --user cz-conventional-gitmoji
-fi
-
-# install mypy
-if ! command -v dmypy &>/dev/null; then
-  log_task "Installing mypy"
-  c pipx install mypy || c /usr/bin/pip3 install --user mypy
-fi
-
-# install copier
-if ! command -v copier &>/dev/null; then
-  log_task "Installing copier"
-  c pipx install copier || c /usr/bin/pip3 install --user copier
 fi
 
 # {{- end -}}
