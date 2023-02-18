@@ -718,7 +718,7 @@
 # {{- /* This retains the value passed with --source on chezmoi init, which is used in the ../install.sh script */ -}} #
 sourceDir: "{{ .chezmoi.workingTree }}"
 
-verbose: { { $verbose | not | not } }
+verbose: {{ $verbose | not | not }}
 
 diff:
   exclude:
@@ -729,118 +729,118 @@ status:
 
 encryption: age
 age:
-  identity: { { $age_keyfile | quote } }
+  identity: {{ $age_keyfile | quote }}
   recipients: ['{{- $age_recipients | replaceAllRegex "," "', '" -}}']
 
 # {{- /* Here we "export" the variables, so we can access them outside this file */ -}} #
 data:
-  name: { { $name | quote } }
-  email: { { $email | quote } }
+  name: {{ $name | quote }}
+  email: {{ $email | quote }}
   editor: "vi"
   system:
-    auto_update: { { $auto_update } }
-    verbose: { { $verbose } }
-    hostname: { { $hostname | quote } }
-    is_wsl: { { $wsl } }
-    is_devcontainer: { { $devcontainer } }
-    is_minimum: { { $minimum } }
-    is_gnome: { { $gnome } }
-    is_interactive: { { $interactive } }
-    is_sudoer: { { $sudoer } }
-    apply_rootmoi: { { and $apply_rootmoi $sudoer } }
-    uname_arch: { { output "uname" "-m" | trim | quote } }
+    auto_update: {{ $auto_update }}
+    verbose: {{ $verbose }}
+    hostname: {{ $hostname | quote }}
+    is_wsl: {{ $wsl }}
+    is_devcontainer: {{ $devcontainer }}
+    is_minimum: {{ $minimum }}
+    is_gnome: {{ $gnome }}
+    is_interactive: {{ $interactive }}
+    is_sudoer: {{ $sudoer }}
+    apply_rootmoi: {{ and $apply_rootmoi $sudoer }}
+    uname_arch: {{ output "uname" "-m" | trim | quote }}
     cpu:
-      cores: { { $cpuCores } }
-      threads: { { $cpuThreads } }
+      cores: {{ $cpuCores }}
+      threads: {{ $cpuThreads }}
     # {{ if $wsl }}
-    winhome: { { $winhome | quote } }
-    winhome_symlink: { { $winhome_symlink | quote } }
+    winhome: {{ $winhome | quote }}
+    winhome_symlink: {{ $winhome_symlink | quote }}
   # {{ end }}
   ssh:
-    home: { { $ssh_homedir | quote } }
-    algorithm: { { $ssh_algorithm | quote } }
-    identity_file: { { $ssh_keyfile | quote } }
+    home: {{ $ssh_homedir | quote }}
+    algorithm: {{ $ssh_algorithm | quote }}
+    identity_file: {{ $ssh_keyfile | quote }}
     authorized_keys: "authorized_keys"
   age:
-    identity_file: { { $age_keyfile | quote } }
+    identity_file: {{ $age_keyfile | quote }}
     authorized_age_keys: "authorized_age_keys"
   gnupg:
-    home: { { $gpg_homedir | quote } }
-    key_id_file: { { $gpg_key_id_file | quote } }
-    key_id: { { $gpg_key_id | quote } }
-    passphrase: { { $gpg_passphrase | quote } }
-    gitsign: { { $git_commit_gpgsign } }
+    home: {{ $gpg_homedir | quote }}
+    key_id_file: {{ $gpg_key_id_file | quote }}
+    key_id: {{ $gpg_key_id | quote }}
+    passphrase: {{ $gpg_passphrase | quote }}
+    gitsign: {{ $git_commit_gpgsign }}
   git:
-    gpgsign: { { $git_commit_gpgsign } }
+    gpgsign: {{ $git_commit_gpgsign }}
     gpg_format: ssh
     ssh_allowed_signers: "allowed_signers"
   github:
-    username: { { $github_username | quote } }
-    token: { { $github_token | quote } }
-    clones: { { $github_clones | quote } }
+    username: {{ $github_username | quote }}
+    token: {{ $github_token | quote }}
+    clones: {{ $github_clones | quote }}
   dotdrop:
-    enabled: { { $use_dotdrop } }
-    repo: { { $dotdrop_repo | quote } }
-    config_dir: { { $dotdrop_config_dir | quote } }
-    config_file: { { $dotdrop_config_file | quote } }
-    root_config_file: { { $dotdrop_root_config_file | quote } }
-    user_profile: { { $dotdrop_user_profile | quote } }
+    enabled: {{ $use_dotdrop }}
+    repo: {{ $dotdrop_repo | quote }}
+    config_dir: {{ $dotdrop_config_dir | quote }}
+    config_file: {{ $dotdrop_config_file | quote }}
+    root_config_file: {{ $dotdrop_root_config_file | quote }}
+    user_profile: {{ $dotdrop_user_profile | quote }}
     root_profile: "root"
   docker:
-    repo: { { $dockerfiles_repo | quote } }
-    share_dir: { { $dockerfiles_share_dir | quote } }
-    username: { { $docker_username | quote } }
+    repo: {{ $dockerfiles_repo | quote }}
+    share_dir: {{ $dockerfiles_share_dir | quote }}
+    username: {{ $docker_username | quote }}
   pass:
-    enabled: { { $use_pass } }
-    store_dir: { { $pass_store_dir | quote } }
-    repo: { { $pass_repo | quote } }
+    enabled: {{ $use_pass }}
+    store_dir: {{ $pass_store_dir | quote }}
+    repo: {{ $pass_repo | quote }}
   passage:
-    enabled: { { $use_passage } }
-    store_dir: { { $passage_store_dir | quote } }
-    repo: { { $passage_repo | quote } }
-    share_dir: { { $passage_share_dir | quote } }
+    enabled: {{ $use_passage }}
+    store_dir: {{ $passage_store_dir | quote }}
+    repo: {{ $passage_repo | quote }}
+    share_dir: {{ $passage_share_dir | quote }}
     share_repo: "https://github.com/FiloSottile/passage.git"
   code:
-    enabled: { { $use_code } }
+    enabled: {{ $use_code }}
   autorestic:
-    enabled: { { $use_autorestic } }
-    config_file: { { $autorestic_config_file | quote } }
-    location: { { $autorestic_location | quote } }
-    backup_dotfiles: { { $autorestic_backup_dotfiles } }
-    restore_dotfiles: { { $autorestic_restore_dotfiles } }
-    restore_to: { { $autorestic_restore_to | quote } }
+    enabled: {{ $use_autorestic }}
+    config_file: {{ $autorestic_config_file | quote }}
+    location: {{ $autorestic_location | quote }}
+    backup_dotfiles: {{ $autorestic_backup_dotfiles }}
+    restore_dotfiles: {{ $autorestic_restore_dotfiles }}
+    restore_to: {{ $autorestic_restore_to | quote }}
   microk8s:
-    enabled: { { $use_microk8s } }
+    enabled: {{ $use_microk8s }}
   vault:
-    enabled: { { $use_vault } }
+    enabled: {{ $use_vault }}
   op:
-    enabled: { { $use_1password } }
-    account: { { $op_account | quote } }
-    vault: { { $op_vault | quote } }
-    connect_host: { { $op_connect_host | quote } }
-    connect_token: { { $op_connect_token | quote } }
+    enabled: {{ $use_1password }}
+    account: {{ $op_account | quote }}
+    vault: {{ $op_vault | quote }}
+    connect_host: {{ $op_connect_host | quote }}
+    connect_token: {{ $op_connect_token | quote }}
   ngrok:
-    enabled: { { $use_ngrok } }
-    authtoken: { { $ngrok_authtoken | quote } }
-    config_file: { { $ngrok_config_file | quote } }
-    ssh_port: { { $ngrok_ssh_port | quote } }
+    enabled: {{ $use_ngrok }}
+    authtoken: {{ $ngrok_authtoken | quote }}
+    config_file: {{ $ngrok_config_file | quote }}
+    ssh_port: {{ $ngrok_ssh_port | quote }}
   python_tools:
-    enabled: { { $use_python_tools } }
+    enabled: {{ $use_python_tools }}
   workspace:
-    name: { { $workspace_name | quote } }
-    location: { { $workspace_location | quote } }
-    root: { { $workspace_root | quote } }
-    home: { { $workspace_home | quote } }
+    name: {{ $workspace_name | quote }}
+    location: {{ $workspace_location | quote }}
+    root: {{ $workspace_root | quote }}
+    home: {{ $workspace_home | quote }}
     move_existing: true
-    symlink_to_home: { { $symlink_to_home } }
-    symlink_colab_workspace: { { $symlink_colab_workspace } }
+    symlink_to_home: {{ $symlink_to_home }}
+    symlink_colab_workspace: {{ $symlink_colab_workspace }}
     colab_drive: "/content/drive/MyDrive"
-    project_dir: { { $project_dir | quote } }
-    reference_dir: { { $reference_dir | quote } }
+    project_dir: {{ $project_dir | quote }}
+    reference_dir: {{ $reference_dir | quote }}
   github_repos:
     # {{- if $github_clones -}}
     # {{- range (split "," $github_clones) -}} #
-    - name: { { . } }
+    - name: {{ . }}
       url: https://github.com/{{.}}.git
 # {{- end -}}
 # {{- end -}}
