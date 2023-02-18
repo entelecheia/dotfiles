@@ -85,6 +85,7 @@ fi
 # install copier
 if ! command -v copier &>/dev/null; then
   log_task "Installing copier"
+  c /usr/bin/pip3 install --user "iteration_utilities[all]"
   c pipx install copier || c /usr/bin/pip3 install --user copier
 fi
 
