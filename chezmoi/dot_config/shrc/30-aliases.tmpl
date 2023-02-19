@@ -4,8 +4,10 @@
 # in order to keep the same aliases on both shells. So keep in mind that any
 # code here must be compatible with bash and zsh.
 
-# alias cz="chezmoi"
-alias czdr="chezmoi apply --verbose --destination {{ .chezmoi.workingTree }}/tmp --dry-run"
+alias czm="chezmoi"
+alias czmi="chezmoi init"
+alias czma="chezmoi apply"
+alias czmdr="chezmoi apply --verbose --destination {{ .chezmoi.workingTree }}/tmp --dry-run"
 
 alias dotp="dotfiles-push"
 alias dotu="dotfiles-update"
