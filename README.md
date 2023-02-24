@@ -1,11 +1,13 @@
 # Dotfiles
 
-[![license-image]][license-url]
 [![version-image]][release-url]
 [![release-date-image]][release-url]
-[![conventional-commits-image]][conventional commits]
+[![test-image]][test-url]
+[![license-image]][license-url]
 
 <!-- Links: -->
+[test-image]: https://github.com/entelecheia/dotfiles/actions/workflows/test.yaml/badge.svg
+[test-url]: https://github.com/entelecheia/dotfiles/actions/workflows/test.yaml
 
 [license-image]: https://img.shields.io/github/license/entelecheia/dotfiles
 [license-url]: https://github.com/entelecheia/dotfiles/blob/main/LICENSE
