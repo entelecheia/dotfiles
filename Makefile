@@ -58,14 +58,14 @@ show-branches: ## show all branches
 	@git show-branch --list
 
 dev-checkout: ## checkout the dev branch
-	@BRANCH=$(shell echo $${BRANCH:-"dev"}) && \
-	    git show-branch --list | grep -q $${BRANCH} && \
-		git checkout $${BRANCH}
+	@branch=$(shell echo $${branch:-"dev"}) && \
+	    git show-branch --list | grep -q $${branch} && \
+		git checkout $${branch}
 
 dev-checkout-upstream: ## create and checkout the dev branch, and set the upstream
-	@BRANCH=$(shell echo $${BRANCH:-"dev"}) && \
-		git checkout -B $${BRANCH} && \
-		git push --set-upstream origin $${BRANCH} || true
+	@branch=$(shell echo $${branch:-"dev"}) && \
+		git checkout -B $${branch} && \
+		git push --set-upstream origin $${branch} || true
 
 main-checkout: ## checkout the main branch
 	@git checkout main
@@ -109,4 +109,3 @@ init-project: install-copier install-precommit-hooks ## initialize the project (
 
 init-git: ## initialize git
 	@git init
-
