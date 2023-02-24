@@ -116,10 +116,6 @@ chezmoi init --apply
 2. Go to **_Profiles -> Defaults_** in the left panel. Then, go to **_Additional settings -> Appearance_**.
 3. At **_Text -> Font face_**, enable the **_Show all fonts_** option and select **_FiraCode Nerd Font_**. Like below:
 
-## License
-
-This project is licensed under the terms of the [MIT](./LICENSE)
-
 ## References
 
 Large part of .chezmoitemplates and .chezmoiscripts files are taken from [felipecrs/dotfiles](https://github.com/felipecrs/dotfiles).
