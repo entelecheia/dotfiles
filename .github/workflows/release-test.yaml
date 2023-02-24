@@ -28,13 +28,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # install copier and init project
-      - name: Install copier and init project
-        if: github.repository == 'entelecheia/hyperfast-template'
-        run: |
-          pipx install copier>=7.0.0
-          make reinit-project-force
-
       # set env variable
       - name: Set env variable
         run: echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV

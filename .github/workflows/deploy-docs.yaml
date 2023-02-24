@@ -22,13 +22,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # install copier and init project
-      - name: Install copier and init project
-        if: github.repository == 'entelecheia/hyperfast-template'
-        run: |
-          pipx install copier>=7.0.0
-          make reinit-project-force
-
       - uses: actions/setup-python@v4
         with:
           python-version: 3.x
