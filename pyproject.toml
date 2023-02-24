@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "dotfiles"
+description = "Dotfiles management for CI/CD"
+authors = ["Young Joon Lee <entelecheia@hotmail.com>"]
+license = "MIT"
+readme = "README.md"
+version = "0.0.0"
+
+[tool.poetry.dependencies]
+python = "^3.8.1"
+python-semantic-release = "^7.33.1"
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "1.0.1"
+tag_format = "v$version"
+
+[tool.semantic_release]
+branch = "main"
+version_toml = "pyproject.toml:tool.poetry.version"
+version_pattern = ".version:VERSION={version}"
+version_source = "tag"
+commit_version_number = true # required for version_source = "tag"
+commit_subject = "chore(release): :rocket: {version} [skip ci]"
+use_textual_changelog_sections = true
+prerelease_tag = "rc"
+major_on_zero = true
+tag_commit = true
+changelog_file = "CHANGELOG.md"
+upload_to_repository = false
+upload_to_release = false
+build_command = false
+dist_path = "dist"
+hvcs = "github" # hosting version control system, gitlab is also supported

@@ -1,0 +1,20 @@
+# Changes here will be overwritten by Copier; do NOT edit manually
+_commit: v0.2.8
+_src_path: gh:entelecheia/hyperfast-template
+author: Young Joon Lee
+copyright_year: 2023
+dist_path: dist
+documentation_url: https://dotfiles.entelecheia.cc
+email: entelecheia@hotmail.com
+friendly_name: Dotfiles
+github_repo_name: dotfiles
+github_username: entelecheia
+project_description: Dotfiles are configuration files that are used to customize your
+    shell and other applications. Dotfiles are a great way to standardize your development
+    environment. You can use the same dotfiles in your local development environment,
+    in your CI/CD pipeline, and in your production environment.
+project_license: MIT
+project_name: dotfiles
+project_short_description: Dotfiles management for CI/CD
+version_file: .version
+

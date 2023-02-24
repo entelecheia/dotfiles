@@ -1,5 +1,32 @@
 # Dotfiles
 
+[![license-image]][license-url]
+[![version-image]][release-url]
+[![release-date-image]][release-url]
+[![conventional-commits-image]][conventional commits]
+
+<!-- Links: -->
+
+[license-image]: https://img.shields.io/github/license/entelecheia/dotfiles
+[license-url]: https://github.com/entelecheia/dotfiles/blob/main/LICENSE
+[version-image]: https://img.shields.io/github/v/release/entelecheia/dotfiles?sort=semver
+[release-date-image]: https://img.shields.io/github/release-date/entelecheia/dotfiles
+[release-url]: https://github.com/entelecheia/dotfiles/releases
+[conventional-commits-image]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white
+[conventional commits]: https://conventionalcommits.org
+[repo-url]: https://github.com/entelecheia/dotfiles
+[pypi-url]: https://pypi.org/project/dotfiles
+[docs-url]: https://dotfiles.entelecheia.cc
+[changelog]: https://github.com/entelecheia/dotfiles/blob/main/CHANGELOG.md
+[contributing guidelines]: https://github.com/entelecheia/dotfiles/blob/main/CONTRIBUTING.md
+
+<!-- Links: -->
+
+Dotfiles management for CI/CD
+
+- Documentation: [https://dotfiles.entelecheia.cc][docs-url]
+- GitHub: [https://github.com/entelecheia/dotfiles][repo-url]
+
 Dotfiles are configuration files that are used to customize your shell and other applications. Dotfiles are a great way to standardize your development environment. You can use the same dotfiles in your local development environment, in your CI/CD pipeline, and in your production environment.
 
 ## Getting started
@@ -18,7 +45,7 @@ sh -c "$(wget -qO- https://dotfiles.entelecheia.cc/install)"
 >  sh -c "$(curl -fsSL https://dotfiles.entelecheia.cc/install)"
 > ```
 
-![install dotfiles script](./docs/figs/install_dotfiles_script.png)
+![install dotfiles script](https://github.com/entelecheia/dotfiles/blob/main/docs/figs/install_dotfiles_script.png?raw=true)
 
 For unattended installations such as in a dockerfile, you can use the environment variables to initialize the dotfiles automatically. For example:
 
@@ -63,7 +90,7 @@ When installing the dotfiles, initialization starts automatically. If you want t
 chezmoi init --apply
 ```
 
-![initialize dotfiles](./docs/figs/initialize_dotfiles.png)
+![initialize dotfiles](https://github.com/entelecheia/dotfiles/blob/main/docs/figs/initialize_dotfiles.png?raw=true)
 
 ## Repositories and repository templates for setting up your own dotfiles
 
@@ -168,10 +195,10 @@ Save your dotfiles once, deploy them everywhere
 It allows you to store your dotfiles in Git and automagically deploy
 different versions of the same file on different setups.
 
-It also allows to manage different *sets* of dotfiles.
+It also allows to manage different _sets_ of dotfiles.
 For example, you can have a set of dotfiles for your home laptop and
 a different set for your office desktop. Those sets may overlap, and different
-versions of the same dotfiles can be deployed using different predefined *profiles*.
+versions of the same dotfiles can be deployed using different predefined _profiles_.
 Or you may have a main set of dotfiles for your
 everyday host and a subset you only need to deploy to temporary
 hosts (cloud VM etc.) that may be using
@@ -179,19 +206,31 @@ a slightly different version of some of the dotfiles.
 
 Features:
 
-* Sync once every dotfile in Git for different usages
-* Allow dotfile templating
-* Dynamically generated dotfile contents with pre-defined variables
-* Comparison between deployed and stored dotfiles
-* Handling multiple profiles with different sets of dotfiles
-* Easily import and update dotfiles
-* Handle files and directories
-* Support symlinking of dotfiles
-* Associate actions to the deployment of specific dotfiles
-* Associate transformations for storing encrypted/compressed dotfiles
-* Provide solutions for handling dotfiles containing sensitive information
+- Sync once every dotfile in Git for different usages
+- Allow dotfile templating
+- Dynamically generated dotfile contents with pre-defined variables
+- Comparison between deployed and stored dotfiles
+- Handling multiple profiles with different sets of dotfiles
+- Easily import and update dotfiles
+- Handle files and directories
+- Support symlinking of dotfiles
+- Associate actions to the deployment of specific dotfiles
+- Associate transformations for storing encrypted/compressed dotfiles
+- Provide solutions for handling dotfiles containing sensitive information
 
 Also check out the [blog post](https://deadc0de.re/articles/dotfiles.html),
 the [example](#getting-started), the [documentation](https://dotdrop.readthedocs.io/) or
 how [people are using dotdrop](https://dotdrop.readthedocs.io/en/latest/misc/people-using-dotdrop/)
 for more.
+
+## Changelog
+
+See the [CHANGELOG] for more information.
+
+## Contributing
+
+Contributions are welcome! Please see the [contributing guidelines] for more information.
+
+## License
+
+This project is released under the [MIT License][license-url].

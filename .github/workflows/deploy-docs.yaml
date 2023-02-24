@@ -1,0 +1,41 @@
+---
+name: deploy-docs
+on:
+  workflow_call:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    # Paths can be used to only trigger actions when you have edited certain files, such as a file within the /docs directory
+    paths:
+      - "README.md"
+      - "mkdocs.yaml"
+      - "docs/**.md"
+      - "docs/images/**"
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      # install copier and init project
+      - name: Install copier and init project
+        if: github.repository == 'entelecheia/hyperfast-template'
+        run: |
+          pipx install copier>=7.0.0
+          make reinit-project-force
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+
+      - uses: actions/cache@v3
+        with:
+          key: ${{ github.ref }}
+          path: .cache
+      - run: pip install -r docs/requirements.txt
+      - run: mkdocs gh-deploy --force
