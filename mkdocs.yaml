@@ -9,3 +9,7 @@ theme:
   name: material
   palette:
     scheme: slate
+extra:
+  analytics:
+    provider: google
+    property: G-VMN7QWCMSV
