@@ -1,5 +1,14 @@
 <!--next-version-placeholder-->
 
+## v0.2.0 (2023-03-04)
+### Feature
+* Add setup-basictex-ko command ([`78a023e`](https://github.com/entelecheia/dotfiles/commit/78a023e78ed8ddfa413f0bce4be516bba0a8c767))
+
+### Documentation
+* Add google analytics ([`b9a1575`](https://github.com/entelecheia/dotfiles/commit/b9a1575eec46fdcf8434ea594b1bbc8282e5ed84))
+* Update README ([`e2d78fc`](https://github.com/entelecheia/dotfiles/commit/e2d78fcdcb40fb3c8e854d42500ebc08d2923e20))
+* Update README ([`cb59414`](https://github.com/entelecheia/dotfiles/commit/cb59414188e70cf27c4e76f3c3ba8bad8923da3d))
+
 ## v0.1.0 (2023-02-24)
 ### Feature
 * Initial version ([`d34d5a3`](https://github.com/entelecheia/dotfiles/commit/d34d5a378dff11ddfa4242f6c7e58be47fe53eda))
