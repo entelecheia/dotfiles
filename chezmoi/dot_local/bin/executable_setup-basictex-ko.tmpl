@@ -9,6 +9,7 @@ readonly wanted_packages=(
   font-noto-serif-cjk-kr
   font-noto-sans-cjk-kr
   poppler
+  imagemagick
 )
 missing_packages=()
 
@@ -49,7 +50,7 @@ fi
 
 # install texlive utility packages
 log_task "Installing texlive utility packages"
-c tlmgr install chktex texliveonfly latexmk spix arara lcdftypetools xindy biber kotex-utils
+c tlmgr install chktex texliveonfly pdfcrop standalone latexmk spix arara lcdftypetools xindy biber kotex-utils
 
 # install texlive packages for Korean
 log_task "Installing texlive packages for Korean"
