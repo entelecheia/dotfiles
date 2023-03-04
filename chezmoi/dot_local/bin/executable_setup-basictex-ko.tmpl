@@ -1,0 +1,72 @@
+#!/bin/bash
+# {{ template "scripts-library" }}
+# {{ template "homebrew-library" }}
+
+readonly wanted_packages=(
+  basictex
+  pygments
+  ghostscript
+  font-noto-serif-cjk-kr
+  font-noto-sans-cjk-kr
+  poppler
+)
+missing_packages=()
+
+for package in "${wanted_packages[@]}"; do
+  if ! is_brew_package_installed "${package}"; then
+    missing_packages+=("${package}")
+  fi
+done
+
+brew_command=(brew)
+if [[ ${#missing_packages[@]} -gt 0 ]]; then
+  log_task "Installing missing packages with brew: ${missing_packages[*]}"
+  # c "${brew_command[@]}" update
+  c "${brew_command[@]}" install "${missing_packages[@]}"
+fi
+
+# change owner of texlive to current user if not already
+# get basictex installed path from tlmgr --version
+texlive_dir=$(tlmgr --version | grep -oE "/usr/local/texlive/[0-9]+basic")
+USER="{{ .chezmoi.username }}"
+if [[ -d "${texlive_dir}" ]]; then
+  if [[ "$(stat -f "%Su" "${texlive_dir}")" != "$(whoami)" ]]; then
+    log_task "Changing owner of ${texlive_dir} to current user"
+    c /usr/bin/sudo chown -R "${USER}" "${texlive_dir}"
+  fi
+fi
+
+# update texlive
+log_task "Updating texlive"
+c tlmgr update --all --self
+
+# add KTUG repository if not already
+if ! tlmgr repository list | grep -q "KTUG"; then
+  log_task "Adding KTUG repository"
+  c tlmgr repository add https://cran.asia/KTUG/texlive/tlnet/ ktug
+  c tlmgr pinning add ktug "*"
+fi
+
+# install texlive utility packages
+log_task "Installing texlive utility packages"
+c tlmgr install chktex texliveonfly latexmk spix arara lcdftypetools xindy biber kotex-utils
+
+# install texlive packages for Korean
+log_task "Installing texlive packages for Korean"
+c tlmgr install kotex-plain kotex-utf nanumtype1 unfonts-core unfonts-extra
+
+# add the following line to texmf.cnf under texlive_dir
+# OSFONTDIR = ~/Library/Fonts//;/Library/Fonts//;/System/Library/Fonts//
+if ! grep -q "OSFONTDIR" "${texlive_dir}/texmf.cnf"; then
+  log_task "Adding OSFONTDIR to texmf.cnf"
+  c echo "OSFONTDIR = ~/Library/Fonts//;/Library/Fonts//;/System/Library/Fonts//" >>"${texlive_dir}/texmf.cnf"
+fi
+
+# symlink fonts to ~/Library/Fonts
+log_task "Symlinking fonts to ~/Library/Fonts"
+if [[ ! -L "${HOME}/Library/Fonts/opentype" ]]; then
+  c ln -s "${texlive_dir}/texmf-dist/fonts/opentype" "${HOME}/Library/Fonts/"
+fi
+if [[ ! -L "${HOME}/Library/Fonts/truetype" ]]; then
+  c ln -s "${texlive_dir}/texmf-dist/fonts/truetype" "${HOME}/Library/Fonts/"
+fi
