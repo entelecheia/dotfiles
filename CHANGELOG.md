@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.2.1 (2023-03-23)
+### Fix
+* Remove mugagen, syncthing ([`990ed9c`](https://github.com/entelecheia/dotfiles/commit/990ed9c7d64afca99b5fd7a7018db7f342ae09c4))
+
 ## v0.2.0 (2023-03-04)
 ### Feature
 * Add setup-basictex-ko command ([`78a023e`](https://github.com/entelecheia/dotfiles/commit/78a023e78ed8ddfa413f0bce4be516bba0a8c767))
