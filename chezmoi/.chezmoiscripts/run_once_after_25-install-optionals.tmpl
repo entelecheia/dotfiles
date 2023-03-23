@@ -20,23 +20,23 @@ if ! command -v serviceman >/dev/null; then
 fi
 
 # install mutagen
-if ! command -v mutagen >/dev/null; then
-  log_task "Installing mutagen"
-  c webi mutagen@stable
-fi
+# if ! command -v mutagen >/dev/null; then
+#   log_task "Installing mutagen"
+#   c webi mutagen@stable
+# fi
 # install mutagen-compose from the archive:
-if ! command -v mutagen-compose >/dev/null; then
-  log_task "Installing mutagen-compose"
-  version="{{ template "get-github-latest-version" list "mutagen-io/mutagen-compose" $cache }}"
-  archive_url="https://github.com/mutagen-io/mutagen-compose/releases/download/v${version}/mutagen-compose_{{ .chezmoi.os }}_{{ .chezmoi.arch }}_v${version}.tar.gz"
-  c curl -L "${archive_url}" | tar -xz -C "${HOME}/.local/bin"
-fi
+# if ! command -v mutagen-compose >/dev/null; then
+#   log_task "Installing mutagen-compose"
+#   version="{{ template "get-github-latest-version" list "mutagen-io/mutagen-compose" $cache }}"
+#   archive_url="https://github.com/mutagen-io/mutagen-compose/releases/download/v${version}/mutagen-compose_{{ .chezmoi.os }}_{{ .chezmoi.arch }}_v${version}.tar.gz"
+#   c curl -L "${archive_url}" | tar -xz -C "${HOME}/.local/bin"
+# fi
 
 # install syncthing if not installed
-if ! command -v syncthing >/dev/null; then
-  log_task "Installing syncthing"
-  c webi syncthing
-fi
+# if ! command -v syncthing >/dev/null; then
+#   log_task "Installing syncthing"
+#   c webi syncthing
+# fi
 
 # install dotdrop if not installed
 if ! command -v dotdrop >/dev/null; then
