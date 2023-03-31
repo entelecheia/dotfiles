@@ -57,6 +57,12 @@ if ! rustc --version &>/dev/null; then
   c curl https://sh.rustup.rs -sSf | sh -s -- -y --profile=minimal
 fi
 
+# install sdkman
+if ! command -v sdk >/dev/null; then
+  log_task "Installing sdkman"
+  c curl -s "https://get.sdkman.io" | bash
+fi
+
 # install git-workspace
 # if ! git workspace --version &>/dev/null; then
 #   log_task "Installing git-workspace"
