@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.3.0 (2023-03-31)
+### Feature
+* Install sdkman ([`7a41734`](https://github.com/entelecheia/dotfiles/commit/7a417346aeec0aaf18a63c98d7c55b4416408ed6))
+
 ## v0.2.1 (2023-03-23)
 ### Fix
 * Remove mugagen, syncthing ([`990ed9c`](https://github.com/entelecheia/dotfiles/commit/990ed9c7d64afca99b5fd7a7018db7f342ae09c4))
