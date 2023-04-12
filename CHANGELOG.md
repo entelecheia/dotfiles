@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.3.1 (2023-04-12)
+### Fix
+* Check if init for pass, passage commands ([`9f50bae`](https://github.com/entelecheia/dotfiles/commit/9f50baeeebd49aff67ceb60247218d3e014d15b0))
+
 ## v0.3.0 (2023-03-31)
 ### Feature
 * Install sdkman ([`7a41734`](https://github.com/entelecheia/dotfiles/commit/7a417346aeec0aaf18a63c98d7c55b4416408ed6))
