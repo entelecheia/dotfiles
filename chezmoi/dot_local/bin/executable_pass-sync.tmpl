@@ -2,20 +2,35 @@
 set -eou pipefail
 # {{ template "scripts-library" }}
 
+AGE_KEY_FILE=${AGE_KEY_FILE:-"{{ .age.identity_file }}"}
+
+if [ ! -d "${PASSWORD_STORE_DIR}" ] || [ ! -e "${PASSWORD_STORE_DIR}/.gpg-id" ] || [ ! -d "${PASSAGE_DIR}" ] || [ ! -e "${AGE_KEY_FILE}" ]; then
+  log_info "Password-store or Passage is not initialized"
+  exit 0
+fi
+
 # sync from pass to passage
 log_task "Syncing from pass to passage"
 cd "${PASSWORD_STORE_DIR:-$HOME/.password-store}"
 while read -r -d "" passfile; do
-  name="${passfile#./}"; name="${name%.gpg}"
+  name="${passfile#./}"
+  name="${name%.gpg}"
   [[ -f "${PASSAGE_DIR:-$HOME/.passage/store}/$name.age" ]] && continue
-  pass "$name" | passage insert -m "$name" || { echo "Exisintg... Skip to insert $name"; continue; }
+  pass "$name" | passage insert -m "$name" || {
+    echo "Exisintg... Skip to insert $name"
+    continue
+  }
 done < <(find . -path '*/.git' -prune -o -iname '*.gpg' -print0)
 
 # sync from passage to pass
 log_task "Syncing from passage to pass"
 cd "${PASSAGE_DIR:-$HOME/.passage/store}"
 while read -r -d "" passagefile; do
-  name="${passagefile#./}"; name="${name%.age}"
+  name="${passagefile#./}"
+  name="${name%.age}"
   [[ -f "${PASSWORD_STORE_DIR:-$HOME/.password-store}/$name.gpg" ]] && continue
-  passage "$name" | pass insert -m "$name" || { echo "Exisintg... Skip to insert $name"; continue; }
+  passage "$name" | pass insert -m "$name" || {
+    echo "Exisintg... Skip to insert $name"
+    continue
+  }
 done < <(find . -path '*/.git' -prune -o -iname '*.age' -print0)

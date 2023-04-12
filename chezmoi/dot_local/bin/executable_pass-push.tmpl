@@ -2,13 +2,22 @@
 # {{ template "scripts-library" }}
 
 # push pass changes to remote
-if git -C "${PASSWORD_STORE_DIR}" remote get-url origin >/dev/null 2>&1; then
-  log_task "Committing pass changes and pushing to remote"
-  c pass git push
+if [ -d "${PASSWORD_STORE_DIR}" ] && [ -e "${PASSWORD_STORE_DIR}/.gpg-id" ]; then
+  if git -C "${PASSWORD_STORE_DIR}" remote get-url origin >/dev/null 2>&1; then
+    log_task "Committing pass changes and pushing to remote"
+    c pass git push
+  fi
+else
+  log_info "Password-store is not initialized"
 fi
 
-# push passage changes to remote
-if git -C "${PASSAGE_DIR}" remote get-url origin >/dev/null 2>&1; then
-  log_task "Committing passage changes and pushing to remote"
-  c passage git push
+# pull passage changes from remote
+AGE_KEY_FILE=${AGE_KEY_FILE:-"{{ .age.identity_file }}"}
+if [ -d "${PASSAGE_DIR}" ] && [ -e "${AGE_KEY_FILE}" ]; then
+  if git -C "${PASSAGE_DIR}" remote get-url origin >/dev/null 2>&1; then
+    log_task "Committing passage changes and pushing to remote"
+    c passage git push
+  fi
+else
+  log_info "Passage is not initialized"
 fi
