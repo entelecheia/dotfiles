@@ -60,8 +60,8 @@ if ! git -C "${PASSWORD_STORE_DIR}" remote get-url origin >/dev/null 2>&1; then
 fi
 
 if ! gh auth status &>/dev/null; then
-  log_info "GitHub is not authenticated, skipping fetching and checking out main branch"
-  exit 0
+    log_info "GitHub is not authenticated, skipping fetching and checking out main branch"
+    exit 0
 fi
 
 # fetch and checkout the main branch
