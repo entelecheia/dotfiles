@@ -4,8 +4,12 @@ set -eou pipefail
 
 AGE_KEY_FILE=${AGE_KEY_FILE:-"{{ .age.identity_file }}"}
 
-if [ ! -d "${PASSWORD_STORE_DIR}" ] || [ ! -e "${PASSWORD_STORE_DIR}/.gpg-id" ] || [ ! -d "${PASSAGE_DIR}" ] || [ ! -e "${AGE_KEY_FILE}" ]; then
-  log_info "Password-store or Passage is not initialized"
+if [ ! -d "${PASSWORD_STORE_DIR}" ] || [ ! -e "${PASSWORD_STORE_DIR}/.gpg-id" ]; then
+  log_info "Password-store is not initialized"
+  exit 0
+fi
+if [ ! -d "${PASSAGE_DIR}" ] || [ ! -e "${AGE_KEY_FILE}" ]; then
+  log_info "Passage is not initialized"
   exit 0
 fi
 
