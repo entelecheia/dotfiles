@@ -24,6 +24,8 @@ if [[ ${#missing_packages[@]} -gt 0 ]]; then
   log_task "Installing missing packages with brew: ${missing_packages[*]}"
   # c "${brew_command[@]}" update
   c "${brew_command[@]}" install "${missing_packages[@]}"
+else
+  log_info "All packages required for basictex are already installed"
 fi
 
 # change owner of texlive to current user if not already
@@ -41,13 +43,52 @@ fi
 log_task "Updating texlive"
 c tlmgr update --all --self
 
-# install texlive utility packages
-log_task "Installing texlive utility packages"
-c tlmgr install chktex texliveonfly pdfcrop standalone latexmk spix arara lcdftypetools xindy biber
+readonly wanted_tex_packages=(
+  # texlive utility packages
+  chktex
+  texliveonfly
+  pdfcrop
+  standalone
+  latexmk
+  spix
+  arara
+  lcdftypetools
+  xindy
+  biber
+  # beamer packages
+  beamer
+  beamertheme-metropolis
+  # Korean language support
+  kotex-plain
+  kotex-utf
+  kotex-utils
+  nanumtype1
+  unfonts-core
+  unfonts-extra
+)
+missing_tex_packages=()
 
-# install texlive packages for beamer
-log_task "Installing texlive packages for beamer"
-c tlmgr install beamer beamertheme-metropolis
+for package in "${wanted_tex_packages[@]}"; do
+  log_info "Checking if tex package ${package} is installed"
+  if ! tlmgr info "${package}" | grep -q "installed: yes"; then
+    missing_tex_packages+=("${package}")
+  fi
+done
+
+if [[ ${#missing_tex_packages[@]} -gt 0 ]]; then
+  log_task "Installing missing tex packages with tlmgr: ${missing_tex_packages[*]}"
+  c tlmgr install "${missing_tex_packages[@]}"
+else
+  log_info "All tex packages are already installed"
+fi
+
+# # install texlive utility packages
+# log_task "Installing texlive utility packages"
+# c tlmgr install chktex texliveonfly pdfcrop standalone latexmk spix arara lcdftypetools xindy biber
+
+# # install texlive packages for beamer
+# log_task "Installing texlive packages for beamer"
+# c tlmgr install beamer beamertheme-metropolis
 
 # add the following line to texmf.cnf under texlive_dir
 # OSFONTDIR = ~/Library/Fonts//;/Library/Fonts//;/System/Library/Fonts//
@@ -74,8 +115,8 @@ fi
 #   c tlmgr pinning add ktug "*"
 # fi
 
-# install texlive packages for Korean
-log_task "Installing texlive packages for Korean"
-c tlmgr install kotex-plain kotex-utf kotex-utils nanumtype1 unfonts-core unfonts-extra
+# # install texlive packages for Korean
+# log_task "Installing texlive packages for Korean"
+# c tlmgr install kotex-plain kotex-utf kotex-utils nanumtype1 unfonts-core unfonts-extra
 
 log_info "Done"
