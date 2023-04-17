@@ -68,9 +68,10 @@ readonly wanted_tex_packages=(
 )
 missing_tex_packages=()
 
+installed_tex_packages=(tlmgr info --only-installed --data name)
 for package in "${wanted_tex_packages[@]}"; do
   log_info "Checking if tex package ${package} is installed"
-  if ! tlmgr info "${package}" | grep -q "installed: yes"; then
+  if ! is_array_element "${package}" "${installed_tex_packages[@]}"; then
     missing_tex_packages+=("${package}")
   fi
 done
