@@ -41,20 +41,13 @@ fi
 log_task "Updating texlive"
 c tlmgr update --all --self
 
-# add KTUG repository if not already
-if ! tlmgr repository list | grep -q "KTUG"; then
-  log_task "Adding KTUG repository"
-  c tlmgr repository add https://cran.asia/KTUG/texlive/tlnet/ ktug
-  c tlmgr pinning add ktug "*"
-fi
-
 # install texlive utility packages
 log_task "Installing texlive utility packages"
-c tlmgr install chktex texliveonfly pdfcrop standalone latexmk spix arara lcdftypetools xindy biber kotex-utils
+c tlmgr install chktex texliveonfly pdfcrop standalone latexmk spix arara lcdftypetools xindy biber
 
-# install texlive packages for Korean
-log_task "Installing texlive packages for Korean"
-c tlmgr install kotex-plain kotex-utf nanumtype1 unfonts-core unfonts-extra
+# install texlive packages for beamer
+log_task "Installing texlive packages for beamer"
+c tlmgr install beamer beamertheme-metropolis
 
 # add the following line to texmf.cnf under texlive_dir
 # OSFONTDIR = ~/Library/Fonts//;/Library/Fonts//;/System/Library/Fonts//
@@ -64,10 +57,25 @@ if ! grep -q "OSFONTDIR" "${texlive_dir}/texmf.cnf"; then
 fi
 
 # symlink fonts to ~/Library/Fonts
-log_task "Symlinking fonts to ~/Library/Fonts"
 if [[ ! -L "${HOME}/Library/Fonts/opentype" ]]; then
+  log_task "Symlinking opentype fonts to ~/Library/Fonts"
   c ln -s "${texlive_dir}/texmf-dist/fonts/opentype" "${HOME}/Library/Fonts/"
 fi
 if [[ ! -L "${HOME}/Library/Fonts/truetype" ]]; then
+  log_task "Symlinking truetype fonts to ~/Library/Fonts"
   c ln -s "${texlive_dir}/texmf-dist/fonts/truetype" "${HOME}/Library/Fonts/"
 fi
+
+# for Korean language support
+# add KTUG repository if not already
+# if ! tlmgr repository list | grep -q "ktug"; then
+#   log_task "Adding KTUG repository"
+#   c tlmgr repository add https://cran.asia/KTUG/texlive/tlnet/ ktug
+#   c tlmgr pinning add ktug "*"
+# fi
+
+# install texlive packages for Korean
+log_task "Installing texlive packages for Korean"
+c tlmgr install kotex-plain kotex-utf kotex-utils nanumtype1 unfonts-core unfonts-extra
+
+log_info "Done"
