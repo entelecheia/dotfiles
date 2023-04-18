@@ -109,3 +109,14 @@ init-project: install-copier install-precommit-hooks ## initialize the project (
 
 init-git: ## initialize git
 	@git init
+
+##@ Utilities
+
+large-files: ## show the 20 largest files in the repo
+	@find . -printf '%s %p\n'| sort -nr | head -20
+
+disk-usage: ## show the disk usage of the repo
+	@du -h -d 2 .
+
+git-sizer: ## run git-sizer
+	@git-sizer --verbose
