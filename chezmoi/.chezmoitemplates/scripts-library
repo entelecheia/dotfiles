@@ -149,3 +149,20 @@ function service_exists() {
     return 1
   fi
 }
+
+# Function to check if an item is in an array
+# Arguments: search_item array
+# Returns: 0 if the item is in the array, 1 otherwise
+function is_item_in_array() {
+  local search_item="$1"
+  shift
+  local array=("$@")
+
+  for item in "${array[@]}"; do
+    if [ "$item" == "$search_item" ]; then
+      return 0
+    fi
+  done
+
+  return 1
+}
