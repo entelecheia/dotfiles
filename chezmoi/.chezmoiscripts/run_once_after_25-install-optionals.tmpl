@@ -59,8 +59,10 @@ fi
 
 # install sdkman
 if command -v unzip >/dev/null; then
-  log_task "Installing sdkman"
-  c curl -s "https://get.sdkman.io" | bash
+  if ! command -v sdk >/dev/null; then
+    log_task "Installing sdkman"
+    c curl -s "https://get.sdkman.io" | bash
+  fi
 else
   log_error "unzip is not installed, skipping sdkman installation"
 fi
