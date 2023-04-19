@@ -58,9 +58,11 @@ if ! rustc --version &>/dev/null; then
 fi
 
 # install sdkman
-if ! command -v sdk >/dev/null; then
+if command -v unzip >/dev/null; then
   log_task "Installing sdkman"
   c curl -s "https://get.sdkman.io" | bash
+else
+  log_error "unzip is not installed, skipping sdkman installation"
 fi
 
 # install git-workspace
