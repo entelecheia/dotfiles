@@ -30,7 +30,7 @@ set +u
 if [[ "$1" != -* ]]; then
   # if no arguments, print usage
   if [[ $# -eq 0 ]]; then
-    echo "Usage: $0 $USAGE" >&2    
+    echo "Usage: $0 $USAGE" >&2
     exit 1
   fi
   DOCKER_NAME="$1"
@@ -102,7 +102,7 @@ while [[ $# -gt 0 ]]; do
     PUSH="true"
     ;;
   -h | --help)
-    echo "Usage: $0 $USAGE" >&2    
+    echo "Usage: $0 $USAGE" >&2
     exit 0
     ;;
   -h*)
@@ -191,7 +191,7 @@ if docker --version &>/dev/null; then
   DOCKER_CMD="${DOCKER_CMD}${BUILD_PATH}"
   c eval "$DOCKER_CMD"
 
-  log_info "Successfully built ${DOCKER_REPO} with context ${BUILD_PATH}"
+  log_info "Successfully built ${DOCKER_REPO} with context ${BUILD_PATH} ✨ 🌟 ✨"
 
   if [[ "$PUSH" == "true" ]]; then
     log_task "Pushing ${DOCKER_REPO}"
