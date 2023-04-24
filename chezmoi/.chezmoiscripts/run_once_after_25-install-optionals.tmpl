@@ -38,17 +38,28 @@ fi
 #   c webi syncthing
 # fi
 
+# install pipx
+if ! pipx --version &>/dev/null; then
+  log_task "Installing pipx"
+  c /usr/bin/pip3 install --user pipx
+fi
+
 # install dotdrop if not installed
 if ! command -v dotdrop >/dev/null; then
-  log_task "Install dotdrop with pip3"
-  if pip3 list | grep -q wheel; then
-    log_task "wheel already installed"
+  if ! command -v pipx >/dev/null; then
+    log_task "Installing dotdrop with pipx"
+    c pipx install dotdrop
   else
-    log_task "Installing wheel"
-    c /usr/bin/pip3 install wheel
+    log_task "Install dotdrop with pip3"
+    if pip3 list | grep -q wheel; then
+      log_task "wheel already installed"
+    else
+      log_task "Installing wheel"
+      c /usr/bin/pip3 install wheel
+    fi
+    # Add ~/.local/bin to PATH in order to use dotdrop before finishing the installation
+    c /usr/bin/pip3 install dotdrop --user
   fi
-  c /usr/bin/pip3 install dotdrop --user
-  # Add ~/.local/bin to PATH in order to use dotdrop before finishing the installation
 fi
 
 # install rust
@@ -59,7 +70,7 @@ fi
 
 # install sdkman
 if command -v unzip >/dev/null; then
-  if ! command -v sdk >/dev/null; then
+  if ! command -v "$SDKMAN_DIR/libexec/version" >/dev/null; then
     log_task "Installing sdkman"
     c curl -s "https://get.sdkman.io" | bash
   fi

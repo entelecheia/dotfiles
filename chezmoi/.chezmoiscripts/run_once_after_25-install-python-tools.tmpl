@@ -19,6 +19,17 @@ if ! poetry --version &>/dev/null; then
   c curl -sSL https://install.python-poetry.org | python3 -
 fi
 
+# install poethepoet
+if ! command -v poe >/dev/null; then
+  if ! command -v pipx >/dev/null; then
+    log_task "Installing poethepoet with pipx"
+    c pipx install poethepoet
+  else
+    log_task "Installing poethepoet with pip"
+    c pip install poethepoet --user
+  fi
+fi
+
 # install pre-commit
 if ! command -v pre-commit &>/dev/null; then
   log_task "Installing pre-commit"
