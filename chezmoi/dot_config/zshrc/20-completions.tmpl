@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Enable poe zsh completions
+if ! command -v poe &>/dev/null; then
+  mkdir -p ~/.oh-my-zsh/completions
+  poe _zsh_completion > ~/.oh-my-zsh/completions/_poe
+fi
+
 # Enable homebrew zsh completions
 if (( ${+commands[brew]} )); then
   fpath+="$(brew --prefix)/share/zsh/site-functions"
