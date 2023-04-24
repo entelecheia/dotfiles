@@ -4,9 +4,11 @@ name: semantic-release
 on:
   workflow_call:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["test"]
+    branches: [main]
+    types:
+      - completed
 
 permissions:
   contents: write
@@ -17,6 +19,8 @@ jobs:
   build:
     # Name the Job
     name: semantic-release-test
+    # check if the workflow result is success
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     # Set the agent to run on
     runs-on: ubuntu-latest
 
