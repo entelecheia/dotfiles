@@ -8,6 +8,7 @@ on:
       - "chezmoi/**"
       - "rootmoi/**"
       - "docs/install*"
+      - ".github/workflows/test.yaml"
   pull_request:
     branches: [main]
   # Allows you to run this workflow manually from the Actions tab
@@ -18,6 +19,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
         variant: [devcontainer, wsl, gnome]
         os: [ubuntu-20.04, ubuntu-22.04]
