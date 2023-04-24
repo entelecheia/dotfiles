@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.4.0 (2023-04-24)
+### Feature
+* **python-tools:** Add poethepoet to install script ([`e17d19e`](https://github.com/entelecheia/dotfiles/commit/e17d19e8a16456fe6f5c8d5f63a8248076af7e25))
+
+### Fix
+* **zsh completions:** Add poe zsh completions and update script ([`e87e714`](https://github.com/entelecheia/dotfiles/commit/e87e7144427c3de00dd8587cc10f56d06a0367b5))
+
 ## v0.3.1 (2023-04-12)
 ### Fix
 * Check if init for pass, passage commands ([`9f50bae`](https://github.com/entelecheia/dotfiles/commit/9f50baeeebd49aff67ceb60247218d3e014d15b0))
