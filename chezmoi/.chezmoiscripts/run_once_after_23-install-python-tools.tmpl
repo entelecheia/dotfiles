@@ -26,10 +26,8 @@ if ! command -v poe >/dev/null; then
     c pipx install poethepoet
   else
     log_task "Installing poethepoet with pip"
-    c pip install poethepoet --user
+    c /usr/bin/pip3 install poethepoet --user
   fi
-  mkdir -p ~/.oh-my-zsh/completions
-  poe _zsh_completion > ~/.oh-my-zsh/completions/_poe
 fi
 
 # install pre-commit

@@ -72,7 +72,7 @@ plugins=(
   sudo
   zsh-syntax-highlighting
   zsh-autosuggestions
-  dotenv 
+  dotenv
   colorize
   )
 
@@ -81,3 +81,15 @@ plugins=(
 
 # shellcheck source=/dev/null
 source "$ZSH/oh-my-zsh.sh"
+
+# Enable poetry completions
+if poetry --version &>/dev/null; then
+  mkdir "$ZSH_CUSTOM/plugins/poetry"
+  poetry completions zsh > "$ZSH_CUSTOM/plugins/poetry/_poetry"
+fi
+
+# Enable poe zsh completions
+if poe --version &>/dev/null; then
+  mkdir "$ZSH_CUSTOM/plugins/poe"
+  poe _zsh_completion > "$ZSH_CUSTOM/plugins/poe/_poe"
+fi
