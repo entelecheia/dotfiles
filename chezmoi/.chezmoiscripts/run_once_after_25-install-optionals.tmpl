@@ -64,7 +64,7 @@ fi
 
 # install sdkman
 if command -v unzip >/dev/null; then
-  if ! command -v "$SDKMAN_DIR/libexec/version" >/dev/null; then
+  if [[ ! -e "${HOME}/.sdkman/bin/sdkman-init.sh" ]]; then
     log_task "Installing sdkman"
     c curl -s "https://get.sdkman.io" | bash
   fi
