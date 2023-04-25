@@ -1,5 +1,14 @@
 <!--next-version-placeholder-->
 
+## v0.5.0 (2023-04-25)
+### Feature
+* **zsh:** Enable poetry and poe completions ([`f27e3e8`](https://github.com/entelecheia/dotfiles/commit/f27e3e83c3725d153d3b1b91933be0ab5c968717))
+
+### Fix
+* **chezmoi:** Add zip and unzip packages in prerequisites script and check for zip in optional installation script ([`5bc1585`](https://github.com/entelecheia/dotfiles/commit/5bc1585f3edab88efb41487631b2f20c74520106))
+* **chezmoi:** Fix SDKMAN installation check ([`2f1a286`](https://github.com/entelecheia/dotfiles/commit/2f1a286e7d8a6ebe8149bacee4fc28cab86868bb))
+* **chezmoi:** Update task numbers in run_once scripts ([`189d284`](https://github.com/entelecheia/dotfiles/commit/189d2841479963f81ff9c126c9b66b66bf105975))
+
 ## v0.4.1 (2023-04-24)
 ### Fix
 * **chezmoi:** Rename install scripts and remove pipx installation ([`d92fc2c`](https://github.com/entelecheia/dotfiles/commit/d92fc2c29f1905f996aa251a5fa530e2abab24d0))
