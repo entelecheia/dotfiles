@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.5.1 (2023-04-26)
+### Fix
+* **zsh:** Update oh-my-zsh plugins and add conditional checks ([`1239330`](https://github.com/entelecheia/dotfiles/commit/1239330481cf9715d9f07bbdefe7fdcd148e07e7))
+
 ## v0.5.0 (2023-04-25)
 ### Feature
 * **zsh:** Enable poetry and poe completions ([`f27e3e8`](https://github.com/entelecheia/dotfiles/commit/f27e3e83c3725d153d3b1b91933be0ab5c968717))
