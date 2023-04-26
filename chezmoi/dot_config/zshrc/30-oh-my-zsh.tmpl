@@ -74,7 +74,7 @@ plugins=(
   zsh-autosuggestions
   dotenv
   colorize
-  )
+)
 
 # https://github.com/zsh-users/zsh-completions/issues/603
 # fpath+="${ZSH_CUSTOM:-"${ZSH}/custom"}/plugins/zsh-completions/src"
@@ -84,12 +84,16 @@ source "$ZSH/oh-my-zsh.sh"
 
 # Enable poetry completions
 if poetry --version &>/dev/null; then
-  mkdir "$ZSH_CUSTOM/plugins/poetry"
-  poetry completions zsh > "$ZSH_CUSTOM/plugins/poetry/_poetry"
+  if [[ ! -d "$ZSH_CUSTOM/plugins/poetry" ]]; then
+    mkdir "$ZSH_CUSTOM/plugins/poetry"
+  fi
+  poetry completions zsh >"$ZSH_CUSTOM/plugins/poetry/_poetry"
 fi
 
 # Enable poe zsh completions
 if poe --version &>/dev/null; then
-  mkdir "$ZSH_CUSTOM/plugins/poe"
-  poe _zsh_completion > "$ZSH_CUSTOM/plugins/poe/_poe"
+  if [[ ! -d "$ZSH_CUSTOM/plugins/poe" ]]; then
+    mkdir "$ZSH_CUSTOM/plugins/poe"
+  fi
+  poe _zsh_completion >"$ZSH_CUSTOM/plugins/poe/_poe"
 fi
