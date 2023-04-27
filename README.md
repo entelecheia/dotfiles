@@ -18,7 +18,7 @@
 [conventional commits]: https://conventionalcommits.org
 [repo-url]: https://github.com/entelecheia/dotfiles
 [pypi-url]: https://pypi.org/project/dotfiles
-[docs-url]: https://dotfiles.entelecheia.cc
+[docs-url]: https://dotfiles.entelecheia.ai
 [changelog]: https://github.com/entelecheia/dotfiles/blob/main/CHANGELOG.md
 [contributing guidelines]: https://github.com/entelecheia/dotfiles/blob/main/CONTRIBUTING.md
 
@@ -26,7 +26,7 @@
 
 Dotfiles management for CI/CD
 
-- Documentation: [https://dotfiles.entelecheia.cc][docs-url]
+- Documentation: [https://dotfiles.entelecheia.ai][docs-url]
 - GitHub: [https://github.com/entelecheia/dotfiles][repo-url]
 
 Dotfiles are configuration files that are used to customize your shell and other applications. Dotfiles are a great way to standardize your development environment. You can use the same dotfiles in your local development environment, in your CI/CD pipeline, and in your production environment.
@@ -35,16 +35,16 @@ Dotfiles are configuration files that are used to customize your shell and other
 
 ### Install dotfiles
 
-You can use the [install dotfiles script](https://dotfiles.entelecheia.cc/install) to install the dotfiles on any machine with a single command. Simply run the following command in your terminal:
+You can use the [install dotfiles script](https://dotfiles.entelecheia.ai/install) to install the dotfiles on any machine with a single command. Simply run the following command in your terminal:
 
 ```bash
-sh -c "$(wget -qO- https://dotfiles.entelecheia.cc/install)"
+sh -c "$(wget -qO- https://dotfiles.entelecheia.ai/install)"
 ```
 
 > 💡 For most Ubuntu-based distributions, `wget` is already installed. If you want to use `curl` instead:
 >
 > ```bash
->  sh -c "$(curl -fsSL https://dotfiles.entelecheia.cc/install)"
+>  sh -c "$(curl -fsSL https://dotfiles.entelecheia.ai/install)"
 > ```
 
 ![install dotfiles script](https://github.com/entelecheia/dotfiles/blob/main/docs/figs/install_dotfiles_script.png?raw=true)
@@ -66,7 +66,7 @@ ENV WORKSPACE_LOCATION="/"
 ENV DOTFILES_APPLY_ROOTMOI=0
 ENV REMOTE_CONTAINERS=1
 
-RUN sh -c "$(wget -qO- https://dotfiles.entelecheia.cc/install)"
+RUN sh -c "$(wget -qO- https://dotfiles.entelecheia.ai/install)"
 
 CMD ["zsh"]
 ```
@@ -81,7 +81,7 @@ SYSTEM_HOSTNAME="devcon-arm64" \
 WORKSPACE_LOCATION="/" \
 DOTFILES_APPLY_ROOTMOI=0 \
 REMOTE_CONTAINERS=1 \
-sh -c "$(wget -qO- https://dotfiles.entelecheia.cc/install)"
+sh -c "$(wget -qO- https://dotfiles.entelecheia.ai/install)"
 ```
 
 ### Initialize dotfiles
