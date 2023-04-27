@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.5.2 (2023-04-27)
+### Fix
+* **docs:** Update documentation url and CNAME file ([`26c4bc1`](https://github.com/entelecheia/dotfiles/commit/26c4bc1158da9a34de18a165cf6bab1282adb8e9))
+
 ## v0.5.1 (2023-04-26)
 ### Fix
 * **zsh:** Update oh-my-zsh plugins and add conditional checks ([`1239330`](https://github.com/entelecheia/dotfiles/commit/1239330481cf9715d9f07bbdefe7fdcd148e07e7))
