@@ -73,6 +73,7 @@ if [ -e "${GH_HOST_CONFIG_FILE}" ]; then
 fi
 export GITHUB_TOKEN="${GITHUB_TOKEN:-${GH_TOKEN}}"
 export GH_TOKEN="${GITHUB_TOKEN}"
+export GITHUB_USER="${GITHUB_USERNAME}"
 
 export VISUAL="{{ .editor }}"
 export EDITOR="{{ .editor }}"
