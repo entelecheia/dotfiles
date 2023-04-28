@@ -1,4 +1,15 @@
 site_name: Dotfiles
+site_url: https://dotfiles.entelecheia.ai
+site_author: Young Joon Lee <entelecheia@hotmail.com>
+site_description: >-
+  Dotfiles are configuration files that are used to customize your shell and other applications. Dotfiles are a great way to standardize your development environment. You can use the same dotfiles in your local development environment, in your CI/CD pipeline, and in your production environment.
+# Repository
+repo_name: entelecheia/dotfiles
+repo_url: https://github.com/entelecheia/dotfiles
+
+# Copyright
+copyright: Copyright &copy; 2022 - 2023 Young Joon Lee
+
 plugins:
   - search
 markdown_extensions:
