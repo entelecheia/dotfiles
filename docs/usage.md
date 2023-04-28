@@ -2,22 +2,36 @@
 
 ## Getting started
 
-### Install dotfiles
+The following guide will walk you through the process of installing and initializing the Dotfiles project on your machine. This will help you set up a consistent development environment across different systems, simplifying your workflow and making it easier to collaborate with others.
 
-You can use the [install dotfiles script](https://dotfiles.entelecheia.ai/install) to install the dotfiles on any machine with a single command. Simply run the following command in your terminal:
+### Prerequisites
+
+Before proceeding with the installation, ensure that your system has the following tools:
+
+- `wget` or `curl`: To fetch the installation script from the internet.
+- `git`: To clone the Dotfiles repository.
+
+Most Linux distributions come with these tools pre-installed. If not, you can install them using your package manager.
+
+### Installing Dotfiles
+
+To install the Dotfiles project on your machine, you need to fetch the installation script and execute it. You can do this using either `wget` or `curl`:
+
+#### Using `wget`:
 
 ```bash
 sh -c "$(wget -qO- https://dotfiles.entelecheia.ai/install)"
 ```
 
-> 💡 For most Ubuntu-based distributions, `wget` is already installed. If you want to use `curl` instead:
->
-> ```bash
->  sh -c "$(curl -fsSL https://dotfiles.entelecheia.ai/install)"
-> ```
+#### Using `curl`:
+
+```bash
+sh -c "$(curl -fsSL https://dotfiles.entelecheia.ai/install)"
+```
+
+Running the above command will download the installation script and execute it, cloning the Dotfiles repository to your machine and setting up the necessary configurations.
 
 ![install dotfiles script](https://github.com/entelecheia/dotfiles/blob/main/docs/figs/install_dotfiles_script.png?raw=true)
-
 For unattended installations such as in a dockerfile, you can use the environment variables to initialize the dotfiles automatically. For example:
 
 ```dockerfile
@@ -53,15 +67,21 @@ REMOTE_CONTAINERS=1 \
 sh -c "$(wget -qO- https://dotfiles.entelecheia.ai/install)"
 ```
 
-### Initialize dotfiles
+### Initializing Dotfiles
 
-When installing the dotfiles, initialization starts automatically. If you want to initialize the dotfiles manually, you can run the following command:
+After the installation, the initialization process will start automatically. This step applies the configurations defined in your dotfiles to your system, ensuring a consistent development environment.
+
+![initialize dotfiles](https://github.com/entelecheia/dotfiles/blob/main/docs/figs/initialize_dotfiles.png?raw=true)
+
+If you need to re-initialize your dotfiles manually, you can run the following command:
 
 ```bash
 chezmoi init --apply
 ```
 
-![initialize dotfiles](https://github.com/entelecheia/dotfiles/blob/main/docs/figs/initialize_dotfiles.png?raw=true)
+This command will update your system with the latest configurations from your dotfiles, keeping your environment up-to-date and in sync with any changes you've made.
+
+Once the initialization process is complete, you can start using your newly configured development environment. Feel free to explore the available configurations and customize them to your preferences.
 
 ## Repositories and repository templates for setting up your own dotfiles
 

@@ -9,12 +9,8 @@ email: entelecheia@hotmail.com
 friendly_name: Dotfiles
 github_repo_name: dotfiles
 github_username: entelecheia
-project_description: Dotfiles are configuration files that are used to customize your
-    shell and other applications. Dotfiles are a great way to standardize your development
-    environment. You can use the same dotfiles in your local development environment,
-    in your CI/CD pipeline, and in your production environment.
+project_description: The Dotfiles project offers a comprehensive solution for managing and synchronizing your dotfiles across various environments, including local development, CI/CD pipelines, and production systems. With this tool, you can effortlessly maintain a consistent development environment, simplifying collaboration and reducing the time spent on setting up new machines. The Dotfiles project uses the Chezmoi framework, providing a secure and flexible way to manage your configuration files. The project also includes support for additional integrations, such as Docker, GitHub repositories, and password management tools, further enhancing your development experience. Get started with the Dotfiles project today and enjoy a seamless, hassle-free configuration management process.
 project_license: MIT
 project_name: dotfiles
-project_short_description: Dotfiles management for CI/CD
+project_short_description: Easily manage and synchronize your dotfiles across multiple environments with the Dotfiles project, streamlining your development setup and CI/CD pipeline.
 version_file: .version
-

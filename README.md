@@ -14,22 +14,19 @@
 [version-image]: https://img.shields.io/github/v/release/entelecheia/dotfiles?sort=semver
 [release-date-image]: https://img.shields.io/github/release-date/entelecheia/dotfiles
 [release-url]: https://github.com/entelecheia/dotfiles/releases
-[conventional-commits-image]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white
-[conventional commits]: https://conventionalcommits.org
 [repo-url]: https://github.com/entelecheia/dotfiles
-[pypi-url]: https://pypi.org/project/dotfiles
 [docs-url]: https://dotfiles.entelecheia.ai
 [changelog]: https://github.com/entelecheia/dotfiles/blob/main/CHANGELOG.md
 [contributing guidelines]: https://github.com/entelecheia/dotfiles/blob/main/CONTRIBUTING.md
 
 <!-- Links: -->
 
-Dotfiles management for CI/CD
+Easily manage and synchronize your dotfiles across multiple environments with the Dotfiles project, streamlining your development setup and CI/CD pipeline.
 
 - Documentation: [https://dotfiles.entelecheia.ai][docs-url]
 - GitHub: [https://github.com/entelecheia/dotfiles][repo-url]
 
-Dotfiles are configuration files that are used to customize your shell and other applications. Dotfiles are a great way to standardize your development environment. You can use the same dotfiles in your local development environment, in your CI/CD pipeline, and in your production environment.
+The Dotfiles project offers a comprehensive solution for managing and synchronizing your dotfiles across various environments, including local development, CI/CD pipelines, and production systems. With this tool, you can effortlessly maintain a consistent development environment, simplifying collaboration and reducing the time spent on setting up new machines. The Dotfiles project uses the Chezmoi framework, providing a secure and flexible way to manage your configuration files. The project also includes support for additional integrations, such as Docker, GitHub repositories, and password management tools, further enhancing your development experience. Get started with the Dotfiles project today and enjoy a seamless, hassle-free configuration management process.
 
 ## Changelog
 
