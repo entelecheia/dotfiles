@@ -6,9 +6,9 @@
 [![license-image]][license-url]
 
 <!-- Links: -->
+
 [test-image]: https://github.com/entelecheia/dotfiles/actions/workflows/test.yaml/badge.svg
 [test-url]: https://github.com/entelecheia/dotfiles/actions/workflows/test.yaml
-
 [license-image]: https://img.shields.io/github/license/entelecheia/dotfiles
 [license-url]: https://github.com/entelecheia/dotfiles/blob/main/LICENSE
 [version-image]: https://img.shields.io/github/v/release/entelecheia/dotfiles?sort=semver
@@ -136,90 +136,6 @@ Large part of .chezmoitemplates and .chezmoiscripts files are taken from [felipe
 - [Set up your new machine in a blink of an eye](https://dev.to/vvidovic/set-up-your-new-machine-in-a-blink-of-an-eye-43j7)
 - [AGE AND AUTHENTICATED ENCRYPTION](https://words.filippo.io/dispatches/age-authentication/)
 - [How I Use Restic to Back up My Home Folders to Backblaze B2](https://www.seanh.cc/2022/04/03/restic/#3-install-pass)
-
-### [chezmoi](https://chezmoi.io)
-
-Chezmoi is a tool for managing your dotfiles across multiple machines, securely. Chezmoi allows you to manage your dotfiles in a Git repository.
-
-#### Install chezmoi
-
-Before installing chezmoi, make sure that you have installed Git, curl, and a recent version of Go.
-
-One-line binary install
-
-```sh
-sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin
-```
-
-Chezmoi will be installed in `$HOME/.local/bin`, so make sure that `$HOME/.local/bin` is in your $PATH.
-
-```sh
-export PATH="$HOME/.local/bin:$PATH"
-```
-
-For more information, see [Install chezmoi](https://www.chezmoi.io/install/).
-
-#### Initialize chezmoi
-
-If it is the first time you use chezmoi, you need to initialize it.
-
-```sh
-chezmoi init
-```
-
-Or if you want to use the existing repository as your dotfiles repository, you can use the following command.
-
-```sh
-chezmoi init https://github.com/$GITHUB_USERNAME/dotfiles.git
-```
-
-Check what changes that chezmoi will make to your home directory by running:
-
-```sh
-chezmoi diff
-```
-
-Apply the changes by running:
-
-```sh
-chezmoi apply -v
-```
-
-### [dotdrop](https://github.com/deadc0de6/dotdrop)
-
-Save your dotfiles once, deploy them everywhere
-
-[Dotdrop](https://github.com/deadc0de6/dotdrop) makes the management of dotfiles between different hosts easy.
-It allows you to store your dotfiles in Git and automagically deploy
-different versions of the same file on different setups.
-
-It also allows to manage different _sets_ of dotfiles.
-For example, you can have a set of dotfiles for your home laptop and
-a different set for your office desktop. Those sets may overlap, and different
-versions of the same dotfiles can be deployed using different predefined _profiles_.
-Or you may have a main set of dotfiles for your
-everyday host and a subset you only need to deploy to temporary
-hosts (cloud VM etc.) that may be using
-a slightly different version of some of the dotfiles.
-
-Features:
-
-- Sync once every dotfile in Git for different usages
-- Allow dotfile templating
-- Dynamically generated dotfile contents with pre-defined variables
-- Comparison between deployed and stored dotfiles
-- Handling multiple profiles with different sets of dotfiles
-- Easily import and update dotfiles
-- Handle files and directories
-- Support symlinking of dotfiles
-- Associate actions to the deployment of specific dotfiles
-- Associate transformations for storing encrypted/compressed dotfiles
-- Provide solutions for handling dotfiles containing sensitive information
-
-Also check out the [blog post](https://deadc0de.re/articles/dotfiles.html),
-the [example](#getting-started), the [documentation](https://dotdrop.readthedocs.io/) or
-how [people are using dotdrop](https://dotdrop.readthedocs.io/en/latest/misc/people-using-dotdrop/)
-for more.
 
 ## Changelog
 
