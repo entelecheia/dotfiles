@@ -1,6 +1,14 @@
 #!/bin/bash
 # {{ template "scripts-library" }}
 
+# check if --prerelease or -p flag is set
+set +u
+if [[ "${1}" == "--prerelease" ]] || [[ "${1}" == "-p" ]]; then
+  PRERELEASE=true
+else
+  PRERELEASE=false
+fi
+
 if command -v gh >/dev/null; then
   if gh auth status &>/dev/null; then
     # setup git authentication
@@ -9,9 +17,32 @@ if command -v gh >/dev/null; then
 fi
 
 if chezmoi --version &>/dev/null; then
-  log_task "Pulling latest changes from dotfiles repo"
-  # Pull latest changes from dotfiles repo
-  chezmoi update --apply=false
+  CHEZMOI_REPO="{{ .chezmoi.workingTree }}"
+  # Get the remote URL of the local repository
+  REPO_URL=$(git --git-dir="$CHEZMOI_REPO/.git" --work-tree="$CHEZMOI_REPO" remote get-url origin)
+
+  # Fetch the latest tags from the remote
+  git --git-dir="$CHEZMOI_REPO/.git" --work-tree="$CHEZMOI_REPO" fetch --tags
+
+  # Get the latest release tag from the remote repository
+  LATEST_REMOTE_TAG=$(git ls-remote --tags --sort="v:refname" "$REPO_URL" | tail -n1 | sed 's/.*\///;s/\^{}//')
+
+  # Get the latest tag in the local repository
+  LATEST_LOCAL_TAG=$(git --git-dir="$CHEZMOI_REPO/.git" --work-tree="$CHEZMOI_REPO" describe --tags --abbrev=0)
+
+  # Compare the local and remote tags
+  if [ -z "$LATEST_REMOTE_TAG" ] && [ "$PRERELEASE" == "false" ]; then
+    log_info "No release tags found in the remote repository."
+  elif [ "$LATEST_LOCAL_TAG" = "$LATEST_REMOTE_TAG" ] && [ "$PRERELEASE" == "false" ]; then
+    log_info "Local dotfiles are up to date."
+  else
+    if [ "$PRERELEASE" == "true" ]; then
+      log_task "Pulling latest changes from dotfiles repo"
+    else
+      log_task "Local dotfiles version is behind the remote version. Updating to $LATEST_REMOTE_TAG..."
+    fi
+    chezmoi update --apply=false
+  fi
 fi
 # {{ if .dotdrop.enabled }}
 if dotdrop --version &>/dev/null; then
@@ -38,10 +69,10 @@ fi
 # {{ end }}
 
 if chezmoi --version &>/dev/null; then
-  log_task "Updating dotfiles for chezmoi"
+  log_task "Applying changes on dotfiles with chezmoi"
   chezmoi init --force
-  # pass additional arguments to chezmoi apply
-  chezmoi apply "$@"
+  # pass additional arguments to chezmoi apply except for --prerelease or -p flag
+  chezmoi apply "${@:2}"
 fi
 
 # update password-store and passage store
