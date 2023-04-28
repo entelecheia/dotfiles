@@ -20,7 +20,14 @@ theme:
   logo: https://assets.entelecheia.ai/favicon.png # logo: Path to the book logo
   palette:
     scheme: slate
+  features:
+    - navigation.expand
+    - content.code.copy
 extra:
   analytics:
     provider: google
     property: G-VMN7QWCMSV
+nav:
+  - Home: index.md
+  - Usage: usage.md
+  - References: references.md
