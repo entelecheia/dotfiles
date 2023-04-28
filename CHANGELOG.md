@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.5.3 (2023-04-28)
+### Fix
+* **dotfiles:** Check for latest release tag before updating ([`aab381f`](https://github.com/entelecheia/dotfiles/commit/aab381f3ad5c80bbb14099538868f9589036eb60))
+
+### Documentation
+* **website:** Add favicon and logo images ([`ea8ef30`](https://github.com/entelecheia/dotfiles/commit/ea8ef3058d1055de1b01d4a1c2756d7f7d87b3ae))
+
 ## v0.5.2 (2023-04-27)
 ### Fix
 * **docs:** Update documentation url and CNAME file ([`26c4bc1`](https://github.com/entelecheia/dotfiles/commit/26c4bc1158da9a34de18a165cf6bab1282adb8e9))
