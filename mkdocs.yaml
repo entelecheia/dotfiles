@@ -22,7 +22,12 @@ theme:
     scheme: slate
   features:
     - navigation.expand
+    - content.action.edit
+    - content.action.view
+    - content.code.annotate
     - content.code.copy
+    # - content.tabs.link
+    - content.tooltips
 extra:
   analytics:
     provider: google
