@@ -52,5 +52,6 @@ nav:
     - usage/index.md
     - Configuration: usage/configuration.md
     - Update: usage/update.md
+    - Dotdrop: usage/dotdrop.md
   - Features: features.md
   - References: references.md
