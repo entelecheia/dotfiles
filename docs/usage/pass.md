@@ -2,7 +2,7 @@
 
 There are a few helper scripts that can be used to make `pass` and `passage` more convenient to use. These scripts are installed in the process of setting up `dotfiles` and can be found in the `.local/bin` directory.
 
-### `pass-clone`
+## `pass-clone`
 
 The `pass-clone` script is a simple utility to clone or update the `pass` and `passage` repositories, which are used for managing password-store and passage directories, respectively.
 
@@ -19,7 +19,7 @@ The script will perform the following actions:
 
 Note: For private repositories, GitHub authentication is required to clone or update them.
 
-### `pass-init`
+## `pass-init`
 
 The `pass-init` script is a utility for initializing and configuring the `pass` password manager. It sets up the necessary environment variables, initializes the `pass` storage directory, and configures the remote Git repository for synchronization.
 
@@ -39,7 +39,7 @@ The script will perform the following actions:
 
 Note: Before running the script, ensure you have generated a GPG key and set the `PASSWORD_STORE_KEY` environment variable. Additionally, set the `PASS_REPO` environment variable to the remote pass repository URL. For private repositories, GitHub authentication is required.
 
-### `passage-init`
+## `passage-init`
 
 The `passage-init` script is a utility for initializing and configuring the `passage` password manager. It ensures `passage` is installed, sets up the necessary environment variables, initializes the `passage` storage directory, and configures the remote Git repository for synchronization.
 
@@ -60,7 +60,7 @@ The script will perform the following actions:
 
 Note: Before running the script, ensure you have generated an age key and set the `AGE_KEY_FILE` environment variable. Additionally, set the `PASSAGE_REPO` environment variable to the remote passage repository URL. For private repositories, GitHub authentication is required.
 
-### `pass-insert`
+## `pass-insert`
 
 The `pass-insert` script is a utility for inserting or updating passwords in both `pass` and `passage` password managers. It checks whether the specified password entry exists in each manager, and if not, it inserts the provided password or prompts the user to enter one. If the entry exists, it updates the password if the provided password is different from the existing one.
 
@@ -87,7 +87,7 @@ The script performs the following actions:
 
 Note: Ensure that both `pass` and `passage` are installed and initialized before using the script. Also, set the `AGE_KEY_FILE` environment variable to the age key file path.
 
-### `pass-rm`
+## `pass-rm`
 
 The `pass-rm` script is a utility for removing password entries from both `pass` and `passage` password managers. It checks whether the specified password entry exists in each manager, and if so, it removes the entry according to the provided options.
 
@@ -116,7 +116,7 @@ The script performs the following actions:
 
 Note: Ensure that both `pass` and `passage` are installed before using the script.
 
-### `pass-pull`
+## `pass-pull`
 
 The `pass-pull` script is a utility for pulling changes from remote repositories for both `pass` and `passage` password managers. It checks whether the password managers are initialized and have remote repositories set, and if so, it pulls the changes from the remote repositories.
 
@@ -138,7 +138,7 @@ The script performs the following actions:
 
 Note: Ensure that you have authenticated with GitHub and both `pass` and `passage` are initialized before using the script.
 
-### `pass-push`
+## `pass-push`
 
 The `pass-push` script is a utility for committing and pushing changes to remote repositories for both `pass` and `passage` password managers. It checks whether the password managers are initialized and have remote repositories set, and if so, it commits and pushes the changes to the remote repositories.
 
@@ -159,7 +159,7 @@ The script performs the following actions:
 
 Note: Ensure that both `pass` and `passage` are initialized before using the script.
 
-### `pass-sync`
+## `pass-sync`
 
 The `pass-sync` script is a utility for synchronizing passwords between the `pass` and `passage` password managers. It checks whether both password managers are initialized and then performs a bidirectional sync between them.
 
