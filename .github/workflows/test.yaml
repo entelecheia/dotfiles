@@ -21,12 +21,12 @@ jobs:
       fail-fast: false
       max-parallel: 1
       matrix:
-        variant: [devcontainer, wsl, gnome]
+        variant: [devcontainer, wsl]
         os: [ubuntu-20.04, ubuntu-22.04]
         # exclude:
-        #   - variant: wsl
-        #     os: ubuntu-22.04
         include:
+          - variant: gnome
+            os: ubuntu-22.04
           - variant: darwin
             os: macos-latest
     steps:
