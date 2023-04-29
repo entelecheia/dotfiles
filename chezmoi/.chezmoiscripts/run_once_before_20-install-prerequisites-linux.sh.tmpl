@@ -43,6 +43,14 @@ if [[ ! -e "${SOURCE_LIST_FILE}" ]]; then
 fi
 # {{ end }}
 
+# {{ if .doppler.enabled }}
+SOURCE_LIST_FILE="/etc/apt/sources.list.d/doppler-cli.list"
+if [[ ! -e "${SOURCE_LIST_FILE}" ]]; then
+  c curl -sLf --retry 3 --tlsv1.2 --proto "=https" 'https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key' | sudo apt-key add -
+  c echo "deb https://packages.doppler.com/public/cli/deb/debian any-version main" | sudo tee /etc/apt/sources.list.d/doppler-cli.list
+fi
+# {{ end }}
+
 # {{ if .code.enabled }}
 SOURCE_LIST_FILE="/etc/apt/sources.list.d/vscode.list"
 if [[ ! -e "${SOURCE_LIST_FILE}" ]]; then
@@ -91,6 +99,9 @@ readonly wanted_packages=(
   # {{ if not .system.is_devcontainer }}
   gpa
   seahorse
+  # {{ end }}
+  # {{ if .doppler.enabled }}
+  doppler
   # {{ end }}
   # {{ if .op.enabled }}
   1password-cli

@@ -47,13 +47,14 @@ readonly wanted_packages=(
   sops
   stow
   pass
-  dopplerhq/cli/doppler
   restic
   autorestic
   fzf
   git-workspace
   helm
-  # {{ if .code.enabled }}
+  # {{ if .doppler.enabled }}
+  dopplerhq/cli/doppler
+  # {{ end }}
   code-cli
   # {{ end }}
   # {{ if .microk8s.enabled }}
