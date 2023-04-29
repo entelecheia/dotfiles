@@ -238,7 +238,7 @@
 # {{-   $passage_repo = .passage.repo -}}
 # {{- end -}}
 
-# {{- $use_dopller := true -}}
+# {{- $use_doppler := true -}}
 # {{- if eq (env "DOTFILES_USE_DOPPLER") "false" "False" "FALSE" "0" -}}
 # {{-   $use_doppler = false -}}
 # {{- end -}}
@@ -302,7 +302,7 @@
 # {{- writeToStdout (printf "🔖  DOTFILES_USE_DOTDROP: %t\n" $use_dotdrop) -}}
 # {{- writeToStdout (printf "🐍  DOTFILES_USE_PYTHON_TOOLS: %t\n" $use_python_tools) -}}
 # {{- writeToStdout (printf "🔑  DOTFILES_USE_PASSAGE: %t\n" $use_passage) -}}
-# {{- writeToStdout (printf "🔑  DOTFILES_USE_DOPPLER: %t\n" $use_DOPPLER) -}}
+# {{- writeToStdout (printf "🔑  DOTFILES_USE_DOPPLER: %t\n" $use_doppler) -}}
 # {{- writeToStdout (printf "🚀  DOTFILES_USE_MICROK8S: %t\n" $use_microk8s) -}}
 # {{- writeToStdout (printf "🚇  DOTFILES_USE_NGROK: %t\n" $use_ngrok) -}}
 # {{- end -}}
