@@ -48,5 +48,6 @@ nav:
   - Home: index.md
   - Usage: usage.md
   - Configuration: configuration.md
+  - Update: update.md
   - Features: features.md
   - References: references.md
