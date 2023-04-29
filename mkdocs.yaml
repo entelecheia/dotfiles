@@ -55,5 +55,6 @@ nav:
     - Dotdrop: usage/dotdrop.md
     - GitHub: usage/github.md
     - SSH, GPG, and AGE: usage/ssh-gpg-age.md
+    - Pass and Passage: usage/pass.md
   - Features: features.md
   - References: references.md
