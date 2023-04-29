@@ -6,32 +6,40 @@ Doppler is a secrets management platform that simplifies secure access to your s
 
 To use Doppler with your Dotfiles project, follow these steps:
 
-1. **Doppler Login**: To authenticate with Doppler and access your secrets, run the following command in your terminal:
+### 1. **Doppler Login**
 
-   ```bash
-   doppler login
-   ```
+To authenticate with Doppler and access your secrets, run the following command in your terminal:
 
-   This command will open a browser window where you can authenticate with your Doppler account.
+```bash
+doppler login
+```
 
-2. **Project Setup**: To configure Doppler for a specific project in your Dotfiles, navigate to the project's directory and run the following command:
+This command will open a browser window where you can authenticate with your Doppler account.
 
-   ```bash
-   cd ./your/project/directory
-   doppler setup
-   ```
+### 2. **Project Setup**
 
-   This command will prompt you to select the project and configuration you want to use with Doppler. You can also pre-configure the Doppler project and config by creating a `doppler.yaml` file in your project directory.
+To configure Doppler for a specific project in your Dotfiles, navigate to the project's directory and run the following command:
 
-3. **Using Secrets**: To access your secrets as environment variables in your Dotfiles project, run your commands with Doppler's `run` command:
+```bash
+cd ./your/project/directory
+doppler setup
+```
 
-   ```bash
-   doppler run -- your-command-here
-   ```
+This command will prompt you to select the project and configuration you want to use with Doppler. You can also pre-configure the Doppler project and config by creating a `doppler.yaml` file in your project directory.
 
-   This command will fetch the latest version of your secrets for the selected project and configuration and inject them as environment variables into the running process.
+### 3. **Using Secrets**
 
-4. **Removing .env Files**: To improve security and avoid confusion about the source of truth for your environment variables, remove any application code relying on `.env` files and delete any `.env` files that may still exist locally.
+To access your secrets as environment variables in your Dotfiles project, run your commands with Doppler's `run` command:
+
+```bash
+doppler run -- your-command-here
+```
+
+This command will fetch the latest version of your secrets for the selected project and configuration and inject them as environment variables into the running process.
+
+### 4. **Removing .env Files**
+
+To improve security and avoid confusion about the source of truth for your environment variables, remove any application code relying on `.env` files and delete any `.env` files that may still exist locally.
 
 By following these steps, you can easily manage and access your secrets securely using Doppler within your Dotfiles project. This integration ensures that your sensitive information is stored securely and is only accessible when needed, making your development environment even more efficient and secure.
 
