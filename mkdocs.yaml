@@ -48,6 +48,7 @@ extra:
     property: G-VMN7QWCMSV
 nav:
   - Home: index.md
+  - Features: features.md
   - Usage:
     - usage/index.md
     - Configuration: usage/configuration.md
@@ -57,5 +58,4 @@ nav:
     - SSH, GPG, and AGE: usage/ssh-gpg-age.md
     - Pass and Passage: usage/pass.md
     - Dockerfiles: usage/dockerfiles.md
-  - Features: features.md
   - References: references.md
