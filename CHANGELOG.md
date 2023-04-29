@@ -1,5 +1,25 @@
 <!--next-version-placeholder-->
 
+## v0.6.0 (2023-04-29)
+### Feature
+* **doppler:** Add doppler command line interface ([`4a42439`](https://github.com/entelecheia/dotfiles/commit/4a424392392d370571586aa7a268d9e881d75c88))
+
+### Fix
+* **prerequisites:** Update darwin packages template ([`7479e8f`](https://github.com/entelecheia/dotfiles/commit/7479e8fe37769c48fb6e3b6a37b9b753a361ca4f))
+* **chezmoi:** Correct typo in use of DOPPLER variable ([`b7d2560`](https://github.com/entelecheia/dotfiles/commit/b7d256050226239489603d5582568096b454b72f))
+
+### Documentation
+* **nav:** Move Features section ([`0fab6b1`](https://github.com/entelecheia/dotfiles/commit/0fab6b1b17d41905bb86a8688b3e78f1c88d9a4d))
+* Add dockerfiles ([`425af6c`](https://github.com/entelecheia/dotfiles/commit/425af6cd9d832e7625cb162180222dc666f00015))
+* Add pass ([`5b378a9`](https://github.com/entelecheia/dotfiles/commit/5b378a9f4ec02c99f09a3cc5328af6c497b8ef71))
+* Add github, SSH, GPG, and AGE ([`1f57c86`](https://github.com/entelecheia/dotfiles/commit/1f57c86c985168375ed2e7b6e7e4ae2bbe6412d3))
+* **usage:** Add Dotdrop documentation to navigation and usage guide ([`536a62f`](https://github.com/entelecheia/dotfiles/commit/536a62ff5359c42c47c3500ba885de99963187a8))
+* Add update ([`5326bd0`](https://github.com/entelecheia/dotfiles/commit/5326bd039e2aed095562f2f8866a273e0129e8df))
+* Add configuration and features ([`a9b23ff`](https://github.com/entelecheia/dotfiles/commit/a9b23ffd2bc6b771648ea5d138939282c5097202))
+* Update usage ([`29f658f`](https://github.com/entelecheia/dotfiles/commit/29f658f58ebc891c613371589c936bb371e578b3))
+* Separate references ([`4eaa13c`](https://github.com/entelecheia/dotfiles/commit/4eaa13cd19829c4c90ec77c908cf1f453b2e05a2))
+* Separate usage ([`e98ada9`](https://github.com/entelecheia/dotfiles/commit/e98ada9055b5bc2684e036cd04ddc71eb4352eb9))
+
 ## v0.5.3 (2023-04-28)
 ### Fix
 * **dotfiles:** Check for latest release tag before updating ([`aab381f`](https://github.com/entelecheia/dotfiles/commit/aab381f3ad5c80bbb14099538868f9589036eb60))
