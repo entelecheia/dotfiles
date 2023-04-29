@@ -1,4 +1,4 @@
-## Features
+# Features
 
 The Dotfiles project offers an extensive set of features to help you manage and configure your development environment with ease. These features are designed to simplify your workflow, improve productivity, and ensure consistency across different systems. Here are some of the key features of the Dotfiles project:
 

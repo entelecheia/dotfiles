@@ -1,4 +1,4 @@
-## Configuration
+# Configuration
 
 The Dotfiles project offers a flexible and customizable configuration system, allowing you to tailor your development environment to your preferences and requirements. The configuration is defined using a data template that includes various settings and options. During the installation process, you will be prompted with interactive questions to configure each section. Here's an explanation of the key configuration options and how to customize them, along with example configurations:
 

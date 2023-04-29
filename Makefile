@@ -98,12 +98,6 @@ install-poetry-deps: ## install poetry dependencies
 install-precommit-hooks: install-precommit ## install pre-commit hooks
 	@pre-commit install
 
-generate-mkdocs-reqs: ## generate requirements.txt from requirements.in
-	@poetry run pip-compile --resolver=backtracking --output-file=docs/requirements.txt docs/requirements.in
-
-remove-template: ## remove the template files (Warning: if you do this, you can't re-run init-project)
-	@rm -rf .copier-template
-
 init-project: install-copier install-precommit-hooks ## initialize the project (Warning: do this only once!)
 	@copier gh:entelecheia/hyperfast-template .
 
