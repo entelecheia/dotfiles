@@ -40,14 +40,17 @@ theme:
     - content.code.copy
     # - content.tabs.link
     - content.tooltips
+    - navigation.indexes
+
 extra:
   analytics:
     provider: google
     property: G-VMN7QWCMSV
 nav:
   - Home: index.md
-  - Usage: usage.md
+  - Usage:
+    - usage/index.md
+    - Configuration: usage/configuration.md
+    - Update: usage/update.md
   - Features: features.md
-  - Configuration: configuration.md
-  - Update: update.md
   - References: references.md
