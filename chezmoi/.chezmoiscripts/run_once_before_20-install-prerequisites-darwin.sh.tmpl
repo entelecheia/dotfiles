@@ -55,6 +55,7 @@ readonly wanted_packages=(
   # {{ if .doppler.enabled }}
   dopplerhq/cli/doppler
   # {{ end }}
+  # {{ if .code.enabled }}
   code-cli
   # {{ end }}
   # {{ if .microk8s.enabled }}
