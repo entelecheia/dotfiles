@@ -78,5 +78,6 @@ nav:
     - GitHub: usage/github.md
     - SSH, GPG, and AGE: usage/ssh-gpg-age.md
     - Pass and Passage: usage/pass.md
+    - Doppler: usage/doppler.md
     - Dockerfiles: usage/dockerfiles.md
   - References: references.md
