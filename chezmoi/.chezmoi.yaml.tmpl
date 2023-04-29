@@ -238,6 +238,15 @@
 # {{-   $passage_repo = .passage.repo -}}
 # {{- end -}}
 
+# {{- $use_dopller := true -}}
+# {{- if eq (env "DOTFILES_USE_DOPPLER") "false" "False" "FALSE" "0" -}}
+# {{-   $use_doppler = false -}}
+# {{- end -}}
+# {{- $doppler_token := or (env "DOPPLER_TOKEN") "" -}}
+# {{- if and (hasKey . "doppler") (hasKey .doppler "token") -}}
+# {{-   $doppler_token = .doppler.token -}}
+# {{- end -}}
+
 # {{- $use_1password := false -}}
 # {{- if eq (env "DOTFILES_USE_1PASSWORD") "true" "True" "TRUE" "1" -}}
 # {{-   $use_1password = true -}}
@@ -292,10 +301,9 @@
 # {{- writeToStdout (printf "📦  DOTFILES_USE_AUTORESTIC: %t\n" $use_autorestic) -}}
 # {{- writeToStdout (printf "🔖  DOTFILES_USE_DOTDROP: %t\n" $use_dotdrop) -}}
 # {{- writeToStdout (printf "🐍  DOTFILES_USE_PYTHON_TOOLS: %t\n" $use_python_tools) -}}
-# {{- writeToStdout (printf "🔑  DOTFILES_USE_PASS: %t\n" $use_pass) -}}
-# {{- writeToStdout (printf "🔏  DOTFILES_USE_1PASSWORD: %t\n" $use_1password) -}}
+# {{- writeToStdout (printf "🔑  DOTFILES_USE_PASSAGE: %t\n" $use_passage) -}}
+# {{- writeToStdout (printf "🔑  DOTFILES_USE_DOPPLER: %t\n" $use_DOPPLER) -}}
 # {{- writeToStdout (printf "🚀  DOTFILES_USE_MICROK8S: %t\n" $use_microk8s) -}}
-# {{- writeToStdout (printf "🔧  DOTFILES_USE_CODE: %t\n" $use_code) -}}
 # {{- writeToStdout (printf "🚇  DOTFILES_USE_NGROK: %t\n" $use_ngrok) -}}
 # {{- end -}}
 # {{- writeToStdout (printf "🔬  DOTFILES_VERBOSE: %t\n" ($verbose | not | not)) -}}
@@ -457,7 +465,7 @@
 # {{- writeToStdout (printf "✅  Age key filename set as '%s'\n" $age_keyfile) -}}
 
 # {{- if $interactive -}}
-# {{-   $question := "❔ What is GitHub Token (If not set, you will be prompted to authenticate)" -}}
+# {{-   $question := "❔ What is your GitHub Token (If not set, you will be prompted to authenticate)" -}}
 # {{-   $answer := "" -}}
 # {{-   if $github_token -}}
 # {{-     $answer = promptString $question $github_token -}}
@@ -581,6 +589,22 @@
 # {{-   writeToStdout "✅  Colab workspace symlinked to workspace root\n" -}}
 # {{- else -}}
 # {{-   writeToStdout "❎  Colab workspace not symlinked\n" -}}
+# {{- end -}}
+
+# {{- if $interactive -}}
+# {{-   $question := "❔ What is your Doppler token" -}}
+# {{-   $answer := "" -}}
+# {{-   if $doppler_token -}}
+# {{-     $answer = promptString $question $doppler_token -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $doppler_token = $answer -}}
+# {{- end -}}
+# {{- if $doppler_token -}}
+# {{-   writeToStdout "✅  Doppler Token set as '***'\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  Doppler Token not set\n" -}}
 # {{- end -}}
 
 # {{- if and $interactive $sudoer -}}
@@ -800,6 +824,9 @@ data:
     repo: {{ $passage_repo | quote }}
     share_dir: {{ $passage_share_dir | quote }}
     share_repo: "https://github.com/FiloSottile/passage.git"
+  doppler:
+    enabled: {{ $use_doppler }}
+    token: {{ $doppler_token | quote }}
   code:
     enabled: {{ $use_code }}
   autorestic:
