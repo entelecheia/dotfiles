@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.6.1 (2023-05-01)
+### Fix
+* **chezmoi:** Update Fira Code Nerd Font download URLs ([`b72ecc0`](https://github.com/entelecheia/dotfiles/commit/b72ecc067f0a29f7b1f3d78b00a1da87b944a648))
+
+### Documentation
+* Add doppler usage ([`754f77c`](https://github.com/entelecheia/dotfiles/commit/754f77c1a3bbf94353f54ae5a713db0b4a3ba188))
+
 ## v0.6.0 (2023-04-29)
 ### Feature
 * **doppler:** Add doppler command line interface ([`4a42439`](https://github.com/entelecheia/dotfiles/commit/4a424392392d370571586aa7a268d9e881d75c88))
