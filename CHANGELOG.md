@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.6.2 (2023-05-04)
+### Fix
+* **rootmoi:** Update dot_rootmoiversion version and refactor passwordless sudo configuration ([`a0b22fe`](https://github.com/entelecheia/dotfiles/commit/a0b22fea2c2966d656cb09edddc9330ad04e6a40))
+
 ## v0.6.1 (2023-05-01)
 ### Fix
 * **chezmoi:** Update Fira Code Nerd Font download URLs ([`b72ecc0`](https://github.com/entelecheia/dotfiles/commit/b72ecc067f0a29f7b1f3d78b00a1da87b944a648))
