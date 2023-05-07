@@ -3,6 +3,7 @@
 # {{ template "scripts-library" }}
 log_task "45. Setting up password store"
 
+# pass-init hash: {{ include "dot_local/bin/executable_pass-init.tmpl" | sha256sum }}
 "${HOME}/.local/bin/pass-init"
 
 # {{ end -}}
