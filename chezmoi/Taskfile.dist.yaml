@@ -1,0 +1,33 @@
+version: "3"
+
+tasks:
+  default:
+    deps:
+      - task: greet
+
+  greet:
+    cmds:
+      - echo $GREETING
+    env:
+      GREETING: Hey, there!
+
+  install-node:
+    desc: Install the latest LTS version of Node.js using nvm
+    cmds:
+      - nvm install --lts
+    env:
+      NVM_DIR: "${HOME}/.nvm"
+
+  nvm-ls:
+    desc: List installed Node.js versions
+    cmds:
+      - nvm ls
+    env:
+      NVM_DIR: "${HOME}/.nvm"
+
+  set-default-node:
+    desc: Set the default Node.js version
+    cmds:
+      - nvm alias default node
+    env:
+      NVM_DIR: "${HOME}/.nvm"
