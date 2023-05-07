@@ -7,8 +7,8 @@
 
 <!-- Links: -->
 
-[test-image]: https://github.com/entelecheia/dotfiles/actions/workflows/test.yaml/badge.svg
-[test-url]: https://github.com/entelecheia/dotfiles/actions/workflows/test.yaml
+[test-image]: https://github.com/entelecheia/dotfiles/actions/workflows/lint_and_test.yaml/badge.svg
+[test-url]: https://github.com/entelecheia/dotfiles/actions/workflows/lint_and_test.yaml
 [license-image]: https://img.shields.io/github/license/entelecheia/dotfiles
 [license-url]: https://github.com/entelecheia/dotfiles/blob/main/LICENSE
 [version-image]: https://img.shields.io/github/v/release/entelecheia/dotfiles?sort=semver
