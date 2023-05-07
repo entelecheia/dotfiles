@@ -1,6 +1,10 @@
-name: test
+name: lint & test
 
 on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
   push:
     branches: [main]
     paths:
@@ -8,11 +12,7 @@ on:
       - "chezmoi/**"
       - "rootmoi/**"
       - "docs/install*"
-      - ".github/workflows/test.yaml"
-  pull_request:
-    branches: [main]
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+      - ".github/workflows/lint_and_test.yaml"
 
 jobs:
   test:

@@ -11,6 +11,9 @@ on:
       - alpha*
       - rc*
       - nigtly*
+    paths:
+      - 'src/**'
+      - 'pyproject.toml'
 
 permissions:
   contents: write
@@ -20,9 +23,13 @@ permissions:
 jobs:
   build:
     # Name the Job
-    name: semantic-prerelease
+    name: prerelease
     # Set the agent to run on
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.8]
 
     # Load all steps #
     steps:
@@ -36,9 +43,11 @@ jobs:
       - name: Set env variable
         run: echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
 
-      # semantic prerelease
-      - name: Python Semantic Release
+      # semantic release
+      - name: Python Semantic Release to PyPI
         uses: relekang/python-semantic-release@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          repository_username: __token__
+          repository_password: ${{ secrets.PYPI_API_TOKEN }}
           additional_options: --prerelease --verbosity=DEBUG --define=branch=${{ env.BRANCH }}
