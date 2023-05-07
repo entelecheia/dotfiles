@@ -5,6 +5,7 @@ log_task "35. Restoring dotfiles from backup with autorestic"
 
 # {{ if and (.autorestic.enabled) (.autorestic.restore_dotfiles) }}
 
+# dotfiles-restore hash: {{ include "dot_local/bin/executable_dotfiles-restore.tmpl" | sha256sum }}
 "${HOME}/.local/bin/dotfiles-restore"
 
 # {{ end }}
