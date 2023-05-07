@@ -1,5 +1,10 @@
 <!--next-version-placeholder-->
 
+## v0.7.1 (2023-05-07)
+### Fix
+* **chezmoi:** Update run_once_after_30-github-auth.tmpl comments. ([`0b8aa8b`](https://github.com/entelecheia/dotfiles/commit/0b8aa8b5642f22164617d82fb6f6bdb49b235ab0))
+* **chezmoi:** Add dotfiles-update-tools script and alias ([`3302d1a`](https://github.com/entelecheia/dotfiles/commit/3302d1ac9fb9cf6ec0470f9f968657e836b3973a))
+
 ## v0.7.0 (2023-05-07)
 ### Feature
 * **chezmoi:** Add Taskfile.dist.yaml and aliases for Taskfile commands, add completion for task command ([`b627b7f`](https://github.com/entelecheia/dotfiles/commit/b627b7f248add8b9b41b8e7f4a4b563dcf30fe53))
