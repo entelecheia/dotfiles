@@ -1,0 +1,40 @@
+#!/bin/bash
+# {{ template "scripts-library" }}
+
+ensure_path_entry "${HOME}/.local/bin"
+
+# install age
+if ! commaand -v age &>/dev/null; then
+  log_task "Installing age"
+else
+  log_task "Updating age"
+fi
+c go install filippo.io/age/cmd/...@latest
+
+# install sops
+if ! command -v sops &>/dev/null; then
+  log_task "Installing sops"
+else
+  log_task "Updating sops"
+fi
+c go install go.mozilla.org/sops/v3/cmd/sops@latest
+
+# install task
+if ! command -v task &>/dev/null; then
+  log_task "Installing task"
+else
+  log_task "Updating task"
+fi
+c sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
+# https://raw.githubusercontent.com/go-task/task/main/completion/zsh/_task
+# copy completion file to ~/.local/share/zsh/site-functions
+task_completion_file="${HOME}/.local/share/zsh/site-functions/_task"
+if [[ ! -f "${task_completion_file}" ]]; then
+  log_task "Installing task completion file"
+  if [[ ! -d "${HOME}/.local/share/zsh/site-functions" ]]; then
+    c mkdir -p "${HOME}/.local/share/zsh/site-functions"
+  fi
+  c wget https://raw.githubusercontent.com/go-task/task/main/completion/zsh/_task -O "${task_completion_file}"
+fi
+
+log_green "✅  Dotfiles tools updated successfully. ✨ 🌟 ✨"
