@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.7.0 (2023-05-07)
+### Feature
+* **chezmoi:** Add Taskfile.dist.yaml and aliases for Taskfile commands, add completion for task command ([`b627b7f`](https://github.com/entelecheia/dotfiles/commit/b627b7f248add8b9b41b8e7f4a4b563dcf30fe53))
+
 ## v0.6.2 (2023-05-04)
 ### Fix
 * **rootmoi:** Update dot_rootmoiversion version and refactor passwordless sudo configuration ([`a0b22fe`](https://github.com/entelecheia/dotfiles/commit/a0b22fea2c2966d656cb09edddc9330ad04e6a40))

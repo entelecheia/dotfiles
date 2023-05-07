@@ -4,7 +4,7 @@ description = "Dotfiles management for CI/CD"
 authors = ["Young Joon Lee <entelecheia@hotmail.com>"]
 license = "MIT"
 readme = "README.md"
-version = "0.6.2"
+version = "0.7.0"
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
