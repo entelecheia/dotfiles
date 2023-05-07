@@ -11,21 +11,26 @@ export GITHUB_TOKEN
 # before generating SSH keys, you can install them from the dotdrop repository
 # {{ if .dotdrop.enabled }}
 
+# dotfiles-setup-dotdrop hash: {{ include "dot_local/bin/executable_dotfiles-setup-dotdrop.tmpl" | sha256sum }}
 # shellcheck source=/dev/null
 source "${HOME}/.local/bin/dotfiles-setup-dotdrop"
 
 # {{ end }}
 
+# dotfiles-setup-ssh hash: {{ include "dot_local/bin/executable_dotfiles-setup-ssh.tmpl" | sha256sum }}
 # shellcheck source=/dev/null
 source "${HOME}/.local/bin/dotfiles-setup-ssh"
 
+# dotfiles-setup-age hash: {{ include "dot_local/bin/executable_dotfiles-setup-age.tmpl" | sha256sum }}
 # shellcheck source=/dev/null
 source "${HOME}/.local/bin/dotfiles-setup-age"
 
 export GPG_PASSPHRASE="{{ .gnupg.passphrase }}"
+# dotfiles-setup-gpg hash: {{ include "dot_local/bin/executable_dotfiles-setup-gpg.tmpl" | sha256sum }}
 # shellcheck source=/dev/null
 source "${HOME}/.local/bin/dotfiles-setup-gpg"
 
+# dotfiles-setup-github-keys hash: {{ include "dot_local/bin/executable_dotfiles-setup-github-keys.tmpl" | sha256sum }}
 # shellcheck source=/dev/null
 source "${HOME}/.local/bin/dotfiles-setup-github-keys"
 
