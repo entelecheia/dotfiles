@@ -2,6 +2,7 @@
 # {{ template "scripts-library" }}
 
 ensure_path_entry "${HOME}/.local/bin"
+ensure_path_entry "${GOROOT}/bin"
 
 # install age
 if ! commaand -v age &>/dev/null; then
