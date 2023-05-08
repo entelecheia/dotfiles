@@ -1,17 +1,15 @@
 #!/bin/bash
-# {{ if eq .chezmoi.os "linux" "darwin" }}
-# {{ template "scripts-library" }}
-log_task "21. Installing minimum packages"
-
 # {{ if eq .chezmoi.os "linux" }}
+# {{ template "scripts-library" }}
+log_task "21. Installing minimum packages for Linux"
+
+ensure_path_entry "${HOME}/.local/bin"
+
 # install yq
 if ! yq --version &>/dev/null; then
   log_task "Installing yq"
   c wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O "${HOME}/.local/bin/yq" && chmod +x "${HOME}/.local/bin/yq"
 fi
-# {{ end }}
-
-ensure_path_entry "${HOME}/.local/bin"
 
 # install go
 if ! go version &>/dev/null; then
