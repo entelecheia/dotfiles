@@ -11,6 +11,10 @@ tasks:
     env:
       GREETING: Hey, there!
 
+  watch-nvidia-smi:
+    cmds:
+      - watch -n 1 nvidia-smi
+
   # install-node:
   #   desc: Install the latest LTS version of Node.js using nvm
   #   cmds:
