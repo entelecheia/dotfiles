@@ -79,5 +79,4 @@ log_manual_action " > export GOROOT=\"${HOME}/go\""
 log_manual_action " > export GOPATH=\"${GOROOT}/packages\""
 log_manual_action " > export PATH=\"\${PATH}:\${GOROOT}/bin:\${GOPATH}/bin\""
 
-
-log_info "You are ready to Go!"
+log_green "✅  You are ready to Go! ✨ 🌟 ✨"
