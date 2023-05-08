@@ -14,6 +14,6 @@ else
   echo "${output}"
   exit 1
 fi
-c sudo apt install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends ca-certificates
+c sudo apt install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends ca-certificates apt-transport-https curl gnupg
 
 # {{ end }}

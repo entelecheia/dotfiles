@@ -26,6 +26,20 @@ if [[ ! -f "${SOURCE_LIST_FILE}" ]]; then
   # {{   end }}
 fi
 
+# Bazel
+SOURCE_LIST_FILE="/etc/apt/sources.list.d/bazel.list"
+if [[ ! -f "${SOURCE_LIST_FILE}" ]]; then
+  log_task "Adding bazel repository"
+  # shellcheck disable=SC1091
+  # {{   if eq .chezmoi.username "root" }}
+  c curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor --output /usr/share/keyrings/bazel-archive-keyring.gpg
+  c echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/bazel-archive-keyring.gpg] https://storage.googleapis.com/bazel-apt stable jdk1.8" | tee "$SOURCE_LIST_FILE"
+  # {{   else }}
+  c curl -fsSL https://bazel.build/bazel-release.pub.gpg | sudo gpg --dearmor --output /usr/share/keyrings/bazel-archive-keyring.gpg
+  c echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/bazel-archive-keyring.gpg] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee "$SOURCE_LIST_FILE"
+  # {{   end }}
+fi
+
 # {{ if .op.enabled }}
 SOURCE_LIST_FILE="/etc/apt/sources.list.d/1password.list"
 if [[ ! -e "${SOURCE_LIST_FILE}" ]]; then
@@ -94,6 +108,7 @@ readonly wanted_packages=(
   stow
   pass
   xclip
+  bazel
   gnupg # used to decrypt the gpg keys of the apt repositories
   pinentry-curses
   # {{ if not .system.is_devcontainer }}
