@@ -19,7 +19,7 @@ if [ -d "${HOME}/.nvm" ]; then
   # shellcheck disable=SC1091
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
   # shellcheck disable=SC1091
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 fi
 
 if [ -r "${HOME}/.sdkman/bin/sdkman-init.sh" ]; then
@@ -42,7 +42,12 @@ fi
 
 if op --version &>/dev/null; then
   if [[ -n "$ZSH_VERSION" ]]; then
-    eval "$(op completion zsh)"; compdef _op op
+    eval "$(op completion zsh)"
+    compdef _op op
   fi
 fi
 
+LD_PRELOAD="/usr/lib64/libtcmalloc.so.4"
+if [[ -f "${LD_PRELOAD}" ]]; then
+  export LD_PRELOAD
+fi

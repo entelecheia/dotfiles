@@ -109,6 +109,7 @@ readonly wanted_packages=(
   pass
   xclip
   bazel
+  google-perftools
   gnupg # used to decrypt the gpg keys of the apt repositories
   pinentry-curses
   # {{ if not .system.is_devcontainer }}
@@ -172,5 +173,22 @@ if ! yq --version &>/dev/null; then
   log_task "Installing yq"
   c sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
 fi
+
+# install tcmalloc
+# LD_PRELOAD="/usr/lib64/libtcmalloc.so.4"
+# if [[ ! -f "${LD_PRELOAD}" ]]; then
+#   log_task "Installing tcmalloc"
+#   TCMALLOC_SOURCE_DIR="${HOME}/.local/share/tcmalloc"
+#   if [[ ! -d "${TCMALLOC_SOURCE_DIR}" ]]; then
+#     c mkdir -p "${TCMALLOC_SOURCE_DIR}"
+#     c git clone https://github.com/google/tcmalloc.git "${TCMALLOC_SOURCE_DIR}"
+#   else
+#     c cd "${TCMALLOC_SOURCE_DIR}"
+#     c git pull
+#   fi
+#   c cd "${TCMALLOC_SOURCE_DIR}"
+#   c bazel test //tcmalloc/...
+#   export LD_PRELOAD="${LD_PRELOAD}"
+# fi
 
 # {{ end -}}
