@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.8.0 (2023-05-08)
+### Feature
+* **dependencies:** Upgrade ca-certificates and add bazel to wanted packages ([`1c67dca`](https://github.com/entelecheia/dotfiles/commit/1c67dca330b585626b162b6d9bb4b26d73fa1422))
+
+### Fix
+* **prerequisites:** Install Google Perftools ([`4816d41`](https://github.com/entelecheia/dotfiles/commit/4816d412d6d19beebc01b4046c2486b23c270dbf))
+
 ## v0.7.1 (2023-05-07)
 ### Fix
 * **chezmoi:** Update run_once_after_30-github-auth.tmpl comments. ([`0b8aa8b`](https://github.com/entelecheia/dotfiles/commit/0b8aa8b5642f22164617d82fb6f6bdb49b235ab0))
