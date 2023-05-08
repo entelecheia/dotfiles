@@ -12,6 +12,7 @@ tasks:
       GREETING: Hey, there!
 
   watch-nvidia-smi:
+    desc: Watch nvidia-smi output every second (useful for monitoring GPU usage)
     cmds:
       - watch -n 1 nvidia-smi
 
