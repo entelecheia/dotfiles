@@ -1,5 +1,13 @@
 <!--next-version-placeholder-->
 
+## v0.8.1 (2023-05-08)
+### Fix
+* **curl:** Update curl command to use --location and --output flags ([`50dcf5a`](https://github.com/entelecheia/dotfiles/commit/50dcf5ab2f143f22edf1f6440bf5db77bdecb493))
+* **installation:** Update executable_install-go.tmpl ([`a68032e`](https://github.com/entelecheia/dotfiles/commit/a68032ec1ca4580cb432f38b14207ebd662ee05d))
+* **run_once_after_21-install-tools-linux-nonroot:** Fix redundant go installation and add logging message ([`d4aa548`](https://github.com/entelecheia/dotfiles/commit/d4aa548fea43202c00b7d2bac8f225d5aa7d2149))
+* **go:** Add script to install latest version ([`460fd59`](https://github.com/entelecheia/dotfiles/commit/460fd59689fa451307e1df06b325ac07f72a4e54))
+* **chezmoi:** Install minimum packages only for Linux and add go-task to prerequisites for macOS installation. ([`63c5a9b`](https://github.com/entelecheia/dotfiles/commit/63c5a9bd8e82ca40e3a36b02a13f48e159a1660b))
+
 ## v0.8.0 (2023-05-08)
 ### Feature
 * **dependencies:** Upgrade ca-certificates and add bazel to wanted packages ([`1c67dca`](https://github.com/entelecheia/dotfiles/commit/1c67dca330b585626b162b6d9bb4b26d73fa1422))
