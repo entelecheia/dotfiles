@@ -17,5 +17,13 @@
         ".chezmoiremove": "helm",
         "**/.chezmoitemplates/*": "helm",
         "**/.chezmoitemplates/*-library": "shellscript"
-       }
+    },
+    "coffeebreak.emails": [
+        "entelecheia@hotmail.com"
+    ],
+    "coffeebreak.mentions": {
+        "Young": {
+            "email": "entelecheia@hotmail.com"
+        }
+    }
 }
