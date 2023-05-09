@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.8.2 (2023-05-09)
+### Fix
+* **install:** Use latest tag for git reset ([`dc3fdce`](https://github.com/entelecheia/dotfiles/commit/dc3fdcedbf95518f9e50ebe4a90ce6cb31cea552))
+* **dotfiles:** Add support for new paths in install-tools script ([`0ec7eb9`](https://github.com/entelecheia/dotfiles/commit/0ec7eb9ff3947269e2a010f46fc1aaadbe3e86c9))
+* **installer:** Add automatic tool update functionality ([`aa7c444`](https://github.com/entelecheia/dotfiles/commit/aa7c444564732450b96f252c9bb5dcb01e56e741))
+
 ## v0.8.1 (2023-05-08)
 ### Fix
 * **curl:** Update curl command to use --location and --output flags ([`50dcf5a`](https://github.com/entelecheia/dotfiles/commit/50dcf5ab2f143f22edf1f6440bf5db77bdecb493))
