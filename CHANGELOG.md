@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.8.5 (2023-05-09)
+### Fix
+* **docker:** Add support for loading global environment variables from custom file ([`37168c0`](https://github.com/entelecheia/dotfiles/commit/37168c0a5ea3f0ce17249a1130078b5d14426053))
+
 ## v0.8.4 (2023-05-09)
 ### Fix
 * Update Docker file paths and version pattern; ([`68d1185`](https://github.com/entelecheia/dotfiles/commit/68d1185523df88167cac60258bdfecebeecef9cb))
