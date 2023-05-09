@@ -3,11 +3,4 @@
 log_task "95. Restarting Docker daemon"
 
 # daemon.json hash: {{ include "/etc/docker/daemon.json" | sha256sum }}
-
-log_task "Restarting Docker daemon"
-# {{ if .system.is_wsl }}
-# service restart fails if the service was never started
-c service docker restart || c service docker start || true
-# {{ else }}
-c systemctl restart docker 
-# {{ end }}
+"${HOME}/.local/bin/restart-docker-daemon"

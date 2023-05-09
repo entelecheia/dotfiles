@@ -16,6 +16,11 @@ tasks:
     cmds:
       - watch -n 1 nvidia-smi
 
+  restart-docker-daemon:
+    desc: Restart the Docker daemon
+    cmds:
+      - restart-docker-daemon
+
   # install-node:
   #   desc: Install the latest LTS version of Node.js using nvm
   #   cmds:
