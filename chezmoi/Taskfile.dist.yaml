@@ -3,13 +3,33 @@ version: "3"
 tasks:
   default:
     deps:
-      - task: greet
+      - task: task-ls
 
   greet:
     cmds:
       - echo $GREETING
     env:
       GREETING: Hey, there!
+
+  task-ls:
+    desc: List available tasks
+    cmds:
+      - task --list
+
+  tmux-new:
+    desc: Create a new tmux session
+    cmds:
+      - tmux new -s {{.CLI_ARGS}}
+
+  tmux-ls:
+    desc: List tmux sessions
+    cmds:
+      - tmux ls
+
+  tmux-attach:
+    desc: Attach to a tmux session
+    cmds:
+      - tmux attach -t {{.CLI_ARGS}}
 
   watch-nvidia-smi:
     desc: Watch nvidia-smi output every second (useful for monitoring GPU usage)
