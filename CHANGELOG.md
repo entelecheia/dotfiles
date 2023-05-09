@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.8.7 (2023-05-09)
+### Fix
+* **bin:** Update executable_dotfiles-install-tools.tmpl ([`85eedaa`](https://github.com/entelecheia/dotfiles/commit/85eedaa08cccffc3177ad166244923ce5af7575d))
+
 ## v0.8.6 (2023-05-09)
 ### Fix
 * **docker:** Add restart-docker-daemon task and executable ([`8431f6b`](https://github.com/entelecheia/dotfiles/commit/8431f6b55aac480d55ea566c6a400ffd6c86364a))
