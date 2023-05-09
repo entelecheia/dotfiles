@@ -41,7 +41,7 @@ fi
 if [[ "$1" != -* ]]; then
   # if no arguments, print usage
   if [[ $# -eq 0 ]]; then
-    echo "Usage: $0 $USAGE" >&2    
+    echo "Usage: $0 $USAGE" >&2
     exit 1
   fi
   DOCKER_NAME="$1"
@@ -123,7 +123,7 @@ while [[ $# -gt 0 ]]; do
     USERNAME="${1#*=}"
     ;;
   -h | --help)
-    echo "Usage: $0 $USAGE" >&2    
+    echo "Usage: $0 $USAGE" >&2
     exit 0
     ;;
   -h*)
@@ -180,7 +180,7 @@ if [[ -z "$PROJECT_DIR" ]]; then
 fi
 # if project directory does not exist or FROM_PROJECT is false, use dockerfile repo path
 if [[ ! -d "$PROJECT_DIR" ]] || [[ "$FROM_PROJECT" != "false" ]]; then
-  PROJECT_DIR="${DOCKERFILES_SHARE_DIR}/${DOCKER_NAME}"
+  PROJECT_DIR="${DOCKERFILES_SHARE_DIR}/src/${DOCKER_NAME}"
 fi
 # if it still does not exist, exit
 if [[ ! -d "$PROJECT_DIR" ]]; then
@@ -189,7 +189,7 @@ if [[ ! -d "$PROJECT_DIR" ]]; then
 fi
 
 if [[ -z "$DOCKERFILES_DIR" ]]; then
-  # DOCKERFILES_DIR="${DOCKERFILES_SHARE_DIR}/${DOCKER_NAME}/.docker"
+  # DOCKERFILES_DIR="${DOCKERFILES_SHARE_DIR}/src/${DOCKER_NAME}/.docker"
   DOCKERFILES_DIR="${PROJECT_DIR}/.docker"
 fi
 COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
@@ -237,7 +237,7 @@ if docker compose version &>/dev/null; then
   log_task "docker compose ${COMMAND} for [${DOCKER_NAME}] with tag [${TAG}] and version [${VERSION}] from [${PROJECT_DIR}]"
 
   # change to the directory of the build context
-  c cd "${PROJECT_DIR}" || exit 1  
+  c cd "${PROJECT_DIR}" || exit 1
   CMD="docker compose --project-directory ${PROJECT_DIR} -f ${COMPOSE_FILE} ${ENV_ARGS} ${COMMAND} ${ADDITIONAL_ARGS}"
   c eval "$CMD" || exit 1
 

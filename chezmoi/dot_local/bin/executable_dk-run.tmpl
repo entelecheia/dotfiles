@@ -30,7 +30,7 @@ set +u
 if [[ "$1" != -* ]]; then
   # if no arguments, print usage
   if [[ $# -eq 0 ]]; then
-    echo "Usage: $0 $USAGE" >&2    
+    echo "Usage: $0 $USAGE" >&2
     exit 1
   fi
   DOCKER_NAME="$1"
@@ -106,7 +106,7 @@ while [[ $# -gt 0 ]]; do
     BUILD_PATH="${1#*=}"
     ;;
   -h | --help)
-    echo "Usage: $0 $USAGE" >&2    
+    echo "Usage: $0 $USAGE" >&2
     exit 0
     ;;
   -h*)
@@ -146,7 +146,7 @@ if [[ -z "$DOCKERFILE_PATH" ]]; then
 fi
 if [[ -z "$DOCKERFILE_PATH" ]]; then
   DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
-  DOCKERFILE_PATH="${DOCKERFILES_REPO_DIR}/${DOCKER_NAME}"
+  DOCKERFILE_PATH="${DOCKERFILES_REPO_DIR}/src/${DOCKER_NAME}"
 fi
 DOCKERFILE_DIR="$DOCKERFILE_PATH"
 

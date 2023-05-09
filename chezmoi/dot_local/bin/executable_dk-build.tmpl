@@ -142,7 +142,7 @@ if [[ -z "$DOCKERFILE_PATH" ]]; then
 fi
 if [[ -z "$DOCKERFILE_PATH" ]]; then
   DOCKERFILES_REPO_DIR="${HOME}/.local/share/dockerfiles"
-  DOCKERFILE_PATH="${DOCKERFILES_REPO_DIR}/${DOCKER_NAME}/Dockerfile.${RELEASE_TYPE}"
+  DOCKERFILE_PATH="${DOCKERFILES_REPO_DIR}/src/${DOCKER_NAME}/Dockerfile.${RELEASE_TYPE}"
 fi
 DOCKERFILE_DIR=$(dirname "$DOCKERFILE_PATH")
 

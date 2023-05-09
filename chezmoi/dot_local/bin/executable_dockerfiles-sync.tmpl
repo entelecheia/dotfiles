@@ -48,7 +48,7 @@ while [[ $# -gt 0 ]]; do
     DOCKERFILES_DIR="${1#*=}"
     ;;
   -h | --help)
-    echo "Usage: $0 $USAGE" >&2    
+    echo "Usage: $0 $USAGE" >&2
     exit 0
     ;;
   -h*)
@@ -113,9 +113,9 @@ if [[ -n "$PROJECT_DIR" ]] && [[ -n "$DOCKERFILES_DIR" ]]; then
 else
   if [[ "$FROM_PROJECT" == "true" ]]; then
     SOURCE_DIR="$WORKSPACE_PROJECT_DIR"
-    DESTINATION_DIR="$DOCKERFILES_SHARE_DIR"
+    DESTINATION_DIR="$DOCKERFILES_SHARE_DIR/src"
   else
-    SOURCE_DIR="$DOCKERFILES_SHARE_DIR"
+    SOURCE_DIR="$DOCKERFILES_SHARE_DIR/src"
     DESTINATION_DIR="$WORKSPACE_PROJECT_DIR"
   fi
   # if DOCKER_NAME is provided, copy dockerfiles from project directory
@@ -123,11 +123,11 @@ else
     copy_dockerfiles "${SOURCE_DIR}/${DOCKER_NAME}" "${DESTINATION_DIR}/${DOCKER_NAME}"
   else
     # if DOCKER_NAME is not provided, copy dockerfiles from all project directories
-    for docker_dir in "${DOCKERFILES_SHARE_DIR}"/*; do
+    for docker_dir in "${DOCKERFILES_SHARE_DIR}/src"/*; do
       if [[ -d "$docker_dir" ]]; then
         DOCKER_NAME=$(basename "$docker_dir")
         copy_dockerfiles "${SOURCE_DIR}/${DOCKER_NAME}" "${DESTINATION_DIR}/${DOCKER_NAME}"
       fi
     done
-  fi  
+  fi
 fi
