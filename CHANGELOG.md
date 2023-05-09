@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.8.8 (2023-05-09)
+### Fix
+* **version:** Use DOTFILES_VERSION data for configuration ([`51d410f`](https://github.com/entelecheia/dotfiles/commit/51d410f101f78a9b7e282f95c90fe60abbd29961))
+
 ## v0.8.7 (2023-05-09)
 ### Fix
 * **bin:** Update executable_dotfiles-install-tools.tmpl ([`85eedaa`](https://github.com/entelecheia/dotfiles/commit/85eedaa08cccffc3177ad166244923ce5af7575d))
