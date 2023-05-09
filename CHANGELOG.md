@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.8.4 (2023-05-09)
+### Fix
+* Update Docker file paths and version pattern; ([`68d1185`](https://github.com/entelecheia/dotfiles/commit/68d1185523df88167cac60258bdfecebeecef9cb))
+
 ## v0.8.3 (2023-05-09)
 ### Fix
 * **install:** Improve git_clean function ([`6a98516`](https://github.com/entelecheia/dotfiles/commit/6a9851612522c07ce45d9791de5fb77e18b6f3fe))
