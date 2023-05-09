@@ -22,7 +22,7 @@ GOROOT="${HOME}/go"
 GOPATH="${GOROOT}/packages"
 if [ -d "${GOROOT}" ]; then
   log_info "Go is already installed in ${GOROOT}, removing it ..."
-  rm -rf "${GOROOT}"
+  sudo rm -rf "${GOROOT}"
 fi
 log_task "Installing from ${LATEST_GO_DOWNLOAD_URL} ..."
 curl --location "${LATEST_GO_DOWNLOAD_URL}" --output "${LATEST_GO_VERSION}.${OS}-${UNAME_MACHINE}.tar.gz"

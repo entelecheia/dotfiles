@@ -12,12 +12,12 @@ if ! yq --version &>/dev/null; then
 fi
 
 # install-go hash: {{ include "dot_local/bin/executable_install-go.tmpl" | sha256sum }}
-# "${HOME}/.local/bin/install-go" // TODO fix this
-c wget -qO - https://dotfiles.entelecheia.ai/install-go | bash
-export GOROOT="${HOME}/go"
-export GOPATH="${GOROOT}/packages"
+if ! command -v go >/dev/null; then
+  log_task "Installing go"
+  bash "${HOME}/.local/bin/install-go" // TODO fix this
+fi
 
 # dotfiles-update-tools hash: {{ include "dot_local/bin/executable_dotfiles-update-tools.tmpl" | sha256sum }}
-"${HOME}/.local/bin/dotfiles-update-tools"
+"${HOME}/.local/bin/dotfiles-install-tools"
 
 # {{- end -}}
