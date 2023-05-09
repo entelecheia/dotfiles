@@ -286,8 +286,8 @@
 
 # {{- $dotfiles_version := or (env "DOTFILES_VERSION") "N/A" -}}
 # {{- writeToStdout "---\n" -}}
-# {{- writeToStdout (printf "🤖  DOTFILES CONFIGURATION (Version: %s)\n" $dotfiles_version) -}}
-# {{- writeToStdout "🖥️  Information found in your system environment variables:\n\n" -}}
+# {{- writeToStdout "🖥️  Information found in your system environment variables:\n" -}}
+# {{- writeToStdout (printf "🤖  DOTFILES CONFIGURATION (Version: %s)\n\n" $dotfiles_version) -}}
 # {{- writeToStdout (printf "👤  USER_FULLNAME: %s\n" $name) -}}
 # {{- writeToStdout (printf "📧  USER_EMAIL: %s\n" $email) -}}
 # {{- writeToStdout (printf "🏠  SYSTEM_HOSTNAME: %s\n" $hostname) -}}
