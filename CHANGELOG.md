@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.8.9 (2023-05-09)
+### Fix
+* **chezmoi:** Update Taskfile.dist.yaml - add new tasks and update existing ones ([`a2b6dca`](https://github.com/entelecheia/dotfiles/commit/a2b6dca1a0fb429a9deb9fc9252f02e88c223317))
+
 ## v0.8.8 (2023-05-09)
 ### Fix
 * **version:** Use DOTFILES_VERSION data for configuration ([`51d410f`](https://github.com/entelecheia/dotfiles/commit/51d410f101f78a9b7e282f95c90fe60abbd29961))
