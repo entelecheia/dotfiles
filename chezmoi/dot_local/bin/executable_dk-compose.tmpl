@@ -6,7 +6,7 @@
 true || source ../../.chezmoitemplates/scripts-library
 
 # arguments usage
-USAGE="COMMAND DOCKER_NAME [-t|--tag TAG] [--from-project] [--project-directory PROJECT_DIR] [--dockerfiles-directory DOCKERFILES_DIR] [-c|--compose-filename COMPOSE_FILENAME] [-e|--env-filename ENV_FILENAME] [-v|--version VERSION] [-l|--latest] [--push ] [-n|--name CONTAINER_NAME] [--network DOCKER_NETWORK_NAME] [-u|--username USERNAME] [-h|--help]"
+USAGE="COMMAND DOCKER_NAME [-t|--tag TAG] [--from-project] [--project-directory PROJECT_DIR] [--dockerfiles-directory DOCKERFILES_DIR] [-c|--compose-filename COMPOSE_FILENAME] [-e|--env-filename ENV_FILENAME] [--global-env-file GLOBAL_ENV_FILE] [-v|--version VERSION] [-l|--latest] [--push ] [-n|--name CONTAINER_NAME] [--network DOCKER_NETWORK_NAME] [-u|--username USERNAME] [-h|--help]"
 
 # declare arguments
 COMMAND=""
@@ -16,6 +16,7 @@ PROJECT_DIR=""
 DOCKERFILES_DIR=""
 COMPOSE_FILENAME=""
 ENV_FILENAME=""
+GLOBAL_ENV_FILE=""
 VERSION=""
 LATEST="false"
 PUSH="false"
@@ -87,6 +88,13 @@ while [[ $# -gt 0 ]]; do
     ;;
   --env-filename=*)
     ENV_FILENAME="${1#*=}"
+    ;;
+  --global-env-file)
+    GLOBAL_ENV_FILE="$2"
+    shift
+    ;;
+  --global-env-file=*)
+    GLOBAL_ENV_FILE="${1#*=}"
     ;;
   -v | --version)
     VERSION="$2"
@@ -200,15 +208,31 @@ if [[ ! -f "$COMPOSE_FILE" ]]; then
   log_error "Dockerfile ${COMPOSE_FILE} does not exist"
   exit 1
 fi
+
 # export DOCKERFILES_DIR
 if [[ -n "$CONTAINER_NAME" ]]; then
   export CONTAINER_NAME
 fi
+# export user id and group id
 export USERNAME
 USER_UID="$(id -u)"
 USER_GID="$(id -g)"
 export USER_UID
 export USER_GID
+
+# global env file
+if [ -z "$GLOBAL_ENV_FILE" ]; then
+  GLOBAL_ENV_FILE="${DOCKERFILES_SHARE_DIR}/src/global.env"
+fi
+if [[ -f "$GLOBAL_ENV_FILE" ]]; then
+  log_task "Loading global environment variables from ${GLOBAL_ENV_FILE}"
+  set -a
+  # shellcheck disable=SC1090
+  c source "$GLOBAL_ENV_FILE"
+  set +a
+fi
+
+# project env file
 ENV_FILE="${DOCKERFILES_DIR}/${ENV_FILENAME}"
 ENV_ARGS=""
 if [[ -f "$ENV_FILE" ]]; then
