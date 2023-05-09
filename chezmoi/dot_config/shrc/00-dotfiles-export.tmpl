@@ -34,6 +34,7 @@ if [ -d "${HOME}/go/packages" ]; then
   ensure_path_entry "${GOPATH}/bin"
 fi
 
+export DOTFILES_VERSION="{{ .DOTFILES_VERSION }}"
 export USER_FULLNAME="{{ .name }}"
 export USER_EMAIL="{{ .email }}"
 export SYSTEM_HOSTNAME="{{ .system.hostname }}"

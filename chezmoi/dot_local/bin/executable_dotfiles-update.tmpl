@@ -75,6 +75,7 @@ if chezmoi --version &>/dev/null; then
   # pass additional arguments to chezmoi apply except for --prerelease or -p flag
   chezmoi apply "${@:2}"
 fi
+export DOTFILES_VERSION="{{ .DOTFILES_VERSION }}"
 
 # update password-store and passage store
 pass-pull

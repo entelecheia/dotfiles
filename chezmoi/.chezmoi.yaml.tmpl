@@ -284,7 +284,9 @@
 # {{-   $github_clones = .github.clones -}}
 # {{- end -}}
 
+# {{- $dotfiles_version := or (env "DOTFILES_VERSION") ""  -}}
 # {{- writeToStdout "---\n" -}}
+# {{- writeToStdout (printf "🤖 DOTFILES CONFIGURATION (Version: %s)\n" $dotfiles_version) -}}
 # {{- writeToStdout "🖥️  Information found in your system environment variables:\n\n" -}}
 # {{- writeToStdout (printf "👤  USER_FULLNAME: %s\n" $name) -}}
 # {{- writeToStdout (printf "📧  USER_EMAIL: %s\n" $email) -}}

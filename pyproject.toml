@@ -81,7 +81,7 @@ tag_format = "v$version"
 [tool.semantic_release]
 branch = "main"
 version_toml = "pyproject.toml:tool.poetry.version"
-version_pattern = "chezmoi/dot_config/chezmoi/dot_version:VERSION={version}"
+version_pattern = "chezmoi/.chezmoidata.yaml:DOTFILES_VERSION: {version}"
 version_source = "tag"
 commit_version_number = true # required for version_source = "tag"
 commit_subject = "chore(release): :rocket: {version} [skip ci]"
