@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.8.6 (2023-05-09)
+### Fix
+* **docker:** Add restart-docker-daemon task and executable ([`8431f6b`](https://github.com/entelecheia/dotfiles/commit/8431f6b55aac480d55ea566c6a400ffd6c86364a))
+
 ## v0.8.5 (2023-05-09)
 ### Fix
 * **docker:** Add support for loading global environment variables from custom file ([`37168c0`](https://github.com/entelecheia/dotfiles/commit/37168c0a5ea3f0ce17249a1130078b5d14426053))
