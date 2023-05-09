@@ -11,13 +11,7 @@ if ! yq --version &>/dev/null; then
   c wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O "${HOME}/.local/bin/yq" && chmod +x "${HOME}/.local/bin/yq"
 fi
 
-# install-go hash: {{ include "dot_local/bin/executable_install-go.tmpl" | sha256sum }}
-if ! command -v go >/dev/null; then
-  log_task "Installing go"
-  bash "${HOME}/.local/bin/install-go" // TODO fix this
-fi
-
-# dotfiles-update-tools hash: {{ include "dot_local/bin/executable_dotfiles-update-tools.tmpl" | sha256sum }}
+# dotfiles-update-tools hash: {{ include "dot_local/bin/executable_dotfiles-install-tools.tmpl" | sha256sum }}
 "${HOME}/.local/bin/dotfiles-install-tools"
 
 # {{- end -}}

@@ -8,6 +8,7 @@ if [[ "${1}" == "--prerelease" ]] || [[ "${1}" == "-p" ]]; then
 else
   PRERELEASE=false
 fi
+set -u
 
 if command -v gh >/dev/null; then
   if gh auth status &>/dev/null; then

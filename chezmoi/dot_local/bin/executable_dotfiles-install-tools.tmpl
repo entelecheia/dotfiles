@@ -1,16 +1,41 @@
 #!/bin/bash
 # {{ template "scripts-library" }}
 
+# check if --update or -u flag is set
+set +u
+if [[ "${1}" == "--update" ]] || [[ "${1}" == "-u" ]]; then
+  UPDATE=true
+else
+  UPDATE=false
+fi
+set -u
+
+export GOROOT="${HOME}/go"
+export GOPATH="${GOROOT}/packages"
 ensure_path_entry "${HOME}/.local/bin"
 ensure_path_entry "${GOROOT}/bin"
+
+if ! command -v go >/dev/null || [[ ! -d "${GOROOT}" ]]; then
+  log_task "Installing go"
+  bash "${HOME}/.local/bin/install-go"
+fi
 
 # install age
 if ! commaand -v age &>/dev/null; then
   log_task "Installing age"
+  c go install filippo.io/age/cmd/...@latest
+elif [[ "${UPDATE}" == "true" ]]; then
+  current_version="$(age --version | cut -d' ' -f2)"
+  latest_version="$(curl -s https://api.github.com/repos/FiloSottile/age/releases/latest | grep tag_name | cut -d '"' -f4)"
+  if [ "$current_version" != "$latest_version" ]; then
+    log_task "Updating age from $current_version to $latest_version"
+    go install filippo.io/age/cmd/...@latest
+  else
+    log_task "age is already up to date ($current_version)"
+  fi
 else
-  log_task "Updating age"
+  log_task "age is already installed"
 fi
-c go install filippo.io/age/cmd/...@latest
 
 # install sops
 if ! command -v sops &>/dev/null; then
