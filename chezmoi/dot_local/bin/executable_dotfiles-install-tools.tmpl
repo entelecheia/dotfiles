@@ -11,8 +11,9 @@ fi
 set -u
 
 ensure_path_entry "${HOME}/.local/bin" "${HOME}/bin" "${HOME}/go/bin" "${HOME}/.cargo/bin"
+GOROOT="${HOME}/go"
 if [ -d "${HOME}/go/packages" ]; then
-  export GOROOT="${HOME}/go"
+  export GOPATH
   export GOPATH="${GOROOT}/packages"
   ensure_path_entry "${GOPATH}/bin"
 fi
