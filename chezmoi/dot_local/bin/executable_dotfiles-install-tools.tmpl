@@ -10,10 +10,12 @@ else
 fi
 set -u
 
-export GOROOT="${HOME}/go"
-export GOPATH="${GOROOT}/packages"
-ensure_path_entry "${HOME}/.local/bin"
-ensure_path_entry "${GOROOT}/bin"
+ensure_path_entry "${HOME}/.local/bin" "${HOME}/bin" "${HOME}/go/bin" "${HOME}/.cargo/bin"
+if [ -d "${HOME}/go/packages" ]; then
+  export GOROOT="${HOME}/go"
+  export GOPATH="${GOROOT}/packages"
+  ensure_path_entry "${GOPATH}/bin"
+fi
 
 if ! command -v go >/dev/null || [[ ! -d "${GOROOT}" ]]; then
   log_task "Installing go"
@@ -35,7 +37,7 @@ else
 fi
 
 # install age
-if ! commaand -v age &>/dev/null; then
+if ! command -v age &>/dev/null; then
   log_task "Installing age"
   c go install filippo.io/age/cmd/...@latest
 elif [[ "${UPDATE}" == "true" ]]; then
@@ -77,7 +79,7 @@ if ! command -v task &>/dev/null; then
   c sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
 elif [[ "${UPDATE}" == "true" ]]; then
   # Get current and latest version numbers
-  current_version="$(task --version | awk '{print $2}')"
+  current_version="$(task --version | awk '{print $3}')"
   latest_version="$(curl -s https://api.github.com/repos/go-task/task/releases/latest | grep 'tag_name' | cut -d'"' -f4)"
 
   # Compare versions and update if necessary
@@ -103,4 +105,8 @@ if [[ ! -f "${task_completion_file}" ]]; then
   c wget https://raw.githubusercontent.com/go-task/task/main/completion/zsh/_task -O "${task_completion_file}"
 fi
 
-log_green "✅  Dotfiles tools updated successfully. ✨ 🌟 ✨"
+if [[ "${UPDATE}" == "true" ]]; then
+  log_green "✅  Tools updated successfully. ✨ 🌟 ✨"
+else
+  log_green "✅  Tools installed successfully. ✨ 🌟 ✨"
+fi
