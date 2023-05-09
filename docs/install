@@ -61,9 +61,14 @@ git_clean() {
   log_task "Cleaning '${path}' with '${remote}' at branch '${branch}'"
   git="git -C ${path}"
   ${git} checkout -B "${branch}"
-  ${git} fetch "${remote}" "${branch}"
-  latest_tag=$(${git} describe --tags "$(${git} rev-list --tags --max-count=1)") # get latest tag
-  ${git} reset --hard "${latest_tag}"                                            # use latest tag instead of FETCH_HEAD
+  ${git} fetch "${remote}" "${branch}" --tags
+  # get latest tag
+  latest_tag=$(${git} describe --tags "$(${git} rev-list --tags --max-count=1)")
+  # ensure to pull the latest tag
+  ${git} fetch "${remote}" "${latest_tag}"
+  # reset to latest tag
+  ${git} reset --hard "${latest_tag}"
+  # remove all untracked files and directories
   ${git} clean -fdx
   unset path remote branch git
 }

@@ -10,8 +10,7 @@ on:
     paths:
       - "README.md"
       - "mkdocs.yaml"
-      - "docs/**.md"
-      - "docs/images/**"
+      - "docs/**/*"
       - ".github/workflows/deploy-docs.yaml"
 
 permissions:
