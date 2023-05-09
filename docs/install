@@ -62,7 +62,8 @@ git_clean() {
   git="git -C ${path}"
   ${git} checkout -B "${branch}"
   ${git} fetch "${remote}" "${branch}"
-  ${git} reset --hard FETCH_HEAD
+  latest_tag=$(${git} describe --tags "$(${git} rev-list --tags --max-count=1)") # get latest tag
+  ${git} reset --hard "${latest_tag}"                                            # use latest tag instead of FETCH_HEAD
   ${git} clean -fdx
   unset path remote branch git
 }
@@ -84,6 +85,7 @@ if [ -d "${DOTFILES_DIR}" ]; then
 else
   log_task "Cloning '${DOTFILES_REPO}' at branch '${DOTFILES_BRANCH}' to '${DOTFILES_DIR}'"
   git clone --branch "${DOTFILES_BRANCH}" "${DOTFILES_REPO}" "${DOTFILES_DIR}"
+  git_clean "${DOTFILES_DIR}" "${DOTFILES_REPO}" "${DOTFILES_BRANCH}"
 fi
 
 if [ -f "${DOTFILES_DIR}/scripts/install_chezmoi.sh" ]; then
