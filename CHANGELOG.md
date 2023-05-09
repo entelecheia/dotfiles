@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.8.3 (2023-05-09)
+### Fix
+* **install:** Improve git_clean function ([`6a98516`](https://github.com/entelecheia/dotfiles/commit/6a9851612522c07ce45d9791de5fb77e18b6f3fe))
+
 ## v0.8.2 (2023-05-09)
 ### Fix
 * **install:** Use latest tag for git reset ([`dc3fdce`](https://github.com/entelecheia/dotfiles/commit/dc3fdcedbf95518f9e50ebe4a90ce6cb31cea552))
