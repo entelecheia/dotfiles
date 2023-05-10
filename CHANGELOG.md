@@ -1,5 +1,13 @@
 <!--next-version-placeholder-->
 
+## v0.8.13 (2023-05-10)
+### Fix
+* **template:** Update dotfiles executable with version log ([`12cc115`](https://github.com/entelecheia/dotfiles/commit/12cc1152e9902a066367e9a3126343fb4a3d3d6d))
+
+### Documentation
+* **sops:** Add sops tutorial ([`13a3c2c`](https://github.com/entelecheia/dotfiles/commit/13a3c2c0c7f4fcc9dd117a011ae1e220b2655cbf))
+* **sops:** Add SOPS section to navigation menu ([`b888bf2`](https://github.com/entelecheia/dotfiles/commit/b888bf2e5c873811b97932db4f9191ee15499f20))
+
 ## v0.8.12 (2023-05-10)
 ### Fix
 * **socrypt:** Add new option for decrypting files, add support for reading environment variables from a file ([`7280f92`](https://github.com/entelecheia/dotfiles/commit/7280f9291ea4ebda629ede4241b48e69c24e9fae))
