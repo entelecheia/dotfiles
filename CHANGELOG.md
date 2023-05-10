@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.8.10 (2023-05-10)
+### Fix
+* **chezmoi:** Update DOTFILES_VERSION formatting in config message. ([`5e94860`](https://github.com/entelecheia/dotfiles/commit/5e94860df441249d11aaa4e592dcd1cb9e25dd1d))
+
 ## v0.8.9 (2023-05-09)
 ### Fix
 * **chezmoi:** Update Taskfile.dist.yaml - add new tasks and update existing ones ([`a2b6dca`](https://github.com/entelecheia/dotfiles/commit/a2b6dca1a0fb429a9deb9fc9252f02e88c223317))
