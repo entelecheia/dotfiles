@@ -77,8 +77,9 @@ nav:
     - Update: usage/update.md
     - Dotdrop: usage/dotdrop.md
     - GitHub: usage/github.md
+    - Dockerfiles: usage/dockerfiles.md
     - SSH, GPG, and AGE: usage/ssh-gpg-age.md
+    - SOPS: usage/sops.md
     - Pass and Passage: usage/pass.md
     - Doppler: usage/doppler.md
-    - Dockerfiles: usage/dockerfiles.md
   - References: references.md
