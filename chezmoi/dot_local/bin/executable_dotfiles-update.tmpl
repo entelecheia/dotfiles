@@ -17,6 +17,7 @@ if command -v gh >/dev/null; then
   fi
 fi
 
+DOTFILES_VERSION="{{ .DOTFILES_VERSION }}"
 if chezmoi --version &>/dev/null; then
   CHEZMOI_REPO="{{ .chezmoi.workingTree }}"
   # Get the remote URL of the local repository
@@ -27,6 +28,7 @@ if chezmoi --version &>/dev/null; then
 
   # Get the latest release tag from the remote repository
   LATEST_REMOTE_TAG=$(git ls-remote --tags --sort="v:refname" "$REPO_URL" | tail -n1 | sed 's/.*\///;s/\^{}//')
+  DOTFILES_VERSION="$LATEST_REMOTE_TAG"
 
   # Get the latest tag in the local repository
   LATEST_LOCAL_TAG=$(git --git-dir="$CHEZMOI_REPO/.git" --work-tree="$CHEZMOI_REPO" describe --tags --abbrev=0)
@@ -75,7 +77,7 @@ if chezmoi --version &>/dev/null; then
   # pass additional arguments to chezmoi apply except for --prerelease or -p flag
   chezmoi apply "${@:2}"
 fi
-export DOTFILES_VERSION="{{ .DOTFILES_VERSION }}"
+export DOTFILES_VERSION
 
 # update password-store and passage store
 pass-pull
@@ -84,6 +86,6 @@ pass-pull
 # backup important files after updating dotfiles
 # {{ end }}
 
-log_green "✅  Dotfiles updated successfully. ✨ 🌟 ✨"
+log_green "✅  Dotfiles updated to version ${DOTFILES_VERSION} successfully. ✨ 🌟 ✨"
 log_info "If you want to reload your shell, run:"
 log_c exec zsh
