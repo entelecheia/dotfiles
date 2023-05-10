@@ -78,8 +78,8 @@ The `socrypt` script is a helper script for SOPS that simplifies the process of 
 
 You can use the script to encrypt and decrypt files using SOPS and AGE:
 
-- To encrypt a file: `./socrypt my_file.txt`
-- To decrypt a file: `./socrypt --decrypt my_file.sops.txt`
+- To encrypt a file: `socrypt my_file.txt`
+- To decrypt a file: `socrypt --decrypt my_file.sops.txt`
 
 The script also supports useful aliases for easier usage:
 
