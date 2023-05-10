@@ -1,41 +1,86 @@
 #!/bin/bash
 
-file="$1"
-filename=$(basename -- "$file")
-basedir=$(dirname -- "$file")
-extension="${filename##*.}"
-name="${filename%.*}"
-output="${basedir}/${name}.sops.${extension}"
+operation="encrypt"
+file=""
+args=""
+output=""
+env_file=".env"
+
+while [[ $# -gt 0 ]]; do
+    key="$1"
+
+    case $key in
+        -i|--inplace)
+            output="$file"
+            shift # past argument
+            ;;
+        -d|--decrypt)
+            operation="decrypt"
+            shift # past argument
+            ;;
+        -e|--env-file)
+            env_file="$2"
+            shift # past argument
+            shift # past value
+            ;;
+        *)
+            file="$key"
+            shift # past value
+            ;;
+    esac
+done
+
+if [ -z "$file" ]; then
+    echo "File not provided"
+    exit 1
+fi
+
 if [ ! -f "$file" ]; then
   echo "File does not exist"
   exit 1
 fi
-# check if there are additional arguments
-if [ $# -gt 1 ]; then
-  args="${*:2}"
+
+filename=$(basename -- "$file")
+basedir=$(dirname -- "$file")
+extension="${filename##*.}"
+name="${filename%.*}"
+
+if [ -z "$output" ]; then
+    if [ "$operation" == "decrypt" ] && [[ "$name" == *.sops ]]; then
+        output="${basedir}/${name%.sops}.${extension}"
+    else
+        output="${basedir}/${name}.sops.${extension}"
+    fi
 fi
-# check if '--inplace' is in the arguments
-if [[ $args == *"--inplace"* ]]; then
-  # remove '--inplace' from the arguments
-  args=${args//--inplace/}
-  # set the output to the input file
-  output="$file"
-fi
+
 if [ -z "$SOPS_AGE_RECIPIENTS" ]; then
-  if [[ -f "${HOME}/.ssh/authorized_age_keys" ]]; then
-    AGE_RECIPIENTS="$(sed -n '/^age1/p' "${HOME}/.ssh/authorized_age_keys" | sort -u | sed 'H;1h;$!d;x;y/\n/,/')"
-    export AGE_RECIPIENTS="${AGE_RECIPIENTS}"
-    export SOPS_AGE_RECIPIENTS="${AGE_RECIPIENTS}"
-  fi
-  if [ -z "$SOPS_AGE_RECIPIENTS" ]; then
-    echo "SOPS_AGE_RECIPIENTS is not set"
-    exit 1
-  fi
+    if [[ -f "${HOME}/.ssh/authorized_age_keys" ]]; then
+        AGE_RECIPIENTS="$(sed -n '/^age1/p' "${HOME}/.ssh/authorized_age_keys" | sort -u | sed 'H;1h;$!d;x;y/\n/,/')"
+        export AGE_RECIPIENTS="${AGE_RECIPIENTS}"
+        export SOPS_AGE_RECIPIENTS="${AGE_RECIPIENTS}"
+    fi
+    if [ -z "$SOPS_AGE_RECIPIENTS" ]; then
+        echo "SOPS_AGE_RECIPIENTS is not set"
+        exit 1
+    fi
 fi
-# encrypt the file
-# if args is empty, it will be ignored
-if [ -z "$args" ]; then
-  sops --encrypt "$file" > "$output"
+
+if [ -f "$env_file" ]; then
+    while IFS= read -r line || [ -n "$line" ]; do
+        # Check if the line has `=` between key and value
+        if [[ $line == *"="* ]]; then
+            export "${line?}"
+        fi
+    done < <(grep -v '^#' "$env_file")
+fi
+
+# perform the operation
+if [ "$operation" == "decrypt" ]; then
+    sops --decrypt "$file" > "$output"
 else
-  sops --encrypt "${args}" "$file" > "$output"
+    if [ -z "$args" ]; then
+        sops --encrypt "$file" > "$output"
+    else
+        sops --encrypt "${args}" "$file" > "$output"
+    fi
 fi
