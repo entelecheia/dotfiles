@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.8.12 (2023-05-10)
+### Fix
+* **socrypt:** Add new option for decrypting files, add support for reading environment variables from a file ([`7280f92`](https://github.com/entelecheia/dotfiles/commit/7280f9291ea4ebda629ede4241b48e69c24e9fae))
+
 ## v0.8.11 (2023-05-10)
 ### Fix
 * **docker:** Replace deprecated 'docker compose' with 'docker-compose' in dk-compose (for backward compatibility) ([`1078277`](https://github.com/entelecheia/dotfiles/commit/10782778c0d34dbd7bb693d045a82db7b1215659))
