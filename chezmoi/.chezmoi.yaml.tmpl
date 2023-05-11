@@ -66,7 +66,7 @@
 # {{- if not $sudoer -}}
 # {{-   $sudo_check := "" -}}
 # {{-   if eq .chezmoi.os "linux" -}}
-# {{-     $sudo_check = (output "sh" "-c" (printf "test -n \"$(ls /etc/sudoers.d | grep -w %s)\" && echo sudo || echo false" .chezmoi.username)) | trim -}}
+# {{-     $sudo_check = (output "sh" "-c" (printf "test -n '$(grep -q \"^sudo:.*%s\\([,].*\\)\\?$\" /etc/group )' && echo sudo || echo false" .chezmoi.username)) | trim -}}
 # {{-   else -}}
 # {{-     $sudo_check = (output "sh" "-c" "test -n \"$(groups | grep -w admin)\" && echo sudo || echo false") | trim -}}
 # {{-   end -}}
@@ -287,8 +287,13 @@
 # {{- $dotfiles_version := or (env "DOTFILES_VERSION") "N/A" -}}
 # {{- writeToStdout "---\n" -}}
 # {{- writeToStdout "🖥️  Information found in your system environment variables:\n" -}}
-# {{- writeToStdout (printf "🤖  DOTFILES CONFIGURATION (Version: %s)\n\n" $dotfiles_version) -}}
+# {{- if $sudoer -}}
+# {{- writeToStdout (printf "🤖  DOTFILES CONFIGURATION (Version: %s) [for SUDOER]\n\n" $dotfiles_version) -}}
+# {{- writeToStdout (printf "🦸  USER_FULLNAME: %s\n" $name) -}}
+# {{- else -}}
+# {{- writeToStdout (printf "🤖  DOTFILES CONFIGURATION (Version: %s) [for NON-SUDOER]\n\n" $dotfiles_version) -}}
 # {{- writeToStdout (printf "👤  USER_FULLNAME: %s\n" $name) -}}
+# {{- end -}}
 # {{- writeToStdout (printf "📧  USER_EMAIL: %s\n" $email) -}}
 # {{- writeToStdout (printf "🏠  SYSTEM_HOSTNAME: %s\n" $hostname) -}}
 # {{- writeToStdout (printf "🐙  GITHUB_USERNAME: %s\n" $github_username) -}}
