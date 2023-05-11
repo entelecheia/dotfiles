@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.8.17 (2023-05-11)
+### Fix
+* **docker:** Add docker-login script ([`32b4a2f`](https://github.com/entelecheia/dotfiles/commit/32b4a2f16387f1e39bbd622775bc46853c6e2757))
+
 ## v0.8.16 (2023-05-11)
 ### Fix
 * **chezmoi:** Fix sudo check command in .chezmoi.yaml.tmpl file ([`8b9a0d4`](https://github.com/entelecheia/dotfiles/commit/8b9a0d4c7a446fc6a009baa2fe29ee62c7472f3c))
