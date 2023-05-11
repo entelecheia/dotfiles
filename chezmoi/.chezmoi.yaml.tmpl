@@ -62,7 +62,7 @@
 # {{- if not $sudoer -}}
 # {{-   $sudo_check := "" -}}
 # {{-   if eq .chezmoi.os "linux" -}}
-# {{-     $sudo_check = (output "sh" "-c" (printf "test -n '$(grep -q \"^sudo:.*%s\\([,].*\\)\\?$\" /etc/group )' && echo sudo || echo false" .chezmoi.username)) | trim -}}
+# {{-     $sudo_check = (output "sh" "-c" (printf "grep -q \"^sudo:.*%s\\([,].*\\)\\?$\" /etc/group && echo sudo || echo false" .chezmoi.username)) | trim -}}
 # {{-   else -}}
 # {{-     $sudo_check = (output "sh" "-c" "test -n \"$(groups | grep -w admin)\" && echo sudo || echo false") | trim -}}
 # {{-   end -}}
