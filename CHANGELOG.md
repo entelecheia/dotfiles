@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.8.18 (2023-05-11)
+### Fix
+* **docker:** Update docker login script and modify config.json template ([`758eaac`](https://github.com/entelecheia/dotfiles/commit/758eaacacbd3f6c4b9c1ba107f6acd2d862f473b))
+
 ## v0.8.17 (2023-05-11)
 ### Fix
 * **docker:** Add docker-login script ([`32b4a2f`](https://github.com/entelecheia/dotfiles/commit/32b4a2f16387f1e39bbd622775bc46853c6e2757))
