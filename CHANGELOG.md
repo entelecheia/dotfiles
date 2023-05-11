@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.8.14 (2023-05-11)
+### Fix
+* **chezmoi:** Update upgrade-ca-certificates script to include GCP public key import ([`ffe937a`](https://github.com/entelecheia/dotfiles/commit/ffe937ac5383bd61938c73129001f7de5069db73))
+
+### Documentation
+* **dotdrop:** Add introduction and basic usage steps in usage/dotdrop.md ([`43ed854`](https://github.com/entelecheia/dotfiles/commit/43ed854c4cf60c1eee7388493c7855a7ec623258))
+
 ## v0.8.13 (2023-05-10)
 ### Fix
 * **template:** Update dotfiles executable with version log ([`12cc115`](https://github.com/entelecheia/dotfiles/commit/12cc1152e9902a066367e9a3126343fb4a3d3d6d))
