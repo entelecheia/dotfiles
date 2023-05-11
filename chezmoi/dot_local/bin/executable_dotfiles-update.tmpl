@@ -86,6 +86,6 @@ pass-pull
 # backup important files after updating dotfiles
 # {{ end }}
 
-log_green "✅  Dotfiles updated to version ${DOTFILES_VERSION} successfully. ✨ 🌟 ✨"
-log_info "If you want to reload your shell, run:"
-log_c exec zsh
+printf "\n"
+log_green "✨ 🌟 ✨  Dotfiles updated to ${DOTFILES_VERSION} successfully. ✨ 🌟 ✨"
+log_yellow "👉  If you want to reload your shell, run:  exec zsh 👈"
