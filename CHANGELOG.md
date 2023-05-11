@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.8.15 (2023-05-11)
+### Fix
+* **chezmoi:** Update sudo check command and improve system environment output formatting ([`cbf9293`](https://github.com/entelecheia/dotfiles/commit/cbf9293bb8f24294d91398a56266424b7efc64dc))
+
 ## v0.8.14 (2023-05-11)
 ### Fix
 * **chezmoi:** Update upgrade-ca-certificates script to include GCP public key import ([`ffe937a`](https://github.com/entelecheia/dotfiles/commit/ffe937ac5383bd61938c73129001f7de5069db73))
