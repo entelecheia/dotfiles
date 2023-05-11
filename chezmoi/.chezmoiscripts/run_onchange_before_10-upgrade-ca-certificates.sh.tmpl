@@ -3,6 +3,9 @@
 # {{ template "scripts-library" }}
 log_task "010. Upgrading ca-certificates"
 
+# import the Google Cloud Platform public key just in case we need it
+c curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - || true
+
 # We need to install ca-certificates before we add the APT repos, because some of them
 # may use newer CAs.
 # Ignore apt update error if it is due to expired certificate (because chances are that
