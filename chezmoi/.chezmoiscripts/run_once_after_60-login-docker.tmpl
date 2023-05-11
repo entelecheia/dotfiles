@@ -3,15 +3,7 @@
 # {{ template "scripts-library" }}
 log_task "60. Login to Docker Hub"
 
-DOCKER_USERNAME="{{ .docker.username }}"
+# docker-login hash: {{ include "dot_local/bin/executable_docker-login.tmpl" | sha256sum }}
+"${HOME}/.local/bin/docker-login"
 
-if [ -n "$DOCKER_USERNAME" ]; then
-  # if docker is installed then login to Docker Hub
-  if docker --version &>/dev/null; then
-    log_task "Login to Docker Hub"
-    c docker login || true
-  else
-    log_info "Docker is not installed"
-  fi
-fi
 # {{ end }}

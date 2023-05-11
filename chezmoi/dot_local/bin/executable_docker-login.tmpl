@@ -1,0 +1,29 @@
+#!/bin/bash
+# {{ template "scripts-library" }}
+
+# check if --force or -f flag is set
+set +u
+if [[ "${1}" == "--force" ]] || [[ "${1}" == "-f" ]]; then
+  FORCE=true
+else
+  FORCE=false
+fi
+set -u
+
+DOCKER_USERNAME=${DOCKER_USERNAME:-"{{ .docker.username }}"}
+
+if [ -n "$DOCKER_USERNAME" ]; then
+  # if docker is installed then login to Docker Hub
+  if docker --version &>/dev/null; then
+    if [ "$FORCE" = true ] && [ -f "$HOME/.docker/config.json" ]; then
+      log_info "Removing existing Docker login credentials"
+      c rm -f "$HOME/.docker/config.json"
+    fi
+    log_task "Login to Docker Hub"
+    c docker login -u "$DOCKER_USERNAME" || true
+  else
+    log_info "Docker is not installed"
+  fi
+else
+  log_info "DOCKER_USERNAME environment variable is not set. Skipping Docker login."
+fi
