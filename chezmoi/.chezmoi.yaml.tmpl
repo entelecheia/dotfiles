@@ -55,12 +55,8 @@
 # {{- end -}}
 
 # {{- $sudoer := false -}}
-# {{- if and (hasKey . "system") (hasKey .system "is_sudoer") -}}
-# {{-   $sudoer = .system.is_sudoer -}}
-# {{- else -}}
-# {{-   if eq (env "DOTFILES_SUDOER") "true" "True" "TRUE" "1" -}}
-# {{-     $sudoer = true -}}
-# {{-   end -}}
+# {{- if eq (env "DOTFILES_SUDOER") "true" "True" "TRUE" "1" -}}
+# {{-   $sudoer = true -}}
 # {{- end -}}
 
 # {{- if not $sudoer -}}
