@@ -1,5 +1,10 @@
 <!--next-version-placeholder-->
 
+## v0.8.16 (2023-05-11)
+### Fix
+* **chezmoi:** Fix sudo check command in .chezmoi.yaml.tmpl file ([`8b9a0d4`](https://github.com/entelecheia/dotfiles/commit/8b9a0d4c7a446fc6a009baa2fe29ee62c7472f3c))
+* **chezmoi:** Simplify sudoer check ([`4b15847`](https://github.com/entelecheia/dotfiles/commit/4b15847f4e674f41fcf6f9a4b3723495581b8d4b))
+
 ## v0.8.15 (2023-05-11)
 ### Fix
 * **chezmoi:** Update sudo check command and improve system environment output formatting ([`cbf9293`](https://github.com/entelecheia/dotfiles/commit/cbf9293bb8f24294d91398a56266424b7efc64dc))
