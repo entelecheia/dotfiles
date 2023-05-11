@@ -12,7 +12,7 @@ fi
 # {{ if .system.is_wsl }}
 json=$("${jq[@]}" '.credsStore = "wincred.exe"' <<<"${json}")
 # {{ else if .system.is_gnome }}
-json=$("${jq[@]}" '.credsStore = "secretservice"' <<<"${json}")
+# json=$("${jq[@]}" '.credsStore = "secretservice"' <<<"${json}")
 # {{ else if eq .chezmoi.os "darwin" }}
 json=$("${jq[@]}" '.credsStore = "osxkeychain"' <<<"${json}")
 # {{ else }}
