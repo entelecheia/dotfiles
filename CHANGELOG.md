@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.9.3 (2023-05-12)
+### Fix
+* **python-tools:** Upgrade pip and setuptools and install python3-testresources ([`8bf1a2d`](https://github.com/entelecheia/dotfiles/commit/8bf1a2d779ee1271b720f009c3d154055bbf322f))
+
 ## v0.9.2 (2023-05-12)
 ### Fix
 * **chezmoi:** Fix condition in installing poethepoet with pipx ([`1454bdf`](https://github.com/entelecheia/dotfiles/commit/1454bdf663d0317c2cc1162d6bd1ca12d2b5351d))
