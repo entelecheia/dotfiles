@@ -1,5 +1,10 @@
 <!--next-version-placeholder-->
 
+## v0.9.2 (2023-05-12)
+### Fix
+* **chezmoi:** Fix condition in installing poethepoet with pipx ([`1454bdf`](https://github.com/entelecheia/dotfiles/commit/1454bdf663d0317c2cc1162d6bd1ca12d2b5351d))
+* **docker:** Remove unnecessary `ADDITIONAL_ARGS` in `docker-compose push` command ([`a5b3aa0`](https://github.com/entelecheia/dotfiles/commit/a5b3aa0816a96de0cb58dc83e01ad5f1445273c5))
+
 ## v0.9.1 (2023-05-12)
 ### Fix
 * **docker-compose:** Add dkcc alias and allow dk-compose to use config command ([`050009b`](https://github.com/entelecheia/dotfiles/commit/050009b8b24eff9acc369588e6d1725045cda42b))
