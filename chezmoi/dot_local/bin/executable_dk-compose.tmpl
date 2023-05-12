@@ -31,7 +31,7 @@ set +u
 # first argument is the command
 COMMAND="$1"
 shift
-if [[ "$COMMAND" != "build" ]] && [[ "$COMMAND" != "run" ]] && [[ "$COMMAND" != "up" ]] && [[ "$COMMAND" != "down" ]]; then
+if [[ "$COMMAND" != "build" ]] && [[ "$COMMAND" != "run" ]] && [[ "$COMMAND" != "up" ]] && [[ "$COMMAND" != "down" ]] && [[ "$COMMAND" != "config" ]]; then
   echo "Invalid command: $COMMAND" >&2
   echo "Usage: $0 $USAGE" >&2
   exit 1
@@ -238,7 +238,7 @@ ENV_ARGS=""
 if [[ -f "$ENV_FILE" ]]; then
   ENV_ARGS="--env-file ${ENV_FILE}"
   log_task "Loading environment variables from ${ENV_FILE}"
-  set -a
+  set -a # export all variables (set -o allexport)
   # shellcheck disable=SC1090
   c source "$ENV_FILE"
   set +a
