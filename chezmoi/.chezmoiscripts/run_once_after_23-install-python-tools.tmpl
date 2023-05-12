@@ -5,6 +5,11 @@ log_task "23. Installing python tools"
 
 ensure_path_entry "${HOME}/.local/bin"
 
+# upgrade pip and setuptools
+log_task "Upgrading pip and setuptools"
+c /usr/bin/pip3 install --upgrade pip
+c /usr/bin/pip3 install --upgrade setuptools
+
 # install pipx
 if ! pipx --version &>/dev/null; then
   log_task "Installing pipx"
