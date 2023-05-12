@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.9.1 (2023-05-12)
+### Fix
+* **docker-compose:** Add dkcc alias and allow dk-compose to use config command ([`050009b`](https://github.com/entelecheia/dotfiles/commit/050009b8b24eff9acc369588e6d1725045cda42b))
+
 ## v0.9.0 (2023-05-12)
 ### Feature
 * **executable:** Add script to change uid and gid ([`86b3a21`](https://github.com/entelecheia/dotfiles/commit/86b3a216ebfa9523b8c68e90102ea959803a62a1))
