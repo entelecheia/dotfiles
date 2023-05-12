@@ -21,7 +21,7 @@ fi
 
 # install poethepoet
 if ! command -v poe >/dev/null; then
-  if ! command -v pipx >/dev/null; then
+  if command -v pipx >/dev/null; then
     log_task "Installing poethepoet with pipx"
     c pipx install poethepoet
   else
