@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.9.0 (2023-05-12)
+### Feature
+* **executable:** Add script to change uid and gid ([`86b3a21`](https://github.com/entelecheia/dotfiles/commit/86b3a216ebfa9523b8c68e90102ea959803a62a1))
+
 ## v0.8.19 (2023-05-11)
 ### Fix
 * **dotfiles:** Update success message and instructions for reloading shell ([`1eecd5f`](https://github.com/entelecheia/dotfiles/commit/1eecd5f72613dbc81f752f8ed01ddcaa6b10819b))
