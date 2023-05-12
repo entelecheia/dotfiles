@@ -1,0 +1,84 @@
+#!/bin/bash
+# {{ template "scripts-library" }}
+
+# Check if script is run as root
+if [[ $EUID -ne 0 ]]; then
+  log_error "This script must be run as root"
+  exit 1
+fi
+
+# Defaults
+username=$(whoami)
+directory=$(eval echo ~"$username")
+
+# Parse command line options
+while (("$#")); do
+  case "$1" in
+  -u | --uid)
+    new_UID=$2
+    shift 2
+    ;;
+  -g | --gid)
+    new_GID=$2
+    shift 2
+    ;;
+  --user)
+    username=$2
+    shift 2
+    ;;
+  --group)
+    groupname=$2
+    shift 2
+    ;;
+  -d | --dir)
+    directory=$2
+    shift 2
+    ;;
+  *)
+    log_error "Error: Invalid argument"
+    exit 1
+    ;;
+  esac
+done
+
+# Check if the required arguments are provided
+if [[ -z "$new_UID" || -z "$new_GID" ]]; then
+  log_info "Usage: $0 -u|--uid <new_UID> -g|--gid <new_GID> [--user <username>] [--group <groupname>] [-d|--dir <directory>]"
+  exit 1
+fi
+
+# If no groupname is provided, use the username as the groupname
+groupname=${groupname:-$username}
+
+# Change UID
+if ! usermod -u "$new_UID" "$username"; then
+  log_error "Failed to change UID"
+  exit 1
+fi
+
+# Check if the group exists, if not, create it
+if ! getent group "$groupname" >/dev/null 2>&1; then
+  if groupadd -g "$new_GID" "$groupname"; then
+    log_info "Group $groupname added successfully"
+  else
+    log_error "Failed to create group $groupname"
+    exit 1
+  fi
+else
+  log_info "Group already exists!"
+fi
+
+# Change the user's primary group
+if usermod -g "$new_GID" "$username"; then
+  log_info "Primary group changed successfully"
+else
+  log_error "Failed to change primary group"
+  exit 1
+fi
+
+# Change the GID of files owned by the old group in the specified directory
+find "$directory" -group "$groupname" -exec chgrp -h "$new_GID" {} \;
+
+log_info "Successfully changed UID and GID"
+
+exit 0
