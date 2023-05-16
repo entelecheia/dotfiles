@@ -115,48 +115,59 @@ The `dk-compose` script is a convenient wrapper for managing Docker Compose proj
 
 ## `dk-compose` Script
 
+`dk-compose` is a script for managing Docker containers using Docker Compose, with a comprehensive set of options for configuring the environment.
+
+### Usage
+
 ```bash
-Usage: dk-compose COMMAND DOCKER_NAME [-t|--tag TAG] [--from-project] [--project-directory PROJECT_DIR] [--dockerfiles-directory DOCKERFILES_DIR] [-c|--compose-filename COMPOSE_FILENAME] [-e|--env-filename ENV_FILENAME] [-v|--version VERSION] [-l|--latest] [--push] [-n|--name CONTAINER_NAME] [--network DOCKER_NETWORK_NAME] [-u|--username USERNAME] [-h|--help]
+dk-compose COMMAND DOCKER_NAME [OPTIONS]
 ```
 
-**COMMAND** - One of the following Docker Compose commands:
+### Arguments
 
-- `build`: Build the Docker services defined in the Compose file.
-- `run`: Run a one-off command on a service.
-- `up`: Create and start the containers defined in the Compose file.
-- `down`: Stop and remove containers, networks, and volumes defined in the Compose file.
+- **COMMAND** - The Docker Compose command to be executed. Valid commands include:
 
-**DOCKER_NAME** - The name of the Docker project.
+  - `build`: Build the Docker services as defined in the Compose file.
+  - `run`: Execute a one-off command on a service.
+  - `up`: Create and start the containers as per the Compose file.
+  - `down`: Halt and remove containers, networks, and volumes as defined in the Compose file.
+  - `config`: Validate and view the Compose file.
 
-**Options:**
+- **DOCKER_NAME** - The name for the Docker project.
 
-- `-t, --tag TAG`: Specify a tag to use for the Docker Compose file and environment file. The script will look for files named `docker-compose-TAG.yaml` and `docker.TAG.env`, where `TAG` is the provided tag.
+### Options
 
-- `--from-project`: Use the project directory as the source of the Docker Compose files instead of the default Dockerfiles directory.
+- `-t, --tag TAG`: Use a specific tag for the Docker Compose file and the environment file. The script will attempt to find files named `docker-compose-TAG.yaml` and `docker.TAG.env`, where `TAG` is the provided tag.
 
-- `--project-directory PROJECT_DIR`: Provide a custom path to the project directory. If not specified, the script will use the default project directory.
+- `--from-project`: Indicate to use the project directory as the source for the Docker Compose files, overriding the default Dockerfiles directory.
 
-- `--dockerfiles-directory DOCKERFILES_DIR`: Provide a custom path to the directory containing the Dockerfiles. If not specified, the script will use the default Dockerfiles directory.
+- `--project-directory PROJECT_DIR`: Set a custom path to the project directory. If not specified, the script defaults to the preconfigured project directory.
 
-- `-c, --compose-filename COMPOSE_FILENAME`: Specify a custom Docker Compose file name. If not specified, the script will use the default `docker-compose.yaml` or `docker-compose-TAG.yaml` based on the provided tag.
+- `--dockerfiles-directory DOCKERFILES_DIR`: Set a custom path to the directory containing Dockerfiles. If not specified, the script defaults to the preconfigured Dockerfiles directory.
 
-- `-e, --env-filename ENV_FILENAME`: Specify a custom environment file name. If not specified, the script will use the default `docker.env` or `docker.TAG.env` based on the provided tag.
+- `-c, --compose-filename COMPOSE_FILENAME`: Indicate a custom Docker Compose filename. If not specified, the script defaults to `docker-compose.yaml` or `docker-compose-TAG.yaml` based on the tag provided.
 
-- `-v, --version VERSION`: Specify the version of the Docker image to use. This will be set as the `VERSION` environment variable for the Docker Compose process.
+- `-e, --env-file FILE`: Specify the environment file for Docker Compose.
 
-- `-l, --latest`: Use the latest version of the Docker image. Sets the `VERSION` environment variable to "latest".
+- `--shell-env-file FILE`: Specify the shell environment file. If not provided, the script defaults to `docker.env` in the Dockerfiles directory.
 
-- `--push`: After successfully building the Docker image, push the image to a remote repository.
+- `--global-env-file FILE`: Specify the global environment file.
 
-- `-n, --name CONTAINER_NAME`: Specify a custom name for the container that will be created.
+- `-v, --version VERSION`: Set the version of the Docker image to use. This will be exported as the `VERSION` environment variable for the Docker Compose process.
 
-- `--network DOCKER_NETWORK_NAME`: Specify the name of the Docker network to use or create. If the network does not exist, the script will create it.
+- `-l, --latest`: Indicate to use the latest Docker image version. This sets the `VERSION` environment variable to "latest".
 
-- `-u, --username USERNAME`: Specify the username to use for the Docker image. If not provided, the script will use the default username from the configuration.
+- `--push`: Enable the script to push the Docker image to a remote repository upon successful build.
 
-- `-h, --help`: Display the usage information for the script.
+- `-n, --name CONTAINER_NAME`: Specify a custom name for the Docker container to be created.
 
-**Examples:**
+- `--network DOCKER_NETWORK_NAME`: Specify the Docker network name to use or create. If the network doesn't exist, the script will create it.
+
+- `-u, --username USERNAME`: Specify the username for the Docker image. If not provided, the script will default to the username from the configuration.
+
+- `-h, --help`: Display the help message containing usage information for the script.
+
+### Examples
 
 1. Build a Docker project named `my_project` with tag `dev`:
 
