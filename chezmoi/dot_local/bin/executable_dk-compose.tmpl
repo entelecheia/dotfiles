@@ -44,6 +44,7 @@ PROJECT_DIR=""
 DOCKERFILES_DIR=""
 COMPOSE_FILENAME=""
 ENV_FILE=""
+SHELL_ENV_FILE=""
 SHELL_ENV_FILENAME=""
 GLOBAL_ENV_FILE=""
 VERSION=""
@@ -269,7 +270,9 @@ if [[ -f "$GLOBAL_ENV_FILE" ]]; then
 fi
 
 # shell env file
-SHELL_ENV_FILE="${DOCKERFILES_DIR}/${SHELL_ENV_FILENAME}"
+if [ -z "$SHELL_ENV_FILE" ]; then
+  SHELL_ENV_FILE="${DOCKERFILES_DIR}/${SHELL_ENV_FILENAME}"
+fi
 if [[ -f "$SHELL_ENV_FILE" ]]; then
   log_task "Exporting shell environment variables from ${SHELL_ENV_FILE}"
   set -a
