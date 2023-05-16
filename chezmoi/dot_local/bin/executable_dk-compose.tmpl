@@ -6,7 +6,7 @@
 true || source ../../.chezmoitemplates/scripts-library
 
 # arguments usage
-USAGE="COMMAND DOCKER_NAME [-t|--tag TAG] [--from-project] [--project-directory PROJECT_DIR] [--dockerfiles-directory DOCKERFILES_DIR] [-c|--compose-filename COMPOSE_FILENAME] [-e|--env-filename ENV_FILENAME] [--global-env-file GLOBAL_ENV_FILE] [-v|--version VERSION] [-l|--latest] [--push ] [-n|--name CONTAINER_NAME] [--network DOCKER_NETWORK_NAME] [-u|--username USERNAME] [-h|--help]"
+USAGE="COMMAND DOCKER_NAME [-t|--tag TAG] [--from-project] [--project-directory PROJECT_DIR] [--dockerfiles-directory DOCKERFILES_DIR] [-c|--compose-filename COMPOSE_FILENAME] [-e|--env-file ENV_FILE]  [--shell-env-filename SHELL_ENV_FILENAME] [--global-env-file GLOBAL_ENV_FILE] [-v|--version VERSION] [-l|--latest] [--push ] [-n|--name CONTAINER_NAME] [--network DOCKER_NETWORK_NAME] [-u|--username USERNAME] [-h|--help]"
 
 # declare arguments
 COMMAND=""
@@ -15,7 +15,8 @@ TAG=""
 PROJECT_DIR=""
 DOCKERFILES_DIR=""
 COMPOSE_FILENAME=""
-ENV_FILENAME=""
+ENV_FILE=""
+SHELL_ENV_FILENAME=""
 GLOBAL_ENV_FILE=""
 VERSION=""
 LATEST="false"
@@ -82,12 +83,19 @@ while [[ $# -gt 0 ]]; do
   --compose-file=*)
     COMPOSE_FILENAME="${1#*=}"
     ;;
-  -e | --env-filename)
-    ENV_FILENAME="$2"
+  -e | --env-file)
+    ENV_FILE="$2"
     shift
     ;;
-  --env-filename=*)
-    ENV_FILENAME="${1#*=}"
+  --env-file=*)
+    ENV_FILE="${1#*=}"
+    ;;
+  --shell-env-file)
+    SHELL_ENV_FILE="$2"
+    shift
+    ;;
+  --shell-env-file=*)
+    SHELL_ENV_FILE="${1#*=}"
     ;;
   --global-env-file)
     GLOBAL_ENV_FILE="$2"
@@ -169,16 +177,16 @@ if [[ -n "$TAG" ]]; then
   if [[ -z "$COMPOSE_FILENAME" ]]; then
     COMPOSE_FILENAME="docker-compose-${TAG}.yaml"
   fi
-  if [[ -z "$ENV_FILENAME" ]]; then
-    ENV_FILENAME="docker.${TAG}.env"
+  if [[ -z "$SHELL_ENV_FILENAME" ]]; then
+    SHELL_ENV_FILENAME="docker.${TAG}.env"
   fi
 else
   # {base_name}.{ext}
   if [[ -z "$COMPOSE_FILENAME" ]]; then
     COMPOSE_FILENAME="docker-compose.yaml"
   fi
-  if [[ -z "$ENV_FILENAME" ]]; then
-    ENV_FILENAME="docker.env"
+  if [[ -z "$SHELL_ENV_FILENAME" ]]; then
+    SHELL_ENV_FILENAME="docker.env"
   fi
 fi
 
@@ -225,23 +233,28 @@ if [ -z "$GLOBAL_ENV_FILE" ]; then
   GLOBAL_ENV_FILE="${DOCKERFILES_SHARE_DIR}/src/global.env"
 fi
 if [[ -f "$GLOBAL_ENV_FILE" ]]; then
-  log_task "Loading global environment variables from ${GLOBAL_ENV_FILE}"
-  set -a
+  log_task "Exporting global environment variables from ${GLOBAL_ENV_FILE}"
+  set -a # export all variables (set -o allexport)
   # shellcheck disable=SC1090
   c source "$GLOBAL_ENV_FILE"
   set +a
 fi
 
+# shell env file
+SHELL_ENV_FILE="${DOCKERFILES_DIR}/${SHELL_ENV_FILENAME}"
+if [[ -f "$SHELL_ENV_FILE" ]]; then
+  log_task "Exporting shell environment variables from ${SHELL_ENV_FILE}"
+  set -a
+  # shellcheck disable=SC1090
+  c source "$SHELL_ENV_FILE"
+  set +a
+fi
+
 # project env file
-ENV_FILE="${DOCKERFILES_DIR}/${ENV_FILENAME}"
 ENV_ARGS=""
 if [[ -f "$ENV_FILE" ]]; then
   ENV_ARGS="--env-file ${ENV_FILE}"
-  log_task "Loading environment variables from ${ENV_FILE}"
-  set -a # export all variables (set -o allexport)
-  # shellcheck disable=SC1090
-  c source "$ENV_FILE"
-  set +a
+  log_task "Loading environment variables for the services from ${ENV_FILE}"
 fi
 
 # if network does not exist, create it
