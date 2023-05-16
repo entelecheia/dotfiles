@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.9.4 (2023-05-16)
+### Fix
+* **dk-compose:** Add improved usage information and arguments ([`16d00f7`](https://github.com/entelecheia/dotfiles/commit/16d00f7618cc9133b01edfefa0d31e5ccc2f694d))
+
+### Documentation
+* **dk-compose:** Modify usage of dk-compose command ([`7b06b7b`](https://github.com/entelecheia/dotfiles/commit/7b06b7beb150437dffc3995d069b6390e274acb2))
+
 ## v0.9.3 (2023-05-12)
 ### Fix
 * **python-tools:** Upgrade pip and setuptools and install python3-testresources ([`8bf1a2d`](https://github.com/entelecheia/dotfiles/commit/8bf1a2d779ee1271b720f009c3d154055bbf322f))
