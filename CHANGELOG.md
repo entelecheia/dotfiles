@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.9.5 (2023-05-17)
+### Fix
+* **dk-compose:** Add conditional for optional SHELL_ENV_FILE variable ([`90c7792`](https://github.com/entelecheia/dotfiles/commit/90c77920ec0eacd4576b6f08bea970ddbdd233df))
+
 ## v0.9.4 (2023-05-16)
 ### Fix
 * **dk-compose:** Add improved usage information and arguments ([`16d00f7`](https://github.com/entelecheia/dotfiles/commit/16d00f7618cc9133b01edfefa0d31e5ccc2f694d))
