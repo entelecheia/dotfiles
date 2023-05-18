@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.9.7 (2023-05-18)
+### Fix
+* **pip:** Add Nvidia extra index and cache adjustments to pip.conf ([`f7573c5`](https://github.com/entelecheia/dotfiles/commit/f7573c57b2719ae7e7172172d140ff90c6c1ff2b))
+
 ## v0.9.6 (2023-05-18)
 ### Fix
 * **docker:** Add sudo to service and systemd restart ([`961bf2a`](https://github.com/entelecheia/dotfiles/commit/961bf2a5ad7a39fd854f0a44490d77dc35562412))
