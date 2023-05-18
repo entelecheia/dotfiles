@@ -31,15 +31,17 @@ tasks:
     cmds:
       - tmux attach -t {{.CLI_ARGS}}
 
-  watch-nvidia-smi:
-    desc: Watch nvidia-smi output every second (useful for monitoring GPU usage)
-    cmds:
-      - watch -n 1 nvidia-smi
-
   restart-docker-daemon:
     desc: Restart the Docker daemon
     cmds:
       - restart-docker-daemon
+
+  # {{ if eq .chezmoi.os "linux" }}
+  watch-nvidia-smi:
+    desc: Watch nvidia-smi output every second (useful for monitoring GPU usage)
+    cmds:
+      - watch -n 1 nvidia-smi
+  # {{ end }}
 
   # install-node:
   #   desc: Install the latest LTS version of Node.js using nvm
