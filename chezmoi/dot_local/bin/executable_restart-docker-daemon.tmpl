@@ -4,7 +4,7 @@
 log_task "Restarting Docker daemon"
 # {{ if .system.is_wsl }}
 # service restart fails if the service was never started
-c service docker restart || c service docker start || true
+c sudo service docker restart || c sudo service docker start || true
 # {{ else }}
-c systemctl restart docker
+c sudo systemctl restart docker
 # {{ end }}
