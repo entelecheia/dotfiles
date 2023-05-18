@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.10.0 (2023-05-18)
+### Feature
+* **dns:** Add script to change DNS servers ([`5a6078a`](https://github.com/entelecheia/dotfiles/commit/5a6078a402b86e69bcf282a0d322dbb1b0423e4d))
+
+### Fix
+* **chezmoi:** Rename Taskfile.dist.yaml to Taskfile.dist.yaml.tmpl ([`f57e26a`](https://github.com/entelecheia/dotfiles/commit/f57e26acb7ae3090fa93b178d7a3f65308a4d11a))
+
 ## v0.9.7 (2023-05-18)
 ### Fix
 * **pip:** Add Nvidia extra index and cache adjustments to pip.conf ([`f7573c5`](https://github.com/entelecheia/dotfiles/commit/f7573c57b2719ae7e7172172d140ff90c6c1ff2b))
