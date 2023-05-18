@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.9.6 (2023-05-18)
+### Fix
+* **docker:** Add sudo to service and systemd restart ([`961bf2a`](https://github.com/entelecheia/dotfiles/commit/961bf2a5ad7a39fd854f0a44490d77dc35562412))
+
 ## v0.9.5 (2023-05-17)
 ### Fix
 * **dk-compose:** Add conditional for optional SHELL_ENV_FILE variable ([`90c7792`](https://github.com/entelecheia/dotfiles/commit/90c77920ec0eacd4576b6f08bea970ddbdd233df))
