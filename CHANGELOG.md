@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.10.1 (2023-05-20)
+### Fix
+* **gitignore:** Update global ignore list ([`1de4d56`](https://github.com/entelecheia/dotfiles/commit/1de4d56cc4856ed8d3db20110bf4575b5438ff92))
+
 ## v0.10.0 (2023-05-18)
 ### Feature
 * **dns:** Add script to change DNS servers ([`5a6078a`](https://github.com/entelecheia/dotfiles/commit/5a6078a402b86e69bcf282a0d322dbb1b0423e4d))
