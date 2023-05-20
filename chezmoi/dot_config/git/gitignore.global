@@ -37,11 +37,17 @@ ehthumbs.db
 Thumbs.db
 
 # Internal use #
+################
 .refs
 .links
 
 # Dot env files #
+#################
 .env*
 !.env.project
 !.env.vault
 !.env.example
+
+# Hypothesis #
+##############
+.hypothesis
