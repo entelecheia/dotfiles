@@ -854,6 +854,20 @@ data:
     authtoken: {{ $ngrok_authtoken | quote }}
     config_file: {{ $ngrok_config_file | quote }}
     ssh_port: {{ $ngrok_ssh_port | quote }}
+  packages:
+    minium:
+    root:
+    prerequisites:
+    apt:
+    snap:
+    brew:
+    brew_cask:
+    npm:
+    pip:
+    gem:
+    cargo:
+    go:
+    rust:
   python_tools:
     enabled: {{ $use_python_tools }}
   workspace:
