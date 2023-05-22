@@ -3,22 +3,35 @@
 # {{ template "scripts-library" }}
 log_task "Installing APT packages"
 
-DOTFILES_APT_PACKAGES=()
-# {{- if and (hasKey . "install_packages") (hasKey .install_packages "total") -}}
-# {{-   $pkgs_total := .install_packages.total -}}
-# {{- else -}}
-# {{-   $pkgs_total := "" -}}
+# {{- if and (hasKey . "install_packages") (hasKey .install_packages "total") }}
+DOTFILES_PACKAGES_TO_INSTALL=(
+  {{- range (split " " .install_packages.total) }}
+  {{ . }}
+  {{- end }}
+)
+# {{- else }}
+DOTFILES_PACKAGES_TO_INSTALL=()
 # {{- end -}}
-# {{- if $pkgs_total -}}
-DOTFILES_APT_PACKAGES=({{ range $pkg := .install_packages.packages }}"{{ $pkg }}",{{ end }})
+# {{- if (hasKey . "packages") }}
+APT_LIST=(
+  {{- range .packages }}
+  {{- if and (hasKey . "apt") (.apt) }}
+  {{ .name }}
+  {{- end }}
+  {{- end }}
+)
+# {{- else }}
+APT_LIST=()
 # {{- end -}}
 
-readonly wanted_packages=(
-  apt-transport-https
-  bazel
-  build-essential
-  direnv
-)
+wanted_packages=()
+for package in "${APT_LIST[@]}"; do
+  if is_item_in_array "${package}" "${DOTFILES_PACKAGES_TO_INSTALL[@]}"; then
+    wanted_packages+=("${package}")
+  fi
+done
+log_info "Wanted packages: ${wanted_packages[*]}"
+
 missing_packages=()
 
 for package in "${wanted_packages[@]}"; do
@@ -26,6 +39,7 @@ for package in "${wanted_packages[@]}"; do
     missing_packages+=("${package}")
   fi
 done
+log_info "Missing packages: ${missing_packages[*]}"
 
 if [[ ${#missing_packages[@]} -gt 0 ]]; then
   log_task "Installing missing packages with APT: ${missing_packages[*]}"

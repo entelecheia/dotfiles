@@ -1,190 +1,190 @@
 DOTFILES_VERSION: 0.10.1
 packages:
-  1password-cli:
+  - name: 1password-cli
     apt: true
     brewcask: true
-  age:
+  - name: age
     brew: true
     snap: true
-  apt-transport-https:
+  - name: apt-transport-https
     apt: true
-  autorestic:
+  - name: autorestic
     brew: true
-  bazel:
+  - name: bazel
     apt: true
-  build-essential:
+  - name: build-essential
     apt: true
-  code:
+  - name: code
     apt: true
-  code-cli:
+  - name: code-cli
     brew: true
-  commitizen:
+  - name: commitizen
     pip-user: true
     pipx: true
-  containerd.io:
+  - name: containerd.io
     apt: true
-  coreutils:
+  - name: coreutils
     brew: true
-  copier:
-    brew: true
-    pip-user: true
-    pipx: true
-  direnv:
-    apt: true
-    brew: true
-  docker-ce:
-    apt: true
-  docker-ce-cli:
-    apt: true
-  docker-compose-plugin:
-    apt: true
-  doppler:
-    apt: true
-  dopplerhq/cli/doppler:
-    brew: true
-  dotdrop:
+  - name: copier
     brew: true
     pip-user: true
     pipx: true
-  file:
+  - name: direnv
     apt: true
-  findutils:
     brew: true
-  font-fira-code:
+  - name: docker-ce
+    apt: true
+  - name: docker-ce-cli
+    apt: true
+  - name: docker-compose-plugin
+    apt: true
+  - name: doppler
+    apt: true
+  - name: dopplerhq/cli/doppler
+    brew: true
+  - name: dotdrop
+    brew: true
+    pip-user: true
+    pipx: true
+  - name: file
+    apt: true
+  - name: findutils
+    brew: true
+  - name: font-fira-code
     brewcask: true
-  font-fira-code-nerd-font:
+  - name: font-fira-code-nerd-font
     brewcask: true
-  fzf:
+  - name: fzf
     apt: true
     brew: true
-  gh:
+  - name: gh
     apt: true
     brew: true
-  gitmojify:
+  - name: gitmojify
     pip-user: true
     pipx: true
-  git-sizer:
+  - name: git-sizer
     apt: true
     brew: true
-  git-workspace:
+  - name: git-workspace
     brew: true
-  google-perftools:
+  - name: google-perftools
     apt: true
-  gnupg:
+  - name: gnupg
     brew: true
-  go:
+  - name: go
     brew: true
     snap: true
-  go-task:
+  - name: go-task
     brew: true
     snap: true
-  gpa:
+  - name: gpa
     apt: true
-  gpg-suite:
+  - name: gpg-suite
     script: true
-  helm:
+  - name: helm
     apt: true
     brew: true
-  jq:
+  - name: jq
     apt: true
     brew: true
-  locales:
+  - name: locales
     apt: true
-  locales-all:
+  - name: locales-all
     apt: true
-  lsb-release:
+  - name: lsb-release
     apt: true
-  microk8s:
+  - name: microk8s
     brew: true
     snap: true
-  mypy:
+  - name: mypy
     pip-user: true
     pipx: true
-  ngrok:
+  - name: ngrok
     snap: true
-  node:
+  - name: node
     apt: true
     brew: true
-  nvm:
+  - name: nvm
     script: true
-  openssh-server:
+  - name: openssh-server
     apt: true
-  pass:
+  - name: pass
     apt: true
     brew: true
-  pinentry-curses:
+  - name: pinentry-curses
     apt: true
-  pinentry-mac:
+  - name: pinentry-mac
     brew: true
-  pip:
+  - name: pip
     pip-user: true
-  pipx:
+  - name: pipx
     brew: true
     pip-user: true
-  poetry:
+  - name: poetry
     brew: true
     snap: true
-  poethepoet:
+  - name: poethepoet
     brew: true
     pip-user: true
     pipx: true
-  pre-commit:
+  - name: pre-commit
     pip-user: true
     pipx: true
-  procps:
+  - name: procps
     apt: true
-  python3-dev:
+  - name: python3-dev
     apt: true
-  python3-pip:
+  - name: python3-pip
     apt: true
-  python3-setuptools:
+  - name: python3-setuptools
     apt: true
-  python3-testresources:
+  - name: python3-testresources
     apt: true
-  python3-venv:
+  - name: python3-venv
     apt: true
-  restic:
+  - name: restic
     brew: true
-  rust:
+  - name: rust
     snap: true
-  sdkman:
+  - name: sdkman
     snap: true
-  seahorse:
+  - name: seahorse
     apt: true
-  serviceman:
+  - name: serviceman
     webi: true
-  setuptools:
+  - name: setuptools
     pip-user: true
-  snapd:
+  - name: snapd
     apt: true
-  sops:
+  - name: sops
     brew: true
     snap: true
-  stow:
+  - name: stow
     apt: true
     brew: true
-  tree:
+  - name: tree
     apt: true
     brew: true
-  tmux:
+  - name: tmux
     apt: true
     brew: true
-  tzdata:
+  - name: tzdata
     apt: true
-  unzip:
+  - name: unzip
     apt: true
     brew: true
-  vim:
+  - name: vim
     apt: true
-  xclip:
+  - name: xclip
     apt: true
-  yq:
+  - name: yq
     brew: true
     snap: true
-  webi:
+  - name: webi
     snap: true
-  zip:
+  - name: zip
     apt: true
-  zsh:
+  - name: zsh
     apt: true
     brew: true
