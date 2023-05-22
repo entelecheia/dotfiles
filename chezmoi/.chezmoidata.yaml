@@ -134,7 +134,6 @@ packages:
     source_list_file: ngrok.list
     source_list_line: "deb https://ngrok-agent.s3.amazonaws.com buster main"
   - name: node
-    apt: true
     brew: true
   - name: nvm
     script: true
