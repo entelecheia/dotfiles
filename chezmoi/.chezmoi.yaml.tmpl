@@ -17,37 +17,10 @@
 # {{-   $cpuThreads = (output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "(Get-CimInstance -ClassName 'Win32_Processor').NumberOfLogicalProcessors") | trim | atoi -}}
 # {{- end -}}
 
-# {{- $pkgs_system := "docker-ce docker-ce-cli containerd.io docker-compose-plugin" -}}
-# {{- $pkgs_minimum := "apt-transport-https lsb-release tree parallel zip" -}}
-
-  build-essential
-  tzdata
-  locales
-  locales-all
-  procps
-  file
-  zip
-  unzip
-  jq
-  zsh
-  tmux
-  python3-pip
-  python3-dev
-  python3-setuptools
-  python3-testresources
-  python3-venv
-  gh
-  git-sizer
-  fzf
-  direnv
-  vim
-  stow
-  pass
-  xclip
-  bazel
-  google-perftools
-  pinentry-curses
-
+# {{- $pkgs_minimum := "age apt-transport-https bazel build-essential coreutils direnv dotdrop file findutils fzf gh git-sizer gnupg go go-task jq locales locales-all lsb-release node nvm pinentry-mac pip pipx procps python3-dev python3-pip python3-setuptools python3-testresources python3-venv sdkman serviceman setuptools sops stow tree tmux tzdata unzip vim xclip yq webi zip zsh" -}}
+# {{- $pkgs_system := "openssh-server containerd.io docker-ce docker-ce-cli docker-compose-plugin helm snapd" -}}
+# {{- $pkgs_python := "dotdrop pip pipx setuptools commitizen copier gitmojify mypy poethepoet pre-commit" -}}
+# {{- $pkgs_user := "" -}}
 
 # {{- $minimum := $devcontainer -}}
 # {{- if and (hasKey . "system") (hasKey .system "is_minimum") -}}
@@ -887,21 +860,10 @@ data:
     config_file: {{ $ngrok_config_file | quote }}
     ssh_port: {{ $ngrok_ssh_port | quote }}
   packages:
-    defaults:
-      minimum:
-      system:
-      additonal:
+    minimum:
+    system:
+    python:
     user:
-    apt:
-    snap:
-    brew:
-    brew_cask:
-    npm:
-    pip:
-    gem:
-    cargo:
-    go:
-    rust:
   python_tools:
     enabled: {{ $use_python_tools }}
   workspace:

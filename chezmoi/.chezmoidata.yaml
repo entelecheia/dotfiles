@@ -105,8 +105,8 @@ packages:
   node:
     apt: true
     brew: true
-    pip-user: true
-    pipx: true
+  nvm:
+    script: true
   openssh-server:
     apt: true
   pass:

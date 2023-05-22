@@ -85,34 +85,34 @@ fi
 
 readonly wanted_packages=(
   apt-transport-https
+  bazel
   build-essential
-  tzdata
+  direnv
+  file
+  fzf
+  gh
+  git-sizer
+  gnupg # used to decrypt the gpg keys of the apt repositories
+  google-perftools
+  jq
   locales
   locales-all
+  pass
+  pinentry-curses
   procps
-  file
-  zip
-  unzip
-  jq
-  zsh
-  tmux
-  python3-pip
   python3-dev
+  python3-pip
   python3-setuptools
   python3-testresources
   python3-venv
-  gh
-  git-sizer
-  fzf
-  direnv
-  vim
   stow
-  pass
+  tmux
+  tzdata
+  unzip
+  vim
   xclip
-  bazel
-  google-perftools
-  gnupg # used to decrypt the gpg keys of the apt repositories
-  pinentry-curses
+  zip
+  zsh
   # {{ if not .system.is_devcontainer }}
   gpa
   seahorse

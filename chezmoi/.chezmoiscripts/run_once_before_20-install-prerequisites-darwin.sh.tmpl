@@ -28,31 +28,31 @@ done
 
 # install packages that are not installed
 readonly wanted_packages=(
+  age
+  autorestic
   coreutils
+  direnv
+  dotdrop
   findutils
-  zsh
-  tree
-  jq
-  yq
+  fzf
   gh
   git-sizer
-  pipx
-  dotdrop
-  direnv
+  git-workspace
   gnupg
-  pinentry-mac
-  node
-  age
   go
   go-task
+  helm
+  jq
+  node
+  pass
+  pinentry-mac
+  pipx
+  restic
   sops
   stow
-  pass
-  restic
-  autorestic
-  fzf
-  git-workspace
-  helm
+  tree
+  yq
+  zsh
   # {{ if .doppler.enabled }}
   dopplerhq/cli/doppler
   # {{ end }}
