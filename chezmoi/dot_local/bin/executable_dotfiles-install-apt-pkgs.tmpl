@@ -26,9 +26,9 @@ GPG_KEY_FIE="/etc/apt/trusted.gpg.d/{{ .gpg_key_file }}"
 GPG_KEY_URL="{{ .gpg_key_url }}"
 if [[ ! -f "${GPG_KEY_FIE}" ]]; then
   if [ "$USENAME" = "root" ]; then
-    c curl -s "${GPG_KEY_URL}" | tee "${GPG_KEY_FIE}"
+    c curl -s "${GPG_KEY_URL}" | tee "${GPG_KEY_FIE}" >/dev/null
   else
-    c curl -s "${GPG_KEY_URL}" | sudo tee "${GPG_KEY_FIE}"
+    c curl -s "${GPG_KEY_URL}" | sudo tee "${GPG_KEY_FIE}" >/dev/null
   fi
 fi
 {{   end }}
