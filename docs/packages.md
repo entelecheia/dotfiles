@@ -38,7 +38,7 @@ Matrix of packages to install on different platforms.
 | go-task                  |     |  T   |          |          |      |   T    |      |      |
 | gpa                      |  T  |      |          |          |      |        |      |      |
 | gpg-suite                |     |      |          |          |      |   T    |      |      |
-| helm                     |  T  |  T   |          |          |      |        |      |      |
+| helm                     |     |  T   |          |          |      |        |  T   |      |
 | jq                       |  T  |  T   |          |          |      |        |      |      |
 | locales                  |  T  |      |          |          |      |        |      |      |
 | locales-all              |  T  |      |          |          |      |        |      |      |
@@ -46,8 +46,7 @@ Matrix of packages to install on different platforms.
 | microk8s                 |     |  T   |          |          |      |        |  T   |      |
 | mypy                     |     |      |          |    T     |  T   |        |      |      |
 | ngrok                    |     |      |          |          |      |   T    |      |      |
-| node                     |  T  |  T   |          |          |      |        |      |      |
-| node                     |     |      |          |    T     |  T   |        |      |      |
+| node                     |     |  T   |          |          |      |        |      |      |
 | openssh-server           |  T  |      |          |          |      |        |      |      |
 | pass                     |  T  |  T   |          |          |      |        |      |      |
 | pinentry-curses          |  T  |      |          |          |      |        |      |      |
