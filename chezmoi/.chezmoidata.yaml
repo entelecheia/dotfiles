@@ -83,6 +83,11 @@ packages:
     keyring_url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
     source_list_file: github-cli.list
     source_list_line: "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main"
+  - name: git
+    apt: true
+    brew: true
+    keyring_file: git-core-ppa-archive-keyring.gpg
+    keyring_url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xE1DD270288B4E6030699E45FA1715D88E1DF1F24
   - name: gitmojify
     pip-user: true
     pipx: true
