@@ -1,7 +1,47 @@
 #!/bin/bash
+# shellcheck disable=SC1083
 # {{ if and (eq .chezmoi.os "linux") .system.is_sudoer }}
 # {{ template "scripts-library" }}
 log_task "Installing APT packages"
+
+{{ range .packages -}}
+{{-   if and (hasKey . "keyring_file") (.keyring_file) }}
+KEYRING_FILE="/usr/share/keyrings/{{ .keyring_file }}"
+KEYRING_URL="{{ .keyring_url }}"
+if [[ ! -f "${KEYRING_FILE}" ]]; then
+  log_task "Downloading {{ .keyring_file }}"
+  if [[ "${USER}" == "root" ]]; then
+    c curl -fsSL "${KEYRING_URL}" | gpg --dearmor -o "${KEYRING_FILE}"
+    c chmod go+r "${KEYRING_FILE}"
+  else
+    c curl -fsSL "${KEYRING_URL}" | sudo gpg --dearmor -o "${KEYRING_FILE}"
+    c sudo chmod go+r "${KEYRING_FILE}"
+  fi
+fi
+{{   end }}
+{{-   if and (hasKey . "apt_key_url") (.apt_key_url) }}
+APT_KEY_URL="{{ .apt_key_url }}"
+if [[ -n "${APT_KEY_URL}" ]]; then
+  if [[ "${USER}" == "root" ]]; then
+    c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${APT_KEY_URL}" | apt-key add -
+  else
+    c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${APT_KEY_URL}" | sudo apt-key add -
+  fi
+fi
+{{   end }}
+{{-   if and (hasKey . "source_list_file") (.source_list_file) }}
+SOURCE_LIST_FILE="/etc/apt/sources.list.d/{{ .source_list_file }}"
+SOURCE_LIST_LINE="{{ .source_list_line }}"
+if [[ ! -f "${SOURCE_LIST_FILE}" ]]; then
+  log_task "Adding {{ .source_list_file }} repository to APT"
+  if [[ "${USER}" == "root" ]]; then
+    c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
+  else
+    c echo "$SOURCE_LIST_LINE" | sudo tee "$SOURCE_LIST_FILE"
+  fi
+fi
+{{   end }}
+{{- end -}}
 
 # {{- if and (hasKey . "install_packages") (hasKey .install_packages "total") }}
 DOTFILES_PACKAGES_TO_INSTALL=(
