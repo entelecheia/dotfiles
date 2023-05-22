@@ -233,6 +233,8 @@ packages:
     snap: true
   - name: webi
     snap: true
+  - name: wheel
+    pip-user: true
   - name: wslu
     apt: true
   - name: zip

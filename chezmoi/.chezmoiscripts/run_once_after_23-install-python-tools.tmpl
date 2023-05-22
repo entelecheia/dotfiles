@@ -9,6 +9,7 @@ ensure_path_entry "${HOME}/.local/bin"
 log_task "Upgrading pip and setuptools"
 c /usr/bin/pip3 install --upgrade pip
 c /usr/bin/pip3 install --upgrade setuptools
+c /usr/bin/pip3 install --upgrade wheel
 
 # install pipx
 if ! pipx --version &>/dev/null; then

@@ -45,12 +45,6 @@ if ! command -v dotdrop >/dev/null; then
     c pipx install dotdrop
   else
     log_task "Install dotdrop with pip3"
-    if pip3 list | grep -q wheel; then
-      log_task "wheel already installed"
-    else
-      log_task "Installing wheel"
-      c /usr/bin/pip3 install wheel
-    fi
     # Add ~/.local/bin to PATH in order to use dotdrop before finishing the installation
     c /usr/bin/pip3 install dotdrop --user
   fi
