@@ -3,4 +3,8 @@
 # {{ template "scripts-library" }}
 # {{ template "install-apt-dependencies" }}
 
+# {{ else }}
+
+log_info "Skipping install-apt-dependencies because not running as root or not on Linux."
+
 # {{ end }}
