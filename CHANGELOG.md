@@ -1,5 +1,42 @@
 <!--next-version-placeholder-->
 
+## v0.11.0 (2023-05-22)
+### Feature
+* **chezmoi:** Add dotfiles-install-apt-pkgs command ([`efca6b9`](https://github.com/entelecheia/dotfiles/commit/efca6b9a0569975f7c20407d34ca40a71a9fc74e))
+* **chezmoi:** Define package list ([`3009d1d`](https://github.com/entelecheia/dotfiles/commit/3009d1d4402a4f2a73f566a26010981ff3903a37))
+* **chezmoi:** Add script to install APT dependencies ([`b791936`](https://github.com/entelecheia/dotfiles/commit/b7919368974b5711673e0e6e943703df23ba9a1c))
+
+### Fix
+* **chezmoi:** Add zsh to apt-dependencies, remove unnecessary code for Alpine init-zsh; Reason: Improving package management and reducing code complexity. ([`2d4bcf4`](https://github.com/entelecheia/dotfiles/commit/2d4bcf4f8004a572377d407ff2001fcda07315df))
+* **chezmoi:** Upgrade Doppler CLI package with new keyring file/url configuration ([`a38053e`](https://github.com/entelecheia/dotfiles/commit/a38053e7450855ac67e8dc613108ffe5f23dd24c))
+* **chezmoi:** Update system packages, remove unnecessary script. ([`4b2e8c3`](https://github.com/entelecheia/dotfiles/commit/4b2e8c385f049b02e15f332ea8d12c846c39389b))
+* **chezmoiscripts:** Update nvidia-container-toolkit installation in run_after_15-install-nvidia-containter.sh.tmpl file ([`96e22d5`](https://github.com/entelecheia/dotfiles/commit/96e22d5804aa2ab89e1b0be5f27566def0e2b5e5))
+* **chezmoi:** Update install-apt-dependencies with Git repository addition. ([`cd2f639`](https://github.com/entelecheia/dotfiles/commit/cd2f6390d260e6975034db4693a7b0e0ffdc0891))
+* **Git:** Add APT repository for newer versions of Git ([`a4c457b`](https://github.com/entelecheia/dotfiles/commit/a4c457b6096c36c5bd5a7b70a215c5354160a6df))
+* **dependencies:** Add git to package list & update keyring file ([`0c35a60`](https://github.com/entelecheia/dotfiles/commit/0c35a6040f7ca055f4fd741f81454bb6cd41b340))
+* **dependencies:** Add google-cloud-cli to apt dependencies and remove unused GitHub CLI keyring file and filter ([`fea6091`](https://github.com/entelecheia/dotfiles/commit/fea6091a964e146f49006901d4471abb7826bc82))
+* **dependencies:** Add google-cloud-cli to apt dependencies and remove unused GitHub CLI keyring file and filter ([`6dec3d5`](https://github.com/entelecheia/dotfiles/commit/6dec3d5810e34af7fc0808066739fa9ba2213259))
+* **chezmoi:** Upgrade package installation; Add apt installation for helm and remove snap installation for helm in packages configuration. Update run_once_after script to remove helm from snap packages list. ([`8484d4d`](https://github.com/entelecheia/dotfiles/commit/8484d4d6a3b1cc21cb1008b6e29926e94b352ce6))
+* **chezmoi:** Fix promptString typo for github repos input ([`b24de55`](https://github.com/entelecheia/dotfiles/commit/b24de5553a229987906ca786f614a41c8b048e71))
+* **chezmoi:** Update helm installation method to use snap instead of apt and brew. ([`4369449`](https://github.com/entelecheia/dotfiles/commit/43694492f3d8d1fcf7f60053bb6f2cd55112a351))
+* **chezmoi:** Remove redundant `apt` parameter for `node` package ([`57a880c`](https://github.com/entelecheia/dotfiles/commit/57a880cf03a8aaf2a1d8e35c14b1c2ae80bbd59c))
+* **chezmoi:** Update Docker source list for correct version codename syntax ([`78d1ce9`](https://github.com/entelecheia/dotfiles/commit/78d1ce9666025c7ed65f01d46163feafffc1596c))
+* **chezmoi:** Add docker-ce package with apt configuration and keyring setup ([`2c18ab4`](https://github.com/entelecheia/dotfiles/commit/2c18ab4ee06d81ee5bfc0f18d7c315b81fc4fedb))
+* **apt-pkgs:** Update ngrok keyring and package source list URLs ([`030e244`](https://github.com/entelecheia/dotfiles/commit/030e244dddc6f17700b26828223aa46c0b67f631))
+* Install apt pkgs command ([`7f0cbfb`](https://github.com/entelecheia/dotfiles/commit/7f0cbfbf64509cd0eb7d307ddb24511b313b1701))
+* Chezmoi config to check os ([`7baf990`](https://github.com/entelecheia/dotfiles/commit/7baf990ff8f0bbf274490f12304c4e7df106b109))
+* **apt:** Use EUID to check if running as root ([`f77a42b`](https://github.com/entelecheia/dotfiles/commit/f77a42b9216ebf83b1ccd39abc8a18546fe96707))
+* **chezmoi:** Rename install scripts to run after prerequisites installation. ([`ebc68bf`](https://github.com/entelecheia/dotfiles/commit/ebc68bfbf637ba4a854c5956fb7f5a18305096bc))
+* **apt:** Apply dotfiles-install-apt-pkgs command ([`db68a00`](https://github.com/entelecheia/dotfiles/commit/db68a0086064b8333d2d2145adb28a5ea5e9c54e))
+* **apt-packages:** Update installation script with new features and improvements ([`b6575d0`](https://github.com/entelecheia/dotfiles/commit/b6575d0b8265c339c090332d260a07c342dc5dcd))
+* **packages:** Add/update several packages with GPG keys and source lists ([`9d0f07e`](https://github.com/entelecheia/dotfiles/commit/9d0f07e56b6d83fe1e573cdc7381c02c1ed63a45))
+* **chezmoi:** Define package list ([`8555061`](https://github.com/entelecheia/dotfiles/commit/8555061fe484a5db6c5b816b74aa8b21a3af3fac))
+
+### Documentation
+* Update packages matrix with helm support ([`7b0d571`](https://github.com/entelecheia/dotfiles/commit/7b0d571605f90216b4cb6315b986f6c45515548d))
+* Update packages.csv and packages.md with latest package information ([`52845a8`](https://github.com/entelecheia/dotfiles/commit/52845a87be5591974337c95f0144224417c41262))
+* Add package matrix ([`e5ed418`](https://github.com/entelecheia/dotfiles/commit/e5ed418f5c038f48e8f3505378716fb29e679beb))
+
 ## v0.10.1 (2023-05-20)
 ### Fix
 * **gitignore:** Update global ignore list ([`1de4d56`](https://github.com/entelecheia/dotfiles/commit/1de4d56cc4856ed8d3db20110bf4575b5438ff92))
