@@ -44,8 +44,13 @@ fi
 {{   end }}
 {{-   if and (hasKey . "source_list_file") (.source_list_file) }}
 SOURCE_LIST_FILE="/etc/apt/sources.list.d/{{ .source_list_file }}"
+{{-   if and (hasKey . "source_list_line") (.source_list_line) }}
 SOURCE_LIST_LINE="{{ .source_list_line }}"
-if [[ ! -f "${SOURCE_LIST_FILE}" ]]; then
+{{-   else }}
+SOURCE_LIST_LINE=""
+{{-   end }}
+
+if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]]; then
   log_task "Adding {{ .source_list_file }} repository to APT"
   if [ "$USENAME" = "root" ]; then
     c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"

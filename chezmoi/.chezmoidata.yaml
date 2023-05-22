@@ -148,6 +148,12 @@ packages:
     source_list_line: "deb https://ngrok-agent.s3.amazonaws.com buster main"
   - name: node
     brew: true
+  - name: nvidia-container-toolkit
+    apt: true
+    keyring_file: nvidia-container-toolkit-keyring.gpg
+    keyring_url: https://nvidia.github.io/libnvidia-container/gpgkey
+    source_list_file: nvidia-container-toolkit.list
+    source_list_line: "deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://nvidia.github.io/libnvidia-container/stable/$(. /etc/os-release;echo $ID$VERSION_ID'/$(ARCH)') /"
   - name: nvm
     script: true
   - name: openssh-server
