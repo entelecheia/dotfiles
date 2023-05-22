@@ -27,7 +27,7 @@ packages:
     keyring_file: packages.microsoft.gpg
     keyring_url: https://packages.microsoft.com/keys/microsoft.asc
     source_list_file: vscode.list
-    source_list_line: "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
+    source_list_line: "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
   - name: code-cli
     brew: true
   - name: commitizen
@@ -125,8 +125,8 @@ packages:
     pipx: true
   - name: ngrok
     snap: true
-    keyring_file: ngrok-archive-keyring.gpg
-    keyring_url: https://ngrok-agent.s3.amazonaws.com/ngrok.asc
+    gpg_key_file: ngrok.asc
+    gpg_key_url: https://ngrok-agent.s3.amazonaws.com/ngrok.asc
     source_list_file: ngrok.list
     source_list_line: "deb https://ngrok-agent.s3.amazonaws.com buster main"
   - name: node

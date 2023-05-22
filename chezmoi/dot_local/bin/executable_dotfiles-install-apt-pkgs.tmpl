@@ -21,6 +21,17 @@ if [[ ! -f "${KEYRING_FILE}" ]]; then
   fi
 fi
 {{   end }}
+{{-   if and (hasKey . "gpg_key_file") (.gpg_key_file) }}
+GPG_KEY_FIE="/etc/apt/trusted.gpg.d/{{ .gpg_key_file }}"
+GPG_KEY_URL="{{ .gpg_key_url }}"
+if [[ ! -f "${GPG_KEY_FIE}" ]]; then
+  if [ "$USENAME" = "root" ]; then
+    c curl -s "${GPG_KEY_URL}" | tee "${GPG_KEY_FIE}"
+  else
+    c curl -s "${GPG_KEY_URL}" | sudo tee "${GPG_KEY_FIE}"
+  fi
+fi
+{{   end }}
 {{-   if and (hasKey . "apt_key_url") (.apt_key_url) }}
 APT_KEY_URL="{{ .apt_key_url }}"
 if [[ -n "${APT_KEY_URL}" ]]; then
