@@ -18,7 +18,7 @@
 # {{- end -}}
 
 # {{- $pkgs_minimum := "age apt-transport-https build-essential coreutils direnv file findutils fzf gh git-sizer gnupg go go-task jq locales locales-all lsb-release node nvm pip pipx procps python3-dev python3-pip python3-setuptools python3-testresources python3-venv setuptools sops stow tree tmux tzdata unzip vim yqzip zsh" -}}
-# {{- $pkgs_full := "bazel font-fira-code font-fira-code-nerd-font google-perftools helm openssh-server rust sdkman serviceman webi" -}}
+# {{- $pkgs_full := "bazel font-fira-code font-fira-code-nerd-font google-perftools openssh-server rust sdkman serviceman webi" -}}
 # {{- $pkgs_system := "containerd.io docker-ce docker-ce-cli docker-compose-plugin snapd" -}}
 # {{- $pkgs_gui := "gpa gpg-suite pinentry-mac xclip seahorse" -}}
 # {{- $pkgs_python := "commitizen copier gitmojify mypy poethepoet pre-commit" -}}
@@ -747,7 +747,7 @@
 # {{-   $question := "❔ What are your GitHub repositories to clone (input as comma separated list, ex: entelecheia/devcon,entelecheia/ekorpkit)" -}}
 # {{-   $answer := "" -}}
 # {{-   if $github_clones -}}
-# {{-     $answer = promptString $question $github_clones -}}
+# {{-     $answer = promptStrin g $question $github_clones -}}
 # {{-   else -}}
 # {{-     $answer = promptString $question -}}
 # {{-   end -}}
@@ -793,7 +793,7 @@
 # {{-   $pkgs_user = printf "%s restic autorestic" $pkgs_user -}}
 # {{- end -}}
 # {{- if $use_microk8s -}}
-# {{-   $pkgs_user = printf "%s microk8s" $pkgs_user -}}
+# {{-   $pkgs_user = printf "%s microk8s helm" $pkgs_user -}}
 # {{- end -}}
 # {{- if $use_doppler -}}
 # {{-   $pkgs_user = printf "%s doppler dopplerhq/cli/doppler" $pkgs_user -}}

@@ -106,8 +106,8 @@ packages:
   - name: gpg-suite
     script: true
   - name: helm
-    apt: true
     brew: true
+    snap: true
   - name: jq
     apt: true
     brew: true
