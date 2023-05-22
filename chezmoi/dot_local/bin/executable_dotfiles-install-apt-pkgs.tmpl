@@ -3,8 +3,14 @@
 # {{ template "scripts-library" }}
 log_task "Installing APT packages"
 
-# DOTFILES_APT_PACKAGES=()
-# {{- range (split "," $github_clones) -}} #
+DOTFILES_APT_PACKAGES=()
+# {{- if and (hasKey . "install_packages") (hasKey .install_packages "total") -}}
+# {{-   $pkgs_total := .install_packages.total -}}
+# {{- else -}}
+# {{-   $pkgs_total := "" -}}
+# {{- end -}}
+# {{- if $pkgs_total -}}
+DOTFILES_APT_PACKAGES=({{ range $pkg := .install_packages.packages }}"{{ $pkg }}",{{ end }})
 # {{- end -}}
 
 readonly wanted_packages=(
