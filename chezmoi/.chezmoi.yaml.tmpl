@@ -24,14 +24,16 @@
 # {{- $pkgs_python := "commitizen copier gitmojify mypy poethepoet pre-commit" -}}
 # {{- $pkgs_user := "" -}}
 # {{- $pkgs_total := $pkgs_minimum -}}
-# {{- if $wsl -}}
-# {{-   $pkgs_system = printf "%s wslu" $pkgs_system -}}
-# {{- else }}
-# {{-   if eq .chezmoi.osRelease.versionCodename "bionic" }}
-# {{-     $pkgs_system = printf "%s linux-generic-hwe-18.04" $pkgs_system -}}
-# {{-   else if eq .chezmoi.osRelease.versionCodename "focal" }}
-# {{-     $pkgs_system = printf "%s linux-generic-hwe-20.04" $pkgs_system -}}
-# {{-   end }}
+# {{- if eq .chezmoi.os "linux" -}}
+# {{-   if $wsl -}}
+# {{-     $pkgs_system = printf "%s wslu" $pkgs_system -}}
+# {{-   else }}
+# {{-     if eq .chezmoi.osRelease.versionCodename "bionic" }}
+# {{-       $pkgs_system = printf "%s linux-generic-hwe-18.04" $pkgs_system -}}
+# {{-     else if eq .chezmoi.osRelease.versionCodename "focal" }}
+# {{-       $pkgs_system = printf "%s linux-generic-hwe-20.04" $pkgs_system -}}
+# {{-     end }}
+# {{   end }}
 # {{ end }}
 
 # {{- $minimum := $devcontainer -}}
