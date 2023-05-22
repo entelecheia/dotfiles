@@ -1,1 +1,241 @@
 DOTFILES_VERSION: 0.10.1
+packages:
+  - name: 1password-cli
+    apt: true
+    brewcask: true
+    keyring_file: 1password-archive-keyring.gpg
+    keyring_url: https://downloads.1password.com/linux/keys/1password.asc
+    source_list_file: 1password.list
+    source_list_line: "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main"
+  - name: age
+    brew: true
+    snap: true
+  - name: apt-transport-https
+    apt: true
+  - name: autorestic
+    brew: true
+  - name: bazel
+    apt: true
+    keyring_file: bazel-archive-keyring.gpg
+    keyring_url: https://bazel.build/bazel-release.pub.gpg
+    source_list_file: bazel.list
+    source_list_line: "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/bazel-archive-keyring.gpg] https://storage.googleapis.com/bazel-apt stable jdk1.8"
+  - name: build-essential
+    apt: true
+  - name: code
+    apt: true
+    keyring_file: packages.microsoft.gpg
+    keyring_url: https://packages.microsoft.com/keys/microsoft.asc
+    source_list_file: vscode.list
+    source_list_line: "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
+  - name: code-cli
+    brew: true
+  - name: commitizen
+    pip-user: true
+    pipx: true
+  - name: containerd.io
+    apt: true
+  - name: coreutils
+    brew: true
+  - name: copier
+    brew: true
+    pip-user: true
+    pipx: true
+  - name: direnv
+    apt: true
+    brew: true
+  - name: docker-ce
+    apt: true
+    keyring_file: docker.gpg
+    keyring_url: https://download.docker.com/linux/ubuntu/gpg
+    source_list_file: docker.list
+    source_list_line: "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - name: docker-ce-cli
+    apt: true
+  - name: docker-compose-plugin
+    apt: true
+  - name: doppler
+    apt: true
+    apt_key_url: https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key
+    source_list_file: doppler-cli.list
+    source_list_line: "deb https://packages.doppler.com/public/cli/deb/debian any-version main"
+  - name: dopplerhq/cli/doppler
+    brew: true
+  - name: dotdrop
+    brew: true
+    pip-user: true
+    pipx: true
+  - name: file
+    apt: true
+  - name: findutils
+    brew: true
+  - name: font-fira-code
+    brewcask: true
+  - name: font-fira-code-nerd-font
+    brewcask: true
+  - name: fzf
+    apt: true
+    brew: true
+  - name: gh
+    apt: true
+    brew: true
+    keyring_file: githubcli-archive-keyring.gpg
+    keyring_url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
+    source_list_file: github-cli.list
+    source_list_line: "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main"
+  - name: git
+    apt: true
+    brew: true
+  - name: gitmojify
+    pip-user: true
+    pipx: true
+  - name: git-sizer
+    apt: true
+    brew: true
+  - name: git-workspace
+    brew: true
+  - name: google-cloud-cli
+    apt: true
+    keyring_file: cloud.google.gpg
+    keyring_url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    source_list_file: google-cloud-sdk.list
+    source_list_line: "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main"
+  - name: google-perftools
+    apt: true
+  - name: gnupg
+    brew: true
+  - name: go
+    brew: true
+    snap: true
+  - name: go-task
+    brew: true
+    snap: true
+  - name: gpa
+    apt: true
+  - name: gpg-suite
+    script: true
+  - name: helm
+    apt: true
+    brew: true
+    keyring_file: helm.gpg
+    keyring_url: https://baltocdn.com/helm/signing.asc
+    source_list_file: helm-stable-debian.list
+    source_list_line: "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main"
+  - name: jq
+    apt: true
+    brew: true
+  - name: linux-generic-hwe-18.04
+    apt: true
+  - name: linux-generic-hwe-20.04
+    apt: true
+  - name: locales
+    apt: true
+  - name: locales-all
+    apt: true
+  - name: lsb-release
+    apt: true
+  - name: microk8s
+    brew: true
+    snap: true
+  - name: mypy
+    pip-user: true
+    pipx: true
+  - name: ngrok
+    snap: true
+    gpg_key_file: ngrok.asc
+    gpg_key_url: https://ngrok-agent.s3.amazonaws.com/ngrok.asc
+    source_list_file: ngrok.list
+    source_list_line: "deb https://ngrok-agent.s3.amazonaws.com buster main"
+  - name: node
+    brew: true
+  - name: nvidia-container-toolkit
+    apt: true
+    keyring_file: nvidia-container-toolkit-keyring.gpg
+    keyring_url: https://nvidia.github.io/libnvidia-container/gpgkey
+    source_list_file: nvidia-container-toolkit.list
+    source_list_line: "deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://nvidia.github.io/libnvidia-container/stable/$(. /etc/os-release;echo $ID$VERSION_ID'/$(ARCH)') /"
+  - name: nvm
+    script: true
+  - name: openssh-server
+    apt: true
+  - name: pass
+    apt: true
+    brew: true
+  - name: pinentry-curses
+    apt: true
+  - name: pinentry-mac
+    brew: true
+  - name: pip
+    pip-user: true
+  - name: pipx
+    brew: true
+    pip-user: true
+  - name: poetry
+    brew: true
+    snap: true
+  - name: poethepoet
+    brew: true
+    pip-user: true
+    pipx: true
+  - name: pre-commit
+    pip-user: true
+    pipx: true
+  - name: procps
+    apt: true
+  - name: python3-dev
+    apt: true
+  - name: python3-pip
+    apt: true
+  - name: python3-setuptools
+    apt: true
+  - name: python3-testresources
+    apt: true
+  - name: python3-venv
+    apt: true
+  - name: restic
+    brew: true
+  - name: rust
+    snap: true
+  - name: sdkman
+    snap: true
+  - name: seahorse
+    apt: true
+  - name: serviceman
+    webi: true
+  - name: setuptools
+    pip-user: true
+  - name: snapd
+    apt: true
+  - name: sops
+    brew: true
+    snap: true
+  - name: stow
+    apt: true
+    brew: true
+  - name: tree
+    apt: true
+    brew: true
+  - name: tmux
+    apt: true
+    brew: true
+  - name: tzdata
+    apt: true
+  - name: unzip
+    apt: true
+    brew: true
+  - name: vim
+    apt: true
+  - name: xclip
+    apt: true
+  - name: yq
+    brew: true
+    snap: true
+  - name: webi
+    snap: true
+  - name: wslu
+    apt: true
+  - name: zip
+    apt: true
+  - name: zsh
+    apt: true
+    brew: true
