@@ -38,7 +38,7 @@ Matrix of packages to install on different platforms.
 | go-task                  |     |  T   |          |          |      |   T    |      |      |
 | gpa                      |  T  |      |          |          |      |        |      |      |
 | gpg-suite                |     |      |          |          |      |   T    |      |      |
-| helm                     |     |  T   |          |          |      |        |  T   |      |
+| helm                     |  T  |  T   |          |          |      |        |      |      |
 | jq                       |  T  |  T   |          |          |      |        |      |      |
 | locales                  |  T  |      |          |          |      |        |      |      |
 | locales-all              |  T  |      |          |          |      |        |      |      |
