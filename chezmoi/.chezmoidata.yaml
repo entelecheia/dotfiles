@@ -91,6 +91,12 @@ packages:
     brew: true
   - name: git-workspace
     brew: true
+  - name: google-cloud-cli
+    apt: true
+    keyring_file: cloud.google.gpg
+    keyring_url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    source_list_file: google-cloud-sdk.list
+    source_list_line: "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main"
   - name: google-perftools
     apt: true
   - name: gnupg
