@@ -13,6 +13,7 @@ copyright: Copyright &copy; 2022 - 2023 Young Joon Lee
 
 plugins:
   - search
+
 markdown_extensions:
   - markdown_include.include:
       base_path: .

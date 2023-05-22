@@ -84,6 +84,6 @@ Matrix of packages to install with different package managers.
 
 ## Configuration
 
-~~~yaml
-{% include "../chezmoi/.chezmoidata.yaml" %}
-~~~
+```yaml
+{!chezmoi/.chezmoidata.yaml!}
+```
