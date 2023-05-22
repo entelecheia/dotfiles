@@ -106,8 +106,12 @@ packages:
   - name: gpg-suite
     script: true
   - name: helm
+    apt: true
     brew: true
-    snap: true
+    keyring_file: helm.gpg
+    keyring_url: https://baltocdn.com/helm/signing.asc
+    source_list_file: helm-stable-debian.list
+    source_list_line: "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main"
   - name: jq
     apt: true
     brew: true
