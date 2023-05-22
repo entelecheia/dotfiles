@@ -13,7 +13,7 @@ else
   echo "${output}"
   exit 1
 fi
-c sudo apt install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends ca-certificates apt-transport-https curl gnupg software-properties-common
+c sudo apt install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends ca-certificates apt-transport-https curl gnupg software-properties-common zsh
 
 # Add APT repositories for newer versions of Git.
 c sudo add-apt-repository ppa:git-core/ppa --yes

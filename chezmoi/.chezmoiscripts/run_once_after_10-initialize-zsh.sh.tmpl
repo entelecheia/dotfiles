@@ -16,18 +16,6 @@ if ! getent passwd '{{ .chezmoi.username }}' | cut -d : -f 7- | grep -q "^${zsh_
 # {{ end }}
 fi
 
-# Alpine frequently does not come with script (from util-linux) installed
-if command -v script >/dev/null && [[ ! -d "${HOME}/.cache/gitstatus" ]]; then
-  log_task "Initializing ZSH"
-  bash -e <<'EOF' >/dev/null
-# We need to be in a git repository, so gitstatusd initiliazes
-cd '{{ .chezmoi.workingTree }}'
-
-# We also need to emulate a TTY
-script -qec "zsh -is </dev/null" /dev/null
-EOF
-fi
-
 # {{ else if eq .chezmoi.os "darwin" }}
 
 if [ "$SHELL" != "$(which zsh)" ]; then
