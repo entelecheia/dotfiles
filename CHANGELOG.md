@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.11.1 (2023-05-22)
+### Fix
+* **chezmoiscripts:** Install wheel in run_once_after_23-install-python-tools ([`8a8b2f9`](https://github.com/entelecheia/dotfiles/commit/8a8b2f97e33e5d90f02b8edc2884d8ade331618e))
+
 ## v0.11.0 (2023-05-22)
 ### Feature
 * **chezmoi:** Add dotfiles-install-apt-pkgs command ([`efca6b9`](https://github.com/entelecheia/dotfiles/commit/efca6b9a0569975f7c20407d34ca40a71a9fc74e))
