@@ -1,1 +1,190 @@
 DOTFILES_VERSION: 0.10.1
+packages:
+  1password-cli:
+    apt: true
+    brewcask: true
+  age:
+    brew: true
+    snap: true
+  apt-transport-https:
+    apt: true
+  autorestic:
+    brew: true
+  bazel:
+    apt: true
+  build-essential:
+    apt: true
+  code:
+    apt: true
+  code-cli:
+    brew: true
+  commitizen:
+    pip-user: true
+    pipx: true
+  containerd.io:
+    apt: true
+  coreutils:
+    brew: true
+  copier:
+    brew: true
+    pip-user: true
+    pipx: true
+  direnv:
+    apt: true
+    brew: true
+  docker-ce:
+    apt: true
+  docker-ce-cli:
+    apt: true
+  docker-compose-plugin:
+    apt: true
+  doppler:
+    apt: true
+  dopplerhq/cli/doppler:
+    brew: true
+  dotdrop:
+    brew: true
+    pip-user: true
+    pipx: true
+  file:
+    apt: true
+  findutils:
+    brew: true
+  font-fira-code:
+    brewcask: true
+  font-fira-code-nerd-font:
+    brewcask: true
+  fzf:
+    apt: true
+    brew: true
+  gh:
+    apt: true
+    brew: true
+  gitmojify:
+    pip-user: true
+    pipx: true
+  git-sizer:
+    apt: true
+    brew: true
+  git-workspace:
+    brew: true
+  google-perftools:
+    apt: true
+  gnupg:
+    brew: true
+  go:
+    brew: true
+    snap: true
+  go-task:
+    brew: true
+    snap: true
+  gpa:
+    apt: true
+  gpg-suite:
+    script: true
+  helm:
+    apt: true
+    brew: true
+  jq:
+    apt: true
+    brew: true
+  locales:
+    apt: true
+  locales-all:
+    apt: true
+  lsb-release:
+    apt: true
+  microk8s:
+    brew: true
+    snap: true
+  mypy:
+    pip-user: true
+    pipx: true
+  ngrok:
+    snap: true
+  node:
+    apt: true
+    brew: true
+    pip-user: true
+    pipx: true
+  openssh-server:
+    apt: true
+  pass:
+    apt: true
+    brew: true
+  pinentry-curses:
+    apt: true
+  pinentry-mac:
+    brew: true
+  pip:
+    pip-user: true
+  pipx:
+    brew: true
+    pip-user: true
+  poetry:
+    brew: true
+    snap: true
+  poethepoet:
+    brew: true
+    pip-user: true
+    pipx: true
+  pre-commit:
+    pip-user: true
+    pipx: true
+  procps:
+    apt: true
+  python3-dev:
+    apt: true
+  python3-pip:
+    apt: true
+  python3-setuptools:
+    apt: true
+  python3-testresources:
+    apt: true
+  python3-venv:
+    apt: true
+  restic:
+    brew: true
+  rust:
+    snap: true
+  sdkman:
+    snap: true
+  seahorse:
+    apt: true
+  serviceman:
+    webi: true
+  setuptools:
+    pip-user: true
+  snapd:
+    apt: true
+  sops:
+    brew: true
+    snap: true
+  stow:
+    apt: true
+    brew: true
+  tree:
+    apt: true
+    brew: true
+  tmux:
+    apt: true
+    brew: true
+  tzdata:
+    apt: true
+  unzip:
+    apt: true
+    brew: true
+  vim:
+    apt: true
+  xclip:
+    apt: true
+  yq:
+    brew: true
+    snap: true
+  webi:
+    snap: true
+  zip:
+    apt: true
+  zsh:
+    apt: true
+    brew: true

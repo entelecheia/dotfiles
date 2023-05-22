@@ -82,4 +82,5 @@ nav:
     - SOPS: usage/sops.md
     - Pass and Passage: usage/pass.md
     - Doppler: usage/doppler.md
+  - Packages: packages.md
   - References: references.md
