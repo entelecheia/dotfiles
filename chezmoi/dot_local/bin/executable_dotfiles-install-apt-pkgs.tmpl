@@ -4,13 +4,15 @@
 # {{ template "scripts-library" }}
 log_task "Installing APT packages"
 
+USENAME=$(whoami)
+
 {{ range .packages -}}
 {{-   if and (hasKey . "keyring_file") (.keyring_file) }}
 KEYRING_FILE="/usr/share/keyrings/{{ .keyring_file }}"
 KEYRING_URL="{{ .keyring_url }}"
 if [[ ! -f "${KEYRING_FILE}" ]]; then
   log_task "Downloading {{ .keyring_file }}"
-  if [ "$EUID" -eq 0 ]; then
+  if [ "$USENAME" = "root" ]; then
     c curl -fsSL "${KEYRING_URL}" | gpg --dearmor -o "${KEYRING_FILE}"
     c chmod go+r "${KEYRING_FILE}"
   else
@@ -22,7 +24,7 @@ fi
 {{-   if and (hasKey . "apt_key_url") (.apt_key_url) }}
 APT_KEY_URL="{{ .apt_key_url }}"
 if [[ -n "${APT_KEY_URL}" ]]; then
-  if [ "$EUID" -eq 0 ]; then
+  if [ "$USENAME" = "root" ]; then
     c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${APT_KEY_URL}" | apt-key add -
   else
     c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${APT_KEY_URL}" | sudo apt-key add -
@@ -34,7 +36,7 @@ SOURCE_LIST_FILE="/etc/apt/sources.list.d/{{ .source_list_file }}"
 SOURCE_LIST_LINE="{{ .source_list_line }}"
 if [[ ! -f "${SOURCE_LIST_FILE}" ]]; then
   log_task "Adding {{ .source_list_file }} repository to APT"
-  if [ "$EUID" -eq 0 ]; then
+  if [ "$USENAME" = "root" ]; then
     c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
   else
     c echo "$SOURCE_LIST_LINE" | sudo tee "$SOURCE_LIST_FILE"
@@ -85,7 +87,7 @@ if [[ ${#missing_packages[@]} -gt 0 ]]; then
   log_task "Installing missing packages with APT: ${missing_packages[*]}"
 
   # This script also gets called when running rootmoi
-  if [ "$EUID" -eq 0 ]; then
+  if [ "$USENAME" = "root" ]; then
     apt_command=(apt)
   else
     apt_command=(sudo apt)
