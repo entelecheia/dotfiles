@@ -107,6 +107,10 @@ packages:
   - name: jq
     apt: true
     brew: true
+  - name: linux-generic-hwe-18.04
+    apt: true
+  - name: linux-generic-hwe-20.04
+    apt: true
   - name: locales
     apt: true
   - name: locales-all
@@ -206,6 +210,8 @@ packages:
     snap: true
   - name: webi
     snap: true
+  - name: wslu
+    apt: true
   - name: zip
     apt: true
   - name: zsh
