@@ -1,6 +1,6 @@
 # Packages
 
-Matrix of packages to install on different platforms.
+Matrix of packages to install with different package managers.
 
 | name                     | apt | brew | brewcask | pip-user | pipx | script | snap | webi |
 | :----------------------- | :-: | :--: | :------: | :------: | :--: | :----: | :--: | :--: |
@@ -81,3 +81,9 @@ Matrix of packages to install on different platforms.
 | webi                     |     |      |          |          |      |   T    |      |      |
 | zip                      |  T  |      |          |          |      |        |      |      |
 | zsh                      |  T  |  T   |          |          |      |        |      |      |
+
+## Configuration
+
+~~~yaml
+{% include "../chezmoi/.chezmoidata.yaml" %}
+~~~
