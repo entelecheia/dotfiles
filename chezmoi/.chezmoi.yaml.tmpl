@@ -17,10 +17,13 @@
 # {{-   $cpuThreads = (output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "(Get-CimInstance -ClassName 'Win32_Processor').NumberOfLogicalProcessors") | trim | atoi -}}
 # {{- end -}}
 
-# {{- $pkgs_minimum := "age apt-transport-https bazel build-essential coreutils direnv dotdrop file findutils fzf gh git-sizer gnupg go go-task jq locales locales-all lsb-release node nvm pinentry-mac pip pipx procps python3-dev python3-pip python3-setuptools python3-testresources python3-venv sdkman serviceman setuptools sops stow tree tmux tzdata unzip vim xclip yq webi zip zsh" -}}
-# {{- $pkgs_system := "openssh-server containerd.io docker-ce docker-ce-cli docker-compose-plugin helm snapd" -}}
-# {{- $pkgs_python := "dotdrop pip pipx setuptools commitizen copier gitmojify mypy poethepoet pre-commit" -}}
+# {{- $pkgs_minimum := "age apt-transport-https build-essential coreutils direnv file findutils fzf gh git-sizer gnupg go go-task jq locales locales-all lsb-release node nvm pip pipx procps python3-dev python3-pip python3-setuptools python3-testresources python3-venv setuptools sops stow tree tmux tzdata unzip vim yqzip zsh" -}}
+# {{- $pkgs_full := "bazel font-fira-code font-fira-code-nerd-font google-perftools helm openssh-server rust sdkman serviceman webi" -}}
+# {{- $pkgs_system := "containerd.io docker-ce docker-ce-cli docker-compose-plugin snapd" -}}
+# {{- $pkgs_gui := "gpa gpg-suite pinentry-mac xclip seahorse" -}}
+# {{- $pkgs_python := "commitizen copier gitmojify mypy poethepoet pre-commit" -}}
 # {{- $pkgs_user := "" -}}
+# {{- $pkgs_total := $pkgs_minimum -}}
 
 # {{- $minimum := $devcontainer -}}
 # {{- if and (hasKey . "system") (hasKey .system "is_minimum") -}}
@@ -745,6 +748,50 @@
 # {{-   writeToStdout "❎  GitHub repositories to clone not set\n" -}}
 # {{- end -}}
 
+# {{- if not $devcontainer -}}
+# {{-   $pkgs_total = printf "%s %s" $pkgs_total $pkgs_gui -}}
+# {{- end -}}
+# {{- if not $minimum -}}
+# {{-   $pkgs_total = printf "%s %s" $pkgs_total $pkgs_full -}}
+# {{- end -}}
+# {{- if $apply_rootmoi -}}
+# {{-   $pkgs_total = printf "%s %s" $pkgs_total $pkgs_system -}}
+# {{- end -}}
+# {{- if $use_dotdrop -}}
+# {{-   $pkgs_user = printf "%s dotdrop" $pkgs_user -}}
+# {{- end -}}
+# {{- if $use_code -}}
+# {{-   $pkgs_user = printf "%s code code-cli" $pkgs_user -}}
+# {{- end -}}
+# {{- if $use_python_tools -}}
+# {{-   $pkgs_user = printf "%s %s" $pkgs_user $pkgs_python -}}
+# {{- end -}}
+# {{- if $use_ngrok -}}
+# {{-   $pkgs_user = printf "%s ngrok" $pkgs_user -}}
+# {{- end -}}
+# {{- if $use_pass -}}
+# {{-   $pkgs_user = printf "%s pass" $pkgs_user -}}
+# {{- end -}}
+# {{- if $use_passage -}}
+# {{-   $pkgs_user = printf "%s passage" $pkgs_user -}}
+# {{- end -}}
+# {{- if $use_1password -}}
+# {{-   $pkgs_user = printf "%s 1password-cli" $pkgs_user -}}
+# {{- end -}}
+# {{- if $use_autorestic -}}
+# {{-   $pkgs_user = printf "%s restic autorestic" $pkgs_user -}}
+# {{- end -}}
+# {{- if $use_microk8s -}}
+# {{-   $pkgs_user = printf "%s microk8s" $pkgs_user -}}
+# {{- end -}}
+# {{- if $use_doppler -}}
+# {{-   $pkgs_user = printf "%s doppler dopplerhq/cli/doppler" $pkgs_user -}}
+# {{- end -}}
+# {{- if $use_vault -}}
+# {{-   $pkgs_user = printf "%s vault" $pkgs_user -}}
+# {{- end -}}
+# {{-   $pkgs_total = printf "%s %s" $pkgs_total $pkgs_user -}}
+
 # {{-   writeToStdout "\n💡 Tip: you can always make chezmoi ask this again by running `chezmoi init` without `--force`.\n" -}}
 
 # {{- /* This retains the value passed with --source on chezmoi init, which is used in the ../install.sh script */ -}} #
@@ -859,11 +906,14 @@ data:
     authtoken: {{ $ngrok_authtoken | quote }}
     config_file: {{ $ngrok_config_file | quote }}
     ssh_port: {{ $ngrok_ssh_port | quote }}
-  packages:
-    minimum:
-    system:
-    python:
-    user:
+  install_packages:
+    minimum: {{ $pkgs_minimum }}
+    full: {{ $pkgs_full }}
+    system: {{ $pkgs_system }}
+    gui: {{ $pkgs_gui }}
+    python: {{ $pkgs_python }}
+    user: {{ $pkgs_user }}
+    total: {{ $pkgs_total }}
   python_tools:
     enabled: {{ $use_python_tools }}
   workspace:

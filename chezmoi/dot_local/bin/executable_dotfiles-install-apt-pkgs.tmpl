@@ -1,0 +1,38 @@
+#!/bin/bash
+# {{ if and (eq .chezmoi.os "linux") .system.is_sudoer }}
+# {{ template "scripts-library" }}
+log_task "Installing APT packages"
+
+# DOTFILES_APT_PACKAGES=()
+# {{- range (split "," $github_clones) -}} #
+# {{- end -}}
+
+readonly wanted_packages=(
+  apt-transport-https
+  bazel
+  build-essential
+  direnv
+)
+missing_packages=()
+
+for package in "${wanted_packages[@]}"; do
+  if ! is_apt_package_installed "${package}"; then
+    missing_packages+=("${package}")
+  fi
+done
+
+if [[ ${#missing_packages[@]} -gt 0 ]]; then
+  log_task "Installing missing packages with APT: ${missing_packages[*]}"
+
+  # This script also gets called when running rootmoi
+  # {{   if eq .chezmoi.username "root" }}
+  apt_command=(apt)
+  # {{   else }}
+  apt_command=(sudo apt)
+  # {{   end }}
+
+  c "${apt_command[@]}" update --yes -qq -o=Dpkg::Use-Pty=0
+  c "${apt_command[@]}" install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends "${missing_packages[@]}"
+fi
+
+# {{ end -}}
