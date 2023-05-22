@@ -56,9 +56,10 @@ packages:
     apt: true
   - name: doppler
     apt: true
-    apt_key_url: https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key
+    keyring_file: doppler-archive-keyring.gpg
+    keyring_url: https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key
     source_list_file: doppler-cli.list
-    source_list_line: "deb https://packages.doppler.com/public/cli/deb/debian any-version main"
+    source_list_line: "deb [signed-by=/usr/share/keyrings/doppler-archive-keyring.gpg] https://packages.doppler.com/public/cli/deb/debian any-version main"
   - name: dopplerhq/cli/doppler
     brew: true
   - name: dotdrop
