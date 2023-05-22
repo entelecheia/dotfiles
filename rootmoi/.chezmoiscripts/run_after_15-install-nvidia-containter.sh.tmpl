@@ -16,7 +16,7 @@ if [[ ! -f "${SOURCE_LIST_FILE}" ]]; then
       sudo tee "$SOURCE_LIST_FILE"
 fi
 
-package="nvidia-docker2"
+package="nvidia-container-toolkit"
 if ! is_apt_package_installed "${package}"; then
   log_task "Installing missing packages with APT: ${package}"
 
