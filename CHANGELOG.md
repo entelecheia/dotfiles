@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.11.2 (2023-05-22)
+### Fix
+* **chezmoi:** Update packages list with yq and zip (typo) ([`5ef9009`](https://github.com/entelecheia/dotfiles/commit/5ef90099ffbd1801ed7e0fd91acafd65f282e0f7))
+
 ## v0.11.1 (2023-05-22)
 ### Fix
 * **chezmoiscripts:** Install wheel in run_once_after_23-install-python-tools ([`8a8b2f9`](https://github.com/entelecheia/dotfiles/commit/8a8b2f97e33e5d90f02b8edc2884d8ade331618e))
