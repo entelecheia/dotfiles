@@ -2,6 +2,9 @@
 
 log_task "Installing APT dependencies"
 
+# Add APT repositories for newer versions of Git.
+c sudo add-apt-repository ppa:git-core/ppa --yes
+
 # We need to install ca-certificates before we add the APT repos, because some of them
 # may use newer CAs.
 # Ignore apt update error if it is due to expired certificate (because chances are that

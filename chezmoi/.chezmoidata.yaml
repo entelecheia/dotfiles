@@ -86,8 +86,6 @@ packages:
   - name: git
     apt: true
     brew: true
-    keyring_file: git-core-ppa-archive-keyring.gpg
-    keyring_url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xE1DD270288B4E6030699E45FA1715D88E1DF1F24
   - name: gitmojify
     pip-user: true
     pipx: true
