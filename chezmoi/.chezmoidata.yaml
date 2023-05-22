@@ -3,6 +3,10 @@ packages:
   - name: 1password-cli
     apt: true
     brewcask: true
+    keyring_file: 1password-archive-keyring.gpg
+    keyring_url: https://downloads.1password.com/linux/keys/1password.asc
+    source_list_file: 1password.list
+    source_list_line: "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main"
   - name: age
     brew: true
     snap: true
@@ -12,10 +16,18 @@ packages:
     brew: true
   - name: bazel
     apt: true
+    keyring_file: bazel-archive-keyring.gpg
+    keyring_url: https://bazel.build/bazel-release.pub.gpg
+    source_list_file: bazel.list
+    source_list_line: "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/bazel-archive-keyring.gpg] https://storage.googleapis.com/bazel-apt stable jdk1.8"
   - name: build-essential
     apt: true
   - name: code
     apt: true
+    keyring_file: packages.microsoft.gpg
+    keyring_url: https://packages.microsoft.com/keys/microsoft.asc
+    source_list_file: vscode.list
+    source_list_line: "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
   - name: code-cli
     brew: true
   - name: commitizen
@@ -40,6 +52,9 @@ packages:
     apt: true
   - name: doppler
     apt: true
+    apt_key_url: https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key
+    source_list_file: doppler-cli.list
+    source_list_line: "deb https://packages.doppler.com/public/cli/deb/debian any-version main"
   - name: dopplerhq/cli/doppler
     brew: true
   - name: dotdrop
@@ -60,6 +75,10 @@ packages:
   - name: gh
     apt: true
     brew: true
+    keyring_file: githubcli-archive-keyring.gpg
+    keyring_url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
+    source_list_file: github-cli.list
+    source_list_line: "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main"
   - name: gitmojify
     pip-user: true
     pipx: true
@@ -102,6 +121,10 @@ packages:
     pipx: true
   - name: ngrok
     snap: true
+    keyring_file: ngrok-archive-keyring.gpg
+    keyring_url: https://ngrok-agent.s3.amazonaws.com/ngrok.asc
+    source_list_file: ngrok.list
+    source_list_line: "deb https://ngrok-agent.s3.amazonaws.com buster main"
   - name: node
     apt: true
     brew: true
