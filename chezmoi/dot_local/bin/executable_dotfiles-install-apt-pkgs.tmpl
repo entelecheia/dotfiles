@@ -4,7 +4,11 @@
 # {{ template "scripts-library" }}
 log_task "Installing APT packages"
 
-USENAME=$(whoami)
+# shellcheck source=/dev/null
+source "${HOME}/.config/shrc/05-package-list"
+
+USENAME=${USENAME-:$(whoami)}
+DOTFILES_PKGS_APT=${DOTFILES_PKGS_APT:-()}
 
 # {{- if and (hasKey . "install_packages") (hasKey .install_packages "total") }}
 DOTFILES_PKGS_TO_INSTALL=(
@@ -15,20 +19,9 @@ DOTFILES_PKGS_TO_INSTALL=(
 # {{- else }}
 DOTFILES_PKGS_TO_INSTALL=()
 # {{- end -}}
-# {{- if (hasKey . "packages") }}
-APT_LIST=(
-  {{- range .packages }}
-  {{- if and (hasKey . "apt") (.apt) }}
-  {{ .name }}
-  {{- end }}
-  {{- end }}
-)
-# {{- else }}
-APT_LIST=()
-# {{- end -}}
 
 wanted_packages=()
-for package in "${APT_LIST[@]}"; do
+for package in "${DOTFILES_PKGS_APT[@]}"; do
   if is_item_in_array "${package}" "${DOTFILES_PKGS_TO_INSTALL[@]}"; then
     wanted_packages+=("${package}")
   fi
