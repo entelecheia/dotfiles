@@ -30,7 +30,7 @@ log_info "Wanted packages: ${wanted_packages[*]}"
 
 {{ range .packages }}
 PKG_NAME="{{ .name }}"
-if in_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
+if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
 {{   if and (hasKey . "keyring_file") (.keyring_file) }}
   KEYRING_FILE="/usr/share/keyrings/{{ .keyring_file }}"
   KEYRING_URL="{{ .keyring_url }}"
