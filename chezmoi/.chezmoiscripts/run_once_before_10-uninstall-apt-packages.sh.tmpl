@@ -1,4 +1,5 @@
 #!/bin/bash
+# {{ if and (eq .chezmoi.os "linux") .system.is_sudoer }}
 # {{ template "scripts-library" }}
 log_task "010. Uninstalling unwanted packages installed with APT"
 
@@ -19,3 +20,5 @@ for package in "${unwanted_packages[@]}"; do
     c apt remove --yes -qq -o=Dpkg::Use-Pty=0 "${package}"
   fi
 done
+
+# {{ end -}}
