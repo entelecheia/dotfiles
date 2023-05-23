@@ -7,39 +7,50 @@ packages:
     keyring_url: https://downloads.1password.com/linux/keys/1password.asc
     source_list_file: 1password.list
     source_list_line: "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main"
+    scope: optional
   - name: age
     brew: true
     snap: true
+    scope: minimal
   - name: apt-transport-https
     apt: true
+    scope: minimal
   - name: autorestic
     brew: true
+    scope: optional
   - name: bazel
     apt: true
     keyring_file: bazel-archive-keyring.gpg
     keyring_url: https://bazel.build/bazel-release.pub.gpg
     source_list_file: bazel.list
     source_list_line: "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/bazel-archive-keyring.gpg] https://storage.googleapis.com/bazel-apt stable jdk1.8"
+    scope: full
   - name: build-essential
     apt: true
+    scope: minimal
   - name: code
     apt: true
     keyring_file: packages.microsoft.gpg
     keyring_url: https://packages.microsoft.com/keys/microsoft.asc
     source_list_file: vscode.list
     source_list_line: "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
+    scope: optional
   - name: code-cli
     brew: true
+    scope: optional
   - name: commitizen
-    pip-user: true
+    pip: true
     pipx: true
+    scope: optional
   - name: containerd.io
     apt: true
+    scope: system
   - name: coreutils
     brew: true
+    scope: minimal
   - name: copier
     brew: true
-    pip-user: true
+    pip: true
     pipx: true
   - name: direnv
     apt: true
@@ -64,7 +75,7 @@ packages:
     brew: true
   - name: dotdrop
     brew: true
-    pip-user: true
+    pip: true
     pipx: true
   - name: file
     apt: true
@@ -88,7 +99,7 @@ packages:
     apt: true
     brew: true
   - name: gitmojify
-    pip-user: true
+    pip: true
     pipx: true
   - name: git-sizer
     apt: true
@@ -139,7 +150,7 @@ packages:
     brew: true
     snap: true
   - name: mypy
-    pip-user: true
+    pip: true
     pipx: true
   - name: ngrok
     snap: true
@@ -167,19 +178,19 @@ packages:
   - name: pinentry-mac
     brew: true
   - name: pip
-    pip-user: true
+    pip: true
   - name: pipx
     brew: true
-    pip-user: true
+    pip: true
   - name: poetry
     brew: true
     snap: true
   - name: poethepoet
     brew: true
-    pip-user: true
+    pip: true
     pipx: true
   - name: pre-commit
-    pip-user: true
+    pip: true
     pipx: true
   - name: procps
     apt: true
@@ -204,7 +215,7 @@ packages:
   - name: serviceman
     webi: true
   - name: setuptools
-    pip-user: true
+    pip: true
   - name: snapd
     apt: true
   - name: sops
@@ -234,7 +245,7 @@ packages:
   - name: webi
     snap: true
   - name: wheel
-    pip-user: true
+    pip: true
   - name: wslu
     apt: true
   - name: zip
