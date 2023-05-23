@@ -113,3 +113,11 @@ export DOTFILES_PKGS_WEBI
 export DOTFILES_PKGS_GO
 export DOTFILES_PKGS_PIP
 export DOTFILES_PKGS_PIPX
+{{ if (hasKey . "install_packages") }}
+DOTFILES_PKGS_USER=(
+  {{ .install_packages.user }}
+)
+{{- else }}
+DOTFILES_PKGS_USER=()
+{{- end }}
+export DOTFILES_PKGS_USER
