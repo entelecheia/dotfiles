@@ -9,100 +9,65 @@ source "${HOME}/.config/shrc/05-package-list"
 
 USENAME=${USENAME-:$(whoami)}
 DOTFILES_PKGS_BREW=${DOTFILES_PKGS_BREW:-()}
-
-# {{- if and (hasKey . "install_packages") (hasKey .install_packages "total") }}
-DOTFILES_PKGS_TO_INSTALL=(
-  {{- range (split " " .install_packages.total) }}
-  {{ . }}
-  {{- end }}
-)
-# {{- else }}
-DOTFILES_PKGS_TO_INSTALL=()
-# {{- end -}}
+DOTFILES_PKGS_TO_INSTALL=${DOTFILES_PKGS_TO_INSTALL:-()}
 
 wanted_packages=()
-for package in "${DOTFILES_PKGS_APT[@]}"; do
+for package in "${DOTFILES_PKGS_BREW[@]}"; do
   if is_item_in_array "${package}" "${DOTFILES_PKGS_TO_INSTALL[@]}"; then
     wanted_packages+=("${package}")
   fi
 done
 log_info "Wanted packages: ${wanted_packages[*]}"
 
-{{ range .packages }}
-{{   if and (hasKey . "keyring_file") (.keyring_file) }}
-KEYRING_FILE="/usr/share/keyrings/{{ .keyring_file }}"
-KEYRING_URL="{{ .keyring_url }}"
-if [[ ! -f "${KEYRING_FILE}" ]]; then
-  log_task "Downloading {{ .keyring_file }}"
-  if [ "$USENAME" = "root" ]; then
-    c curl -fsSL "${KEYRING_URL}" | gpg --dearmor -o "${KEYRING_FILE}"
-    c chmod go+r "${KEYRING_FILE}"
-  else
-    c curl -fsSL "${KEYRING_URL}" | sudo gpg --dearmor -o "${KEYRING_FILE}"
-    c sudo chmod go+r "${KEYRING_FILE}"
+wanted_cask_packages=()
+for package in "${DOTFILES_PKGS_BREWCASK[@]}"; do
+  if is_item_in_array "${package}" "${DOTFILES_PKGS_TO_INSTALL[@]}"; then
+    wanted_cask_packages+=("${package}")
   fi
-fi
-{{   end }}
-{{   if and (hasKey . "gpg_key_file") (.gpg_key_file) }}
-GPG_KEY_FIE="/etc/apt/trusted.gpg.d/{{ .gpg_key_file }}"
-GPG_KEY_URL="{{ .gpg_key_url }}"
-if [[ ! -f "${GPG_KEY_FIE}" ]]; then
-  if [ "$USENAME" = "root" ]; then
-    c curl -s "${GPG_KEY_URL}" | tee "${GPG_KEY_FIE}" >/dev/null
-  else
-    c curl -s "${GPG_KEY_URL}" | sudo tee "${GPG_KEY_FIE}" >/dev/null
-  fi
-fi
-{{   end }}
-{{   if and (hasKey . "apt_key_url") (.apt_key_url) }}
-APT_KEY_URL="{{ .apt_key_url }}"
-if [[ -n "${APT_KEY_URL}" ]]; then
-  if [ "$USENAME" = "root" ]; then
-    c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${APT_KEY_URL}" | apt-key add -
-  else
-    c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${APT_KEY_URL}" | sudo apt-key add -
-  fi
-fi
-{{   end }}
-{{   if and (hasKey . "source_list_file") (.source_list_file) }}
-SOURCE_LIST_FILE="/etc/apt/sources.list.d/{{ .source_list_file }}"
-{{   if and (hasKey . "source_list_line") (.source_list_line) }}
-SOURCE_LIST_LINE="{{ .source_list_line }}"
-{{   else }}
-SOURCE_LIST_LINE=""
-{{   end }}
-if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]]; then
-  log_task "Adding {{ .source_list_file }} repository to APT"
-  if [ "$USENAME" = "root" ]; then
-    c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
-  else
-    c echo "$SOURCE_LIST_LINE" | sudo tee "$SOURCE_LIST_FILE"
-  fi
-fi
-{{   end }}
-{{ end }}
+done
+log_info "Wanted cask packages: ${wanted_cask_packages[*]}"
 
+readonly wanted_tabs=(
+  homebrew/cask-fonts
+)
+
+# get tab list into BREW_TABS variable
+BREW_TABS=$(brew tap)
+
+# install tabs that are not installed
+for tab in "${wanted_tabs[@]}"; do
+  if ! echo "${BREW_TABS}" | grep -q "^${tab}$"; then
+    log_task "Installing brew tab: ${tab}"
+    c brew tap "${tab}"
+  fi
+done
+
+# install packages that are not installed
 missing_packages=()
-
 for package in "${wanted_packages[@]}"; do
-  if ! is_apt_package_installed "${package}"; then
+  if ! is_brew_package_installed "${package}"; then
     missing_packages+=("${package}")
   fi
 done
-log_info "Missing packages: ${missing_packages[*]}"
 
+brew_command=(brew)
 if [[ ${#missing_packages[@]} -gt 0 ]]; then
-  log_task "Installing missing packages with APT: ${missing_packages[*]}"
-
-  # This script also gets called when running rootmoi
-  if [ "$USENAME" = "root" ]; then
-    apt_command=(apt)
-  else
-    apt_command=(sudo apt)
-  fi
-
-  c "${apt_command[@]}" update --yes -qq -o=Dpkg::Use-Pty=0
-  c "${apt_command[@]}" install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends "${missing_packages[@]}"
+  log_task "Installing missing packages with brew: ${missing_packages[*]}"
+  # c "${brew_command[@]}" update
+  c "${brew_command[@]}" install "${missing_packages[@]}"
+else
+  log_info "No missing packages to install with brew"
 fi
+
+# get installed cask packages with brew list --casks
+BREW_CASK_PACKAGES=$(brew list --casks)
+
+# install cask packages that are not installed
+for package in "${wanted_cask_packages[@]}"; do
+  if ! echo "${BREW_CASK_PACKAGES}" | grep -q "^${package}$"; then
+    log_task "Installing a package with brew cask: ${package}"
+    c "${brew_command[@]}" install --cask "${package}"
+  fi
+done
 
 # {{ end -}}

@@ -231,7 +231,6 @@ packages:
     snap: true
     scope: minimal
   - name: poethepoet
-    brew: true
     pip: true
     pipx: true
     scope: minimal

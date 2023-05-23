@@ -21,7 +21,6 @@ DOTFILES_PKGS_GUI=(
 {{- end }}
 {{- end }}
 )
-{{- if eq .chezmoi.os "linux" }}
 DOTFILES_PKGS_FULL=(
 {{- range .packages }}
 {{- if and (hasKey . "scope") ( eq .scope "full" ) }}
@@ -29,6 +28,7 @@ DOTFILES_PKGS_FULL=(
 {{- end }}
 {{- end }}
 )
+{{- if eq .chezmoi.os "linux" }}
 DOTFILES_PKGS_APT=(
 {{- range .packages }}
 {{- if and (hasKey . "apt") ( .apt ) }}
@@ -48,6 +48,13 @@ DOTFILES_PKGS_SNAP=(
 DOTFILES_PKGS_BREW=(
 {{- range .packages }}
 {{- if and (hasKey . "brew") ( .brew ) }}
+  {{ .name }}
+{{- end }}
+{{- end }}
+)
+DOTFILES_PKGS_BREWCASK=(
+{{- range .packages }}
+{{- if and (hasKey . "brewcask") ( .brewcask ) }}
   {{ .name }}
 {{- end }}
 {{- end }}
@@ -92,13 +99,14 @@ DOTFILES_PKGS_PIPX=(
 DOTFILES_PKGS_MINIMAL=()
 DOTFILES_PKGS_SYSTEM=()
 DOTFILES_PKGS_GUI=()
-{{- if eq .chezmoi.os "linux" }}
 DOTFILES_PKGS_FULL=()
+{{- if eq .chezmoi.os "linux" }}
 DOTFILES_PKGS_APT=()
 DOTFILES_PKGS_SNAP=()
 {{- end }}
 {{- if eq .chezmoi.os "darwin" }}
 DOTFILES_PKGS_BREW=()
+DOTFILES_PKGS_BREWCASK=()
 {{- end }}
 DOTFILES_PKGS_SCRIPT=()
 DOTFILES_PKGS_WEBI=()
@@ -126,18 +134,6 @@ DOTFILES_PKGS_SYSTEM+=(linux-generic-hwe-20.04)
 {{-     end }}
 {{   end }}
 {{ end }}
-# total packages to install
-DOTFILES_PKGS_TO_INSTALL=($DOTFILES_PKGS_MINIMAL[@])
-{{- if .system.is_devcontainer }}
-DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_GUI[@]})
-{{- end }}
-{{- if not .system.is_minimum }}
-DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_FULL[@]})
-{{- end }}
-{{- if .system.apply_rootmoi }}
-DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_SYSTEM[@]})
-{{- end }}
-DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_USER[@]})
 # export variables
 export DOTFILES_PKGS_MINIMAL
 export DOTFILES_PKGS_SYSTEM
@@ -148,6 +144,7 @@ export DOTFILES_PKGS_SNAP
 {{- end }}
 {{- if eq .chezmoi.os "darwin" }}
 export DOTFILES_PKGS_BREW
+export DOTFILES_PKGS_BREWCASK
 {{- end }}
 export DOTFILES_PKGS_SCRIPT
 export DOTFILES_PKGS_WEBI
@@ -155,4 +152,16 @@ export DOTFILES_PKGS_GO
 export DOTFILES_PKGS_PIP
 export DOTFILES_PKGS_PIPX
 export DOTFILES_PKGS_USER
+# total packages to install
+DOTFILES_PKGS_TO_INSTALL=(${DOTFILES_PKGS_MINIMAL[@]})
+{{- if .system.is_devcontainer }}
+DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_GUI[@]})
+{{- end }}
+{{- if not .system.is_minimum }}
+DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_FULL[@]})
+{{- end }}
+{{- if .system.apply_rootmoi }}
+DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_SYSTEM[@]})
+{{- end }}
+DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_USER[@]})
 export DOTFILES_PKGS_TO_INSTALL
