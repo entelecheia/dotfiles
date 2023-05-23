@@ -1,0 +1,115 @@
+#!/bin/bash
+{{ if (hasKey . "packages") }}
+DOTFILES_PKGS_MINIMAL=(
+{{- range .packages }}
+{{- if and (hasKey . "scope") ( eq .scope "minimal" ) }}
+  {{ .name }}
+{{- end }}
+{{- end }}
+)
+DOTFILES_PKGS_SYSTEM=(
+{{- range .packages }}
+{{- if and (hasKey . "scope") ( eq .scope "system" ) }}
+  {{ .name }}
+{{- end }}
+{{- end }}
+)
+{{- if eq .chezmoi.os "linux" }}
+DOTFILES_PKGS_FULL=(
+{{- range .packages }}
+{{- if and (hasKey . "scope") ( eq .scope "full" ) }}
+  {{ .name }}
+{{- end }}
+{{- end }}
+)
+DOTFILES_PKGS_APT=(
+{{- range .packages }}
+{{- if and (hasKey . "apt") ( .apt ) }}
+  {{ .name }}
+{{- end }}
+{{- end }}
+)
+DOTFILES_PKGS_SNAP=(
+{{- range .packages }}
+{{- if and (hasKey . "snap") ( .snap ) }}
+  {{ .name }}
+{{- end }}
+{{- end }}
+)
+{{- end }}
+{{- if eq .chezmoi.os "darwin" }}
+DOTFILES_PKGS_BREW=(
+{{- range .packages }}
+{{- if and (hasKey . "brew") ( .brew ) }}
+  {{ .name }}
+{{- end }}
+{{- end }}
+)
+{{- end }}
+DOTFILES_PKGS_SCRIPT=(
+{{- range .packages }}
+{{- if and (hasKey . "script") ( .script ) }}
+  {{ .name }}
+{{- end }}
+{{- end }}
+)
+DOTFILES_PKGS_WEBI=(
+{{- range .packages }}
+{{- if and (hasKey . "webi") ( .webi ) }}
+  {{ .name }}
+{{- end }}
+{{- end }}
+)
+DOTFILES_PKGS_GO=(
+{{- range .packages }}
+{{- if and (hasKey . "go") ( .go ) }}
+  {{ .name }}
+{{- end }}
+{{- end }}
+)
+DOTFILES_PKGS_PIP=(
+{{- range .packages }}
+{{- if and (hasKey . "pip") ( .pip ) }}
+  {{ .name }}
+{{- end }}
+{{- end }}
+)
+DOTFILES_PKGS_PIPX=(
+{{- range .packages }}
+{{- if and (hasKey . "pipx") ( .pipx ) }}
+  {{ .name }}
+{{- end }}
+{{- end }}
+)
+{{- else }}
+DOTFILES_PKGS_MINIMAL=()
+DOTFILES_PKGS_SYSTEM=()
+{{- if eq .chezmoi.os "linux" }}
+DOTFILES_PKGS_FULL=()
+DOTFILES_PKGS_APT=()
+DOTFILES_PKGS_SNAP=()
+{{- end }}
+{{- if eq .chezmoi.os "darwin" }}
+DOTFILES_PKGS_BREW=()
+{{- end }}
+DOTFILES_PKGS_SCRIPT=()
+DOTFILES_PKGS_WEBI=()
+DOTFILES_PKGS_GO=()
+DOTFILES_PKGS_PIP=()
+DOTFILES_PKGS_PIPX=()
+{{- end }}
+export DOTFILES_PKGS_MINIMAL
+export DOTFILES_PKGS_SYSTEM
+{{- if eq .chezmoi.os "linux" }}
+export DOTFILES_PKGS_FULL
+export DOTFILES_PKGS_APT
+export DOTFILES_PKGS_SNAP
+{{- end }}
+{{- if eq .chezmoi.os "darwin" }}
+export DOTFILES_PKGS_BREW
+{{- end }}
+export DOTFILES_PKGS_SCRIPT
+export DOTFILES_PKGS_WEBI
+export DOTFILES_PKGS_GO
+export DOTFILES_PKGS_PIP
+export DOTFILES_PKGS_PIPX
