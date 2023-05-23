@@ -28,10 +28,10 @@ for package in "${DOTFILES_PKGS_APT[@]}"; do
 done
 log_info "Wanted packages: ${wanted_packages[*]}"
 
-{{ range .packages -}}
+{{ range .packages }}
 PKG_NAME="{{ .name }}"
 if in_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
-{{-   if and (hasKey . "keyring_file") (.keyring_file) }}
+{{   if and (hasKey . "keyring_file") (.keyring_file) }}
   KEYRING_FILE="/usr/share/keyrings/{{ .keyring_file }}"
   KEYRING_URL="{{ .keyring_url }}"
   if [[ ! -f "${KEYRING_FILE}" ]]; then
@@ -45,7 +45,7 @@ if in_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
     fi
   fi
 {{   end }}
-{{-   if and (hasKey . "gpg_key_file") (.gpg_key_file) }}
+{{   if and (hasKey . "gpg_key_file") (.gpg_key_file) }}
   GPG_KEY_FIE="/etc/apt/trusted.gpg.d/{{ .gpg_key_file }}"
   GPG_KEY_URL="{{ .gpg_key_url }}"
   if [[ ! -f "${GPG_KEY_FIE}" ]]; then
@@ -56,7 +56,7 @@ if in_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
     fi
   fi
 {{   end }}
-{{-   if and (hasKey . "apt_key_url") (.apt_key_url) }}
+{{   if and (hasKey . "apt_key_url") (.apt_key_url) }}
   APT_KEY_URL="{{ .apt_key_url }}"
   if [[ -n "${APT_KEY_URL}" ]]; then
     if [ "$USENAME" = "root" ]; then
@@ -66,13 +66,13 @@ if in_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
     fi
   fi
 {{   end }}
-{{-   if and (hasKey . "source_list_file") (.source_list_file) }}
+{{   if and (hasKey . "source_list_file") (.source_list_file) }}
   SOURCE_LIST_FILE="/etc/apt/sources.list.d/{{ .source_list_file }}"
-{{-   if and (hasKey . "source_list_line") (.source_list_line) }}
+{{   if and (hasKey . "source_list_line") (.source_list_line) }}
   SOURCE_LIST_LINE="{{ .source_list_line }}"
-{{-   else }}
+{{   else }}
   SOURCE_LIST_LINE=""
-{{-   end }}
+{{   end }}
 
   if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]]; then
     log_task "Adding {{ .source_list_file }} repository to APT"
