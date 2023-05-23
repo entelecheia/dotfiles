@@ -6,69 +6,14 @@ log_task "Installing APT packages"
 
 USENAME=$(whoami)
 
-{{ range .packages -}}
-{{-   if and (hasKey . "keyring_file") (.keyring_file) }}
-KEYRING_FILE="/usr/share/keyrings/{{ .keyring_file }}"
-KEYRING_URL="{{ .keyring_url }}"
-if [[ ! -f "${KEYRING_FILE}" ]]; then
-  log_task "Downloading {{ .keyring_file }}"
-  if [ "$USENAME" = "root" ]; then
-    c curl -fsSL "${KEYRING_URL}" | gpg --dearmor -o "${KEYRING_FILE}"
-    c chmod go+r "${KEYRING_FILE}"
-  else
-    c curl -fsSL "${KEYRING_URL}" | sudo gpg --dearmor -o "${KEYRING_FILE}"
-    c sudo chmod go+r "${KEYRING_FILE}"
-  fi
-fi
-{{   end }}
-{{-   if and (hasKey . "gpg_key_file") (.gpg_key_file) }}
-GPG_KEY_FIE="/etc/apt/trusted.gpg.d/{{ .gpg_key_file }}"
-GPG_KEY_URL="{{ .gpg_key_url }}"
-if [[ ! -f "${GPG_KEY_FIE}" ]]; then
-  if [ "$USENAME" = "root" ]; then
-    c curl -s "${GPG_KEY_URL}" | tee "${GPG_KEY_FIE}" >/dev/null
-  else
-    c curl -s "${GPG_KEY_URL}" | sudo tee "${GPG_KEY_FIE}" >/dev/null
-  fi
-fi
-{{   end }}
-{{-   if and (hasKey . "apt_key_url") (.apt_key_url) }}
-APT_KEY_URL="{{ .apt_key_url }}"
-if [[ -n "${APT_KEY_URL}" ]]; then
-  if [ "$USENAME" = "root" ]; then
-    c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${APT_KEY_URL}" | apt-key add -
-  else
-    c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${APT_KEY_URL}" | sudo apt-key add -
-  fi
-fi
-{{   end }}
-{{-   if and (hasKey . "source_list_file") (.source_list_file) }}
-SOURCE_LIST_FILE="/etc/apt/sources.list.d/{{ .source_list_file }}"
-{{-   if and (hasKey . "source_list_line") (.source_list_line) }}
-SOURCE_LIST_LINE="{{ .source_list_line }}"
-{{-   else }}
-SOURCE_LIST_LINE=""
-{{-   end }}
-
-if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]]; then
-  log_task "Adding {{ .source_list_file }} repository to APT"
-  if [ "$USENAME" = "root" ]; then
-    c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
-  else
-    c echo "$SOURCE_LIST_LINE" | sudo tee "$SOURCE_LIST_FILE"
-  fi
-fi
-{{   end }}
-{{- end -}}
-
 # {{- if and (hasKey . "install_packages") (hasKey .install_packages "total") }}
-DOTFILES_PACKAGES_TO_INSTALL=(
+DOTFILES_PKGS_TO_INSTALL=(
   {{- range (split " " .install_packages.total) }}
   {{ . }}
   {{- end }}
 )
 # {{- else }}
-DOTFILES_PACKAGES_TO_INSTALL=()
+DOTFILES_PKGS_TO_INSTALL=()
 # {{- end -}}
 # {{- if (hasKey . "packages") }}
 APT_LIST=(
@@ -84,11 +29,69 @@ APT_LIST=()
 
 wanted_packages=()
 for package in "${APT_LIST[@]}"; do
-  if is_item_in_array "${package}" "${DOTFILES_PACKAGES_TO_INSTALL[@]}"; then
+  if is_item_in_array "${package}" "${DOTFILES_PKGS_TO_INSTALL[@]}"; then
     wanted_packages+=("${package}")
   fi
 done
 log_info "Wanted packages: ${wanted_packages[*]}"
+
+{{ range .packages -}}
+PKG_NAME="{{ .name }}"
+if in_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
+{{-   if and (hasKey . "keyring_file") (.keyring_file) }}
+  KEYRING_FILE="/usr/share/keyrings/{{ .keyring_file }}"
+  KEYRING_URL="{{ .keyring_url }}"
+  if [[ ! -f "${KEYRING_FILE}" ]]; then
+    log_task "Downloading {{ .keyring_file }}"
+    if [ "$USENAME" = "root" ]; then
+      c curl -fsSL "${KEYRING_URL}" | gpg --dearmor -o "${KEYRING_FILE}"
+      c chmod go+r "${KEYRING_FILE}"
+    else
+      c curl -fsSL "${KEYRING_URL}" | sudo gpg --dearmor -o "${KEYRING_FILE}"
+      c sudo chmod go+r "${KEYRING_FILE}"
+    fi
+  fi
+{{   end }}
+{{-   if and (hasKey . "gpg_key_file") (.gpg_key_file) }}
+  GPG_KEY_FIE="/etc/apt/trusted.gpg.d/{{ .gpg_key_file }}"
+  GPG_KEY_URL="{{ .gpg_key_url }}"
+  if [[ ! -f "${GPG_KEY_FIE}" ]]; then
+    if [ "$USENAME" = "root" ]; then
+      c curl -s "${GPG_KEY_URL}" | tee "${GPG_KEY_FIE}" >/dev/null
+    else
+      c curl -s "${GPG_KEY_URL}" | sudo tee "${GPG_KEY_FIE}" >/dev/null
+    fi
+  fi
+{{   end }}
+{{-   if and (hasKey . "apt_key_url") (.apt_key_url) }}
+  APT_KEY_URL="{{ .apt_key_url }}"
+  if [[ -n "${APT_KEY_URL}" ]]; then
+    if [ "$USENAME" = "root" ]; then
+      c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${APT_KEY_URL}" | apt-key add -
+    else
+      c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${APT_KEY_URL}" | sudo apt-key add -
+    fi
+  fi
+{{   end }}
+{{-   if and (hasKey . "source_list_file") (.source_list_file) }}
+  SOURCE_LIST_FILE="/etc/apt/sources.list.d/{{ .source_list_file }}"
+{{-   if and (hasKey . "source_list_line") (.source_list_line) }}
+  SOURCE_LIST_LINE="{{ .source_list_line }}"
+{{-   else }}
+  SOURCE_LIST_LINE=""
+{{-   end }}
+
+  if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]]; then
+    log_task "Adding {{ .source_list_file }} repository to APT"
+    if [ "$USENAME" = "root" ]; then
+      c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
+    else
+      c echo "$SOURCE_LIST_LINE" | sudo tee "$SOURCE_LIST_FILE"
+    fi
+  fi
+{{   end }}
+fi
+{{- end -}}
 
 missing_packages=()
 
