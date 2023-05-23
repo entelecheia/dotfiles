@@ -1,5 +1,24 @@
 <!--next-version-placeholder-->
 
+## v0.12.0 (2023-05-23)
+### Feature
+* Add install-brew-pkgs command ([`ffdb81a`](https://github.com/entelecheia/dotfiles/commit/ffdb81a9d7a47d64b33d3b3c4c654a8f82bafb09))
+* Export DOTFILES_PKGS_TO_INSTALL, add install-brew-pkgs command ([`0611b3c`](https://github.com/entelecheia/dotfiles/commit/0611b3cd3df01ac89d4de14f7e7e4f82241545a3))
+* **config:** Export package list ([`1c5a8bc`](https://github.com/entelecheia/dotfiles/commit/1c5a8bc266dc8fd610bf2d9a3715ebe0ae33460a))
+
+### Fix
+* **chezmoi:** Update installation scripts templates with comments on package management variables ([`df7e03a`](https://github.com/entelecheia/dotfiles/commit/df7e03a47ecf69eaa1c3e548f10868052633817c))
+* **chezmoi:** Update bash script templates for macOS and Linux installation packages and remove old script. ([`93cda49`](https://github.com/entelecheia/dotfiles/commit/93cda49492f594c58de6e31235b851b1c015d968))
+* **packages:** Check if pkgs is in the required list when add source ([`1000828`](https://github.com/entelecheia/dotfiles/commit/1000828a74fa1ecdda754e103de3b1460e811f21))
+* **packages:** Check if pkgs is in the required list when add source ([`6feb5bf`](https://github.com/entelecheia/dotfiles/commit/6feb5bf77900c3ab344ae74409bedf8cb5fdf212))
+* **packages:** Check if pkgs is in the required list when add source ([`544bc39`](https://github.com/entelecheia/dotfiles/commit/544bc39963b2ee3b3565390a7afcc9259c75e5b8))
+* **packages:** Check if pkgs is in the required list when add source ([`31bb98a`](https://github.com/entelecheia/dotfiles/commit/31bb98ab6e27e340d3e349afddc7c1c01b046cec))
+* **dependencies:** Update APT package installation script ([`22d742e`](https://github.com/entelecheia/dotfiles/commit/22d742ebd2f82a7c72b08031c2940c258c2c5326))
+
+### Documentation
+* Update package matrix ([`04f11c0`](https://github.com/entelecheia/dotfiles/commit/04f11c0a6b8bedd8a0572e8e828b5c5b605433fc))
+* Update packages.md to reflect package managers instead of platforms ([`567e439`](https://github.com/entelecheia/dotfiles/commit/567e43957ce22ca3dba4ebf476f2988e31461934))
+
 ## v0.11.2 (2023-05-22)
 ### Fix
 * **chezmoi:** Update packages list with yq and zip (typo) ([`5ef9009`](https://github.com/entelecheia/dotfiles/commit/5ef90099ffbd1801ed7e0fd91acafd65f282e0f7))
