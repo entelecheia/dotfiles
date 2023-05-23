@@ -110,7 +110,7 @@ help = "show remotes"
 cmd = "git show-ref"
 help = "show refs"
 
-[tool.poe.tasks.branch-chekcout-upstream]
+[tool.poe.tasks.branch-checkout-upstream]
 sequence = [
     { cmd = "git checkout -B ${branch}" },
     { cmd = "git push --set-upstream origin ${branch}" },
@@ -118,7 +118,7 @@ sequence = [
 help = "create a new branch and push it to origin"
 args = ["branch"]
 
-[tool.poe.tasks.branch-chekcout]
+[tool.poe.tasks.branch-checkout]
 cmd = "git checkout ${branch}"
 help = "checkout a branch"
 args = ["branch"]
