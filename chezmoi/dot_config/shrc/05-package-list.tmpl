@@ -14,6 +14,13 @@ DOTFILES_PKGS_SYSTEM=(
 {{- end }}
 {{- end }}
 )
+DOTFILES_PKGS_GUI=(
+{{- range .packages }}
+{{- if and (hasKey . "scope") ( eq .scope "gui" ) }}
+  {{ .name }}
+{{- end }}
+{{- end }}
+)
 {{- if eq .chezmoi.os "linux" }}
 DOTFILES_PKGS_FULL=(
 {{- range .packages }}
@@ -84,6 +91,7 @@ DOTFILES_PKGS_PIPX=(
 {{- else }}
 DOTFILES_PKGS_MINIMAL=()
 DOTFILES_PKGS_SYSTEM=()
+DOTFILES_PKGS_GUI=()
 {{- if eq .chezmoi.os "linux" }}
 DOTFILES_PKGS_FULL=()
 DOTFILES_PKGS_APT=()
@@ -98,6 +106,39 @@ DOTFILES_PKGS_GO=()
 DOTFILES_PKGS_PIP=()
 DOTFILES_PKGS_PIPX=()
 {{- end }}
+# user packages
+{{ if (hasKey . "install_packages") }}
+DOTFILES_PKGS_USER=(
+  {{ .install_packages.user }}
+)
+{{- else }}
+DOTFILES_PKGS_USER=()
+{{- end }}
+# system-dependent packages
+{{- if eq .chezmoi.os "linux" -}}
+{{-   if .system.is_wsl -}}
+DOTFILES_PKGS_SYSTEM+=(wslu)
+{{-   else }}
+{{-     if eq .chezmoi.osRelease.versionCodename "bionic" }}
+DOTFILES_PKGS_SYSTEM+=(linux-generic-hwe-18.04)
+{{-     else if eq .chezmoi.osRelease.versionCodename "focal" }}
+DOTFILES_PKGS_SYSTEM+=(linux-generic-hwe-20.04)
+{{-     end }}
+{{   end }}
+{{ end }}
+# total packages to install
+DOTFILES_PKGS_TO_INSTALL=($DOTFILES_PKGS_MINIMAL[@])
+{{- if .system.is_devcontainer }}
+DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_GUI[@]})
+{{- end }}
+{{- if not .system.is_minimum }}
+DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_FULL[@]})
+{{- end }}
+{{- if .system.apply_rootmoi }}
+DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_SYSTEM[@]})
+{{- end }}
+DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_USER[@]})
+# export variables
 export DOTFILES_PKGS_MINIMAL
 export DOTFILES_PKGS_SYSTEM
 {{- if eq .chezmoi.os "linux" }}
@@ -113,11 +154,5 @@ export DOTFILES_PKGS_WEBI
 export DOTFILES_PKGS_GO
 export DOTFILES_PKGS_PIP
 export DOTFILES_PKGS_PIPX
-{{ if (hasKey . "install_packages") }}
-DOTFILES_PKGS_USER=(
-  {{ .install_packages.user }}
-)
-{{- else }}
-DOTFILES_PKGS_USER=()
-{{- end }}
 export DOTFILES_PKGS_USER
+export DOTFILES_PKGS_TO_INSTALL
