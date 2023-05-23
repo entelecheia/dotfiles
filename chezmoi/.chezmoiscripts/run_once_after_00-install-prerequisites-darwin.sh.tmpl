@@ -1,9 +1,0 @@
-#!/bin/bash
-# {{ if eq .chezmoi.os "darwin" }}
-# {{ template "scripts-library" }}
-log_task "00. Installing packages for macOS"
-
-# dotfiles-install-apt-pkgs hash: {{ include "dot_local/bin/executable_dotfiles-install-apt-pkgs.tmpl" | sha256sum }}
-"${HOME}/.local/bin/dotfiles-install-apt-pkgs"
-
-# {{ end -}}
