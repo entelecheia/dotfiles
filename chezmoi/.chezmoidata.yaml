@@ -165,10 +165,8 @@ packages:
     scope: minimal
   - name: linux-generic-hwe-18.04
     apt: true
-    scope: system
   - name: linux-generic-hwe-20.04
     apt: true
-    scope: system
   - name: locales
     apt: true
     scope: minimal
@@ -319,7 +317,6 @@ packages:
     scpoe: minimal
   - name: wslu
     apt: true
-    scope: system
   - name: zip
     apt: true
     scope: minimal
