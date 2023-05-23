@@ -17,13 +17,13 @@
 # {{-   $cpuThreads = (output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "(Get-CimInstance -ClassName 'Win32_Processor').NumberOfLogicalProcessors") | trim | atoi -}}
 # {{- end -}}
 
-# {{- $pkgs_minimum := "age apt-transport-https build-essential coreutils direnv file findutils fzf gh git-sizer gnupg go go-task jq locales locales-all lsb-release node nvm pip pipx procps python3-dev python3-pip python3-setuptools python3-testresources python3-venv setuptools sops stow tree tmux tzdata unzip vim yq zip zsh" -}}
+# {{- $pkgs_minimal := "age apt-transport-https build-essential coreutils direnv file findutils fzf gh git-sizer gnupg go go-task jq locales locales-all lsb-release node nvm pip pipx procps python3-dev python3-pip python3-setuptools python3-testresources python3-venv setuptools sops stow tree tmux tzdata unzip vim yq zip zsh" -}}
 # {{- $pkgs_full := "bazel font-fira-code font-fira-code-nerd-font google-perftools openssh-server rust sdkman serviceman webi" -}}
 # {{- $pkgs_system := "containerd.io docker-ce docker-ce-cli docker-compose-plugin nvidia-container-toolkit snapd" -}}
 # {{- $pkgs_gui := "gpa gpg-suite pinentry-mac xclip seahorse" -}}
 # {{- $pkgs_python := "commitizen copier gitmojify mypy poethepoet pre-commit" -}}
 # {{- $pkgs_user := "" -}}
-# {{- $pkgs_total := $pkgs_minimum -}}
+# {{- $pkgs_total := $pkgs_minimal -}}
 # {{- if eq .chezmoi.os "linux" -}}
 # {{-   if $wsl -}}
 # {{-     $pkgs_system = printf "%s wslu" $pkgs_system -}}
@@ -918,7 +918,7 @@ data:
     config_file: {{ $ngrok_config_file | quote }}
     ssh_port: {{ $ngrok_ssh_port | quote }}
   install_packages:
-    minimum: {{ $pkgs_minimum }}
+    minimal: {{ $pkgs_minimal }}
     full: {{ $pkgs_full }}
     system: {{ $pkgs_system }}
     gui: {{ $pkgs_gui }}

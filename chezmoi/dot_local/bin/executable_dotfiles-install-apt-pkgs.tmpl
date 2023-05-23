@@ -4,10 +4,32 @@
 # {{ template "scripts-library" }}
 log_task "Installing APT packages"
 
-USENAME=$(whoami)
+# shellcheck source=/dev/null
+source "${HOME}/.config/shrc/05-package-list"
 
-{{ range .packages -}}
-{{-   if and (hasKey . "keyring_file") (.keyring_file) }}
+USENAME=${USENAME-:$(whoami)}
+DOTFILES_PKGS_APT=${DOTFILES_PKGS_APT:-()}
+
+# {{- if and (hasKey . "install_packages") (hasKey .install_packages "total") }}
+DOTFILES_PKGS_TO_INSTALL=(
+  {{- range (split " " .install_packages.total) }}
+  {{ . }}
+  {{- end }}
+)
+# {{- else }}
+DOTFILES_PKGS_TO_INSTALL=()
+# {{- end -}}
+
+wanted_packages=()
+for package in "${DOTFILES_PKGS_APT[@]}"; do
+  if is_item_in_array "${package}" "${DOTFILES_PKGS_TO_INSTALL[@]}"; then
+    wanted_packages+=("${package}")
+  fi
+done
+log_info "Wanted packages: ${wanted_packages[*]}"
+
+{{ range .packages }}
+{{   if and (hasKey . "keyring_file") (.keyring_file) }}
 KEYRING_FILE="/usr/share/keyrings/{{ .keyring_file }}"
 KEYRING_URL="{{ .keyring_url }}"
 if [[ ! -f "${KEYRING_FILE}" ]]; then
@@ -21,7 +43,7 @@ if [[ ! -f "${KEYRING_FILE}" ]]; then
   fi
 fi
 {{   end }}
-{{-   if and (hasKey . "gpg_key_file") (.gpg_key_file) }}
+{{   if and (hasKey . "gpg_key_file") (.gpg_key_file) }}
 GPG_KEY_FIE="/etc/apt/trusted.gpg.d/{{ .gpg_key_file }}"
 GPG_KEY_URL="{{ .gpg_key_url }}"
 if [[ ! -f "${GPG_KEY_FIE}" ]]; then
@@ -32,7 +54,7 @@ if [[ ! -f "${GPG_KEY_FIE}" ]]; then
   fi
 fi
 {{   end }}
-{{-   if and (hasKey . "apt_key_url") (.apt_key_url) }}
+{{   if and (hasKey . "apt_key_url") (.apt_key_url) }}
 APT_KEY_URL="{{ .apt_key_url }}"
 if [[ -n "${APT_KEY_URL}" ]]; then
   if [ "$USENAME" = "root" ]; then
@@ -42,14 +64,13 @@ if [[ -n "${APT_KEY_URL}" ]]; then
   fi
 fi
 {{   end }}
-{{-   if and (hasKey . "source_list_file") (.source_list_file) }}
+{{   if and (hasKey . "source_list_file") (.source_list_file) }}
 SOURCE_LIST_FILE="/etc/apt/sources.list.d/{{ .source_list_file }}"
-{{-   if and (hasKey . "source_list_line") (.source_list_line) }}
+{{   if and (hasKey . "source_list_line") (.source_list_line) }}
 SOURCE_LIST_LINE="{{ .source_list_line }}"
-{{-   else }}
+{{   else }}
 SOURCE_LIST_LINE=""
-{{-   end }}
-
+{{   end }}
 if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]]; then
   log_task "Adding {{ .source_list_file }} repository to APT"
   if [ "$USENAME" = "root" ]; then
@@ -59,36 +80,7 @@ if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]]; then
   fi
 fi
 {{   end }}
-{{- end -}}
-
-# {{- if and (hasKey . "install_packages") (hasKey .install_packages "total") }}
-DOTFILES_PACKAGES_TO_INSTALL=(
-  {{- range (split " " .install_packages.total) }}
-  {{ . }}
-  {{- end }}
-)
-# {{- else }}
-DOTFILES_PACKAGES_TO_INSTALL=()
-# {{- end -}}
-# {{- if (hasKey . "packages") }}
-APT_LIST=(
-  {{- range .packages }}
-  {{- if and (hasKey . "apt") (.apt) }}
-  {{ .name }}
-  {{- end }}
-  {{- end }}
-)
-# {{- else }}
-APT_LIST=()
-# {{- end -}}
-
-wanted_packages=()
-for package in "${APT_LIST[@]}"; do
-  if is_item_in_array "${package}" "${DOTFILES_PACKAGES_TO_INSTALL[@]}"; then
-    wanted_packages+=("${package}")
-  fi
-done
-log_info "Wanted packages: ${wanted_packages[*]}"
+{{ end }}
 
 missing_packages=()
 
@@ -97,7 +89,6 @@ for package in "${wanted_packages[@]}"; do
     missing_packages+=("${package}")
   fi
 done
-log_info "Missing packages: ${missing_packages[*]}"
 
 if [[ ${#missing_packages[@]} -gt 0 ]]; then
   log_task "Installing missing packages with APT: ${missing_packages[*]}"
@@ -111,6 +102,8 @@ if [[ ${#missing_packages[@]} -gt 0 ]]; then
 
   c "${apt_command[@]}" update --yes -qq -o=Dpkg::Use-Pty=0
   c "${apt_command[@]}" install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends "${missing_packages[@]}"
+else
+  log_info "No missing packages to install with APT"
 fi
 
 # {{ end -}}

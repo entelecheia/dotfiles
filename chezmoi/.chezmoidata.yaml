@@ -7,76 +7,102 @@ packages:
     keyring_url: https://downloads.1password.com/linux/keys/1password.asc
     source_list_file: 1password.list
     source_list_line: "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main"
+    scope: optional
   - name: age
     brew: true
     snap: true
+    scope: minimal
   - name: apt-transport-https
     apt: true
+    scope: minimal
   - name: autorestic
     brew: true
+    scope: optional
   - name: bazel
     apt: true
     keyring_file: bazel-archive-keyring.gpg
     keyring_url: https://bazel.build/bazel-release.pub.gpg
     source_list_file: bazel.list
     source_list_line: "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/bazel-archive-keyring.gpg] https://storage.googleapis.com/bazel-apt stable jdk1.8"
+    scope: full
   - name: build-essential
     apt: true
+    scope: minimal
   - name: code
     apt: true
     keyring_file: packages.microsoft.gpg
     keyring_url: https://packages.microsoft.com/keys/microsoft.asc
     source_list_file: vscode.list
     source_list_line: "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
+    scope: optional
   - name: code-cli
     brew: true
+    scope: optional
   - name: commitizen
-    pip-user: true
+    pip: true
     pipx: true
+    scope: optional
   - name: containerd.io
     apt: true
+    scope: system
   - name: coreutils
     brew: true
+    scope: minimal
   - name: copier
     brew: true
-    pip-user: true
+    pip: true
     pipx: true
+    scope: minimal
   - name: direnv
     apt: true
     brew: true
+    scope: minimal
   - name: docker-ce
     apt: true
     keyring_file: docker.gpg
     keyring_url: https://download.docker.com/linux/ubuntu/gpg
     source_list_file: docker.list
     source_list_line: "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    scope: system
   - name: docker-ce-cli
     apt: true
+    scope: system
   - name: docker-compose-plugin
     apt: true
+    scope: system
   - name: doppler
     apt: true
     keyring_file: doppler-archive-keyring.gpg
     keyring_url: https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key
     source_list_file: doppler-cli.list
     source_list_line: "deb [signed-by=/usr/share/keyrings/doppler-archive-keyring.gpg] https://packages.doppler.com/public/cli/deb/debian any-version main"
+    scope: optional
   - name: dopplerhq/cli/doppler
     brew: true
+    scope: optional
   - name: dotdrop
     brew: true
-    pip-user: true
+    pip: true
     pipx: true
+    scope: optional
   - name: file
     apt: true
+    scope: minimal
   - name: findutils
     brew: true
+    scope: minimal
   - name: font-fira-code
     brewcask: true
+    brewtab: homebrew/cask-fonts
+    scope: minimal
   - name: font-fira-code-nerd-font
     brewcask: true
+    brewtab: homebrew/cask-fonts
+    scope: minimal
   - name: fzf
     apt: true
     brew: true
+    scope: minimal
   - name: gh
     apt: true
     brew: true
@@ -84,37 +110,49 @@ packages:
     keyring_url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
     source_list_file: github-cli.list
     source_list_line: "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main"
+    scope: minimal
   - name: git
     apt: true
     brew: true
+    scope: minimal
   - name: gitmojify
-    pip-user: true
+    pip: true
     pipx: true
+    scope: optional
   - name: git-sizer
     apt: true
     brew: true
+    scope: minimal
   - name: git-workspace
     brew: true
+    scope: optional
   - name: google-cloud-cli
     apt: true
     keyring_file: cloud.google.gpg
     keyring_url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
     source_list_file: google-cloud-sdk.list
     source_list_line: "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main"
+    scope: optional
   - name: google-perftools
     apt: true
+    scope: full
   - name: gnupg
     brew: true
+    scope: minimal
   - name: go
     brew: true
     snap: true
+    scope: minimal
   - name: go-task
     brew: true
     snap: true
+    scope: minimal
   - name: gpa
     apt: true
+    scope: gui
   - name: gpg-suite
     script: true
+    scope: gui
   - name: helm
     apt: true
     brew: true
@@ -122,123 +160,168 @@ packages:
     keyring_url: https://baltocdn.com/helm/signing.asc
     source_list_file: helm-stable-debian.list
     source_list_line: "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main"
+    scope: optional
   - name: jq
     apt: true
     brew: true
+    scope: minimal
   - name: linux-generic-hwe-18.04
     apt: true
   - name: linux-generic-hwe-20.04
     apt: true
   - name: locales
     apt: true
+    scope: minimal
   - name: locales-all
     apt: true
+    scope: minimal
   - name: lsb-release
     apt: true
+    scope: minimal
   - name: microk8s
     brew: true
     snap: true
+    scope: optional
   - name: mypy
-    pip-user: true
+    pip: true
     pipx: true
+    scope: optional
   - name: ngrok
     snap: true
     gpg_key_file: ngrok.asc
     gpg_key_url: https://ngrok-agent.s3.amazonaws.com/ngrok.asc
     source_list_file: ngrok.list
     source_list_line: "deb https://ngrok-agent.s3.amazonaws.com buster main"
+    scope: optional
   - name: node
     brew: true
+    scope: minimal
   - name: nvidia-container-toolkit
     apt: true
     keyring_file: nvidia-container-toolkit-keyring.gpg
     keyring_url: https://nvidia.github.io/libnvidia-container/gpgkey
     source_list_file: nvidia-container-toolkit.list
     source_list_line: "deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://nvidia.github.io/libnvidia-container/stable/$(. /etc/os-release;echo $ID$VERSION_ID'/$(ARCH)') /"
+    scope: system
   - name: nvm
     script: true
+    scope: minimal
   - name: openssh-server
     apt: true
+    scope: full
   - name: pass
     apt: true
     brew: true
+    scope: minimal
   - name: pinentry-curses
     apt: true
+    scope: gui
   - name: pinentry-mac
     brew: true
+    scope: gui
   - name: pip
-    pip-user: true
+    pip: true
+    scope: minimal
   - name: pipx
     brew: true
-    pip-user: true
+    pip: true
+    scope: minimal
   - name: poetry
     brew: true
     snap: true
+    scope: minimal
   - name: poethepoet
-    brew: true
-    pip-user: true
+    pip: true
     pipx: true
+    scope: minimal
   - name: pre-commit
-    pip-user: true
+    pip: true
     pipx: true
+    scope: optional
   - name: procps
     apt: true
+    scope: minimal
   - name: python3-dev
     apt: true
+    scope: minimal
   - name: python3-pip
     apt: true
+    scope: minimal
   - name: python3-setuptools
     apt: true
+    scope: minimal
   - name: python3-testresources
     apt: true
+    scope: minimal
   - name: python3-venv
     apt: true
+    scope: minimal
   - name: restic
     brew: true
+    scope: optional
   - name: rust
     snap: true
+    scope: minimal
   - name: sdkman
     snap: true
+    scope: minimal
   - name: seahorse
     apt: true
+    scope: gui
   - name: serviceman
     webi: true
+    scope: gui
   - name: setuptools
-    pip-user: true
+    pip: true
+    scope: minimal
   - name: snapd
     apt: true
+    scope: full
   - name: sops
     brew: true
     snap: true
+    scope: minimal
   - name: stow
     apt: true
     brew: true
+    scope: optional
   - name: tree
     apt: true
     brew: true
+    scope: minimal
   - name: tmux
     apt: true
     brew: true
+    scope: minimal
   - name: tzdata
     apt: true
+    scope: minimal
   - name: unzip
     apt: true
     brew: true
+    scope: minimal
   - name: vim
     apt: true
+    scope: minimal
   - name: xclip
     apt: true
+    scope: gui
   - name: yq
     brew: true
     snap: true
+    scope: minimal
   - name: webi
     snap: true
+    scope: gui
   - name: wheel
-    pip-user: true
+    pip: true
+    scpoe: minimal
   - name: wslu
     apt: true
   - name: zip
     apt: true
+    scope: minimal
   - name: zsh
     apt: true
     brew: true
+    scope: minimal

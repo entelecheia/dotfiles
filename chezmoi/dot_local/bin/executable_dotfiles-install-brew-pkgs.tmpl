@@ -1,18 +1,34 @@
 #!/bin/bash
+# shellcheck disable=SC1083
 # {{ if eq .chezmoi.os "darwin" }}
 # {{ template "scripts-library" }}
-log_task "00. Installing prerequisites for macOS"
+log_task "Installing BREW packages"
+
+# shellcheck source=/dev/null
+source "${HOME}/.config/shrc/05-package-list"
+
+USENAME=${USENAME-:$(whoami)}
+DOTFILES_PKGS_BREW=${DOTFILES_PKGS_BREW:-()}
+DOTFILES_PKGS_TO_INSTALL=${DOTFILES_PKGS_TO_INSTALL:-()}
+
+wanted_packages=()
+for package in "${DOTFILES_PKGS_BREW[@]}"; do
+  if is_item_in_array "${package}" "${DOTFILES_PKGS_TO_INSTALL[@]}"; then
+    wanted_packages+=("${package}")
+  fi
+done
+log_info "Wanted packages: ${wanted_packages[*]}"
+
+wanted_cask_packages=()
+for package in "${DOTFILES_PKGS_BREWCASK[@]}"; do
+  if is_item_in_array "${package}" "${DOTFILES_PKGS_TO_INSTALL[@]}"; then
+    wanted_cask_packages+=("${package}")
+  fi
+done
+log_info "Wanted cask packages: ${wanted_cask_packages[*]}"
 
 readonly wanted_tabs=(
   homebrew/cask-fonts
-  homebrew/bundle
-  homebrew/cask
-  homebrew/cask-fonts
-  homebrew/core
-  homebrew/services
-  # {{ if .vault.enabled }}
-  hashicorp/tap
-  # {{ end }}
 )
 
 # get tab list into BREW_TABS variable
@@ -27,44 +43,7 @@ for tab in "${wanted_tabs[@]}"; do
 done
 
 # install packages that are not installed
-readonly wanted_packages=(
-  age
-  autorestic
-  coreutils
-  direnv
-  dotdrop
-  findutils
-  fzf
-  gh
-  git-sizer
-  git-workspace
-  gnupg
-  go
-  go-task
-  helm
-  jq
-  node
-  pass
-  pinentry-mac
-  pipx
-  restic
-  sops
-  stow
-  tree
-  yq
-  zsh
-  # {{ if .doppler.enabled }}
-  dopplerhq/cli/doppler
-  # {{ end }}
-  # {{ if .code.enabled }}
-  code-cli
-  # {{ end }}
-  # {{ if .microk8s.enabled }}
-  microk8s
-  # {{ end }}
-)
 missing_packages=()
-
 for package in "${wanted_packages[@]}"; do
   if ! is_brew_package_installed "${package}"; then
     missing_packages+=("${package}")
@@ -76,19 +55,9 @@ if [[ ${#missing_packages[@]} -gt 0 ]]; then
   log_task "Installing missing packages with brew: ${missing_packages[*]}"
   # c "${brew_command[@]}" update
   c "${brew_command[@]}" install "${missing_packages[@]}"
+else
+  log_info "No missing packages to install with brew"
 fi
-
-readonly wanted_cask_packages=(
-  gpg-suite
-  font-fira-code
-  font-fira-code-nerd-font
-  # {{ if .op.enabled }}
-  1password-cli
-  # {{ end }}
-  # {{ if .ngrok.enabled }}
-  ngrok
-  # {{ end }}
-)
 
 # get installed cask packages with brew list --casks
 BREW_CASK_PACKAGES=$(brew list --casks)
@@ -100,8 +69,5 @@ for package in "${wanted_cask_packages[@]}"; do
     c "${brew_command[@]}" install --cask "${package}"
   fi
 done
-
-# c echo "pinentry-program $(which pinentry-mac)" >> "${HOME}/.gnupg/gpg-agent.conf"
-# c killall gpg-agent || true
 
 # {{ end -}}
