@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.12.1 (2023-05-23)
+### Fix
+* **chezmoi:** Add conditional check for sudoer before running script ([`fc0cdeb`](https://github.com/entelecheia/dotfiles/commit/fc0cdeb93644fe173fec7f73387f99baf6f27303))
+
 ## v0.12.0 (2023-05-23)
 ### Feature
 * Add install-brew-pkgs command ([`ffdb81a`](https://github.com/entelecheia/dotfiles/commit/ffdb81a9d7a47d64b33d3b3c4c654a8f82bafb09))
