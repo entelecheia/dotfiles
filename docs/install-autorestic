@@ -39,7 +39,7 @@ fi
 
 if ! command -v restic &>/dev/null; then
     echo "Missing restic command. Installing restic..."
-    wget -qO - https://github.com/restic/restic/releases/latest |
+    wget -qO - https://api.github.com/repos/restic/restic/releases/latest |
         grep "browser_download_url.*_${OS}_${ARCH}" |
         cut -d : -f 2,3 |
         tr -d \" |
