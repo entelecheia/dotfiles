@@ -1,5 +1,10 @@
 <!--next-version-placeholder-->
 
+## v0.12.3 (2023-05-24)
+### Fix
+* **dependencies:** Add scripts to install autorestic and yq via executable files ([`f8ebf9c`](https://github.com/entelecheia/dotfiles/commit/f8ebf9cf28c2bdb6f49f009f4dba59d92cd4c65f))
+* Seprate install go pkgs ([`9fe77e4`](https://github.com/entelecheia/dotfiles/commit/9fe77e423156a7af09d3fe63758999f36799c936))
+
 ## v0.12.2 (2023-05-24)
 ### Fix
 * **chezmoi:** Update package manager for gpg-suite ([`0e4978c`](https://github.com/entelecheia/dotfiles/commit/0e4978c9ec5d2e3133d91539be4e8c6c6d59fefa))
