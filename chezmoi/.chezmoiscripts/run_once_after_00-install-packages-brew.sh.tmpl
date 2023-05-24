@@ -9,6 +9,7 @@ ensure_path_entry "${HOME}/.local/bin"
 #  {{ .install_packages.user  }}
 # {{- end }}
 # .chezmoidata.yaml hash: {{ include ".chezmoidata.yaml" | sha256sum }}
+
 # dotfiles-install-brew-pkgs hash: {{ include "dot_local/bin/executable_dotfiles-install-brew-pkgs.tmpl" | sha256sum }}
 dotfiles-install-brew-pkgs
 
