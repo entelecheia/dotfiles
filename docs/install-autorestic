@@ -3,6 +3,7 @@
 shopt -s nocaseglob
 
 OUT_FILE=${1:-${HOME}/.local/bin/autorestic}
+RESTIC_FILE=${2:-${HOME}/.local/bin/restic}
 
 # Type
 NATIVE_OS=$(uname | tr '[:upper:]' '[:lower:]')
@@ -36,6 +37,17 @@ if ! command -v bzip2 &>/dev/null; then
     exit 1
 fi
 
+if ! command -v restic &>/dev/null; then
+    echo "Missing restic command. Installing restic..."
+    wget -q0 - https://github.com/restic/restic/releases/download/latest |
+        grep "browser_download_url.*_${OS}_${ARCH}" |
+        cut -d : -f 2,3 |
+        tr -d \" |
+        wget -O "${RESTIC_FILE}.bz2" -i -
+    bzip2 -fd "${RESTIC_FILE}.bz2"
+    chmod +x "${RESTIC_FILE}"
+    echo "Successfully installed restic"
+fi
 wget -qO - https://api.github.com/repos/cupcakearmy/autorestic/releases/latest |
     grep "browser_download_url.*_${OS}_${ARCH}" |
     cut -d : -f 2,3 |
