@@ -1,5 +1,37 @@
 <!--next-version-placeholder-->
 
+## v0.13.0 (2023-05-24)
+### Feature
+* **package-management:** Add installation script for SNAP packages. ([`96c6a89`](https://github.com/entelecheia/dotfiles/commit/96c6a89b864cbad1c53a2b4008e9ddf3a25cd66a))
+* **packages:** Update Python packaging scripts and dependencies ([`3b6d2b0`](https://github.com/entelecheia/dotfiles/commit/3b6d2b0da7dfb07c2b2fefa7db53a68f649a8780))
+* **packages:** Add check installed command to poethepoet, update python package installation script. ([`256483c`](https://github.com/entelecheia/dotfiles/commit/256483cd674005fa1ebf93cd3f1505615529353f))
+* **chezmoi:** Add dotfiles-install-python-pkgs command to run_once_after_21-install-packages-others.sh.tmpl ([`bc15090`](https://github.com/entelecheia/dotfiles/commit/bc1509018d96661d90d9a974491c699b08bfe56e))
+* Add install-python-pkgs ([`e59ffa5`](https://github.com/entelecheia/dotfiles/commit/e59ffa5999a81d63e55515d39a316c6ce4a86aac))
+* **packages:** Update installation scripts for go-age and go-sops ([`f307f43`](https://github.com/entelecheia/dotfiles/commit/f307f43f004a1434251377a3a13ae2b6a24ff5a7))
+* Add install-go-task ([`d8f8546`](https://github.com/entelecheia/dotfiles/commit/d8f854638c8b3a595710df9ad998f4812e2dcf8a))
+* **pkg-install:** Add package installation script template ([`0ce237b`](https://github.com/entelecheia/dotfiles/commit/0ce237bb2d66a60902c1832415474a63ff6299a1))
+* **chezmoi:** Add nvm installation script to packages config ([`da71e72`](https://github.com/entelecheia/dotfiles/commit/da71e72abdcb5e32003bf561f232f3cb42997156))
+
+### Fix
+* **chezmoi:** Update .chezmoidata.yaml; add prerequisite check and change package scope ([`837ed98`](https://github.com/entelecheia/dotfiles/commit/837ed982433e4803e7a0026ce8420ea8e13bf604))
+* **chezmoi:** Update post_install command for microk8s package ([`e3f4ffe`](https://github.com/entelecheia/dotfiles/commit/e3f4ffe89ee9d0a71dfd1ab45a36f94dcdce6019))
+* **chezmoi:** Corrected post_install command for microk8s package. ([`df1a360`](https://github.com/entelecheia/dotfiles/commit/df1a3601934ca9e2ba49b71a34952ac6ad8bec04))
+* **dependencies:** Update executable_dotfiles-install-python-pkgs.tmpl ([`6aa9eba`](https://github.com/entelecheia/dotfiles/commit/6aa9eba02940973394dc6f471d534d7ea3df6d6e))
+* **chezmoi:** Update install packages script for non-root users on Linux ([`9f5ea34`](https://github.com/entelecheia/dotfiles/commit/9f5ea34f7a624b861389165f1536e1d073eda943))
+* **packages:** Update script_cmd for serviceman; ([`ba7cebf`](https://github.com/entelecheia/dotfiles/commit/ba7cebf3885cbe3c65d19bbdba66c34fe7647ea7))
+* **dependencies:** Remove obsolete task completion file installation ([`bc332ff`](https://github.com/entelecheia/dotfiles/commit/bc332ff943ba9a4189712f8f2e9ae39753c73f7c))
+* **chezmoi:** Update package installation template ([`efdbfc9`](https://github.com/entelecheia/dotfiles/commit/efdbfc9db2b966f22782cc5b1682f2e91258fef3))
+* **packages:** Update check_installed commands in .chezmoi.yaml file ([`6d1ba90`](https://github.com/entelecheia/dotfiles/commit/6d1ba9095095f814c549bcc60b027e6e8171bb34))
+* **deps:** Remove check_installed for yq and webi in packages configuration in .chezmoidata.yaml file ([`1de237e`](https://github.com/entelecheia/dotfiles/commit/1de237e2d03121a0c42f0130bd75c81d2eded08b))
+* **chezmoi:** Update installation scripts and package lists ([`a3a3207`](https://github.com/entelecheia/dotfiles/commit/a3a320729302ce3553800c06321e3b784156abb4))
+* **package-manager:** Update package installation script to use DOTFILES_PKGS_TO_INSTALL and DOTFILES_PKGS_SCRIPT variables ([`6719484`](https://github.com/entelecheia/dotfiles/commit/671948460f5548b2bd8a19592eb4c159a851f791))
+* **chezmoi:** Add path entry and run dotfiles-install-brew-pkgs script ([`755b8ce`](https://github.com/entelecheia/dotfiles/commit/755b8cec551675333edb98df13e20533a440c227))
+* **chezmoi:** Add path entry for .local/bin and rename script to dotfiles-install-apt-pkgs ([`bc5eb33`](https://github.com/entelecheia/dotfiles/commit/bc5eb3322c51b34f16cd68cdaf66d9ca2ad713d1))
+* **chezmoi:** Update install script and rename executable ([`3dfb7bd`](https://github.com/entelecheia/dotfiles/commit/3dfb7bd7480c8fff08ece814db02e8ec6599c30c))
+* **installation:** Change variable declaration for DOTFILES_PKGS_TO_INSTALL ([`733ee6b`](https://github.com/entelecheia/dotfiles/commit/733ee6b3a71bbdccaacce3335d7b2a5d83e45ad2))
+* Check sha256sum when installing apt & brew pkgs ([`10857ef`](https://github.com/entelecheia/dotfiles/commit/10857ef595b744019f792eec24aabaa74f842b15))
+* **packages:** Add bzip2 to minimal scope ([`7ab9cd0`](https://github.com/entelecheia/dotfiles/commit/7ab9cd0dae1ec3a8662b93261098a6d6d817f49e))
+
 ## v0.12.4 (2023-05-24)
 ### Fix
 * **installation:** Use REST API URL to download restic latest release ([`af24399`](https://github.com/entelecheia/dotfiles/commit/af243994d927c71c35acdbefed10ee37c77ced3f))
