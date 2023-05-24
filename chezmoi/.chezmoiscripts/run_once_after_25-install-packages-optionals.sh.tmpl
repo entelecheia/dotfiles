@@ -7,12 +7,6 @@ log_task "25. Installing optional packages"
 
 ensure_path_entry "${HOME}/.local/bin"
 
-# install serviceman if not installed
-if ! command -v serviceman >/dev/null; then
-  log_task "Installing serviceman"
-  c webi serviceman
-fi
-
 # install dotdrop if not installed
 if ! command -v dotdrop >/dev/null; then
   if ! command -v pipx >/dev/null; then

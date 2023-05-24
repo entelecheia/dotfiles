@@ -305,7 +305,8 @@ packages:
     apt: true
     scope: gui
   - name: serviceman
-    webi: true
+    script: true
+    script_cmd: webi serviceman
     scope: gui
   - name: setuptools
     pip: true
