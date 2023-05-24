@@ -1,0 +1,25 @@
+#!/bin/bash
+# {{ if eq .chezmoi.os "linux" "darwin" }}
+# {{ template "scripts-library" }}
+log_task "55. Cloning git repos"
+
+# root: /home/yj.lee/workspace
+# symlink_colab_workspace: true
+# colab_drive: "/content/drive/MyDrive"
+WORKSPACE_PROJECT_DIR="{{ .workspace.project_dir }}"
+
+# clone git repos into workspace project_dir
+c mkdir -p "${WORKSPACE_PROJECT_DIR}"
+# {{ range .github_repos }}
+log_task "Cloning git repo: {{ .name }}"
+REPO_NAME="{{ .name }}"
+# split repo name into org and repo
+REPO_NAME="$(echo "${REPO_NAME}" | cut -d'/' -f2)"
+if [[ -d "${WORKSPACE_PROJECT_DIR}/${REPO_NAME}" ]]; then
+  log_info "Git repo already exists: {{ .name }}"
+else
+  c git clone "{{ .url -}}" "${WORKSPACE_PROJECT_DIR}/${REPO_NAME}"
+fi
+# {{ end }}
+
+# {{ end -}}
