@@ -5,7 +5,7 @@
 log_task "Installing APT packages"
 
 # shellcheck source=/dev/null
-source "${HOME}/.config/shrc/05-package-list"
+source "${HOME}/.config/shrc/00-dotfiles-export"
 
 USER=${USER-:$(whoami)}
 DOTFILES_PKGS_APT=${DOTFILES_PKGS_APT:-()}

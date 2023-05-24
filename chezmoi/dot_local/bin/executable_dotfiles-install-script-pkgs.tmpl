@@ -12,7 +12,7 @@ set -u
 log_task "Installing packages by scripts"
 
 # shellcheck source=/dev/null
-source "${HOME}/.config/shrc/05-package-list"
+source "${HOME}/.config/shrc/00-dotfiles-export"
 
 ensure_path_entry "${HOME}/.local/bin" "${HOME}/bin" "${HOME}/go/bin" "${HOME}/.cargo/bin"
 GOROOT="${HOME}/go"
