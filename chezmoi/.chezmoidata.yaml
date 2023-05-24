@@ -45,6 +45,7 @@ packages:
     scope: optional
   - name: commitizen
     pipx: true
+    check_installed: command -v cz &>/dev/null
     scope: optional
   - name: containerd.io
     apt: true
@@ -117,8 +118,9 @@ packages:
     apt: true
     brew: true
     scope: minimal
-  - name: gitmojify
+  - name: cz-conventional-gitmoji
     pipx: true
+    check_installed: command -v gitmojify &>/dev/null
     scope: optional
   - name: git-sizer
     apt: true
@@ -208,6 +210,7 @@ packages:
     scope: optional
   - name: mypy
     pipx: true
+    check_installed: command -v dmypy &>/dev/null
     scope: optional
   - name: ngrok
     snap: true
@@ -219,6 +222,10 @@ packages:
   - name: node
     brew: true
     scope: minimal
+  - name: nox
+    pipx: true
+    pipx_extra: nox-poetry
+    scope: optional
   - name: nvidia-container-toolkit
     apt: true
     keyring_file: nvidia-container-toolkit-keyring.gpg
