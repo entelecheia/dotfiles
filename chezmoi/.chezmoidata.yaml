@@ -28,6 +28,10 @@ packages:
   - name: build-essential
     apt: true
     scope: minimal
+  - name: bzip2
+    apt: true
+    brew: true
+    scope: minimal
   - name: code
     apt: true
     keyring_file: packages.microsoft.gpg
