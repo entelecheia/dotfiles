@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.14.1 (2023-05-24)
+### Fix
+* **chezmoi:** Remove outdated install-packages-apt script template ([`d77ff41`](https://github.com/entelecheia/dotfiles/commit/d77ff41ba8ea8c5037e30939f321958766b7f716))
+* Integrate package-list into dotfiles-export ([`53d0981`](https://github.com/entelecheia/dotfiles/commit/53d098160331f723f93c8a92227283865bd9f0b1))
+* Integrate package-list into dotfiles-export ([`4c8f878`](https://github.com/entelecheia/dotfiles/commit/4c8f878061a8242d26d2bcf18122df923f75fc2b))
+* **chezmoi:** Update run_once_after_00-install-packages-brew.sh.tmpl formatting and add shrc sourcing ([`a640e89`](https://github.com/entelecheia/dotfiles/commit/a640e893366578e7934c0a7bdf626a400f43d07c))
+
 ## v0.14.0 (2023-05-24)
 ### Feature
 * **git-clone:** Add git repo cloning script ([`25c701f`](https://github.com/entelecheia/dotfiles/commit/25c701f6b616296aeacca27f14e26de133d62e70))
