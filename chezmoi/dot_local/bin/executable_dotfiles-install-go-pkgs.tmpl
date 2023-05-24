@@ -55,17 +55,6 @@ else
   log_task "sops is already installed"
 fi
 
-# https://raw.githubusercontent.com/go-task/task/main/completion/zsh/_task
-# copy completion file to ~/.local/share/zsh/site-functions
-task_completion_file="${HOME}/.local/share/zsh/site-functions/_task"
-if [[ ! -f "${task_completion_file}" ]]; then
-  log_task "Installing task completion file"
-  if [[ ! -d "${HOME}/.local/share/zsh/site-functions" ]]; then
-    c mkdir -p "${HOME}/.local/share/zsh/site-functions"
-  fi
-  c wget https://raw.githubusercontent.com/go-task/task/main/completion/zsh/_task -O "${task_completion_file}"
-fi
-
 if [[ "${UPDATE}" == "true" ]]; then
   log_green "✅  Go-packages updated successfully. ✨ 🌟 ✨"
 else
