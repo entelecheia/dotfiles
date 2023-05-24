@@ -258,6 +258,7 @@ packages:
     scope: minimal
   - name: poethepoet
     pipx: true
+    check_installed: command -v poe &>/dev/null
     scope: minimal
   - name: pre-commit
     pipx: true
