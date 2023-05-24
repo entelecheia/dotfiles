@@ -309,7 +309,8 @@ packages:
   - name: serviceman
     script: true
     script_cmd: webi serviceman
-    scope: gui
+    check_prereqs: "command -v webi &> /dev/null"
+    scope: optional
   - name: setuptools
     pip: true
     scope: minimal
