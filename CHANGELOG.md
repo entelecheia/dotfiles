@@ -1,5 +1,15 @@
 <!--next-version-placeholder-->
 
+## v0.14.0 (2023-05-24)
+### Feature
+* **git-clone:** Add git repo cloning script ([`25c701f`](https://github.com/entelecheia/dotfiles/commit/25c701f6b616296aeacca27f14e26de133d62e70))
+* Add set-workspace command ([`92dc5ac`](https://github.com/entelecheia/dotfiles/commit/92dc5ac5000ff52c6a78656ea5c7bee65a7587d1))
+
+### Fix
+* Typo in set-workspace ([`4ecf32a`](https://github.com/entelecheia/dotfiles/commit/4ecf32a00c7044c4e76e5cff3a12a4ded44080c2))
+* **workspace:** Update chown command ([`3028bed`](https://github.com/entelecheia/dotfiles/commit/3028bed4fb4130ef599598d1594fc2b1113dd6c2))
+* **chezmoi:** Upgrade clone-repos executable ([`7ba4346`](https://github.com/entelecheia/dotfiles/commit/7ba434645582d27024a5a638199c8de92406ab21))
+
 ## v0.13.1 (2023-05-24)
 ### Fix
 * **python:** Always install package when updating, never check if ([`af40c30`](https://github.com/entelecheia/dotfiles/commit/af40c30b56b78774d1f3a62b54a252d42e241ff3))
