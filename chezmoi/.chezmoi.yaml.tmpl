@@ -21,7 +21,6 @@
 # {{- $pkgs_full := "bazel font-fira-code font-fira-code-nerd-font google-perftools openssh-server rust sdkman serviceman webi" -}}
 # {{- $pkgs_system := "containerd.io docker-ce docker-ce-cli docker-compose-plugin nvidia-container-toolkit snapd" -}}
 # {{- $pkgs_gui := "gpa gpg-suite pinentry-mac xclip seahorse" -}}
-# {{- $pkgs_python := "commitizen copier gitmojify mypy poethepoet pre-commit" -}}
 # {{- $pkgs_user := "" -}}
 # {{- $pkgs_total := $pkgs_minimal -}}
 # {{- if eq .chezmoi.os "linux" -}}
@@ -774,9 +773,6 @@
 # {{- if $use_code -}}
 # {{-   $pkgs_user = printf "%s code code-cli" $pkgs_user -}}
 # {{- end -}}
-# {{- if $use_python_tools -}}
-# {{-   $pkgs_user = printf "%s %s" $pkgs_user $pkgs_python -}}
-# {{- end -}}
 # {{- if $use_ngrok -}}
 # {{-   $pkgs_user = printf "%s ngrok" $pkgs_user -}}
 # {{- end -}}
@@ -918,13 +914,7 @@ data:
     config_file: {{ $ngrok_config_file | quote }}
     ssh_port: {{ $ngrok_ssh_port | quote }}
   install_packages:
-    minimal: {{ $pkgs_minimal }}
-    full: {{ $pkgs_full }}
-    system: {{ $pkgs_system }}
-    gui: {{ $pkgs_gui }}
-    python: {{ $pkgs_python }}
     user: {{ $pkgs_user }}
-    total: {{ $pkgs_total }}
   python_tools:
     enabled: {{ $use_python_tools }}
   workspace:
