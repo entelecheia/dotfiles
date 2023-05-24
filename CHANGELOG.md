@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.13.1 (2023-05-24)
+### Fix
+* **python:** Always install package when updating, never check if ([`af40c30`](https://github.com/entelecheia/dotfiles/commit/af40c30b56b78774d1f3a62b54a252d42e241ff3))
+
+### Documentation
+* Update package matrix ([`d88039d`](https://github.com/entelecheia/dotfiles/commit/d88039d0aaa5b0cc9740136e1d390194c74136cf))
+
 ## v0.13.0 (2023-05-24)
 ### Feature
 * **package-management:** Add installation script for SNAP packages. ([`96c6a89`](https://github.com/entelecheia/dotfiles/commit/96c6a89b864cbad1c53a2b4008e9ddf3a25cd66a))
