@@ -1,0 +1,85 @@
+#!/bin/bash
+# {{ template "scripts-library" }}
+
+# check if --update or -u flag is set
+set +u
+if [[ "${1}" == "--update" ]] || [[ "${1}" == "-u" ]]; then
+  UPDATE=true
+else
+  UPDATE=false
+fi
+set -u
+log_task "Installing python packages"
+
+# shellcheck source=/dev/null
+source "${HOME}/.config/shrc/05-package-list"
+
+ensure_path_entry "${HOME}/.local/bin"
+
+DOTFILES_PKGS_PIP=${DOTFILES_PKGS_PIP:-()}
+DOTFILES_PKGS_PIPX=${DOTFILES_PKGS_PIPX:-()}
+DOTFILES_PKGS_TO_INSTALL=${DOTFILES_PKGS_TO_INSTALL:-()}
+
+wanted_packages=()
+for package in "${DOTFILES_PKGS_PIP[@]}"; do
+  if is_item_in_array "${package}" "${DOTFILES_PKGS_PIP[@]}"; then
+    wanted_packages+=("${package}")
+  fi
+done
+log_info "Wanted packages: ${wanted_packages[*]}"
+
+{{- range .packages }}
+{{- if and (hasKey . "pip") ( .pip ) }}
+# installing {{ .name }}
+PKG_NAME="{{ .name }}"
+if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
+  if {{ if and (hasKey . "check_prereqs") ( .check_prereqs ) }}{{ .check_prereqs }}{{ else }}true{{ end }}; then
+    if [[ "${UPDATE}" == "true" ]]; then
+      c /usr/bin/pip3 install --user --upgrade "${PKG_NAME}" || true
+    elif {{ if and (hasKey . "check_installed") ( .check_installed ) }}{{ .check_installed }}{{ else }}pip show "${PKG_NAME}" &>/dev/null{{ end }}; then
+      log_info "Package ${PKG_NAME} is already installed"
+    else
+      log_task "Installing ${PKG_NAME}"
+      c /usr/bin/pip3 install --user --upgrade "${PKG_NAME}"
+    fi
+  else
+    log_error "Prerequisites for ${PKG_NAME} not met"
+  fi
+fi
+{{- end }}
+{{- end }}
+
+wanted_packages=()
+for package in "${DOTFILES_PKGS_PIPX[@]}"; do
+  if is_item_in_array "${package}" "${DOTFILES_PKGS_PIPX[@]}"; then
+    wanted_packages+=("${package}")
+  fi
+done
+log_info "Wanted packages: ${wanted_packages[*]}"
+
+{{- range .packages }}
+{{- if and (hasKey . "pipx") ( .pipx ) }}
+# installing {{ .name }}
+PKG_NAME="{{ .name }}"
+if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
+  if command -v pipx >/dev/null; then
+    if {{ if and (hasKey . "check_installed") ( .check_installed ) }}{{ .check_installed }}{{ else }}command -v "${PKG_NAME}" &>/dev/null{{ end }}; then
+      if [[ "${UPDATE}" == "true" ]]; then
+        log_task "Upgrading ${PKG_NAME} with pipx"
+        c pipx upgrade "${PKG_NAME}"
+      else
+        log_info "Package ${PKG_NAME} is already installed"
+      fi
+    else
+      log_task "Installing ${PKG_NAME} with pipx"
+      c pipx install "${PKG_NAME}"{{ if and (hasKey . "pipx_extra") ( .pipx_extra ) }} && pipx inject "${PKG_NAME}" {{ .pipx_extra }}{{ end }}
+    fi
+  else
+    log_task "Installing ${PKG_NAME} with pip"
+    c /usr/bin/pip3 install --user --upgrade "${PKG_NAME}"{{ if and (hasKey . "pipx_extra") ( .pipx_extra ) }} {{ .pipx_extra }}{{ end }}
+  fi
+fi
+{{- end }}
+{{- end }}
+
+log_green "✅  Python packages installed successfully. ✨ 🌟 ✨"

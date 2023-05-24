@@ -1,9 +1,0 @@
-#!/bin/bash
-# {{ if eq .chezmoi.os "darwin" "linux" }}
-# {{ template "scripts-library" }}
-log_task "45. Setting up passage"
-
-# passage-init hash: {{ include "dot_local/bin/executable_passage-init.tmpl" | sha256sum }}
-"${HOME}/.local/bin/passage-init"
-
-# {{ end -}}

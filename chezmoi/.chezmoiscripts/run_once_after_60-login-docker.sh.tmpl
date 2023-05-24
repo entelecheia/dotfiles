@@ -3,7 +3,9 @@
 # {{ template "scripts-library" }}
 log_task "60. Login to Docker Hub"
 
+ensure_path_entry "${HOME}/.local/bin"
+
 # docker-login hash: {{ include "dot_local/bin/executable_dk-login.tmpl" | sha256sum }}
-"${HOME}/.local/bin/dk-login"
+dk-login
 
 # {{ end }}

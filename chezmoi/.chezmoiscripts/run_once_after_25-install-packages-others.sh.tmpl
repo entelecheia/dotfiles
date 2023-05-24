@@ -1,0 +1,19 @@
+#!/bin/bash
+# {{ template "scripts-library" }}
+log_task "21. Installing tools for non-root users on Linux"
+
+ensure_path_entry "${HOME}/.local/bin"
+# package list
+# {{- if (hasKey . "install_packages") -}}
+#  {{ .install_packages.user  }}
+# {{- end }}
+# .chezmoidata.yaml hash: {{ include ".chezmoidata.yaml" | sha256sum }}
+
+# dotfiles-install-script-pkgs hash: {{ include "dot_local/bin/executable_dotfiles-install-script-pkgs.tmpl" | sha256sum }}
+dotfiles-install-script-pkgs
+
+# dotfiles-install-python-pkgs hash: {{ include "dot_local/bin/executable_dotfiles-install-python-pkgs.tmpl" | sha256sum }}
+dotfiles-install-python-pkgs
+
+# dotfiles-install-snap-pkgs hash: {{ include "dot_local/bin/executable_dotfiles-install-snap-pkgs.tmpl" | sha256sum }}
+dotfiles-install-snap-pkgs

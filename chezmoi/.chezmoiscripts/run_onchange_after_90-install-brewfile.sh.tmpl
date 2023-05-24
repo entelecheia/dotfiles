@@ -3,7 +3,9 @@
 # {{ template "scripts-library" }}
 log_task "90. Installing Homebrew from bundle"
 
+ensure_path_entry "${HOME}/.local/bin"
+
 # brew-install-bundle hash: {{ include "dot_local/bin/executable_brew-install-bundle.tmpl" | sha256sum }}
-"${HOME}/.local/bin/brew-install-bundle"
+brew-install-bundle
 
 # {{ end -}}

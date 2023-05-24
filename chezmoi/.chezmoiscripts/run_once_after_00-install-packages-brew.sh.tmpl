@@ -3,11 +3,14 @@
 # {{ template "scripts-library" }}
 log_task "00. Installing packages for macOS"
 
+ensure_path_entry "${HOME}/.local/bin"
 # package list
 # {{- if (hasKey . "install_packages") -}}
-#  {{ .install_packages.total  }}
+#  {{ .install_packages.user  }}
 # {{- end }}
+# .chezmoidata.yaml hash: {{ include ".chezmoidata.yaml" | sha256sum }}
+
 # dotfiles-install-brew-pkgs hash: {{ include "dot_local/bin/executable_dotfiles-install-brew-pkgs.tmpl" | sha256sum }}
-"${HOME}/.local/bin/dotfiles-install-brew-pkgs"
+dotfiles-install-brew-pkgs
 
 # {{ end -}}
