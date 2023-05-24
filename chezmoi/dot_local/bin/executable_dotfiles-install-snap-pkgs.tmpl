@@ -31,7 +31,7 @@ if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
     c sudo snap install "${package}" --classic
 {{- if and (hasKey . "post_install") ( .post_install ) }}
     # run post install script
-    {{ .post_install }}
+    c {{ .post_install }}
 {{- end }}
   fi
 fi
