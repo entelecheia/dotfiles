@@ -17,6 +17,8 @@ packages:
     scope: minimal
   - name: autorestic
     brew: true
+    script: true
+    script_file: install-autorestic
     scope: optional
   - name: bazel
     apt: true
@@ -313,6 +315,8 @@ packages:
   - name: yq
     brew: true
     snap: true
+    script: true
+    script_file: install-yq
     scope: minimal
   - name: webi
     snap: true
