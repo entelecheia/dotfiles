@@ -1,5 +1,4 @@
 #!/bin/bash
-# {{ if eq .chezmoi.os "linux" }}
 # {{ template "scripts-library" }}
 log_task "21. Installing tools for non-root users on Linux"
 
@@ -16,4 +15,5 @@ dotfiles-install-script-pkgs
 # dotfiles-install-python-pkgs hash: {{ include "dot_local/bin/executable_dotfiles-install-python-pkgs.tmpl" | sha256sum }}
 dotfiles-install-python-pkgs
 
-# {{- end -}}
+# dotfiles-install-snap-pkgs hash: {{ include "dot_local/bin/executable_dotfiles-install-snap-pkgs.tmpl" | sha256sum }}
+dotfiles-install-snap-pkgs
