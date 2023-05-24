@@ -258,7 +258,8 @@ packages:
     scope: minimal
   - name: poetry
     brew: true
-    snap: true
+    script: true
+    script_cmd: curl -sSL https://install.python-poetry.org | python3 -
     scope: minimal
   - name: poethepoet
     pip: true

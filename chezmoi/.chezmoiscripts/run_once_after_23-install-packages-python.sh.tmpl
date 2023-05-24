@@ -19,12 +19,6 @@ fi
 
 # {{ if .python_tools.enabled }}
 
-# install poetry
-if ! poetry --version &>/dev/null; then
-  log_task "Installing poetry"
-  c curl -sSL https://install.python-poetry.org | python3 -
-fi
-
 # install poethepoet
 if ! command -v poe >/dev/null; then
   if command -v pipx >/dev/null; then
