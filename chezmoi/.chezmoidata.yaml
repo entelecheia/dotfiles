@@ -161,6 +161,8 @@ packages:
     check_installed: command -v task &>/dev/null
     current_version: $(task --version | awk '{print $3}')
     latest_version: $(curl -s https://api.github.com/repos/go-task/task/releases/latest | grep 'tag_name' | cut -d'"' -f4)
+    completion_file: ${HOME}/.local/share/zsh/site-functions/_task
+    completion_url: https://raw.githubusercontent.com/go-task/task/main/completion/zsh/_task
     scope: minimal
   - name: gpa
     apt: true

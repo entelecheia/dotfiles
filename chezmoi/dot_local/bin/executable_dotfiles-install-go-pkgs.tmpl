@@ -18,25 +18,6 @@ if [ -d "${HOME}/go/packages" ]; then
   ensure_path_entry "${GOPATH}/bin"
 fi
 
-if ! command -v go >/dev/null || [[ ! -d "${GOROOT}" ]]; then
-  log_task "Installing go"
-  c install-go
-elif [[ "${UPDATE}" == "true" ]]; then
-  # Get current and latest version numbers
-  current_version="$(go version | awk '{print $3}')"
-  latest_version="$(curl -s 'https://go.dev/VERSION?m=text')"
-
-  # Compare versions and update if necessary
-  if [[ "$current_version" != "$latest_version" ]]; then
-    log_task "Upgrading Go from ${current_version} to ${latest_version}"
-    c install-go
-  else
-    log_task "Go is already up-to-date (${current_version})"
-  fi
-else
-  log_task "go is already installed"
-fi
-
 # install age
 if ! command -v age &>/dev/null; then
   log_task "Installing age"
@@ -72,27 +53,6 @@ elif [[ "${UPDATE}" == "true" ]]; then
   fi
 else
   log_task "sops is already installed"
-fi
-
-# install go-task
-if ! command -v task &>/dev/null; then
-  log_task "Installing go-task"
-  c sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
-elif [[ "${UPDATE}" == "true" ]]; then
-  # Get current and latest version numbers
-  current_version="$(task --version | awk '{print $3}')"
-  latest_version="$(curl -s https://api.github.com/repos/go-task/task/releases/latest | grep 'tag_name' | cut -d'"' -f4)"
-
-  # Compare versions and update if necessary
-  if [[ "$current_version" != "$latest_version" ]]; then
-    log_task "Upgrading go-task from ${current_version} to ${latest_version}"
-    rm -f ~/.local/bin/task
-    sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
-  else
-    log_task "go-task is already up-to-date (${current_version})"
-  fi
-else
-  log_task "go-task is already installed"
 fi
 
 # https://raw.githubusercontent.com/go-task/task/main/completion/zsh/_task
