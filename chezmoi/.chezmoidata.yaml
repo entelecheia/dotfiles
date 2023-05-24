@@ -271,7 +271,7 @@ packages:
     snap: true
     script: true
     script_cmd: "curl https://sh.rustup.rs -sSf | sh -s -- -y --profile=minimal"
-    check_installed: "! command -v rustup || rustup --version"
+    check_installed: "! command -v rustup &> /dev/null"
     scope: minimal
   - name: sdkman
     script: true
@@ -325,12 +325,10 @@ packages:
     snap: true
     script: true
     script_cmd: install-yq
-    check_installed: "! command -v yq || yq --version"
     scope: minimal
   - name: webi
     script: true
     script_cmd: curl https://webi.sh/webi | sh
-    check_installed: "! command -v webi || webi --version"
     cmd_name: webi
     scope: gui
   - name: wheel
