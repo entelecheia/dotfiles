@@ -13,7 +13,4 @@ ensure_path_entry "${HOME}/.local/bin"
 # dotfiles-install-script-pkgs hash: {{ include "dot_local/bin/executable_dotfiles-install-script-pkgs.tmpl" | sha256sum }}
 dotfiles-install-script-pkgs
 
-# dotfiles-install-go-pkgs hash: {{ include "dot_local/bin/executable_dotfiles-install-go-pkgs.tmpl" | sha256sum }}
-dotfiles-install-go-pkgs
-
 # {{- end -}}
