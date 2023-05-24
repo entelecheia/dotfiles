@@ -5,19 +5,8 @@ log_task "21. Installing tools for non-root users on Linux"
 
 ensure_path_entry "${HOME}/.local/bin"
 
-# install yq
-if ! yq --version &>/dev/null; then
-  log_task "Installing yq"
-  "${HOME}/.local/bin/install-yq"
-fi
-
- install autorestic
-if ! autorestic --version &>/dev/null; then
-  log_task "Installing autorestic"
-  "${HOME}/.local/bin/install-autorestic"
-fi
 
 # dotfiles-install-go-pkgs hash: {{ include "dot_local/bin/executable_dotfiles-install-go-pkgs.tmpl" | sha256sum }}
-"${HOME}/.local/bin/dotfiles-install-go-pkgs"
+dotfiles-install-go-pkgs
 
 # {{- end -}}

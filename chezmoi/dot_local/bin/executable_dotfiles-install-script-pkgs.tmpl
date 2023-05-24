@@ -1,18 +1,19 @@
 #!/bin/bash
 # {{ template "scripts-library" }}
 
+log_task "Installing packages by scripts"
 ensure_path_entry "${HOME}/.local/bin"
 
 # install yq
 if ! yq --version &>/dev/null; then
   log_task "Installing yq"
-  "${HOME}/.local/bin/install-yq"
+  install-yq
 fi
 
 # install autorestic
 if ! autorestic --version &>/dev/null; then
   log_task "Installing autorestic"
-  "${HOME}/.local/bin/install-autorestic"
+  install-autorestic
 fi
 
 # install webi if not installed
