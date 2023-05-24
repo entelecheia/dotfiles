@@ -28,46 +28,12 @@ if {{ if and (hasKey . "check_prereqs") ( .check_prereqs ) }}{{ .check_prereqs }
     log_info "Package ${PKG_NAME} is already installed"
   else
     log_task "Installing ${PKG_NAME}"
-    # {{ .script }}
+    c {{ .script_cmd }}
   fi
 else
   log_error "Prerequisites for ${PKG_NAME} not met"
 fi
 {{- end }}
 {{- end }}
-
-# # install yq
-# if ! yq --version &>/dev/null; then
-#   log_task "Installing yq"
-#   install-yq
-# fi
-
-# # install autorestic
-# if ! autorestic --version &>/dev/null; then
-#   log_task "Installing autorestic"
-#   install-autorestic
-# fi
-
-# # install webi if not installed
-# if ! command -v webi >/dev/null; then
-#   log_task "Installing webi"
-#   c curl https://webi.sh/webi | sh
-# fi
-
-# # install rust
-# if ! rustc --version &>/dev/null; then
-#   log_task "Installing rust"
-#   c curl https://sh.rustup.rs -sSf | sh -s -- -y --profile=minimal
-# fi
-
-# # install sdkman
-# if command -v unzip >/dev/null && command -v zip >/dev/null; then
-#   if [[ ! -e "${HOME}/.sdkman/bin/sdkman-init.sh" ]]; then
-#     log_task "Installing sdkman"
-#     c curl -s "https://get.sdkman.io" | bash
-#   fi
-# else
-#   log_error "unzip is not installed, skipping sdkman installation"
-# fi
 
 log_green "✅  Packages installed by scripts successfully. ✨ 🌟 ✨"
