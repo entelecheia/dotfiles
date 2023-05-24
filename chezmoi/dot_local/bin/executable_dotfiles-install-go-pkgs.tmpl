@@ -20,7 +20,7 @@ fi
 
 if ! command -v go >/dev/null || [[ ! -d "${GOROOT}" ]]; then
   log_task "Installing go"
-  "${HOME}/.local/bin/install-go"
+  c install-go
 elif [[ "${UPDATE}" == "true" ]]; then
   # Get current and latest version numbers
   current_version="$(go version | awk '{print $3}')"
@@ -29,7 +29,7 @@ elif [[ "${UPDATE}" == "true" ]]; then
   # Compare versions and update if necessary
   if [[ "$current_version" != "$latest_version" ]]; then
     log_task "Upgrading Go from ${current_version} to ${latest_version}"
-    "${HOME}/.local/bin/install-go"
+    c install-go
   else
     log_task "Go is already up-to-date (${current_version})"
   fi
