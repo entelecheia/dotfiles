@@ -207,7 +207,7 @@ packages:
   - name: microk8s
     brew: true
     snap: true
-    post_install: id -nG "${USER}" | grep -qw microk8s || sudo usermod -a -G microk8s "${USER}"
+    post_install: id -nG "${USER}" | grep -qw microk8s && sudo usermod -a -G microk8s "${USER}"
     scope: optional
   - name: mypy
     pipx: true
