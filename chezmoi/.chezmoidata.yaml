@@ -212,7 +212,7 @@ packages:
   - name: nvm
     script: true
     script_cmd: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash"
-    check_installed: "[[ ! -f ${HOME}/.nvm/nvm.sh ]]"
+    check_installed: "[[ -f ${HOME}/.nvm/nvm.sh ]]"
     scope: minimal
   - name: openssh-server
     apt: true
@@ -271,13 +271,13 @@ packages:
     snap: true
     script: true
     script_cmd: "curl https://sh.rustup.rs -sSf | sh -s -- -y --profile=minimal"
-    check_installed: "! command -v rustup &> /dev/null"
+    check_installed: "command -v rustup &> /dev/null"
     scope: minimal
   - name: sdkman
     script: true
     script_cmd: "curl -s 'https://get.sdkman.io' | bash"
     check_prereqs: "command -v unzip"
-    check_installed: "[[ ! -f ${HOME}/.sdkman/bin/sdkman-init.sh ]]"
+    check_installed: "[[ -f ${HOME}/.sdkman/bin/sdkman-init.sh ]]"
     scope: minimal
   - name: seahorse
     apt: true
