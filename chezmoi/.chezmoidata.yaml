@@ -10,9 +10,6 @@ packages:
     scope: optional
   - name: age
     brew: true
-    go: true
-    go_get: filippo.io/age/cmd/...@latest
-    current_version: "age --version | cut -d' ' -f2"
     scope: minimal
   - name: apt-transport-https
     apt: true
@@ -153,6 +150,20 @@ packages:
     script_cmd: install-go
     current_version: "$(go version | awk '{print $3}')"
     latest_version: "$(curl -s 'https://go.dev/VERSION?m=text')"
+    scope: minimal
+  - name: go-age
+    script: true
+    script_cmd: go install filippo.io/age/cmd/...@latest
+    # check_installed: command -v age &>/dev/null
+    current_version: "age --version | cut -d' ' -f2"
+    latest_version: $(curl -s https://api.github.com/repos/FiloSottile/age/releases/latest | grep tag_name | cut -d '"' -f4)
+    scope: minimal
+  - name: go-sops
+    script: true
+    script_cmd: go install go.mozilla.org/sops/v3/cmd/sops@latest
+    # check_installed: command -v sops &>/dev/null
+    current_version: "sops --version | awk '{print $NF}'"
+    latest_version: $(curl -s https://api.github.com/repos/mozilla/sops/releases/latest | grep 'tag_name' | cut -d'"' -f4)
     scope: minimal
   - name: go-task
     brew: true
@@ -304,9 +315,6 @@ packages:
     scope: full
   - name: sops
     brew: true
-    go: true
-    go_get: go.mozilla.org/sops/v3/cmd/sops@latest
-    current_version: "sops --version | awk '{print $NF}'"
     scope: minimal
   - name: stow
     apt: true
