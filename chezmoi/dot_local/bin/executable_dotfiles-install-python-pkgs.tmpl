@@ -35,8 +35,8 @@ PKG_NAME="{{ .name }}"
 if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   if {{ if and (hasKey . "check_prereqs") ( .check_prereqs ) }}{{ .check_prereqs }}{{ else }}true{{ end }}; then
     if [[ "${UPDATE}" == "true" ]]; then
-      c /usr/bin/pip3 install --user --upgrade "${PKG_NAME}"
-    elif {{ if and (hasKey . "check_installed") ( .check_installed ) }}{{ .check_installed }}{{ else }}false{{ end }}; then
+      c /usr/bin/pip3 install --user --upgrade "${PKG_NAME}" || true
+    elif {{ if and (hasKey . "check_installed") ( .check_installed ) }}{{ .check_installed }}{{ else }}pip show "${PKG_NAME}" &>/dev/null{{ end }}; then
       log_info "Package ${PKG_NAME} is already installed"
     else
       log_task "Installing ${PKG_NAME}"

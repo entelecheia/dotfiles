@@ -19,29 +19,24 @@ for package in "${DOTFILES_PKGS_SNAP[@]}"; do
 done
 log_info "Wanted packages: ${wanted_packages[*]}"
 
-missing_packages=()
-
-for package in "${wanted_packages[@]}"; do
-  if ! is_snap_package_installed "${package}"; then
-    missing_packages+=("${package}")
-  fi
-done
-
-if [[ ${#missing_packages[@]} -gt 0 ]]; then
-  log_task "Installing missing packages with SNAP: ${missing_packages[*]}"
-
-  # This script also gets called when running rootmoi
-  if [ "$USER" = "root" ]; then
-    snap_command=(snap)
+{{- range .packages }}
+{{- if and (hasKey . "snap") ( .snap ) }}
+# installing {{ .name }}
+PKG_NAME="{{ .name }}"
+if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
+  if is_snap_package_installed "${PKG_NAME}"; then
+    log_info "Package ${PKG_NAME} is already installed"
   else
-    snap_command=(sudo snap)
+    log_task "Installing ${PKG_NAME}"
+    c sudo snap install "${package}" --classic
+{{- if and (hasKey . "post_install") ( .post_install ) }}
+    # run post install script
+    {{ .post_install }}
+{{- end }}
   fi
-  for package in "${missing_packages[@]}"; do
-    c "${snap_command[@]}" install "${package}" --classic
-  done
-else
-  log_info "No missing packages to install with SNAP"
 fi
+{{- end }}
+{{- end }}
 
 log_green "✅  SNAP packages installed successfully. ✨ 🌟 ✨"
 # {{ end -}}
