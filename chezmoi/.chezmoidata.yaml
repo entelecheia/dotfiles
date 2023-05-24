@@ -10,7 +10,9 @@ packages:
     scope: optional
   - name: age
     brew: true
-    snap: true
+    go: true
+    go_get: filippo.io/age/cmd/...@latest
+    current_version: "age --version | cut -d' ' -f2"
     scope: minimal
   - name: apt-transport-https
     apt: true
@@ -147,11 +149,10 @@ packages:
     scope: minimal
   - name: go
     brew: true
-    snap: true
+    script: true
     scope: minimal
   - name: go-task
     brew: true
-    snap: true
     scope: minimal
   - name: gpa
     apt: true
@@ -293,7 +294,9 @@ packages:
     scope: full
   - name: sops
     brew: true
-    snap: true
+    go: true
+    go_get: go.mozilla.org/sops/v3/cmd/sops@latest
+    current_version: "sops --version | awk '{print $NF}'"
     scope: minimal
   - name: stow
     apt: true
