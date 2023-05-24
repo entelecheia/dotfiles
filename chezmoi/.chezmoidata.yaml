@@ -44,7 +44,6 @@ packages:
     brew: true
     scope: optional
   - name: commitizen
-    pip: true
     pipx: true
     scope: optional
   - name: containerd.io
@@ -55,7 +54,6 @@ packages:
     scope: minimal
   - name: copier
     brew: true
-    pip: true
     pipx: true
     scope: minimal
   - name: direnv
@@ -87,7 +85,6 @@ packages:
     scope: optional
   - name: dotdrop
     brew: true
-    pip: true
     pipx: true
     scope: optional
   - name: file
@@ -121,7 +118,6 @@ packages:
     brew: true
     scope: minimal
   - name: gitmojify
-    pip: true
     pipx: true
     scope: optional
   - name: git-sizer
@@ -211,7 +207,6 @@ packages:
     snap: true
     scope: optional
   - name: mypy
-    pip: true
     pipx: true
     scope: optional
   - name: ngrok
@@ -262,11 +257,9 @@ packages:
     script_cmd: curl -sSL https://install.python-poetry.org | python3 -
     scope: minimal
   - name: poethepoet
-    pip: true
     pipx: true
     scope: minimal
   - name: pre-commit
-    pip: true
     pipx: true
     scope: optional
   - name: procps
