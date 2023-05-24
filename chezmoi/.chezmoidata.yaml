@@ -276,7 +276,7 @@ packages:
   - name: sdkman
     script: true
     script_cmd: "curl -s 'https://get.sdkman.io' | bash"
-    check_prereqs: "command -v unzip"
+    check_prereqs: "command -v unzip &> /dev/null"
     check_installed: "[[ -f ${HOME}/.sdkman/bin/sdkman-init.sh ]]"
     scope: minimal
   - name: seahorse

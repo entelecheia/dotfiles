@@ -23,11 +23,15 @@ log_info "Wanted packages: ${wanted_packages[*]}"
 {{- if and (hasKey . "script") ( .script ) }}
 # installing {{ .name }}
 PKG_NAME="{{ .name }}"
-if {{ if and (hasKey . "check_installed") ( .check_installed ) }}{{ .check_installed }}{{ else }}command -v "${PKG_NAME}" &>/dev/null{{ end }}; then
-  log_info "Package ${PKG_NAME} is already installed"
+if {{ if and (hasKey . "check_prereqs") ( .check_prereqs ) }}{{ .check_prereqs }}{{ else }}true{{ end }}; then
+  if {{ if and (hasKey . "check_installed") ( .check_installed ) }}{{ .check_installed }}{{ else }}command -v "${PKG_NAME}" &>/dev/null{{ end }}; then
+    log_info "Package ${PKG_NAME} is already installed"
+  else
+    log_task "Installing ${PKG_NAME}"
+    # {{ .script }}
+  fi
 else
-  log_task "Installing ${PKG_NAME}"
-  # {{ .script }}
+  log_error "Prerequisites for ${PKG_NAME} not met"
 fi
 {{- end }}
 {{- end }}
