@@ -211,6 +211,8 @@ packages:
     scope: system
   - name: nvm
     script: true
+    script_cmd: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash"
+    check_installed: "[[ ! -f ${HOME}/.nvm/nvm.sh ]]"
     scope: minimal
   - name: openssh-server
     apt: true
