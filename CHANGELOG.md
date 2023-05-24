@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.12.2 (2023-05-24)
+### Fix
+* **chezmoi:** Update package manager for gpg-suite ([`0e4978c`](https://github.com/entelecheia/dotfiles/commit/0e4978c9ec5d2e3133d91539be4e8c6c6d59fefa))
+
 ## v0.12.1 (2023-05-23)
 ### Fix
 * **chezmoi:** Add conditional check for sudoer before running script ([`fc0cdeb`](https://github.com/entelecheia/dotfiles/commit/fc0cdeb93644fe173fec7f73387f99baf6f27303))
