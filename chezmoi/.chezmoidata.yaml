@@ -150,9 +150,17 @@ packages:
   - name: go
     brew: true
     script: true
+    script_cmd: install-go
+    current_version: "$(go version | awk '{print $3}')"
+    latest_version: "$(curl -s 'https://go.dev/VERSION?m=text')"
     scope: minimal
   - name: go-task
     brew: true
+    script: true
+    script_cmd: install-go-task
+    check_installed: command -v task &>/dev/null
+    current_version: $(task --version | awk '{print $3}')
+    latest_version: $(curl -s https://api.github.com/repos/go-task/task/releases/latest | grep 'tag_name' | cut -d'"' -f4)
     scope: minimal
   - name: gpa
     apt: true

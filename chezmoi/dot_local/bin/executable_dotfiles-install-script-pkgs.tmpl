@@ -45,6 +45,18 @@ if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
       log_task "Installing ${PKG_NAME}"
       c {{ .script_cmd }}
     fi
+  elif [[ "${UPDATE}" == "true" ]]; then
+    # Get current and latest version numbers
+    current_version="{{ if hasKey . "current_version" }}{{ .current_version }}{{ end }}"
+    latest_version="{{ if hasKey . "latest_version" }}{{ .latest_version }}{{ end }}"
+
+    # Compare versions and update if necessary
+    if [[ "$current_version" != "$latest_version" ]]; then
+      log_task "Upgrading ${PKG_NAME} from ${current_version} to ${latest_version}"
+      c {{ .script_cmd }}
+    else
+      log_task "${PKG_NAME} is already up-to-date (${current_version})"
+    fi
   else
     log_error "Prerequisites for ${PKG_NAME} not met"
   fi
