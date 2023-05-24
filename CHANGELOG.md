@@ -1,5 +1,10 @@
 <!--next-version-placeholder-->
 
+## v0.12.4 (2023-05-24)
+### Fix
+* **installation:** Use REST API URL to download restic latest release ([`af24399`](https://github.com/entelecheia/dotfiles/commit/af243994d927c71c35acdbefed10ee37c77ced3f))
+* **installation:** Fix typo in wget command and use correct flag ([`4d09c09`](https://github.com/entelecheia/dotfiles/commit/4d09c09544d701dab838f64779a98fcfd49656bb))
+
 ## v0.12.3 (2023-05-24)
 ### Fix
 * **dependencies:** Add scripts to install autorestic and yq via executable files ([`f8ebf9c`](https://github.com/entelecheia/dotfiles/commit/f8ebf9cf28c2bdb6f49f009f4dba59d92cd4c65f))
