@@ -1,0 +1,47 @@
+#!/bin/bash
+# shellcheck disable=SC1083
+# {{ if and (eq .chezmoi.os "linux") .system.is_sudoer }}
+# {{ template "scripts-library" }}
+log_task "Installing SNAP packages"
+
+# shellcheck source=/dev/null
+source "${HOME}/.config/shrc/05-package-list"
+
+USER=${USER-:$(whoami)}
+DOTFILES_PKGS_SNAP=${DOTFILES_PKGS_SNAP:-()}
+DOTFILES_PKGS_TO_INSTALL=${DOTFILES_PKGS_TO_INSTALL:-()}
+
+wanted_packages=()
+for package in "${DOTFILES_PKGS_SNAP[@]}"; do
+  if is_item_in_array "${package}" "${DOTFILES_PKGS_TO_INSTALL[@]}"; then
+    wanted_packages+=("${package}")
+  fi
+done
+log_info "Wanted packages: ${wanted_packages[*]}"
+
+missing_packages=()
+
+for package in "${wanted_packages[@]}"; do
+  if ! is_snap_package_installed "${package}"; then
+    missing_packages+=("${package}")
+  fi
+done
+
+if [[ ${#missing_packages[@]} -gt 0 ]]; then
+  log_task "Installing missing packages with SNAP: ${missing_packages[*]}"
+
+  # This script also gets called when running rootmoi
+  if [ "$USER" = "root" ]; then
+    snap_command=(snap)
+  else
+    snap_command=(sudo snap)
+  fi
+  for package in "${missing_packages[@]}"; do
+    c "${snap_command[@]}" install "${package}" --classic
+  done
+else
+  log_info "No missing packages to install with SNAP"
+fi
+
+log_green "✅  SNAP packages installed successfully. ✨ 🌟 ✨"
+# {{ end -}}

@@ -207,13 +207,14 @@ packages:
   - name: microk8s
     brew: true
     snap: true
+    post_install: id -nG "${USER}" | grep -qw microk8s || sudo usermod -a -G microk8s "${USER}"
     scope: optional
   - name: mypy
     pipx: true
     check_installed: command -v dmypy &>/dev/null
     scope: optional
   - name: ngrok
-    snap: true
+    apt: true
     gpg_key_file: ngrok.asc
     gpg_key_url: https://ngrok-agent.s3.amazonaws.com/ngrok.asc
     source_list_file: ngrok.list
@@ -292,7 +293,6 @@ packages:
     brew: true
     scope: optional
   - name: rust
-    snap: true
     script: true
     script_cmd: "curl https://sh.rustup.rs -sSf | sh -s -- -y --profile=minimal"
     check_installed: "command -v rustup &> /dev/null"
@@ -346,7 +346,6 @@ packages:
     scope: gui
   - name: yq
     brew: true
-    snap: true
     script: true
     script_cmd: install-yq
     scope: minimal
