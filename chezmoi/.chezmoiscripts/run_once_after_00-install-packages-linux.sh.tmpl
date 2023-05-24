@@ -10,27 +10,4 @@ log_task "00. Installing packages for Linux"
 # dotfiles-install-apt-pkgs hash: {{ include "dot_local/bin/executable_dotfiles-install-apt-pkgs.tmpl" | sha256sum }}
 "${HOME}/.local/bin/dotfiles-install-apt-pkgs"
 
-# Set up locales
-# check if locale is already set up by running locale | grep LC_ALL | grep en_US.UTF-8
-if ! locale | grep LC_ALL | grep -q en_US.UTF-8; then
-  log_task "Setting up locales"
-  # {{   if eq .chezmoi.username "root" }}
-  c localedef -v -c -i en_US -f UTF-8 en_US.UTF-8 || true
-  # {{   else }}
-  c sudo localedef -v -c -i en_US -f UTF-8 en_US.UTF-8 || true
-  # {{   end }}
-fi
-
-# install autorestic
-if ! autorestic --version &>/dev/null; then
-  log_task "Installing autorestic"
-  c wget -qO - https://raw.githubusercontent.com/cupcakearmy/autorestic/master/install.sh | sudo bash
-fi
-
-# install yq
-if ! yq --version &>/dev/null; then
-  log_task "Installing yq"
-  c sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
-fi
-
 # {{ end -}}
