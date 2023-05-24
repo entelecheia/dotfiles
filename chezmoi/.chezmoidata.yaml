@@ -18,7 +18,7 @@ packages:
   - name: autorestic
     brew: true
     script: true
-    script_file: install-autorestic
+    script_cmd: install-autorestic
     scope: optional
   - name: bazel
     apt: true
@@ -267,9 +267,15 @@ packages:
     scope: optional
   - name: rust
     snap: true
+    script: true
+    script_cmd: "curl https://sh.rustup.rs -sSf | sh -s -- -y --profile=minimal"
+    check_installed: "! command -v rustup || rustup --version"
     scope: minimal
   - name: sdkman
-    snap: true
+    script: true
+    script_cmd: "curl -s 'https://get.sdkman.io' | bash"
+    check_prereqs: "command -v unzip"
+    check_installed: "[[ ! -f ${HOME}/.sdkman/bin/sdkman-init.sh ]]"
     scope: minimal
   - name: seahorse
     apt: true
@@ -316,10 +322,14 @@ packages:
     brew: true
     snap: true
     script: true
-    script_file: install-yq
+    script_cmd: install-yq
+    check_installed: "! command -v yq || yq --version"
     scope: minimal
   - name: webi
-    snap: true
+    script: true
+    script_cmd: curl https://webi.sh/webi | sh
+    check_installed: "! command -v webi || webi --version"
+    cmd_name: webi
     scope: gui
   - name: wheel
     pip: true
