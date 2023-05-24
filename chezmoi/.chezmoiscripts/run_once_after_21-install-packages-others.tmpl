@@ -8,13 +8,13 @@ ensure_path_entry "${HOME}/.local/bin"
 # install yq
 if ! yq --version &>/dev/null; then
   log_task "Installing yq"
-  c wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O "${HOME}/.local/bin/yq" && chmod +x "${HOME}/.local/bin/yq"
+  "${HOME}/.local/bin/install-yq"
 fi
 
 # install autorestic
 if ! autorestic --version &>/dev/null; then
   log_task "Installing autorestic"
-  c wget -qO - https://raw.githubusercontent.com/cupcakearmy/autorestic/master/install.sh | sudo bash
+  "${HOME}/.local/bin/install-autorestic"
 fi
 
 # dotfiles-update-tools hash: {{ include "dot_local/bin/executable_dotfiles-install-tools.tmpl" | sha256sum }}
