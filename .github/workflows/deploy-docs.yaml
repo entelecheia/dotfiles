@@ -12,6 +12,7 @@ on:
       - "mkdocs.yaml"
       - "docs/**/*"
       - ".github/workflows/deploy-docs.yaml"
+      - "chezmoi/.chezmoidata.yaml"
 
 permissions:
   contents: write
