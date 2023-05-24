@@ -2,40 +2,55 @@
 # {{ template "scripts-library" }}
 
 log_task "Installing packages by scripts"
+
+# shellcheck source=/dev/null
+source "${HOME}/.config/shrc/05-package-list"
+
 ensure_path_entry "${HOME}/.local/bin"
 
-# install yq
-if ! yq --version &>/dev/null; then
-  log_task "Installing yq"
-  install-yq
-fi
+DOTFILES_PKGS_SCRIPT=${DOTFILES_PKGS_SCRIPT:-()}
+DOTFILES_PKGS_TO_INSTALL=${DOTFILES_PKGS_TO_INSTALL:-()}
 
-# install autorestic
-if ! autorestic --version &>/dev/null; then
-  log_task "Installing autorestic"
-  install-autorestic
-fi
-
-# install webi if not installed
-if ! command -v webi >/dev/null; then
-  log_task "Installing webi"
-  c curl https://webi.sh/webi | sh
-fi
-
-# install rust
-if ! rustc --version &>/dev/null; then
-  log_task "Installing rust"
-  c curl https://sh.rustup.rs -sSf | sh -s -- -y --profile=minimal
-fi
-
-# install sdkman
-if command -v unzip >/dev/null && command -v zip >/dev/null; then
-  if [[ ! -e "${HOME}/.sdkman/bin/sdkman-init.sh" ]]; then
-    log_task "Installing sdkman"
-    c curl -s "https://get.sdkman.io" | bash
+wanted_packages=()
+for package in "${DOTFILES_PKGS_SCRIPT[@]}"; do
+  if is_item_in_array "${package}" "${DOTFILES_PKGS_TO_INSTALL[@]}"; then
+    wanted_packages+=("${package}")
   fi
-else
-  log_error "unzip is not installed, skipping sdkman installation"
-fi
+done
+log_info "Wanted packages: ${wanted_packages[*]}"
+
+# # install yq
+# if ! yq --version &>/dev/null; then
+#   log_task "Installing yq"
+#   install-yq
+# fi
+
+# # install autorestic
+# if ! autorestic --version &>/dev/null; then
+#   log_task "Installing autorestic"
+#   install-autorestic
+# fi
+
+# # install webi if not installed
+# if ! command -v webi >/dev/null; then
+#   log_task "Installing webi"
+#   c curl https://webi.sh/webi | sh
+# fi
+
+# # install rust
+# if ! rustc --version &>/dev/null; then
+#   log_task "Installing rust"
+#   c curl https://sh.rustup.rs -sSf | sh -s -- -y --profile=minimal
+# fi
+
+# # install sdkman
+# if command -v unzip >/dev/null && command -v zip >/dev/null; then
+#   if [[ ! -e "${HOME}/.sdkman/bin/sdkman-init.sh" ]]; then
+#     log_task "Installing sdkman"
+#     c curl -s "https://get.sdkman.io" | bash
+#   fi
+# else
+#   log_error "unzip is not installed, skipping sdkman installation"
+# fi
 
 log_green "✅  Packages installed by scripts successfully. ✨ 🌟 ✨"
