@@ -8,7 +8,7 @@ WORKSPACE_NAME=${WORKSPACE_NAME:-"{{ .workspace.name }}"}
 WORKSPACE_LOCATION=${WORKSPACE_LOCATION:-"{{ .workspace.location }}"}
 WORKSPACE_PROJECT_DIR=${WORKSPACE_PROJECT_DIR:-"{{ .workspace.project_dir }}"}
 WORKSPACE_REFERENCE_DIR="{{ .workspace.reference_dir }}"
-USER=${USER-:"{{ .chezmoi.username }}"}
+USER=${USER:-"{{ .chezmoi.username }}"}
 
 # {{ if .system.is_wsl }}
 WINHOME=${WINHOME:-"{{ .system.winhome }}"}
