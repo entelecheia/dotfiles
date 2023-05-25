@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.16.0 (2023-05-25)
+### Feature
+* **pkgUpgrade:** Allow package upgrades in chezmoi ([`f5ef74f`](https://github.com/entelecheia/dotfiles/commit/f5ef74f1a50884909031fefe8156248b41d8ca27))
+
 ## v0.15.7 (2023-05-25)
 ### Fix
 * **dependencies:** Update python package installation script and remove unnecessary path entries ([`b568d12`](https://github.com/entelecheia/dotfiles/commit/b568d122e1dbeba858698ea76455c3394bd964c6))
