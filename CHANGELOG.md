@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.15.3 (2023-05-25)
+### Fix
+* **config:** Improve fallback for GH_TOKEN ([`3fdfd19`](https://github.com/entelecheia/dotfiles/commit/3fdfd19777aa4434d975addd1a0b56f343504921))
+
 ## v0.15.2 (2023-05-25)
 ### Fix
 * Install apt prereqs ([`ae845cf`](https://github.com/entelecheia/dotfiles/commit/ae845cffb9a4d205ed7935e7259e3ba0f88d7ef1))
