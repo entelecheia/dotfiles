@@ -72,6 +72,7 @@ extra:
 nav:
   - Home: index.md
   - Features: features.md
+  - Bootstrap: bootstrap.md
   - Usage:
     - usage/index.md
     - Configuration: usage/configuration.md
