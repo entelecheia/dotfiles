@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.15.2 (2023-05-25)
+### Fix
+* Install apt prereqs ([`ae845cf`](https://github.com/entelecheia/dotfiles/commit/ae845cffb9a4d205ed7935e7259e3ba0f88d7ef1))
+
 ## v0.15.1 (2023-05-25)
 ### Fix
 * **chezmoi:** Remove apt sources ([`b49b632`](https://github.com/entelecheia/dotfiles/commit/b49b63215d5372e1f6479520688ea4662db7cf46))
