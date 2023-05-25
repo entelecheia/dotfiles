@@ -1,5 +1,10 @@
 <!--next-version-placeholder-->
 
+## v0.14.2 (2023-05-25)
+### Fix
+* **chezmoi:** Refactor run scripts ([`39b7184`](https://github.com/entelecheia/dotfiles/commit/39b7184c21dd76c7a415f878ccf27f7c4047c2b8))
+* **dotfiles:** Rename setup scripts ([`be9a91c`](https://github.com/entelecheia/dotfiles/commit/be9a91c535f10deb05bf8a58d77690ee8e254536))
+
 ## v0.14.1 (2023-05-24)
 ### Fix
 * **chezmoi:** Remove outdated install-packages-apt script template ([`d77ff41`](https://github.com/entelecheia/dotfiles/commit/d77ff41ba8ea8c5037e30939f321958766b7f716))
