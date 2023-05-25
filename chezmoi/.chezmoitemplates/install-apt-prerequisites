@@ -3,12 +3,12 @@
 log_task "Installing APT prerequisites"
 
 # remove existing apt sources
-sudo rm -f etc/apt/sources.list.d/git-core-ubuntu-ppa-*.list*
-sudo rm -f etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list*
+c sudo rm -f etc/apt/sources.list.d/git-core-*.list*
+c sudo rm -f etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list*
 
 # We need to install ca-certificates before we add the APT repos, because some of them
 # may use newer CAs.
-# Ignore apt update error if it is due to expired certificate (because chances are that
+# Ignore apt update error if it is due to expired certificate because chances are that
 # the next command will fix it.
 if output="$(sudo apt update --yes)" || [[ "${output}" == *"The certificate chain uses expired certificate."* ]]; then
   echo "${output}"
