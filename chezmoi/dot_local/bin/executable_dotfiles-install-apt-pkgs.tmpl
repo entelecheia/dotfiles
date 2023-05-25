@@ -11,6 +11,32 @@ USER=${USER-:$(whoami)}
 DOTFILES_PKGS_APT=${DOTFILES_PKGS_APT:-()}
 DOTFILES_PKGS_TO_INSTALL=${DOTFILES_PKGS_TO_INSTALL:-()}
 
+function is_apt_pkg_installed() {
+  local package="$1"
+
+  apt list --quiet --quiet --installed "${package}" 2>/dev/null | grep --quiet .
+
+}
+
+obsolete_packages=(
+{{- range .packages }}
+{{-   if and (hasKey . "apt_remove") (.apt_remove) }}
+  {{ .apt_remove }}
+{{-   end }}
+{{- end }}
+)
+if [[ "${#obsolete_packages[@]}" -gt 0 ]]; then
+  log_info "Obsolte packages: ${obsolete_packages[*]}"
+  for package in "${obsolete_packages[@]}"; do
+    if is_apt_pkg_installed "${package}"; then
+      log_task "Removing obsolete package '${package}'"
+      c sudo apt remove --yes -qq -o=Dpkg::Use-Pty=0 "${package}"
+    else
+      log_info "Package '${package}' is not installed"
+    fi
+  done
+fi
+
 wanted_packages=()
 for package in "${DOTFILES_PKGS_APT[@]}"; do
   if is_item_in_array "${package}" "${DOTFILES_PKGS_TO_INSTALL[@]}"; then

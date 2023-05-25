@@ -63,6 +63,7 @@ packages:
     scope: minimal
   - name: docker-ce
     apt: true
+    apt_remove: docker
     keyring_file: docker.gpg
     keyring_url: https://download.docker.com/linux/ubuntu/gpg
     source_list_file: docker.list

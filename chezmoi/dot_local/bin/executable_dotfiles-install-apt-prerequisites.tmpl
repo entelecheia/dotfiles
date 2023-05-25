@@ -1,0 +1,10 @@
+#!/bin/bash
+# {{ if and (eq .chezmoi.os "linux") (.system.is_sudoer) }}
+# {{ template "scripts-library" }}
+# {{ template "install-apt-prerequisites" }}
+
+# {{ else }}
+
+log_info "Skipping install-apt-prerequisites because not running as root or not on Linux."
+
+# {{ end }}

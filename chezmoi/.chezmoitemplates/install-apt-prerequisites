@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-log_task "Installing APT dependencies"
+log_task "Installing APT prerequisites"
 
 # We need to install ca-certificates before we add the APT repos, because some of them
 # may use newer CAs.
