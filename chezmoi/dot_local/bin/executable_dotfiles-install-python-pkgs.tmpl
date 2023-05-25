@@ -13,8 +13,7 @@ log_task "Installing python packages"
 
 # shellcheck source=/dev/null
 source "${HOME}/.config/shrc/00-dotfiles-export"
-
-ensure_path_entry "${HOME}/.local/bin"
+export PYTHONWARNINGS="ignore"
 
 DOTFILES_PKGS_PIP=${DOTFILES_PKGS_PIP:-()}
 DOTFILES_PKGS_PIPX=${DOTFILES_PKGS_PIPX:-()}

@@ -14,14 +14,6 @@ log_task "Installing packages by scripts"
 # shellcheck source=/dev/null
 source "${HOME}/.config/shrc/00-dotfiles-export"
 
-ensure_path_entry "${HOME}/.local/bin" "${HOME}/bin" "${HOME}/go/bin" "${HOME}/.cargo/bin"
-GOROOT="${HOME}/go"
-if [ -d "${HOME}/go/packages" ]; then
-  export GOPATH
-  export GOPATH="${GOROOT}/packages"
-  ensure_path_entry "${GOPATH}/bin"
-fi
-
 DOTFILES_PKGS_SCRIPT=${DOTFILES_PKGS_SCRIPT:-()}
 DOTFILES_PKGS_TO_INSTALL=${DOTFILES_PKGS_TO_INSTALL:-()}
 
