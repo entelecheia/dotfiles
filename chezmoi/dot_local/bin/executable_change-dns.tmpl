@@ -1,12 +1,6 @@
 #!/bin/bash
 # {{ template "scripts-library" }}
 
-# Check if script is run as root
-if [ "$EUID" -ne 0 ]; then
-  log_info "Please run as root"
-  exit
-fi
-
 # Check if there is at least one argument
 if [ "$#" -eq 0 ]; then
   log_info "Usage: $0 dns1 [dns2] ..."
@@ -15,22 +9,22 @@ fi
 
 # Install resolvconf if not already installed
 if ! is_apt_package_installed resolvconf; then
-  c apt-get update
-  c apt-get install -y resolvconf
+  c sudo apt-get update
+  c sudo apt-get install -y resolvconf
 fi
 
 # Backup original resolv.conf.d/head file
 log_task "Backing up original resolv.conf.d/head file"
-c cp /etc/resolvconf/resolv.conf.d/head /etc/resolvconf/resolv.conf.d/head.bak-"$(date +%Y%m%d%H%M%S)"
+c sudo cp /etc/resolvconf/resolv.conf.d/head /etc/resolvconf/resolv.conf.d/head.bak-"$(date +%Y%m%d%H%M%S)"
 
 # Write new nameservers
-c echo "" >/etc/resolvconf/resolv.conf.d/head
+c sudo echo "" >/etc/resolvconf/resolv.conf.d/head
 for server in "$@"; do
-  c echo "nameserver $server" >>/etc/resolvconf/resolv.conf.d/head
+  c sudo echo "nameserver $server" >>/etc/resolvconf/resolv.conf.d/head
 done
 
 # Start resolvconf service
 log_task "Starting resolvconf service"
-c systemctl enable --now resolvconf.service
+c sudo systemctl enable --now resolvconf.service
 
 log_info "DNS servers set to $*"
