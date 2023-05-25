@@ -1,5 +1,14 @@
 <!--next-version-placeholder-->
 
+## v0.16.1 (2023-05-25)
+### Fix
+* **apt-installer:** Fix upgrade_packages command to upgrade the specified packages instead of all. ([`3a1873f`](https://github.com/entelecheia/dotfiles/commit/3a1873fd82cab7b3ff200da0ed83930a6783ffd6))
+* **apt-pkgs:** Check if package is upgradable before adding to upgrade_packages array ([`34aff03`](https://github.com/entelecheia/dotfiles/commit/34aff0398202c524a5afd34a648176dfe7484c6d))
+* **python-pkg-install:** Improve upgrade check ([`8abf075`](https://github.com/entelecheia/dotfiles/commit/8abf07544804230351d0a740ddd2f0caf3de2553))
+* **apt:** Add allow_upgrade option, upgrade packages with APT if needed ([`bf2ae5f`](https://github.com/entelecheia/dotfiles/commit/bf2ae5f62a9f7eb0ccc6ff55085ff8d424d947b5))
+* **chezmoi:** Update chezmoidata to allow package upgrades ([`3c48314`](https://github.com/entelecheia/dotfiles/commit/3c483142374a5b8515c21a124aac58a32216eefb))
+* **installation:** Improve upgrade logic for brew and pipx packages ([`d783d7f`](https://github.com/entelecheia/dotfiles/commit/d783d7fc1830e0ad38e80245ab31984e943a5223))
+
 ## v0.16.0 (2023-05-25)
 ### Feature
 * **pkgUpgrade:** Allow package upgrades in chezmoi ([`f5ef74f`](https://github.com/entelecheia/dotfiles/commit/f5ef74f1a50884909031fefe8156248b41d8ca27))
