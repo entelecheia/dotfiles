@@ -1,5 +1,15 @@
 <!--next-version-placeholder-->
 
+## v0.15.0 (2023-05-25)
+### Feature
+* **rootmoi:** Streamline run scripts ([`c504159`](https://github.com/entelecheia/dotfiles/commit/c5041590f033f5fa2f2223ab5e1ca3556f12cbf8))
+* **chezmoi:** Streamline run scripts ([`fefda88`](https://github.com/entelecheia/dotfiles/commit/fefda88dd097f431596d620d889cea5b9842b5c3))
+* **chezmoi:** Add dotfiles-apply-rootmoi and initialize-zsh commands ([`968192d`](https://github.com/entelecheia/dotfiles/commit/968192d94bcd782dedfb8b44756cc4bd5fb33eff))
+* **chezmoi:** Add dotfiles-apply-rootmoi and initialize-zsh commands ([`10d4173`](https://github.com/entelecheia/dotfiles/commit/10d4173aee67dca67af23a801d4eaf515e70b734))
+
+### Fix
+* **rootmoi:** Streamline run scripts ([`a9f6fb2`](https://github.com/entelecheia/dotfiles/commit/a9f6fb2465cc978e2d9e673505a7b584147a41a2))
+
 ## v0.14.2 (2023-05-25)
 ### Fix
 * **chezmoi:** Refactor run scripts ([`39b7184`](https://github.com/entelecheia/dotfiles/commit/39b7184c21dd76c7a415f878ccf27f7c4047c2b8))
