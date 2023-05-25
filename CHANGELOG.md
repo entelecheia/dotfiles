@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.15.5 (2023-05-25)
+### Fix
+* **rootmoi:** Remove outdated sources and files ([`431d3f5`](https://github.com/entelecheia/dotfiles/commit/431d3f57e5f1bfb3cd1483fe8f550fafdc903357))
+
 ## v0.15.4 (2023-05-25)
 ### Fix
 * **rootmoi:** Add missing apt source list to remove list ([`93b5a6a`](https://github.com/entelecheia/dotfiles/commit/93b5a6ad63a9632ff429f4362edf81a8ec761214))
