@@ -239,6 +239,13 @@ DOTFILES_PKGS_PIPX=(
 {{- end }}
 {{- end }}
 )
+DOTFILES_PKGS_UPGRADABLE=(
+{{- range .packages }}
+{{- if and (hasKey . "allow_upgrade") ( .allow_upgrade ) }}
+  {{ .name }}
+{{- end }}
+{{- end }}
+)
 {{- else }}
 DOTFILES_PKGS_MINIMAL=()
 DOTFILES_PKGS_SYSTEM=()
@@ -257,6 +264,7 @@ DOTFILES_PKGS_WEBI=()
 DOTFILES_PKGS_GO=()
 DOTFILES_PKGS_PIP=()
 DOTFILES_PKGS_PIPX=()
+DOTFILES_PKGS_UPGRADABLE=()
 {{- end }}
 
 # user packages
@@ -301,6 +309,7 @@ export DOTFILES_PKGS_WEBI
 export DOTFILES_PKGS_GO
 export DOTFILES_PKGS_PIP
 export DOTFILES_PKGS_PIPX
+export DOTFILES_PKGS_UPGRADABLE
 export DOTFILES_PKGS_USER
 
 # total packages to install

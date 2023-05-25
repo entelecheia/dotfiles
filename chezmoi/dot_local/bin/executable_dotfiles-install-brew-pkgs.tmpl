@@ -10,6 +10,7 @@ source "${HOME}/.config/shrc/00-dotfiles-export"
 USENAME=${USENAME-:$(whoami)}
 DOTFILES_PKGS_BREW=${DOTFILES_PKGS_BREW:-()}
 DOTFILES_PKGS_TO_INSTALL=${DOTFILES_PKGS_TO_INSTALL:-()}
+DOTFILES_PKGS_UPGRADABLE=${DOTFILES_PKGS_UPGRADABLE:-()}
 
 wanted_packages=()
 for package in "${DOTFILES_PKGS_BREW[@]}"; do
@@ -44,9 +45,12 @@ done
 
 # install packages that are not installed
 missing_packages=()
+upgrade_packages=()
 for package in "${wanted_packages[@]}"; do
   if ! is_brew_package_installed "${package}"; then
     missing_packages+=("${package}")
+  elif is_item_in_array "${package}" "${DOTFILES_PKGS_UPGRADABLE[@]}"; then
+    upgrade_packages+=("${package}")
   fi
 done
 
@@ -58,6 +62,13 @@ if [[ ${#missing_packages[@]} -gt 0 ]]; then
 else
   log_info "No missing packages to install with brew"
 fi
+if [[ ${#upgrade_packages[@]} -gt 0 ]]; then
+  log_task "Upgrading packages with brew: ${upgrade_packages[*]}"
+  # c "${brew_command[@]}" update
+  c "${brew_command[@]}" upgrade "${upgrade_packages[@]}"
+else
+  log_info "No packages to upgrade with brew"
+fi
 
 # get installed cask packages with brew list --casks
 BREW_CASK_PACKAGES=$(brew list --casks)
@@ -67,6 +78,11 @@ for package in "${wanted_cask_packages[@]}"; do
   if ! echo "${BREW_CASK_PACKAGES}" | grep -q "^${package}$"; then
     log_task "Installing a package with brew cask: ${package}"
     c "${brew_command[@]}" install --cask "${package}"
+  elif is_item_in_array "${package}" "${DOTFILES_PKGS_UPGRADABLE[@]}"; then
+    log_task "Upgrading a package with brew cask: ${package}"
+    c "${brew_command[@]}" upgrade --cask "${package}"
+  else
+    log_info "Package already installed with brew cask: ${package}"
   fi
 done
 

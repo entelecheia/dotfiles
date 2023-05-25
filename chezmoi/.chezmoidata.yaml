@@ -115,6 +115,7 @@ packages:
     source_list_file: github-cli.list
     source_list_line: "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main"
     scope: minimal
+    allow_upgrade: true
   - name: git
     apt: true
     brew: true
