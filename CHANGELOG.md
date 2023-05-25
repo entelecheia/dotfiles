@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.15.4 (2023-05-25)
+### Fix
+* **rootmoi:** Add missing apt source list to remove list ([`93b5a6a`](https://github.com/entelecheia/dotfiles/commit/93b5a6ad63a9632ff429f4362edf81a8ec761214))
+
 ## v0.15.3 (2023-05-25)
 ### Fix
 * **config:** Improve fallback for GH_TOKEN ([`3fdfd19`](https://github.com/entelecheia/dotfiles/commit/3fdfd19777aa4434d975addd1a0b56f343504921))
