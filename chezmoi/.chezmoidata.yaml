@@ -8,6 +8,7 @@ packages:
     source_list_file: 1password.list
     source_list_line: "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main"
     scope: optional
+    allow_upgrade: true
   - name: age
     brew: true
     scope: minimal
@@ -57,6 +58,7 @@ packages:
     brew: true
     pipx: true
     scope: minimal
+    allow_upgrade: true
   - name: direnv
     apt: true
     brew: true
@@ -89,6 +91,7 @@ packages:
     brew: true
     pipx: true
     scope: optional
+    allow_upgrade: true
   - name: file
     apt: true
     scope: minimal
@@ -107,6 +110,7 @@ packages:
     apt: true
     brew: true
     scope: minimal
+    allow_upgrade: true
   - name: gh
     apt: true
     brew: true
@@ -120,6 +124,7 @@ packages:
     apt: true
     brew: true
     scope: minimal
+    allow_upgrade: true
   - name: cz-conventional-gitmoji
     pipx: true
     check_installed: command -v gitmojify &>/dev/null
@@ -257,10 +262,12 @@ packages:
   - name: pip
     pip: true
     scope: minimal
+    allow_upgrade: true
   - name: pipx
     brew: true
     pip: true
     scope: minimal
+    allow_upgrade: true
   - name: poetry
     brew: true
     script: true
@@ -270,9 +277,11 @@ packages:
     pipx: true
     check_installed: command -v poe &>/dev/null
     scope: minimal
+    allow_upgrade: true
   - name: pre-commit
     pipx: true
     scope: optional
+    allow_upgrade: true
   - name: procps
     apt: true
     scope: minimal
@@ -316,6 +325,7 @@ packages:
   - name: setuptools
     pip: true
     scope: minimal
+    allow_upgrade: true
   - name: snapd
     apt: true
     scope: full
