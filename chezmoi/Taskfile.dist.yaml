@@ -51,6 +51,11 @@ tasks:
     cmds:
       - neofetch
 
+  sysinfo-inxi:
+    desc: Print system information using inxi
+    cmds:
+      - inxi -F
+
   # install-node:
   #   desc: Install the latest LTS version of Node.js using nvm
   #   cmds:
