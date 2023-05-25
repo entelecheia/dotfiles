@@ -46,6 +46,11 @@ tasks:
     cmds:
       - resolvectl status | grep "DNS Server" -A2
 
+  sysinfo:
+    desc: Print system information
+    cmds:
+      - neofetch
+
   # install-node:
   #   desc: Install the latest LTS version of Node.js using nvm
   #   cmds:

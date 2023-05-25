@@ -220,6 +220,10 @@ packages:
     pipx: true
     check_installed: command -v dmypy &>/dev/null
     scope: optional
+  - name: neofetch
+    apt: true
+    brew: true
+    scope: minimal
   - name: ngrok
     apt: true
     gpg_key_file: ngrok.asc
