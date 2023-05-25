@@ -1,8 +1,0 @@
-#!/bin/bash
-# {{ template "scripts-library" }}
-log_task "55. Cloning git repos"
-
-ensure_path_entry "${HOME}/.local/bin"
-
-# clone-repos hash: {{ include "dot_local/bin/executable_clone-repos.tmpl" | sha256sum }}
-clone-repos

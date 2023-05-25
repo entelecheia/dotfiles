@@ -1,5 +1,6 @@
 #!/bin/bash
 # {{ template "scripts-library" }}
+log_task "Restoring dotfiles from backup with autorestic"
 
 CONFIG_FILE="{{ .autorestic.config_file }}"
 LOCATION="{{ .autorestic.location }}"

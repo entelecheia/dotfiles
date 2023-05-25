@@ -1,0 +1,12 @@
+#!/bin/bash
+# shellcheck source=/dev/null
+source "${HOME}/.config/shrc/00-dotfiles-export"
+
+# log_task "Setting up workspace"
+# dotfiles-setup-workspace hash: {{ include "dot_local/bin/executable_dotfiles-setup-workspace.tmpl" | sha256sum }}
+dotfiles-setup-workspace
+
+# log_task "Cloning git repos"
+# {{ .github.clones }}
+# clone-repos hash: {{ include "dot_local/bin/executable_clone-repos.tmpl" | sha256sum }}
+clone-repos

@@ -1,8 +1,0 @@
-#!/bin/bash
-# {{ template "scripts-library" }}
-log_task "50. Setting up workspace"
-
-ensure_path_entry "${HOME}/.local/bin"
-
-# set-workspace hash: {{ include "dot_local/bin/executable_set-workspace.tmpl" | sha256sum }}
-set-workspace

@@ -1,11 +1,8 @@
 #!/bin/bash
-# {{ if eq .chezmoi.os "darwin" }}
-# {{ template "scripts-library" }}
-log_task "90. Installing Homebrew from bundle"
-
-ensure_path_entry "${HOME}/.local/bin"
-
+# {{- if eq .chezmoi.os "darwin" }}
+# shellcheck source=/dev/null
+source "${HOME}/.config/shrc/00-dotfiles-export"
+# log_task "Installing Homebrew from bundle"
 # brew-install-bundle hash: {{ include "dot_local/bin/executable_brew-install-bundle.tmpl" | sha256sum }}
 brew-install-bundle
-
-# {{ end -}}
+# {{- end }}

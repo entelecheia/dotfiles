@@ -1,8 +1,9 @@
 #!/bin/bash
 # {{ template "scripts-library" }}
+log_task "Authenticating with GitHub"
 
 # check if --interactive or -f flag is set
-set +u 
+set +u
 if [[ "${1}" == "--interactive" ]] || [[ "${1}" == "-i" ]]; then
     INTERACTIVE=true
 else

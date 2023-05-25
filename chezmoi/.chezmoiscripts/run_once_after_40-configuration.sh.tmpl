@@ -1,0 +1,57 @@
+#!/bin/bash
+# shellcheck source=/dev/null
+source "${HOME}/.config/shrc/00-dotfiles-export"
+
+# log_task "Authenticating with GitHub"
+GITHUB_USERNAME=${GITHUB_USERNAME:-"{{ .github.username }}"}
+GITHUB_TOKEN=${GITHUB_TOKEN:-"{{ .github.token }}"}
+export GITHUB_USERNAME
+export GITHUB_TOKEN
+
+# github-auth hash: {{ include "dot_local/bin/executable_github-auth.tmpl" | sha256sum }}
+# {{- if .system.is_interactive }}
+github-auth --interactive
+# {{- else }}
+github-auth
+# {{- end }}
+
+# log_task "Restoring dotfiles from backup with autorestic"
+# {{- if and (.autorestic.enabled) (.autorestic.restore_dotfiles) }}
+# dotfiles-restore hash: {{ include "dot_local/bin/executable_dotfiles-restore.tmpl" | sha256sum }}
+dotfiles-restore
+# {{- end }}
+
+# log_task "Setting up SSH, AGE, and GPG keys"
+# before generating SSH keys, you can install them from the dotdrop repository
+# {{- if .dotdrop.enabled }}
+# dotfiles-setup-dotdrop hash: {{ include "dot_local/bin/executable_dotfiles-setup-dotdrop.tmpl" | sha256sum }}
+dotfiles-setup-dotdrop
+# {{- end }}
+# dotfiles-setup-ssh hash: {{ include "dot_local/bin/executable_dotfiles-setup-ssh.tmpl" | sha256sum }}
+dotfiles-setup-ssh
+# dotfiles-setup-age hash: {{ include "dot_local/bin/executable_dotfiles-setup-age.tmpl" | sha256sum }}
+dotfiles-setup-age
+export GPG_PASSPHRASE="{{ .gnupg.passphrase }}"
+# dotfiles-setup-gpg hash: {{ include "dot_local/bin/executable_dotfiles-setup-gpg.tmpl" | sha256sum }}
+dotfiles-setup-gpg
+# dotfiles-setup-github-keys hash: {{ include "dot_local/bin/executable_dotfiles-setup-github-keys.tmpl" | sha256sum }}
+dotfiles-setup-github-keys
+# log_info "Done setting up SSH, AGE, and GPG keys ✨ 🌟 ✨"
+
+# log_task "Setting up password store"
+# pass-init hash: {{ include "dot_local/bin/executable_pass-init.tmpl" | sha256sum }}
+pass-init
+# passage-init hash: {{ include "dot_local/bin/executable_passage-init.tmpl" | sha256sum }}
+passage-init
+
+# {{- if .system.is_interactive }}
+# log_task "Login to Docker Hub"
+# docker-login hash: {{ include "dot_local/bin/executable_dk-login.tmpl" | sha256sum }}
+dk-login
+# {{- end }}
+
+# log_task "Backing up dotfiles with autorestic"
+# {{ if and (.autorestic.enabled) (.autorestic.backup_dotfiles) }}
+# dotfiles-backup hash: {{ include "dot_local/bin/executable_dotfiles-backup.tmpl" | sha256sum }}
+dotfiles-backup
+# {{ end }}
