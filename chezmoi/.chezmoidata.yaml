@@ -344,6 +344,7 @@ packages:
     apt: true
     brew: true
     scope: minimal
+    allow_upgrade: true
   - name: tzdata
     apt: true
     scope: minimal

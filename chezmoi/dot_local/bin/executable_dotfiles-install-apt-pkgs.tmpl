@@ -10,6 +10,7 @@ source "${HOME}/.config/shrc/00-dotfiles-export"
 USER=${USER-:$(whoami)}
 DOTFILES_PKGS_APT=${DOTFILES_PKGS_APT:-()}
 DOTFILES_PKGS_TO_INSTALL=${DOTFILES_PKGS_TO_INSTALL:-()}
+DOTFILES_PKGS_UPGRADABLE=${DOTFILES_PKGS_UPGRADABLE:-()}
 
 function is_apt_pkg_installed() {
   local package="$1"
@@ -100,16 +101,17 @@ fi
 {{ end }}
 
 missing_packages=()
+upgrade_packages=()
 
 for package in "${wanted_packages[@]}"; do
   if ! is_apt_package_installed "${package}"; then
     missing_packages+=("${package}")
+  elif is_apt_pkg_installed "${package}"; then
+    upgrade_packages+=("${package}")
   fi
 done
 
-if [[ ${#missing_packages[@]} -gt 0 ]]; then
-  log_task "Installing missing packages with APT: ${missing_packages[*]}"
-
+if [[ ${#missing_packages[@]} -gt 0 ]] || [[ ${#upgrade_packages[@]} -gt 0 ]]; then
   # This script also gets called when running rootmoi
   if [ "$USER" = "root" ]; then
     apt_command=(apt)
@@ -118,9 +120,16 @@ if [[ ${#missing_packages[@]} -gt 0 ]]; then
   fi
 
   c "${apt_command[@]}" update --yes -qq -o=Dpkg::Use-Pty=0
+fi
+if [[ ${#missing_packages[@]} -gt 0 ]]; then
+  log_task "Installing missing packages with APT: ${missing_packages[*]}"
   c "${apt_command[@]}" install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends "${missing_packages[@]}"
 else
   log_info "No missing packages to install with APT"
+fi
+if [[ ${#upgrade_packages[@]} -gt 0 ]]; then
+  log_task "Upgrading packages with APT: ${upgrade_packages[*]}"
+  c "${apt_command[@]}" upgrade --yes -qq -o=Dpkg::Use-Pty=0 "${upgrade_packages[@]}"
 fi
 
 log_green "✅  APT packages installed successfully. ✨ 🌟 ✨"
