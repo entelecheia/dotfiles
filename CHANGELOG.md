@@ -1,5 +1,13 @@
 <!--next-version-placeholder-->
 
+## v0.15.1 (2023-05-25)
+### Fix
+* **chezmoi:** Remove apt sources ([`b49b632`](https://github.com/entelecheia/dotfiles/commit/b49b63215d5372e1f6479520688ea4662db7cf46))
+
+### Documentation
+* Update bootstrap page ([`c47646d`](https://github.com/entelecheia/dotfiles/commit/c47646d44b1099100b2538c5f821a8bea5500121))
+* Add bootstrap page ([`a69569c`](https://github.com/entelecheia/dotfiles/commit/a69569c41c77ffee51b58ffa80c5f773f01d5198))
+
 ## v0.15.0 (2023-05-25)
 ### Feature
 * **rootmoi:** Streamline run scripts ([`c504159`](https://github.com/entelecheia/dotfiles/commit/c5041590f033f5fa2f2223ab5e1ca3556f12cbf8))
