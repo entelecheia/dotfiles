@@ -2,7 +2,7 @@
 
 In the process of setting up dotfiles, bootstrap scripts are used to automate the installation process. These scripts are invoked by Chezmoi in a specific order due to the numeric prefixes in their filenames. This allows for a complex bootstrapping process to be broken down into manageable, discrete steps.
 
-These scripts help to automate the installation process and run initial configurations. These scripts are invoked in the `run_once_after_xx` and `run_once_before_xx` sequence in the `.chezmoiscripts` directory.
+These scripts help to automate the installation process and run initial configurations. These scripts are invoked in the `run_once_before_xx` and `run_once_after_xx` sequence in the `.chezmoiscripts` directory.
 
 ## Description of Scripts
 
