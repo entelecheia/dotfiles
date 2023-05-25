@@ -129,7 +129,7 @@ else
 fi
 if [[ ${#upgrade_packages[@]} -gt 0 ]]; then
   log_task "Upgrading packages with APT: ${upgrade_packages[*]}"
-  c "${apt_command[@]}" upgrade --yes -qq -o=Dpkg::Use-Pty=0 "${upgrade_packages[@]}"
+  c "${apt_command[@]}" install --yes -qq -o=Dpkg::Use-Pty=0 "${upgrade_packages[@]}"
 fi
 
 log_green "✅  APT packages installed successfully. ✨ 🌟 ✨"
