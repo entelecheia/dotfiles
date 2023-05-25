@@ -1,29 +1,5 @@
 #!/bin/bash
-# {{ template "scripts-library" }}
-log_task "10. Initializing ZSH"
-
-# {{ if and (eq .chezmoi.os "linux") }}
-
-zsh_path="/bin/zsh"
-
-if ! getent passwd '{{ .chezmoi.username }}' | cut -d : -f 7- | grep -q "^${zsh_path}$"; then
-  log_task "Configuring ZSH as default shell"
-
-# {{ if .system.is_sudoer }}
-  c sudo usermod --shell "${zsh_path}" '{{ .chezmoi.username }}'
-# {{ else }}
-  c chsh --shell "${zsh_path}"
-# {{ end }}
-fi
-
-# {{ else if eq .chezmoi.os "darwin" }}
-
-if [ "$SHELL" != "$(which zsh)" ]; then
-  log_task "Configuring ZSH as default shell"
-
-  # c sudo dscl . -create "/Users/{{ .chezmoi.username }}" UserShell "$(which zsh)"
-  c sudo sh -c "echo $(which zsh) >> /etc/shells"
-  c sudo chsh -s "$(which zsh)" "{{ .chezmoi.username }}"
-fi
-
-# {{ end }}
+# shellcheck source=/dev/null
+source "${HOME}/.config/shrc/00-dotfiles-export"
+# dotfiles-initialize-zsh hash: {{ include "dot_local/bin/executable_dotfiles-initialize-zsh.tmpl" | sha256sum }}
+dotfiles-initialize-zsh
