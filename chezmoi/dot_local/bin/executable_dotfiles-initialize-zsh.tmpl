@@ -1,0 +1,29 @@
+#!/bin/bash
+# {{- template "scripts-library" }}
+log_task "Initializing ZSH"
+
+# {{- if and (eq .chezmoi.os "linux") }}
+
+zsh_path="/bin/zsh"
+
+if ! getent passwd '{{ .chezmoi.username }}' | cut -d : -f 7- | grep -q "^${zsh_path}$"; then
+  log_task "Configuring ZSH as default shell"
+
+# {{ if .system.is_sudoer }}
+  c sudo usermod --shell "${zsh_path}" '{{ .chezmoi.username }}'
+# {{ else }}
+  c chsh --shell "${zsh_path}"
+# {{ end }}
+fi
+
+# {{- else if eq .chezmoi.os "darwin" }}
+
+if [ "$SHELL" != "$(which zsh)" ]; then
+  log_task "Configuring ZSH as default shell"
+
+  # c sudo dscl . -create "/Users/{{ .chezmoi.username }}" UserShell "$(which zsh)"
+  c sudo sh -c "echo $(which zsh) >> /etc/shells"
+  c sudo chsh -s "$(which zsh)" "{{ .chezmoi.username }}"
+fi
+
+# {{- end }}

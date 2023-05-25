@@ -1,0 +1,7 @@
+#!/bin/bash
+# {{- if and (eq .chezmoi.os "linux") (.system.apply_rootmoi) (.system.is_sudoer) }}
+# shellcheck source=/dev/null
+source "${HOME}/.config/shrc/00-dotfiles-export"
+# dotfiles-apply-rootmoi hash: {{ include "dot_local/bin/executable_dotfiles-apply-rootmoi.tmpl" | sha256sum }}
+dotfiles-apply-rootmoi
+# {{- end }}
