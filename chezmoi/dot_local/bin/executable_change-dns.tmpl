@@ -9,22 +9,22 @@ fi
 
 # Install resolvconf if not already installed
 if ! is_apt_package_installed resolvconf; then
-  c sudo apt-get update
-  c sudo apt-get install -y resolvconf
+  c apt-get update
+  c apt-get install -y resolvconf
 fi
 
 # Backup original resolv.conf.d/head file
 log_task "Backing up original resolv.conf.d/head file"
-c sudo cp /etc/resolvconf/resolv.conf.d/head /etc/resolvconf/resolv.conf.d/head.bak-"$(date +%Y%m%d%H%M%S)"
+c cp /etc/resolvconf/resolv.conf.d/head /etc/resolvconf/resolv.conf.d/head.bak-"$(date +%Y%m%d%H%M%S)"
 
 # Write new nameservers
-c sudo echo "" >/etc/resolvconf/resolv.conf.d/head
+c echo "" >/etc/resolvconf/resolv.conf.d/head
 for server in "$@"; do
-  c sudo echo "nameserver $server" >>/etc/resolvconf/resolv.conf.d/head
+  c echo "nameserver $server" >>/etc/resolvconf/resolv.conf.d/head
 done
 
 # Start resolvconf service
 log_task "Starting resolvconf service"
-c sudo systemctl enable --now resolvconf.service
+c systemctl enable --now resolvconf.service
 
 log_info "DNS servers set to $*"
