@@ -19,7 +19,7 @@ tasks:
   tmux-new:
     desc: Create a new tmux session
     cmds:
-      - tmux new -s {{.CLI_ARGS}}
+      - tmux new -s {{"{{.CLI_ARGS}}"}}
 
   tmux-ls:
     desc: List tmux sessions
@@ -29,7 +29,7 @@ tasks:
   tmux-attach:
     desc: Attach to a tmux session
     cmds:
-      - tmux attach -t {{.CLI_ARGS}}
+      - tmux attach -t {{"{{.CLI_ARGS}}"}}
 
   restart-docker-daemon:
     desc: Restart the Docker daemon
