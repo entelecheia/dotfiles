@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.15.6 (2023-05-25)
+### Fix
+* **github:** Upgrade key setup script with SSH key check ([`12e281c`](https://github.com/entelecheia/dotfiles/commit/12e281c2c736172511ed380e7618a913176c1de0))
+
 ## v0.15.5 (2023-05-25)
 ### Fix
 * **rootmoi:** Remove outdated sources and files ([`431d3f5`](https://github.com/entelecheia/dotfiles/commit/431d3f57e5f1bfb3cd1483fe8f550fafdc903357))
