@@ -1,3 +1,4 @@
+etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list*
 # GCM Core got renamed to GCM only
 usr/local/bin/git-credential-manager-core
 usr/local/share/gcm-core

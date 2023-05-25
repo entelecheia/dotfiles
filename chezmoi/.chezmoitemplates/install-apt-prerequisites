@@ -2,10 +2,6 @@
 
 log_task "Installing APT prerequisites"
 
-# remove existing apt sources
-c sudo rm -f etc/apt/sources.list.d/git-core-*.list*
-c sudo rm -f etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list*
-
 # We need to install ca-certificates before we add the APT repos, because some of them
 # may use newer CAs.
 # Ignore apt update error if it is due to expired certificate because chances are that
@@ -17,9 +13,12 @@ else
   echo "${output}"
   exit 1
 fi
-c sudo apt install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends ca-certificates apt-transport-https curl gnupg software-properties-common zsh locales locales-all
+c sudo apt install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends ca-certificates
+c sudo apt install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends curl gnupg software-properties-common zsh locales locales-all jq
 
 # Add APT repositories for newer versions of Git.
+# remove existing apt sources
+c sudo rm -f etc/apt/sources.list.d/git-core-*.list*
 c sudo add-apt-repository ppa:git-core/ppa --yes
 c sudo apt update --yes
 c sudo apt install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends git
