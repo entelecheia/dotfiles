@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.15.7 (2023-05-25)
+### Fix
+* **dependencies:** Update python package installation script and remove unnecessary path entries ([`b568d12`](https://github.com/entelecheia/dotfiles/commit/b568d122e1dbeba858698ea76455c3394bd964c6))
+
 ## v0.15.6 (2023-05-25)
 ### Fix
 * **github:** Upgrade key setup script with SSH key check ([`12e281c`](https://github.com/entelecheia/dotfiles/commit/12e281c2c736172511ed380e7618a913176c1de0))
