@@ -22,10 +22,13 @@ GPG_PUB_ASC_KEY_FILE="${GPG_PUB_KEY_FILE}.asc"
 # "Adding SSH & GPG keys to GitHub after login"
 if command -v gh >/dev/null; then
     if gh auth status &>/dev/null; then
+        GH_KEY_LIST=$(gh ssh-key list)
+        log_info "GitHub is authenticated, checking if SSH key is added to GitHub"
+        echo "${GH_KEY_LIST}"
         if [ -e "${SSH_PUB_KEY_FILE}" ]; then
             SSH_PUB_KEY=$(cat "${SSH_PUB_KEY_FILE}")
             SSH_PUB_KEY_KEY=$(echo "${SSH_PUB_KEY}" | cut -d' ' -f2)
-            if gh ssh-key list | grep "${SSH_PUB_KEY_KEY}" >/dev/null; then
+            if grep -q "${SSH_PUB_KEY_KEY}" <<< "${GH_KEY_LIST}"; then
                 log_info "SSH key already added to GitHub"
             else
                 log_task "Adding SSH key to GitHub"
