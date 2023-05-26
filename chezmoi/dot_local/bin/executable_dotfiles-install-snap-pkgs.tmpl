@@ -27,7 +27,7 @@ PKG_NAME="{{ .name }}"
 if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   if is_snap_package_installed "${PKG_NAME}"; then
     log_info "Package ${PKG_NAME} is already installed"
-  elif ! is_package_installed "${PKG_NAME}"; then
+  elif ! is_pkg_installed_by_pkg_managers "${PKG_NAME}"; then
     log_task "Installing ${PKG_NAME}"
     c sudo snap install "${package}" --classic
 {{- if and (hasKey . "post_install") ( .post_install ) }}
