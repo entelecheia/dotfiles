@@ -131,7 +131,7 @@ packages:
     apt: true
     brew: true
     scope: minimal
-    repository_cmd: curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+    repository_script: https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh
     allow_upgrade: true
   - name: git-sizer
     apt: true

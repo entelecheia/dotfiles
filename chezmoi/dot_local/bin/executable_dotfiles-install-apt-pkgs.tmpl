@@ -42,6 +42,26 @@ log_info "Wanted packages: ${wanted_packages[*]}"
 
 {{ range .packages }}
 PKG_NAME="{{ .name }}"
+{{   if and (hasKey . "repository_script") (.repository_script) }}
+REPO_SCRIPT="{{ .repository_script }}"
+if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
+  if [ REPO_SCRIPT == http* ]; then
+    log_task "Downloading and running repository script for '${PKG_NAME}'"
+    if [ "$USER" = "root" ]; then
+      c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${REPO_SCRIPT}" | bash -
+    else
+      c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${REPO_SCRIPT}" | sudo bash -
+    fi
+  else
+    log_task "Running repository script for '${PKG_NAME}'"
+    if [ "$USER" = "root" ]; then
+      c "${REPO_SCRIPT}"
+    else
+      c sudo "${REPO_SCRIPT}"
+    fi
+  fi
+fi
+{{   end }}
 {{   if and (hasKey . "keyring_file") (.keyring_file) }}
 KEYRING_FILE="/usr/share/keyrings/{{ .keyring_file }}"
 KEYRING_URL="{{ .keyring_url }}"
@@ -69,7 +89,7 @@ fi
 {{   end }}
 {{   if and (hasKey . "apt_key_url") (.apt_key_url) }}
 APT_KEY_URL="{{ .apt_key_url }}"
-if [[ -n "${APT_KEY_URL}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
+if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   if [ "$USER" = "root" ]; then
     c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${APT_KEY_URL}" | apt-key add -
   else
@@ -84,6 +104,7 @@ SOURCE_LIST_LINE="{{ .source_list_line }}"
 {{   else }}
 SOURCE_LIST_LINE=""
 {{   end }}
+
 if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   log_task "Adding {{ .source_list_file }} repository to APT"
   if [ "$USER" = "root" ]; then
