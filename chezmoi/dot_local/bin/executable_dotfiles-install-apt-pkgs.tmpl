@@ -2,6 +2,7 @@
 # shellcheck disable=SC1083
 # {{- if and (eq .chezmoi.os "linux") .system.is_sudoer }}
 # {{- template "scripts-library" }}
+# {{- template "package-library" }}
 log_task "Installing APT packages"
 
 # shellcheck source=/dev/null
@@ -11,13 +12,6 @@ USER=${USER-:$(whoami)}
 DOTFILES_PKGS_APT=${DOTFILES_PKGS_APT:-()}
 DOTFILES_PKGS_TO_INSTALL=${DOTFILES_PKGS_TO_INSTALL:-()}
 DOTFILES_PKGS_UPGRADABLE=${DOTFILES_PKGS_UPGRADABLE:-()}
-
-function is_apt_pkg_installed() {
-  local package="$1"
-
-  apt list --quiet --quiet --installed "${package}" 2>/dev/null | grep --quiet .
-
-}
 
 obsolete_packages=(
 {{- range .packages }}
@@ -29,7 +23,7 @@ obsolete_packages=(
 if [[ "${#obsolete_packages[@]}" -gt 0 ]]; then
   log_info "Obsolte packages: ${obsolete_packages[*]}"
   for package in "${obsolete_packages[@]}"; do
-    if is_apt_pkg_installed "${package}"; then
+    if is_apt_package_installed "${package}"; then
       log_task "Removing obsolete package '${package}'"
       c sudo apt remove --yes -qq -o=Dpkg::Use-Pty=0 "${package}"
     else
@@ -104,9 +98,9 @@ missing_packages=()
 upgrade_packages=()
 
 for package in "${wanted_packages[@]}"; do
-  if ! is_apt_package_installed "${package}"; then
+  if ! is_package_installed "${package}"; then
     missing_packages+=("${package}")
-  elif is_apt_pkg_installed "${package}" && is_item_in_array "${package}" "${DOTFILES_PKGS_UPGRADABLE[@]}"; then
+  elif is_apt_package_installed "${package}" && is_item_in_array "${package}" "${DOTFILES_PKGS_UPGRADABLE[@]}"; then
     upgrade_packages+=("${package}")
   fi
 done
