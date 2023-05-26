@@ -165,6 +165,8 @@ packages:
   - name: go-age
     script: true
     script_cmd: go install filippo.io/age/cmd/...@latest
+    script_prereqs: "source ${HOME}/.config/shrc/00-dotfiles-export"
+    check_prereqs: "command -v go &> /dev/null"
     check_installed: command -v age &>/dev/null
     current_version: "age --version | cut -d' ' -f2"
     latest_version: $(curl -s https://api.github.com/repos/FiloSottile/age/releases/latest | grep tag_name | cut -d '"' -f4)
@@ -172,6 +174,8 @@ packages:
   - name: go-sops
     script: true
     script_cmd: go install go.mozilla.org/sops/v3/cmd/sops@latest
+    script_prereqs: "source ${HOME}/.config/shrc/00-dotfiles-export"
+    check_prereqs: "command -v go &> /dev/null"
     check_installed: command -v sops &>/dev/null
     current_version: "sops --version | awk '{print $NF}'"
     latest_version: $(curl -s https://api.github.com/repos/mozilla/sops/releases/latest | grep 'tag_name' | cut -d'"' -f4)

@@ -30,6 +30,9 @@ log_info "Wanted packages: ${wanted_packages[*]}"
 # installing {{ .name }}
 PKG_NAME="{{ .name }}"
 if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
+  {{- if and (hasKey . "script_prereqs") ( .script_prereqs ) }}
+  {{ .script_prereqs }}
+  {{- end }}
   if {{ if and (hasKey . "check_prereqs") ( .check_prereqs ) }}{{ .check_prereqs }}{{ else }}true{{ end }}; then
     if {{ if and (hasKey . "check_installed") ( .check_installed ) }}{{ .check_installed }}{{ else }}command -v "${PKG_NAME}" &>/dev/null{{ end }}; then
       if [[ "${UPDATE}" == "true" ]] || ( [[ "${DOTFILES_UPGRADE_PACKAGES}" == "true" ]] && is_item_in_array "${PKG_NAME}" "${DOTFILES_PKGS_UPGRADABLE[@]}" ); then
