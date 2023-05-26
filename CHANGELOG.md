@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.17.4 (2023-05-26)
+### Fix
+* **pkg:** Add script and check prereqs for go-age and go-sops installation in dotfiles-install-script-pkgs script ([`c2db711`](https://github.com/entelecheia/dotfiles/commit/c2db711bdd721c0cf67224276fef7f17c2a2249e))
+
 ## v0.17.3 (2023-05-26)
 ### Fix
 * **go:** Add GOPATH to PATH in installation scripts ([`2dabc64`](https://github.com/entelecheia/dotfiles/commit/2dabc64a1a45caa9dc4bef2622e4ec00be12b621))
