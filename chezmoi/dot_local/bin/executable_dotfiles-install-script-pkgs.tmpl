@@ -1,5 +1,6 @@
 #!/bin/bash
 # {{- template "scripts-library" }}
+# {{- template "package-library" }}
 log_task "Installing packages by scripts"
 
 # shellcheck source=/dev/null
@@ -24,40 +25,6 @@ for package in "${DOTFILES_PKGS_SCRIPT[@]}"; do
 done
 log_info "Wanted packages: ${wanted_packages[*]}"
 
-function is_pkg_installed_by_pkg_managers() {
-  local package="$1"
-  if command -v brew &>/dev/null; then
-    local BREW_PACKAGES=$(brew list)
-    local BREW_CASK_PACKAGES=$(brew list --cask)
-  else
-    local BREW_PACKAGES=""
-    local BREW_CASK_PACKAGES=""
-  fi
-  if command -v apt &>/dev/null; then
-    local APT_PACKAGES=$(apt list --installed)
-  else
-    local APT_PACKAGES=""
-  fi
-  if command -v snap &>/dev/null; then
-    local SNAP_PACKAGES=$(snap list)
-  else
-    local SNAP_PACKAGES=""
-  fi
-
-  if grep -q "^${package}$" <<< "${BREW_PACKAGES}"; then
-    return 0
-  elif grep -q "^${package}$" <<< "${BREW_CASK_PACKAGES}"; then
-    return 0
-  elif grep -q "^${package}/" <<< "${APT_PACKAGES}"; then
-    return 0
-  elif grep -q "^${package} " <<< "${SNAP_PACKAGES}"; then
-    return 0
-  else
-    return 1
-  fi
-
-}
-
 {{- range .packages }}
 {{- if and (hasKey . "script_cmd") ( .script_cmd ) }}
 # installing {{ .name }}
@@ -66,7 +33,7 @@ if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   if {{ if and (hasKey . "check_prereqs") ( .check_prereqs ) }}{{ .check_prereqs }}{{ else }}true{{ end }}; then
     if [[ "${UPDATE}" == "true" ]] || ( [[ "${DOTFILES_UPGRADE_PACKAGES}" == "true" ]] || is_item_in_array "${PKG_NAME}" "${DOTFILES_PKGS_UPGRADABLE[@]}" ); then
       if is_pkg_installed_by_pkg_managers "${PKG_NAME}"; then
-        log_info "Package ${PKG_NAME} is already installed by package manager"
+        log_info "Package ${PKG_NAME} is installed by package manager"
       else
         # Get current and latest version numbers
         current_version="{{ if hasKey . "current_version" }}{{ .current_version }}{{ end }}"
