@@ -64,7 +64,7 @@ function service_exists() {
   fi
 }
 
-function is_pkg_installed_by_pkg_managers() {
+function is_package_installed_by_package_managers() {
   local package="$1"
 
   if is_apt_package_installed "${package}"; then
