@@ -77,8 +77,8 @@ nav:
     - usage/index.md
     - Configuration: usage/configuration.md
     - Update: usage/update.md
-    - Aliases: aliases.md
-    - Environment Variables: envs.md
+    - Aliases: usage/aliases.md
+    - Environment Variables: usage/envs.md
     - Dotdrop: usage/dotdrop.md
     - GitHub: usage/github.md
     - Dockerfiles: usage/dockerfiles.md
