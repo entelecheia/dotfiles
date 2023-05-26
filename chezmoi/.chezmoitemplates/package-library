@@ -9,7 +9,7 @@ function is_package_installed() {
 function is_apt_package_installed() {
   local package="$1"
 
-  if command -v apt &>/dev/null; then
+  if [[ "${DOTFILES_OS}" == "linux" ]] && command -v apt &>/dev/null; then
     apt list --quiet --quiet --installed "${package}" 2>/dev/null | grep --quiet .
   else
     return 1
@@ -20,7 +20,7 @@ function is_brew_package_installed() {
   local package="$1"
 
   if command -v brew &>/dev/null; then
-    brew list "${package}" 2>/dev/null | grep --quiet .
+    brew list | grep --quiet "^${package}$"
   else
     return 1
   fi
@@ -30,7 +30,7 @@ function is_brewcask_package_installed() {
   local package="$1"
 
   if command -v brew &>/dev/null; then
-    brew list --cask "${package}" 2>/dev/null | grep --quiet .
+    brew list --cask | grep --quiet "^${package}$"
   else
     return 1
   fi
@@ -39,7 +39,7 @@ function is_brewcask_package_installed() {
 function is_snap_package_installed() {
   local package="$1"
 
-  if command -v snap &>/dev/null; then
+  if [[ "${DOTFILES_OS}" == "linux" ]] && command -v snap &>/dev/null; then
     snap list "${package}" 2>/dev/null | grep --quiet .
   else
     return 1
@@ -70,8 +70,6 @@ function is_package_installed_by_package_managers() {
   if is_apt_package_installed "${package}"; then
     return 0
   elif is_brew_package_installed "${package}"; then
-    return 0
-  elif is_brewcask_package_installed "${package}"; then
     return 0
   elif is_snap_package_installed "${package}"; then
     return 0

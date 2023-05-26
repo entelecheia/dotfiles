@@ -35,6 +35,7 @@ if [ -d "${HOME}/go/packages" ]; then
 fi
 
 export DOTFILES_VERSION="{{ .DOTFILES_VERSION }}"
+export DOTFILES_OS="{{ .chezmoi.os }}"
 export USER_FULLNAME="{{ .name }}"
 export USER_EMAIL="{{ .email }}"
 export SYSTEM_HOSTNAME="{{ .system.hostname }}"
