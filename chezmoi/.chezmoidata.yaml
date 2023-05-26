@@ -79,13 +79,11 @@ packages:
     scope: system
   - name: doppler
     apt: true
+    brew: true
     keyring_file: doppler-archive-keyring.gpg
     keyring_url: https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key
     source_list_file: doppler-cli.list
     source_list_line: "deb [signed-by=/usr/share/keyrings/doppler-archive-keyring.gpg] https://packages.doppler.com/public/cli/deb/debian any-version main"
-    scope: optional
-  - name: dopplerhq/cli/doppler
-    brew: true
     scope: optional
   - name: dotdrop
     brew: true

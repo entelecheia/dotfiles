@@ -21,14 +21,6 @@ for package in "${DOTFILES_PKGS_BREW[@]}"; do
 done
 log_info "Wanted packages: ${wanted_packages[*]}"
 
-wanted_cask_packages=()
-for package in "${DOTFILES_PKGS_BREWCASK[@]}"; do
-  if is_item_in_array "${package}" "${DOTFILES_PKGS_TO_INSTALL[@]}"; then
-    wanted_cask_packages+=("${package}")
-  fi
-done
-log_info "Wanted cask packages: ${wanted_cask_packages[*]}"
-
 readonly wanted_tabs=(
   homebrew/cask-fonts
 )
@@ -73,6 +65,14 @@ if [[ ${DOTFILES_UPGRADE_PACKAGES} == "true" ]]; then
     log_info "No packages to upgrade with brew"
   fi
 fi
+
+wanted_cask_packages=()
+for package in "${DOTFILES_PKGS_BREWCASK[@]}"; do
+  if is_item_in_array "${package}" "${DOTFILES_PKGS_TO_INSTALL[@]}"; then
+    wanted_cask_packages+=("${package}")
+  fi
+done
+log_info "Wanted cask packages: ${wanted_cask_packages[*]}"
 
 # install cask packages that are not installed
 for package in "${wanted_cask_packages[@]}"; do
