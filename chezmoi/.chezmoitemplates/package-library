@@ -1,34 +1,49 @@
 # shellcheck shell=bash
 
+function is_package_installed() {
+  local package="$1"
+
+  command -v "${package}" >/dev/null 2>&1
+}
+
 function is_apt_package_installed() {
   local package="$1"
 
-  # first check if the package command is available
-  if command -v "${package}" >/dev/null 2>&1; then
-    return 0
+  if command -v apt &>/dev/null; then
+    apt list --quiet --quiet --installed "${package}" 2>/dev/null | grep --quiet .
+  else
+    return 1
   fi
-  apt list --quiet --quiet --installed "${package}" 2>/dev/null | grep --quiet .
-
 }
 
 function is_brew_package_installed() {
   local package="$1"
 
-  # first check if the package command is available
-  if command -v "${package}" >/dev/null 2>&1; then
-    return 0
+  if command -v brew &>/dev/null; then
+    brew list "${package}" 2>/dev/null | grep --quiet .
+  else
+    return 1
   fi
-  brew list "${package}" 2>/dev/null | grep --quiet .
+}
+
+function is_brewcask_package_installed() {
+  local package="$1"
+
+  if command -v brew &>/dev/null; then
+    brew list --cask "${package}" 2>/dev/null | grep --quiet .
+  else
+    return 1
+  fi
 }
 
 function is_snap_package_installed() {
   local package="$1"
 
-  # first check if the package command is available
-  if command -v "${package}" >/dev/null 2>&1; then
-    return 0
+  if command -v snap &>/dev/null; then
+    snap list "${package}" 2>/dev/null | grep --quiet .
+  else
+    return 1
   fi
-  snap list "${package}" 2>/dev/null | grep --quiet .
 }
 
 function not_during_test() {
@@ -47,13 +62,6 @@ function service_exists() {
   else
     return 1
   fi
-}
-
-function is_apt_pkg_installed() {
-  local package="$1"
-
-  apt list --quiet --quiet --installed "${package}" 2>/dev/null | grep --quiet .
-
 }
 
 function is_pkg_installed_by_pkg_managers() {
