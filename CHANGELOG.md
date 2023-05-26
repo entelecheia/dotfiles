@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.17.2 (2023-05-26)
+### Fix
+* **pkgs:** Add doppler to system and brew packages, remove dopplerhq/cli/doppler from brew packages, update wanted cask packages in install script ([`c88eaab`](https://github.com/entelecheia/dotfiles/commit/c88eaab8fbe4b10a3ea2d6db51367c4510d1f209))
+
 ## v0.17.1 (2023-05-26)
 ### Fix
 * **package-library:** Fix the grep command to properly check if a package is installed in brew and brewcask ([`9bd7cbd`](https://github.com/entelecheia/dotfiles/commit/9bd7cbd6cf825a5c20f17c791189102721dbf290))
