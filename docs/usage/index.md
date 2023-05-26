@@ -76,7 +76,7 @@ After the installation, the initialization process will start automatically. Thi
 If you need to re-initialize your dotfiles manually, you can run the following command:
 
 ```bash
-chezmoi init --apply
+dotu init
 ```
 
 This command will update your system with the latest configurations from your dotfiles, keeping your environment up-to-date and in sync with any changes you've made.
