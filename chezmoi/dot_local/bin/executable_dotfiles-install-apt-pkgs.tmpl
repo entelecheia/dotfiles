@@ -129,4 +129,6 @@ if [[ ${DOTFILES_UPGRADE_PACKAGES} == "true" ]]; then
 fi
 
 log_green "✅  APT packages installed successfully. ✨ 🌟 ✨"
+# {{- else }}
+log_info "Your system does not use APT"
 # {{- end }}
