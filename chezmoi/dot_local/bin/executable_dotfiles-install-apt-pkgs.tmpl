@@ -98,7 +98,7 @@ missing_packages=()
 upgrade_packages=()
 
 for package in "${wanted_packages[@]}"; do
-  if ! is_package_installed "${package}"; then
+  if ! is_package_installed "${package}" && ! is_apt_package_installed "${package}"; then
     missing_packages+=("${package}")
   elif is_apt_package_installed "${package}" && is_item_in_array "${package}" "${DOTFILES_PKGS_UPGRADABLE[@]}"; then
     upgrade_packages+=("${package}")
