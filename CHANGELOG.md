@@ -1,5 +1,10 @@
 <!--next-version-placeholder-->
 
+## v0.17.1 (2023-05-26)
+### Fix
+* **package-library:** Fix the grep command to properly check if a package is installed in brew and brewcask ([`9bd7cbd`](https://github.com/entelecheia/dotfiles/commit/9bd7cbd6cf825a5c20f17c791189102721dbf290))
+* **install-script:** Refactor package installation logic ([`abcc1b7`](https://github.com/entelecheia/dotfiles/commit/abcc1b7fdd897e5c827593115483645c426c9e03))
+
 ## v0.17.0 (2023-05-26)
 ### Feature
 * **package-library:** Add functions for checking if a package is installed by various package managers ([`c097a87`](https://github.com/entelecheia/dotfiles/commit/c097a87fc77cfde252afbd4ea7f821371b39f07d))
