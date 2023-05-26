@@ -2,6 +2,7 @@
 # shellcheck disable=SC1083
 # {{ if eq .chezmoi.os "darwin" }}
 # {{ template "scripts-library" }}
+# {{- template "package-library" }}
 log_task "Installing BREW packages"
 
 # shellcheck source=/dev/null
@@ -46,11 +47,10 @@ done
 # install packages that are not installed
 missing_packages=()
 upgrade_packages=()
-BREW_PACKAGES=$(brew list)
 for package in "${wanted_packages[@]}"; do
-  if ! is_brew_package_installed "${package}"; then
+  if ! is_package_installed "${package}" && ! is_brew_package_installed "${package}"; then
     missing_packages+=("${package}")
-  elif is_item_in_array "${package}" "${DOTFILES_PKGS_UPGRADABLE[@]}" && grep -q "^${package}$" <<< "${BREW_PACKAGES}"; then
+  elif is_item_in_array "${package}" "${DOTFILES_PKGS_UPGRADABLE[@]}" && is_brew_package_installed "${package}"; then
     upgrade_packages+=("${package}")
   fi
 done
@@ -73,15 +73,12 @@ if [[ ${DOTFILES_UPGRADE_PACKAGES} == "true" ]]; then
   fi
 fi
 
-# get installed cask packages with brew list --casks
-BREW_CASK_PACKAGES=$(brew list --casks)
-
 # install cask packages that are not installed
 for package in "${wanted_cask_packages[@]}"; do
-  if ! echo "${BREW_CASK_PACKAGES}" | grep -q "^${package}$"; then
+  if ! is_package_installed "${package}" && ! is_brew_package_installed "${package}"; then
     log_task "Installing a package with brew cask: ${package}"
     c "${brew_command[@]}" install --cask "${package}"
-  elif is_item_in_array "${package}" "${DOTFILES_PKGS_UPGRADABLE[@]}" && grep -q "^${package}$" <<< "${BREW_CASK_PACKAGES}"; then
+  elif is_item_in_array "${package}" "${DOTFILES_PKGS_UPGRADABLE[@]}" && is_brew_package_installed "${package}"; then
     if [[ ${DOTFILES_UPGRADE_PACKAGES} == "true" ]]; then
       log_task "Upgrading a package with brew cask: ${package}"
       c "${brew_command[@]}" upgrade --cask "${package}" || true
