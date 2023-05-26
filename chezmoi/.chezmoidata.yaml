@@ -59,6 +59,10 @@ packages:
     pipx: true
     scope: minimal
     allow_upgrade: true
+  - name: cz-conventional-gitmoji
+    pipx: true
+    check_installed: command -v gitmojify &>/dev/null
+    scope: optional
   - name: direnv
     apt: true
     brew: true
@@ -123,10 +127,6 @@ packages:
     brew: true
     scope: minimal
     allow_upgrade: true
-  - name: cz-conventional-gitmoji
-    pipx: true
-    check_installed: command -v gitmojify &>/dev/null
-    scope: optional
   - name: git-sizer
     apt: true
     brew: true
