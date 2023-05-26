@@ -36,7 +36,7 @@ if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   if {{ if and (hasKey . "check_prereqs") ( .check_prereqs ) }}{{ .check_prereqs }}{{ else }}true{{ end }}; then
     if [[ "${UPDATE}" == "true" ]] || ( [[ "${DOTFILES_UPGRADE_PACKAGES}" == "true" ]] && is_item_in_array "${PKG_NAME}" "${DOTFILES_PKGS_UPGRADABLE[@]}" ); then
       if is_package_installed_by_package_managers "${PKG_NAME}"; then
-        log_info "Package ${PKG_NAME} is installed by package manager"
+        log_info "Package ${PKG_NAME} is installed by other means"
       else
         c /usr/bin/pip3 install --user --upgrade "${PKG_NAME}" || true
       fi
