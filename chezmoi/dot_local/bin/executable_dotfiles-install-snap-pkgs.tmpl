@@ -1,7 +1,8 @@
 #!/bin/bash
 # shellcheck disable=SC1083
-# {{ if and (eq .chezmoi.os "linux") .system.is_sudoer }}
-# {{ template "scripts-library" }}
+# {{- if and (eq .chezmoi.os "linux") .system.is_sudoer }}
+# {{- template "scripts-library" }}
+# {{- template "package-library" }}
 log_task "Installing SNAP packages"
 
 # shellcheck source=/dev/null
@@ -26,13 +27,15 @@ PKG_NAME="{{ .name }}"
 if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   if is_snap_package_installed "${PKG_NAME}"; then
     log_info "Package ${PKG_NAME} is already installed"
-  else
+  elif ! is_package_installed "${PKG_NAME}"; then
     log_task "Installing ${PKG_NAME}"
     c sudo snap install "${package}" --classic
 {{- if and (hasKey . "post_install") ( .post_install ) }}
     # run post install script
     c {{ .post_install }}
 {{- end }}
+  else
+    log_error "Package ${PKG_NAME} is already installed via other means"
   fi
 fi
 {{- end }}
