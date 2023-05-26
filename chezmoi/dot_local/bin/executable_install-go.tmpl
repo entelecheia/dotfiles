@@ -30,7 +30,7 @@ rm "${LATEST_GO_VERSION}.${OS}-${UNAME_MACHINE}.tar.gz"
 
 export GOROOT
 export GOPATH
-export PATH="${PATH}:${GOROOT}/bin"
+export PATH="${PATH}:${GOROOT}/bin:${GOPATH}/bin"
 
 log_manual_action "Add Go to your PATH by adding the following line to your ~/.bashrc or ~/.zshrc:"
 log_manual_action " > export GOROOT=\"${HOME}/go\""
