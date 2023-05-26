@@ -1,11 +1,6 @@
 #!/bin/bash
-
-# {{ template "scripts-library" }}
-# {{ template "homebrew-library" }}
-
-# The following line is for ShellCheck to correctly identify the above include
-true || source ../../.chezmoitemplates/scripts-library
-true || source ../../.chezmoitemplates/homebrew-library
+# {{- template "scripts-library" }}
+# {{- template "package-library" }}
 
 if brew --version &>/dev/null; then
   log_task "Updating brew"
