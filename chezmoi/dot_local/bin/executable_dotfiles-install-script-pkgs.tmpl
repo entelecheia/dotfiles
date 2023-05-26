@@ -31,24 +31,26 @@ log_info "Wanted packages: ${wanted_packages[*]}"
 PKG_NAME="{{ .name }}"
 if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   if {{ if and (hasKey . "check_prereqs") ( .check_prereqs ) }}{{ .check_prereqs }}{{ else }}true{{ end }}; then
-    if [[ "${UPDATE}" == "true" ]] || ( [[ "${DOTFILES_UPGRADE_PACKAGES}" == "true" ]] && is_item_in_array "${PKG_NAME}" "${DOTFILES_PKGS_UPGRADABLE[@]}" ); then
-      if is_package_installed_by_package_managers "${PKG_NAME}"; then
-        log_info "Package ${PKG_NAME} is installed by package manager"
-      else
-        # Get current and latest version numbers
-        current_version="{{ if hasKey . "current_version" }}{{ .current_version }}{{ end }}"
-        latest_version="{{ if hasKey . "latest_version" }}{{ .latest_version }}{{ end }}"
-
-        # Compare versions and update if necessary
-        if [[ "$current_version" != "$latest_version" ]]; then
-          log_task "Upgrading ${PKG_NAME} from ${current_version} to ${latest_version}"
-          c {{ .script_cmd }}
+    if {{ if and (hasKey . "check_installed") ( .check_installed ) }}{{ .check_installed }}{{ else }}command -v "${PKG_NAME}" &>/dev/null{{ end }}; then
+      if [[ "${UPDATE}" == "true" ]] || ( [[ "${DOTFILES_UPGRADE_PACKAGES}" == "true" ]] && is_item_in_array "${PKG_NAME}" "${DOTFILES_PKGS_UPGRADABLE[@]}" ); then
+        if is_package_installed_by_package_managers "${PKG_NAME}"; then
+          log_info "Package ${PKG_NAME} is installed by package manager"
         else
-          log_task "${PKG_NAME} is already up-to-date (${current_version})"
+          # Get current and latest version numbers
+          current_version="{{ if hasKey . "current_version" }}{{ .current_version }}{{ end }}"
+          latest_version="{{ if hasKey . "latest_version" }}{{ .latest_version }}{{ end }}"
+
+          # Compare versions and update if necessary
+          if [[ "$current_version" != "$latest_version" ]]; then
+            log_task "Upgrading ${PKG_NAME} from ${current_version} to ${latest_version}"
+            c {{ .script_cmd }}
+          else
+            log_task "${PKG_NAME} is already up-to-date (${current_version})"
+          fi
         fi
+      else
+        log_info "Package ${PKG_NAME} is already installed"
       fi
-    elif {{ if and (hasKey . "check_installed") ( .check_installed ) }}{{ .check_installed }}{{ else }}command -v "${PKG_NAME}" &>/dev/null{{ end }}; then
-      log_info "Package ${PKG_NAME} is already installed"
     else
       log_task "Installing ${PKG_NAME}"
       c {{ .script_cmd }}
