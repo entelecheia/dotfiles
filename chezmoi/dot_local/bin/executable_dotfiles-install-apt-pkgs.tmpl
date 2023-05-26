@@ -41,10 +41,11 @@ done
 log_info "Wanted packages: ${wanted_packages[*]}"
 
 {{ range .packages }}
+PKG_NAME="{{ .name }}"
 {{   if and (hasKey . "keyring_file") (.keyring_file) }}
 KEYRING_FILE="/usr/share/keyrings/{{ .keyring_file }}"
 KEYRING_URL="{{ .keyring_url }}"
-if [[ ! -f "${KEYRING_FILE}" ]]; then
+if [[ ! -f "${KEYRING_FILE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   log_task "Downloading {{ .keyring_file }}"
   if [ "$USER" = "root" ]; then
     c curl -fsSL "${KEYRING_URL}" | gpg --dearmor -o "${KEYRING_FILE}"
@@ -58,7 +59,7 @@ fi
 {{   if and (hasKey . "gpg_key_file") (.gpg_key_file) }}
 GPG_KEY_FIE="/etc/apt/trusted.gpg.d/{{ .gpg_key_file }}"
 GPG_KEY_URL="{{ .gpg_key_url }}"
-if [[ ! -f "${GPG_KEY_FIE}" ]]; then
+if [[ ! -f "${GPG_KEY_FIE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   if [ "$USER" = "root" ]; then
     c curl -s "${GPG_KEY_URL}" | tee "${GPG_KEY_FIE}" >/dev/null
   else
@@ -68,7 +69,7 @@ fi
 {{   end }}
 {{   if and (hasKey . "apt_key_url") (.apt_key_url) }}
 APT_KEY_URL="{{ .apt_key_url }}"
-if [[ -n "${APT_KEY_URL}" ]]; then
+if [[ -n "${APT_KEY_URL}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   if [ "$USER" = "root" ]; then
     c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${APT_KEY_URL}" | apt-key add -
   else
@@ -83,7 +84,7 @@ SOURCE_LIST_LINE="{{ .source_list_line }}"
 {{   else }}
 SOURCE_LIST_LINE=""
 {{   end }}
-if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]]; then
+if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   log_task "Adding {{ .source_list_file }} repository to APT"
   if [ "$USER" = "root" ]; then
     c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
