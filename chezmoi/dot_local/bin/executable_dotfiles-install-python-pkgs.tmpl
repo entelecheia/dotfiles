@@ -1,5 +1,6 @@
 #!/bin/bash
 # {{- template "scripts-library" }}
+# {{- template "package-library" }}
 log_task "Installing python packages"
 
 # shellcheck source=/dev/null
@@ -10,7 +11,7 @@ set +u
 if [[ "${1}" == "--update" ]] || [[ "${1}" == "-u" ]]; then
   UPDATE=true
 else
-  UPDATE=${DOTFILES_UPGRADE_PACKAGES:-false}
+  UPDATE=false
 fi
 set -u
 
@@ -34,7 +35,11 @@ PKG_NAME="{{ .name }}"
 if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   if {{ if and (hasKey . "check_prereqs") ( .check_prereqs ) }}{{ .check_prereqs }}{{ else }}true{{ end }}; then
     if [[ "${UPDATE}" == "true" ]] || ( [[ "${DOTFILES_UPGRADE_PACKAGES}" == "true" ]] || is_item_in_array "${PKG_NAME}" "${DOTFILES_PKGS_UPGRADABLE[@]}" ); then
-      c /usr/bin/pip3 install --user --upgrade "${PKG_NAME}" || true
+      if is_pkg_installed_by_pkg_managers "${PKG_NAME}"; then
+        log_info "Package ${PKG_NAME} is installed by package manager"
+      else
+        c /usr/bin/pip3 install --user --upgrade "${PKG_NAME}" || true
+      fi
     elif {{ if and (hasKey . "check_installed") ( .check_installed ) }}{{ .check_installed }}{{ else }}/usr/bin/pip3 show "${PKG_NAME}" &>/dev/null{{ end }}; then
       log_info "Package ${PKG_NAME} is already installed"
     else
@@ -63,7 +68,7 @@ PKG_NAME="{{ .name }}"
 if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   if command -v pipx >/dev/null; then
     if {{ if and (hasKey . "check_installed") ( .check_installed ) }}{{ .check_installed }}{{ else }}command -v "${PKG_NAME}" &>/dev/null{{ end }}; then
-      if [[ "${UPDATE}" == "true" ]] || is_item_in_array "${PKG_NAME}" "${DOTFILES_PKGS_UPGRADABLE[@]}"; then
+      if [[ "${UPDATE}" == "true" ]] || ( [[ "${DOTFILES_UPGRADE_PACKAGES}" == "true" ]] || is_item_in_array "${PKG_NAME}" "${DOTFILES_PKGS_UPGRADABLE[@]}" ); then
         if pipx list | grep -q "${PKG_NAME}"; then
           log_task "Upgrading ${PKG_NAME} with pipx"
           c pipx upgrade "${PKG_NAME}"
