@@ -1,5 +1,33 @@
 <!--next-version-placeholder-->
 
+## v0.17.0 (2023-05-26)
+### Feature
+* **package-library:** Add functions for checking if a package is installed by various package managers ([`c097a87`](https://github.com/entelecheia/dotfiles/commit/c097a87fc77cfde252afbd4ea7f821371b39f07d))
+* **dependencies:** Update and optimize script for installing python and brew packages ([`efe1285`](https://github.com/entelecheia/dotfiles/commit/efe1285988b7c7ec4b9d360186286aa9665641a2))
+* **chezmoi:** Add interactive prompt for additional package installation ([`142690b`](https://github.com/entelecheia/dotfiles/commit/142690b4cde7ec8bc1954b178884cf29b315dd94))
+* **dotfiles-update:** Add handling for accepted chezmoi commands and improve help message ([`a9792a2`](https://github.com/entelecheia/dotfiles/commit/a9792a289dbc5faf770991c509cbc83b1522dcdd))
+
+### Fix
+* **package-library:** Integrate homebrew-library ([`3c614e6`](https://github.com/entelecheia/dotfiles/commit/3c614e69f77c1539df462a57c84294546e68123d))
+* **chezmoi:** Suppress grep output in is_brew_package_installed and is_brewcask_package_installed functions ([`23ec82d`](https://github.com/entelecheia/dotfiles/commit/23ec82d36e73d40cb94bf6d32f026fa519606168))
+* **chezmoi:** Add package-library template symlink ([`811bcd5`](https://github.com/entelecheia/dotfiles/commit/811bcd553797913c838e024e23ca0a0d17d45efe))
+* **packages:** Enable upgrades for go-task and go-version packages ([`2c449e6`](https://github.com/entelecheia/dotfiles/commit/2c449e6e2331e7a1456d2a18f2faa70e182c9d05))
+* **package-mgmt:** Fix logical operator in install scripts ([`2de349f`](https://github.com/entelecheia/dotfiles/commit/2de349fa21c94c333ef717eeb078f45d08fb629f))
+* **packages:** Improve pip package management ([`6da4b80`](https://github.com/entelecheia/dotfiles/commit/6da4b808a6bf0348f226ae3a9bad10d75501a2ad))
+* **install:** Check for package installation through package managers ([`5ad3a1f`](https://github.com/entelecheia/dotfiles/commit/5ad3a1f56f65590722e2b86cdd3ae9ebee87e69d))
+* **templates:** Update install snap pkgs template with package-library ([`a5cbb39`](https://github.com/entelecheia/dotfiles/commit/a5cbb3959d0c067fa68e35445a6793bd79c907c5))
+* **apt-packages:** Check if package is installed via apt before adding it to missing_packages array. ([`17609ed`](https://github.com/entelecheia/dotfiles/commit/17609ed6ee631ced9243b7a631171b4a7914cb34))
+* **install-script:** Fix APT command not found error and make package-upgrade logic clearer ([`ca766dc`](https://github.com/entelecheia/dotfiles/commit/ca766dcaa320d20eca6c266fa02a5e463f524986))
+* **packages:** Upgrade pip packages update condition and syntax ([`7d253e0`](https://github.com/entelecheia/dotfiles/commit/7d253e042dc84ff0af4c3bc045bace5cfdfbde22))
+* **apt:** Replace deprecated apt command with apt-get command ([`597c330`](https://github.com/entelecheia/dotfiles/commit/597c330f2852840a2fcbadb203594d795142ed4e))
+* **install-script:** Improve package installation logic and add package manager detection ([`edbacf5`](https://github.com/entelecheia/dotfiles/commit/edbacf569d7e3cf557d80865cfb5397174bc11c2))
+
+### Documentation
+* Add aliases ([`bcd8c65`](https://github.com/entelecheia/dotfiles/commit/bcd8c65b7f1e2a4e700acebb6fe570a7b0940625))
+* Add environment variables ([`bd17a56`](https://github.com/entelecheia/dotfiles/commit/bd17a569f0c60eb2f13aad35cd55299a8fd57c3c))
+* Update configuration ([`aea742a`](https://github.com/entelecheia/dotfiles/commit/aea742a6210a49a1fddedd43c50dd43640bfe231))
+* Update configuration ([`39645db`](https://github.com/entelecheia/dotfiles/commit/39645db2c628bd5ef8c3d6f60d83d86686b66a62))
+
 ## v0.16.1 (2023-05-25)
 ### Fix
 * **apt-installer:** Fix upgrade_packages command to upgrade the specified packages instead of all. ([`3a1873f`](https://github.com/entelecheia/dotfiles/commit/3a1873fd82cab7b3ff200da0ed83930a6783ffd6))
