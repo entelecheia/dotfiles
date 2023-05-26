@@ -1,6 +1,6 @@
 #!/bin/bash
-# {{ template "scripts-library" }}
-
+# {{- template "scripts-library" }}
+# {{- template "package-library" }}
 # Check if there is at least one argument
 if [ "$#" -eq 0 ]; then
   log_info "Usage: $0 dns1 [dns2] ..."
