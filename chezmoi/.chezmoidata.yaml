@@ -156,6 +156,7 @@ packages:
     current_version: "$(go version | awk '{print $3}')"
     latest_version: "$(curl -s 'https://go.dev/VERSION?m=text')"
     scope: minimal
+    allow_upgrade: true
   - name: go-age
     script: true
     script_cmd: go install filippo.io/age/cmd/...@latest
@@ -180,6 +181,7 @@ packages:
     completion_file: ${HOME}/.local/share/zsh/site-functions/_task
     completion_url: https://raw.githubusercontent.com/go-task/task/main/completion/zsh/_task
     scope: minimal
+    allow_upgrade: true
   - name: gpa
     apt: true
     scope: gui
