@@ -20,7 +20,7 @@ function is_brew_package_installed() {
   local package="$1"
 
   if command -v brew &>/dev/null; then
-    brew list | grep --quiet "^${package}$"
+    brew list | grep --quiet "^${package}$" >/dev/null 2>&1
   else
     return 1
   fi
@@ -30,7 +30,7 @@ function is_brewcask_package_installed() {
   local package="$1"
 
   if command -v brew &>/dev/null; then
-    brew list --cask | grep --quiet "^${package}$"
+    brew list --cask | grep --quiet "^${package}$" >/dev/null 2>&1
   else
     return 1
   fi
