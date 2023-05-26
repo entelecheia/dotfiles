@@ -80,8 +80,6 @@ Sure, here are the descriptions for the aliases used in the dotfiles project:
 
 39. `dkcc`: This alias is for displaying the docker-compose configuration.
 
-I apologize for the interruption. Let's continue with the rest of the aliases.
-
 40. `dkb`: This is an alias for building an image from a Dockerfile.
 
 41. `dkr`: This is an alias for running a command in a new Docker container.
