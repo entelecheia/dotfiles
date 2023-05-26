@@ -127,9 +127,11 @@ if [[ ${#missing_packages[@]} -gt 0 ]]; then
 else
   log_info "No missing packages to install with APT"
 fi
-if [[ ${#upgrade_packages[@]} -gt 0 ]]; then
-  log_task "Upgrading packages with APT: ${upgrade_packages[*]}"
-  c "${apt_command[@]}" install --yes -qq -o=Dpkg::Use-Pty=0 "${upgrade_packages[@]}"
+if [[ ${DOTFILES_UPGRADE_PACKAGES} == "true" ]]; then
+  if [[ ${#upgrade_packages[@]} -gt 0 ]]; then
+    log_task "Upgrading packages with APT: ${upgrade_packages[*]}"
+    c "${apt_command[@]}" install --yes -qq -o=Dpkg::Use-Pty=0 "${upgrade_packages[@]}"
+  fi
 fi
 
 log_green "✅  APT packages installed successfully. ✨ 🌟 ✨"
