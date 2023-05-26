@@ -1,17 +1,7 @@
 #!/bin/bash
-# {{ template "scripts-library" }}
-
-ensure_path_entry "${HOME}/.local/bin"
-
-GOROOT=${GOROOT:-"${HOME}/go"}
-GOPATH=${GOPATH:-"${GOROOT}/packages"}
-
-if [ -d "${GOROOT}/bin" ]; then
-    ensure_path_entry "${GOROOT}/bin"
-fi 
-if [ -d "${GOPATH}/bin" ]; then
-    ensure_path_entry "${GOPATH}/bin"
-fi
+# {{- template "scripts-library" }}
+# shellcheck source=/dev/null
+source "${HOME}/.config/shrc/00-dotfiles-export"
 
 SSH_HOME=${SSH_HOME:-"{{ .ssh.home }}"}
 
