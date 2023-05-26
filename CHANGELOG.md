@@ -1,5 +1,15 @@
 <!--next-version-placeholder-->
 
+## v0.17.3 (2023-05-26)
+### Fix
+* **go:** Add GOPATH to PATH in installation scripts ([`2dabc64`](https://github.com/entelecheia/dotfiles/commit/2dabc64a1a45caa9dc4bef2622e4ec00be12b621))
+* **setup-age:** Source target to ensure path ([`297e562`](https://github.com/entelecheia/dotfiles/commit/297e562c8742a7c3214c8e80861a4b88415937d8))
+* **packages:** Add inxi for system scope ([`17e3081`](https://github.com/entelecheia/dotfiles/commit/17e3081013da3f8dbb20ef25ad8efa067409c35d))
+* **dependencies:** Add source list file for git-lfs installation ([`509e1be`](https://github.com/entelecheia/dotfiles/commit/509e1be504a5172dc065a1423095ce761ff02f5c))
+* **apt:** Support loading repository script during package installation ([`9eb7b1d`](https://github.com/entelecheia/dotfiles/commit/9eb7b1de1dbf8447693285a4b9d781db6a903d44))
+* **package:** Add git-lfs package to minimal scope ([`b432c29`](https://github.com/entelecheia/dotfiles/commit/b432c29bb63e2ff488f86fc0a4ef808331a6c2b2))
+* **chezmoi:** Update executable_dotfiles-install-apt-pkgs.tmpl to conditionally download and add repositories based on package availability ([`eca951c`](https://github.com/entelecheia/dotfiles/commit/eca951c98e0322e1a16331990888a781500a805a))
+
 ## v0.17.2 (2023-05-26)
 ### Fix
 * **pkgs:** Add doppler to system and brew packages, remove dopplerhq/cli/doppler from brew packages, update wanted cask packages in install script ([`c88eaab`](https://github.com/entelecheia/dotfiles/commit/c88eaab8fbe4b10a3ea2d6db51367c4510d1f209))
