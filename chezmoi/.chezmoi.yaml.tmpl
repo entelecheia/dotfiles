@@ -53,6 +53,15 @@
 # {{-   end -}}
 # {{- end -}}
 
+# {{- $upgrade_packages := false -}}
+# {{- if and (hasKey . "system") (hasKey .system "upgrade_packages") -}}
+# {{-   $upgrade_packages = .system.upgrade_packages -}}
+# {{- else -}}
+# {{-   if eq (env "DOTFILES_UPGRADE_PACKAGES") "true" "True" "TRUE" "1" -}}
+# {{-     $upgrade_packages = true -}}
+# {{-   end -}}
+# {{- end -}}
+
 # {{- $verbose := "1" -}}
 # {{- if and (hasKey . "system") (hasKey .system "verbose") -}}
 # {{-   $verbose = .system.verbose | toString -}}
@@ -348,6 +357,16 @@
 # {{-   writeToStdout "✅  Auto update enabled\n" -}}
 # {{- else -}}
 # {{-   writeToStdout "❎  Auto update disabled\n" -}}
+# {{- end -}}
+
+# {{- if $interactive -}}
+# {{-   $question := "❔ Do you want to upgrade packages if needed" -}}
+# {{-   $upgrade_packages = promptBool $question $upgrade_packages -}}
+# {{- end -}}
+# {{- if $upgrade_packages -}}
+# {{-   writeToStdout "✅  Upgrade packages enabled\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  Upgrade packages disabled\n" -}}
 # {{- end -}}
 
 # {{- if $interactive -}}
@@ -825,6 +844,7 @@ data:
   editor: "vi"
   system:
     auto_update: {{ $auto_update }}
+    upgrade_packages: {{ $upgrade_packages }}
     verbose: {{ $verbose }}
     hostname: {{ $hostname | quote }}
     is_wsl: {{ $wsl }}
