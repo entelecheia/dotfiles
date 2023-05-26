@@ -132,6 +132,7 @@ packages:
     brew: true
     scope: minimal
     repository_script: https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh
+    source_list_file: github_git-lfs.list
     allow_upgrade: true
   - name: git-sizer
     apt: true

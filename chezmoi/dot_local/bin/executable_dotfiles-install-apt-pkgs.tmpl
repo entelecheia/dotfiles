@@ -40,12 +40,13 @@ for package in "${DOTFILES_PKGS_APT[@]}"; do
 done
 log_info "Wanted packages: ${wanted_packages[*]}"
 
-{{ range .packages }}
+{{- range .packages }}
 PKG_NAME="{{ .name }}"
-{{   if and (hasKey . "repository_script") (.repository_script) }}
+{{-   if and (hasKey . "repository_script") (.repository_script) }}
 REPO_SCRIPT="{{ .repository_script }}"
-if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
-  if [ REPO_SCRIPT == http* ]; then
+SOURCE_LIST_FILE="/etc/apt/sources.list.d/{{ .source_list_file }}"
+if [[ ! -f "${SOURCE_LIST_FILE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
+  if [[ $REPO_SCRIPT == http* ]]; then
     log_task "Downloading and running repository script for '${PKG_NAME}'"
     if [ "$USER" = "root" ]; then
       c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${REPO_SCRIPT}" | bash -
@@ -61,8 +62,8 @@ if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
     fi
   fi
 fi
-{{   end }}
-{{   if and (hasKey . "keyring_file") (.keyring_file) }}
+{{-   end }}
+{{-   if and (hasKey . "keyring_file") (.keyring_file) }}
 KEYRING_FILE="/usr/share/keyrings/{{ .keyring_file }}"
 KEYRING_URL="{{ .keyring_url }}"
 if [[ ! -f "${KEYRING_FILE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
@@ -75,8 +76,8 @@ if [[ ! -f "${KEYRING_FILE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_pack
     c sudo chmod go+r "${KEYRING_FILE}"
   fi
 fi
-{{   end }}
-{{   if and (hasKey . "gpg_key_file") (.gpg_key_file) }}
+{{-   end }}
+{{-   if and (hasKey . "gpg_key_file") (.gpg_key_file) }}
 GPG_KEY_FIE="/etc/apt/trusted.gpg.d/{{ .gpg_key_file }}"
 GPG_KEY_URL="{{ .gpg_key_url }}"
 if [[ ! -f "${GPG_KEY_FIE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
@@ -86,8 +87,8 @@ if [[ ! -f "${GPG_KEY_FIE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packa
     c curl -s "${GPG_KEY_URL}" | sudo tee "${GPG_KEY_FIE}" >/dev/null
   fi
 fi
-{{   end }}
-{{   if and (hasKey . "apt_key_url") (.apt_key_url) }}
+{{-   end }}
+{{-   if and (hasKey . "apt_key_url") (.apt_key_url) }}
 APT_KEY_URL="{{ .apt_key_url }}"
 if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   if [ "$USER" = "root" ]; then
@@ -96,15 +97,14 @@ if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
     c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${APT_KEY_URL}" | sudo apt-key add -
   fi
 fi
-{{   end }}
-{{   if and (hasKey . "source_list_file") (.source_list_file) }}
+{{-   end }}
+{{-   if and (hasKey . "source_list_file") (.source_list_file) }}
 SOURCE_LIST_FILE="/etc/apt/sources.list.d/{{ .source_list_file }}"
-{{   if and (hasKey . "source_list_line") (.source_list_line) }}
+{{-   if and (hasKey . "source_list_line") (.source_list_line) }}
 SOURCE_LIST_LINE="{{ .source_list_line }}"
-{{   else }}
+{{-   else }}
 SOURCE_LIST_LINE=""
-{{   end }}
-
+{{-   end }}
 if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   log_task "Adding {{ .source_list_file }} repository to APT"
   if [ "$USER" = "root" ]; then
@@ -113,8 +113,8 @@ if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]] && is_item
     c echo "$SOURCE_LIST_LINE" | sudo tee "$SOURCE_LIST_FILE"
   fi
 fi
-{{   end }}
-{{ end }}
+{{-   end }}
+{{- end }}
 
 missing_packages=()
 upgrade_packages=()
