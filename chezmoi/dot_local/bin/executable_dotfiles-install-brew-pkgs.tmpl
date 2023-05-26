@@ -63,12 +63,14 @@ if [[ ${#missing_packages[@]} -gt 0 ]]; then
 else
   log_info "No missing packages to install with brew"
 fi
-if [[ ${#upgrade_packages[@]} -gt 0 ]]; then
-  log_task "Upgrading packages with brew: ${upgrade_packages[*]}"
-  # c "${brew_command[@]}" update
-  c "${brew_command[@]}" upgrade "${upgrade_packages[@]}" || true
-else
-  log_info "No packages to upgrade with brew"
+if [[ ${DOTFILES_UPGRADE_PACKAGES} == "true" ]]; then
+  if [[ ${#upgrade_packages[@]} -gt 0 ]]; then
+    log_task "Upgrading packages with brew: ${upgrade_packages[*]}"
+    # c "${brew_command[@]}" update
+    c "${brew_command[@]}" upgrade "${upgrade_packages[@]}" || true
+  else
+    log_info "No packages to upgrade with brew"
+  fi
 fi
 
 # get installed cask packages with brew list --casks
@@ -80,8 +82,10 @@ for package in "${wanted_cask_packages[@]}"; do
     log_task "Installing a package with brew cask: ${package}"
     c "${brew_command[@]}" install --cask "${package}"
   elif is_item_in_array "${package}" "${DOTFILES_PKGS_UPGRADABLE[@]}" && grep -q "^${package}$" <<< "${BREW_CASK_PACKAGES}"; then
-    log_task "Upgrading a package with brew cask: ${package}"
-    c "${brew_command[@]}" upgrade --cask "${package}" || true
+    if [[ ${DOTFILES_UPGRADE_PACKAGES} == "true" ]]; then
+      log_task "Upgrading a package with brew cask: ${package}"
+      c "${brew_command[@]}" upgrade --cask "${package}" || true
+    fi
   else
     log_info "Package already installed with brew cask: ${package}"
   fi

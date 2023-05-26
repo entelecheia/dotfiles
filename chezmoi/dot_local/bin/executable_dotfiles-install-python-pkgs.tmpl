@@ -1,19 +1,18 @@
 #!/bin/bash
-# {{ template "scripts-library" }}
-
-# check if --update or -u flag is set
-set +u
-if [[ "${1}" == "--update" ]] || [[ "${1}" == "-u" ]]; then
-  UPDATE=true
-else
-  UPDATE=false
-fi
-set -u
+# {{- template "scripts-library" }}
 log_task "Installing python packages"
 
 # shellcheck source=/dev/null
 source "${HOME}/.config/shrc/00-dotfiles-export"
 export PYTHONWARNINGS="ignore"
+# check if --update or -u flag is set
+set +u
+if [[ "${1}" == "--update" ]] || [[ "${1}" == "-u" ]]; then
+  UPDATE=true
+else
+  UPDATE=${DOTFILES_UPGRADE_PACKAGES:-false}
+fi
+set -u
 
 DOTFILES_PKGS_PIP=${DOTFILES_PKGS_PIP:-()}
 DOTFILES_PKGS_PIPX=${DOTFILES_PKGS_PIPX:-()}
