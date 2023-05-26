@@ -1,6 +1,6 @@
 # Environment Variables
 
-Here are descriptions for the environment variables mentioned in the script for the dotfiles project:
+Here are descriptions for the environment variables used by the Dotfiles project.
 
 - `DOTFILES_VERSION`: The version of your dotfiles.
 

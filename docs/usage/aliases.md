@@ -1,6 +1,6 @@
 # Aliases
 
-Sure, here are the descriptions for the aliases mentioned:
+Sure, here are the descriptions for the aliases used in the dotfiles project:
 
 1. `czm`: This is an alias for "chezmoi", a tool for managing your dotfiles across multiple machines.
 
