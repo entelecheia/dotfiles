@@ -50,7 +50,7 @@ function is_brew_package_installed() {
   local package="$1"
 
   if command -v brew &>/dev/null; then
-    if brew list | grep -q "^${package}$"; then
+    if brew list | (grep -q "^${package}$"; ret=$?; cat >/dev/null; exit $ret) then
       return 0
     else
       return 1
@@ -64,7 +64,7 @@ function is_brewcask_package_installed() {
   local package="$1"
 
   if command -v brew &>/dev/null; then
-    if brew list --cask | grep -q "^${package}$"; then
+    if brew list --cask | (grep -q "^${package}$"; ret=$?; cat >/dev/null; exit $ret) then
       return 0
     else
       return 1
