@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.17.7 (2023-05-27)
+### Fix
+* **chezmoi:** Add wget and unzip to APT prerequisites installation script ([`39bd288`](https://github.com/entelecheia/dotfiles/commit/39bd288c43cd06086e97d4f961bdb7f4a9d1008c))
+
 ## v0.17.6 (2023-05-27)
 ### Fix
 * **github:** Update authentication flow with gh tool ([`300ad5f`](https://github.com/entelecheia/dotfiles/commit/300ad5f5bd954b829600b3838a0e04ce082dfcda))
