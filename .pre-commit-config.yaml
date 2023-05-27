@@ -26,4 +26,8 @@ repos:
         args: [--allow-abort, --commit-msg-file]
         stages: [commit-msg]
         language: system
-        require_serial: true
+      - id: update-rootmoi-version
+        name: Update Rootmoi Version
+        entry: scripts/update_rootmoi_version
+        language: script
+        files: '^rootmoi/.*'

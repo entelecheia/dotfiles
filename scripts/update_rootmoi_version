@@ -1,0 +1,32 @@
+#!/bin/bash
+
+ROOTMOI_DIR="rootmoi"
+VERSION_FILE="chezmoi/dot_config/rootmoi/dot_rootmoiversion"
+
+# Check if there were changes in rootmoi
+if git diff --name-only --cached | grep -q $ROOTMOI_DIR
+then
+    echo "Changes detected in rootmoi"
+
+    # Get the latest tag
+    LATEST_TAG=$(git describe --tags "$(git rev-list --tags --max-count=1)")
+
+    # Get the version from the version file
+    CURRENT_VERSION=$(cat $VERSION_FILE)
+
+    # Check if the current version is different from the latest tag
+    if [ "$CURRENT_VERSION" != "$LATEST_TAG" ]
+    then
+        # Update the version file with the latest tag
+        echo "$LATEST_TAG" > $VERSION_FILE
+
+        # Add the updated version file to the staging area
+        git add $VERSION_FILE
+
+        echo "Updated version file with the latest tag: ${LATEST_TAG}"
+    else
+        echo "Version file is already up to date"
+    fi
+else
+    echo "No changes in rootmoi"
+fi

@@ -6,3 +6,4 @@ docs/index.md
 mkdocs.yaml
 README.md
 .gitignore
+.pre-commit-config.yaml
