@@ -53,6 +53,15 @@ if [ -z "$output" ]; then
     fi
 fi
 
+if [ -f "$env_file" ]; then
+    while IFS= read -r line || [ -n "$line" ]; do
+        # Check if the line has `=` between key and value
+        if [[ $line == *"="* ]]; then
+            export "${line?}"
+        fi
+    done < <(grep -v '^#' "$env_file")
+fi
+
 if [ -z "$SOPS_AGE_RECIPIENTS" ]; then
     if [[ -f "${HOME}/.ssh/authorized_age_keys" ]]; then
         AGE_RECIPIENTS="$(sed -n '/^age1/p' "${HOME}/.ssh/authorized_age_keys" | sort -u | sed 'H;1h;$!d;x;y/\n/,/')"
@@ -63,15 +72,6 @@ if [ -z "$SOPS_AGE_RECIPIENTS" ]; then
         echo "SOPS_AGE_RECIPIENTS is not set"
         exit 1
     fi
-fi
-
-if [ -f "$env_file" ]; then
-    while IFS= read -r line || [ -n "$line" ]; do
-        # Check if the line has `=` between key and value
-        if [[ $line == *"="* ]]; then
-            export "${line?}"
-        fi
-    done < <(grep -v '^#' "$env_file")
 fi
 
 # perform the operation
