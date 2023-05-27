@@ -14,6 +14,7 @@ fi
 # if age is not installed, skip
 if command -v age-keygen &> /dev/null; then
     AGE_KEY_FILE=${AGE_KEY_FILE:-"{{ .age.identity_file }}"}
+    AGE_PUB_KEY_FILE="${AGE_KEY_FILE}.pub"
     AUTHORIZED_AGE_KEYS_FILE="${SSH_HOME}/{{ .age.authorized_age_keys }}"
     if [ ! -e "${AGE_KEY_FILE}" ]; then
         log_task "Generating age key"
@@ -34,6 +35,17 @@ if command -v age-keygen &> /dev/null; then
         else
             log_task "Adding age key to authorized_age_keys"
             c echo "${AGE_RECIPIENT}" > "${AUTHORIZED_AGE_KEYS_FILE}"
+        fi
+        if [ -e "${AGE_PUB_KEY_FILE}" ]; then
+            if ! grep -q "${AGE_RECIPIENT}" "${AGE_PUB_KEY_FILE}"; then
+                log_task "Replacing age key in ${AGE_PUB_KEY_FILE}"
+                echo "${AGE_RECIPIENT}" > "${AGE_PUB_KEY_FILE}"
+            else
+                log_info "age key already in ${AGE_PUB_KEY_FILE}"
+            fi
+        else
+            log_task "Adding age key to ${AGE_PUB_KEY_FILE}"
+            c echo "${AGE_RECIPIENT}" > "${AGE_PUB_KEY_FILE}"
         fi
     fi
 else
