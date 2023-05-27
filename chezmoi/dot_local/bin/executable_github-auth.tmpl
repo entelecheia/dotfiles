@@ -58,6 +58,12 @@ if [[ "${INTERACTIVE}" == "true" ]]; then
   log_info "If you choose to login with a web browser and the device page is not displayed, please open the following URL in your browser: "
   log_info " > https://github.com/login/device"
   c gh auth login -h github.com -s admin:public_key -s write:gpg_key -s admin:ssh_signing_key
+  GH_HOST_CONFIG_FILE="${HOME}/.config/gh/hosts.yml"
+  if [ -e "${GH_HOST_CONFIG_FILE}" ] && command -v yq >/dev/null; then
+    GH_TOKEN=$(yq e '."github.com".oauth_token' "${GH_HOST_CONFIG_FILE}" || echo "")
+  fi
+  export GITHUB_TOKEN="${GITHUB_TOKEN:-${GH_TOKEN}}"
+  export GH_TOKEN="${GITHUB_TOKEN}"
 else
   if [[ -n "${GITHUB_TOKEN}" ]]; then
       log_info "Logging in to GitHub"
@@ -69,5 +75,5 @@ else
 fi
 if gh auth status &>/dev/null; then
   # setup git authentication
-  gh auth setup-git
+  c gh auth setup-git
 fi

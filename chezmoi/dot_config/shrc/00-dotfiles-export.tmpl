@@ -68,7 +68,7 @@ export GIT_WORKSPACE="${WORKSPACE_PROJECT_DIR}"
 export WORKSPACE_REFERENCE_DIR="{{ .workspace.reference_dir }}"
 export GIT_COMMIT_GPGSIGN="{{ .git.gpgsign }}"
 
-GITHUB_TOKEN="{{ .github.token }}"
+GITHUB_TOKEN=${GITHUB_TOKEN:-"{{ .github.token }}"}
 GH_TOKEN="${GITHUB_TOKEN}"
 GH_HOST_CONFIG_FILE="${HOME}/.config/gh/hosts.yml"
 if [ -e "${GH_HOST_CONFIG_FILE}" ] && command -v yq >/dev/null; then
