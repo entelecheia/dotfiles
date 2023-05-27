@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.17.6 (2023-05-27)
+### Fix
+* **github:** Update authentication flow with gh tool ([`300ad5f`](https://github.com/entelecheia/dotfiles/commit/300ad5f5bd954b829600b3838a0e04ce082dfcda))
+* **chezmoi:** Remove dopplerhq/cli/doppler packages and update user package list. ([`0989a8d`](https://github.com/entelecheia/dotfiles/commit/0989a8d788b5a0255b42fba106c16547eacb8ad0))
+* **github:** Update github-auth with interactive and reset options ([`7afd910`](https://github.com/entelecheia/dotfiles/commit/7afd910b04fa3709f2aeb384177aceb03ad50f7e))
+
 ## v0.17.5 (2023-05-27)
 ### Fix
 * **encrypt:** Change updatekeys operation to decrypt and encrypt in-place ([`6fcd981`](https://github.com/entelecheia/dotfiles/commit/6fcd9813a4a077649101d9019b3f424b27806ca4))
