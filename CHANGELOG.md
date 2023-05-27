@@ -1,5 +1,13 @@
 <!--next-version-placeholder-->
 
+## v0.17.5 (2023-05-27)
+### Fix
+* **encrypt:** Change updatekeys operation to decrypt and encrypt in-place ([`6fcd981`](https://github.com/entelecheia/dotfiles/commit/6fcd9813a4a077649101d9019b3f424b27806ca4))
+* **socrypt:** Add sencu alias and update socrypt executable to support key rotation ([`637ecbb`](https://github.com/entelecheia/dotfiles/commit/637ecbbcfe083aa81f81635388a841d88f18f529))
+* **socrypt:** Load SOPS_AGE_RECIPIENTS var from .env, authorized_age_keys, and pub key in .sop dir ([`d016f86`](https://github.com/entelecheia/dotfiles/commit/d016f8650c6e2d01f6686d8feebda7a52d7d606c))
+* **age:** Add support for managing authorized age keys with dotfiles-setup-age ([`eabfc47`](https://github.com/entelecheia/dotfiles/commit/eabfc47950ebe58cc10e947f5c4016d16f5a2fee))
+* **github-auth:** Add permission for ssh_signing_key in gh auth login ([`ddd519f`](https://github.com/entelecheia/dotfiles/commit/ddd519f2c4bcaf94c1e899a4d0fa1408b955889d))
+
 ## v0.17.4 (2023-05-26)
 ### Fix
 * **pkg:** Add script and check prereqs for go-age and go-sops installation in dotfiles-install-script-pkgs script ([`c2db711`](https://github.com/entelecheia/dotfiles/commit/c2db711bdd721c0cf67224276fef7f17c2a2249e))
