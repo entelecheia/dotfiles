@@ -4,31 +4,31 @@
 #
 ".oh-my-zsh":
   type: archive
-  url: "https://github.com/ohmyzsh/ohmyzsh/archive/{{- template "get-github-head-revision" list "ohmyzsh/ohmyzsh" $cache -}}.tar.gz"
+  url: "https://github.com/ohmyzsh/ohmyzsh/archive/{{ template "get-github-head-revision" list "ohmyzsh/ohmyzsh" $cache }}.tar.gz"
   stripComponents: 1
   # refreshPeriod: 168h
 
 ".oh-my-zsh/custom/themes/spaceship":
   type: archive
-  url: "https://github.com/spaceship-prompt/spaceship-prompt/archive/{{- template "get-github-head-revision" list "spaceship-prompt/spaceship-prompt" $cache -}}.tar.gz"
+  url: "https://github.com/spaceship-prompt/spaceship-prompt/archive/{{ template "get-github-head-revision" list "spaceship-prompt/spaceship-prompt" $cache }}.tar.gz"
   stripComponents: 1
   exact: true
 
 ".oh-my-zsh/custom/plugins/zsh-syntax-highlighting":
   type: archive
-  url: "https://github.com/zsh-users/zsh-syntax-highlighting/archive/{{- template "get-github-head-revision" list "zsh-users/zsh-syntax-highlighting" $cache -}}.tar.gz"
+  url: "https://github.com/zsh-users/zsh-syntax-highlighting/archive/{{ template "get-github-head-revision" list "zsh-users/zsh-syntax-highlighting" $cache }}.tar.gz"
   stripComponents: 1
   exact: true
 
 ".oh-my-zsh/custom/plugins/zsh-autosuggestions":
   type: archive
-  url: "https://github.com/zsh-users/zsh-autosuggestions/archive/{{- template "get-github-head-revision" list "zsh-users/zsh-autosuggestions" $cache -}}.tar.gz"
+  url: "https://github.com/zsh-users/zsh-autosuggestions/archive/{{ template "get-github-head-revision" list "zsh-users/zsh-autosuggestions" $cache }}.tar.gz"
   stripComponents: 1
   exact: true
 
 ".oh-my-zsh/custom/plugins/zsh-completions":
   type: archive
-  url: "https://github.com/zsh-users/zsh-completions/archive/{{- template "get-github-head-revision" list "zsh-users/zsh-completions" $cache -}}.tar.gz"
+  url: "https://github.com/zsh-users/zsh-completions/archive/{{ template "get-github-head-revision" list "zsh-users/zsh-completions" $cache }}.tar.gz"
   stripComponents: 1
   exact: true
 
@@ -37,6 +37,13 @@
   url: "https://github.com/nvm-sh/nvm/archive/{{ template "get-github-head-revision" list "nvm-sh/nvm" $cache }}.tar.gz"
   stripComponents: 1
   # exact: true
+
+".local/bin/lfs-folderstore":
+  type: file
+  url: "https://github.com/sinbad/lfs-folderstore/releases/download/v{{ template "get-github-latest-version" list "sinbad/lfs-folderstore" $cache }}/lfs-folderstore-{{ .chezmoi.os }}-{{ .chezmoi.arch }}-v{{ template "get-github-latest-version" list "sinbad/lfs-folderstore" $cache }}.zip"
+  executable: true
+  filter:
+    command: funzip
 
 ".local/share/passage":
   type: git-repo
@@ -51,7 +58,7 @@
 # {{- if ne .chezmoi.os "darwin" -}} #
 ".local/bin/direnv":
   type: file
-  url: "https://github.com/direnv/direnv/releases/download/v{{- template "get-github-latest-version" list "direnv/direnv" $cache -}}/direnv.linux-{{- .chezmoi.arch -}}"
+  url: "https://github.com/direnv/direnv/releases/download/v{{ template "get-github-latest-version" list "direnv/direnv" $cache }}/direnv.linux-{{ .chezmoi.arch }}"
   executable: true
 # {{- end -}}
 
