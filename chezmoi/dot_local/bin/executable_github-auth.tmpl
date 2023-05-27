@@ -2,14 +2,37 @@
 # {{ template "scripts-library" }}
 log_task "Authenticating with GitHub"
 
-# check if --interactive or -f flag is set
-set +u
-if [[ "${1}" == "--interactive" ]] || [[ "${1}" == "-i" ]]; then
-    INTERACTIVE=true
-else
-    INTERACTIVE=false
-fi
-set -u
+INTERACTIVE=false
+RESET=false
+
+usage() {
+  echo "Usage: $0 [-i|--interactive] [-r|--reset] [-h|--help]"
+  echo
+  echo "Options:"
+  echo "  -i, --interactive    Enable interactive mode."
+  echo "  -r, --reset          Enable reset mode."
+  echo "  -h, --help           Display this help message."
+  exit 1
+}
+
+while (( "$#" )); do
+  case "$1" in
+    --interactive|-i)
+      INTERACTIVE=true
+      shift
+      ;;
+    --reset|-r)
+      RESET=true
+      shift
+      ;;
+    --help|-h)
+      usage
+      ;;
+    *)
+      echo "Error: Invalid argument"
+      usage
+  esac
+done
 
 GITHUB_USERNAME=${GITHUB_USERNAME:-"{{ .github.username }}"}
 GITHUB_TOKEN=${GITHUB_TOKEN:-"{{ .github.token }}"}
@@ -21,6 +44,12 @@ fi
 if ! command -v gh >/dev/null; then
   log_info "gh is not installed. Skipping GitHub authentication."
   exit 0
+fi
+
+if [[ "${RESET}" == "true" ]]; then
+  log_info "Resetting GitHub authentication"
+  export GITHUB_TOKEN=""
+  export GH_TOKEN=""
 fi
 
 c gh config set -h github.com git_protocol https
