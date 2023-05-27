@@ -96,7 +96,7 @@ packages:
     allow_upgrade: true
   - name: fig
     brew: true
-    scope: full
+    scope: optional
   - name: file
     apt: true
     scope: minimal
