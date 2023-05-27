@@ -44,6 +44,7 @@ filename=$(basename -- "$file")
 basedir=$(dirname -- "$file")
 extension="${filename##*.}"
 name="${filename%.*}"
+SOPS_AGE_RECIPIENTS=${SOPS_AGE_RECIPIENTS:-""}
 
 if [ -z "$output" ]; then
     if [ "$operation" == "decrypt" ] && [[ "$name" == *.sops ]]; then
@@ -62,16 +63,31 @@ if [ -f "$env_file" ]; then
     done < <(grep -v '^#' "$env_file")
 fi
 
+if [ -f "${HOME}/.ssh/authorized_age_keys" ]; then
+    while IFS= read -r key || [ -n "$key" ]; do
+        # Check if the key is already in the SOPS_AGE_RECIPIENTS variable
+        if [[ $SOPS_AGE_RECIPIENTS != *"$key"* ]]; then
+            SOPS_AGE_RECIPIENTS="${SOPS_AGE_RECIPIENTS},${key}"
+        fi
+    done < <(grep -v '^#' "${HOME}/.ssh/authorized_age_keys")
+    export SOPS_AGE_RECIPIENTS
+fi
+
+if [ -d ".sops" ]; then
+    # iterate all files with pattern of age_key_*.pub
+    # if the key is not in SOPS_AGE_RECIPIENTS, add it
+    for key_file in .sops/age_key_*.pub; do
+        key=$(cat "$key_file")
+        # Check if the key is already in the SOPS_AGE_RECIPIENTS variable
+        if [[ $SOPS_AGE_RECIPIENTS != *"$key"* ]]; then
+            SOPS_AGE_RECIPIENTS="${SOPS_AGE_RECIPIENTS},${key}"
+        fi
+    done
+fi
+
 if [ -z "$SOPS_AGE_RECIPIENTS" ]; then
-    if [[ -f "${HOME}/.ssh/authorized_age_keys" ]]; then
-        AGE_RECIPIENTS="$(sed -n '/^age1/p' "${HOME}/.ssh/authorized_age_keys" | sort -u | sed 'H;1h;$!d;x;y/\n/,/')"
-        export AGE_RECIPIENTS="${AGE_RECIPIENTS}"
-        export SOPS_AGE_RECIPIENTS="${AGE_RECIPIENTS}"
-    fi
-    if [ -z "$SOPS_AGE_RECIPIENTS" ]; then
-        echo "SOPS_AGE_RECIPIENTS is not set"
-        exit 1
-    fi
+    echo "SOPS_AGE_RECIPIENTS is not set"
+    exit 1
 fi
 
 # perform the operation
