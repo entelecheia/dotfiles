@@ -811,7 +811,7 @@
 # {{-   $pkgs_user = printf "%s microk8s helm" $pkgs_user -}}
 # {{- end -}}
 # {{- if $use_doppler -}}
-# {{-   $pkgs_user = printf "%s doppler dopplerhq/cli/doppler" $pkgs_user -}}
+# {{-   $pkgs_user = printf "%s doppler" $pkgs_user -}}
 # {{- end -}}
 # {{- if $use_vault -}}
 # {{-   $pkgs_user = printf "%s vault" $pkgs_user -}}
