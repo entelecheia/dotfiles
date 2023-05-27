@@ -22,6 +22,10 @@ while [[ $# -gt 0 ]]; do
             operation="updatekeys"
             shift # past argument
             ;;
+        -r|--rotate)
+            operation="rotate"
+            shift # past argument
+            ;;
         -e|--env-file)
             env_file="$2"
             shift # past argument
@@ -87,6 +91,7 @@ if [ -d ".sops" ]; then
             SOPS_AGE_RECIPIENTS="${SOPS_AGE_RECIPIENTS},${key}"
         fi
     done
+    export SOPS_AGE_RECIPIENTS
 fi
 
 if [ -z "$SOPS_AGE_RECIPIENTS" ]; then
@@ -98,7 +103,9 @@ fi
 if [ "$operation" == "decrypt" ]; then
     sops --decrypt "$file" > "$output"
 elif [ "$operation" == "updatekeys" ]; then
-    sops --rotate --in-place --add-age "$SOPS_AGE_RECIPIENTS" "$file"
+    sops --decrypt --in-place "$file" && sops --encrypt --in-place "$file"
+elif [ "$operation" == "rotate" ]; then
+    sops --rotate --in-place "$file"
 else
     if [ -z "$args" ]; then
         sops --encrypt "$file" > "$output"
