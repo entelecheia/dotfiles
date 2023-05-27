@@ -28,7 +28,7 @@ if [[ "${INTERACTIVE}" == "true" ]]; then
   log_info "Logging in to GitHub"
   log_info "If you choose to login with a web browser and the device page is not displayed, please open the following URL in your browser: "
   log_info " > https://github.com/login/device"
-  c gh auth login -h github.com -s admin:public_key -s write:gpg_key
+  c gh auth login -h github.com -s admin:public_key -s write:gpg_key -s admin:ssh_signing_key
 else
   if [[ -n "${GITHUB_TOKEN}" ]]; then
       log_info "Logging in to GitHub"
