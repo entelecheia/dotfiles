@@ -94,6 +94,9 @@ packages:
     pipx: true
     scope: optional
     allow_upgrade: true
+  - name: fig
+    brew: true
+    scope: full
   - name: file
     apt: true
     scope: minimal

@@ -51,3 +51,7 @@ LD_PRELOAD="/usr/lib64/libtcmalloc.so.4"
 if [[ -f "${LD_PRELOAD}" ]]; then
   export LD_PRELOAD
 fi
+
+if command -v fig >/dev/null 2>&1 && [ -d "${HOME}/.fig/bin" ]; then
+  export PATH="${HOME}/.fig/bin:${PATH}"
+fi
