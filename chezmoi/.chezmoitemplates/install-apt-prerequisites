@@ -2,7 +2,6 @@
 
 log_task "Installing APT prerequisites"
 
-export DEBIAN_FRONTEND=noninteractive
 # We need to install ca-certificates before we add the APT repos, because some of them
 # may use newer CAs.
 # Ignore apt update error if it is due to expired certificate because chances are that
@@ -14,15 +13,15 @@ else
   echo "${output}"
   exit 1
 fi
-c sudo apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends ca-certificates
-c sudo apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends curl gnupg software-properties-common zsh locales locales-all jq wget unzip
+c sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends ca-certificates
+c sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends curl gnupg software-properties-common zsh locales locales-all jq wget unzip
 
 # Add APT repositories for newer versions of Git.
 # remove existing apt sources
 c sudo rm -f etc/apt/sources.list.d/git-core-*.list*
 c sudo add-apt-repository ppa:git-core/ppa --yes
 c sudo apt-get update --yes
-c sudo apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends git
+c sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends git
 
 # Set up locales
 # check if locale is already set up by running locale | grep LC_ALL | grep en_US.UTF-8

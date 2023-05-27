@@ -131,9 +131,9 @@ done
 if [[ ${#missing_packages[@]} -gt 0 ]] || [[ ${#upgrade_packages[@]} -gt 0 ]]; then
   # This script also gets called when running rootmoi
   if [ "$USER" = "root" ]; then
-    apt_command=(apt-get)
+    apt_command=(DEBIAN_FRONTEND=noninteractive apt-get)
   else
-    apt_command=(sudo apt-get)
+    apt_command=(sudo DEBIAN_FRONTEND=noninteractive apt-get)
   fi
 
   c "${apt_command[@]}" update --yes -qq -o=Dpkg::Use-Pty=0
