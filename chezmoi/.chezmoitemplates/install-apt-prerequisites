@@ -14,7 +14,7 @@ else
   exit 1
 fi
 c sudo apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends ca-certificates
-c sudo apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends curl gnupg software-properties-common zsh locales locales-all jq
+c sudo apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends curl gnupg software-properties-common zsh locales locales-all jq wget unzip
 
 # Add APT repositories for newer versions of Git.
 # remove existing apt sources
