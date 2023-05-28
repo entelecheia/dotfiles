@@ -53,12 +53,12 @@
 # {{-   end -}}
 # {{- end -}}
 
-# {{- $upgrade_packages := true -}}
+# {{- $upgrade_packages := false -}}
 # {{- if and (hasKey . "system") (hasKey .system "upgrade_packages") -}}
 # {{-   $upgrade_packages = .system.upgrade_packages -}}
 # {{- else -}}
-# {{-   if eq (env "DOTFILES_UPGRADE_PACKAGES") "false" "False" "FALSE" "0" -}}
-# {{-     $upgrade_packages = false -}}
+# {{-   if eq (env "DOTFILES_UPGRADE_PACKAGES") "true" "True" "TRUE" "1" -}}
+# {{-     $upgrade_packages = true -}}
 # {{-   end -}}
 # {{- end -}}
 
