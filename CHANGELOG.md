@@ -1,5 +1,13 @@
 <!--next-version-placeholder-->
 
+## v0.18.0 (2023-05-28)
+### Feature
+* **installer:** Add script to install git from source ([`932f0b3`](https://github.com/entelecheia/dotfiles/commit/932f0b31b04c90d20e9a2e1cd171a8c839013cba))
+
+### Fix
+* **chezmoi:** Organize apt package installs ([`e849589`](https://github.com/entelecheia/dotfiles/commit/e849589dd1a74b053e0cdf539f2c8c3e6d0dbb83))
+* **chezmoi:** Add autoconf to apt prerequisites install script ([`773f99e`](https://github.com/entelecheia/dotfiles/commit/773f99ea5a415b2b454301d9ac855a06e299aceb))
+
 ## v0.17.9 (2023-05-28)
 ### Fix
 * **passage:** Update installation script name and functionality ([`ac1721e`](https://github.com/entelecheia/dotfiles/commit/ac1721e0264bb97161e2a25b243cc579e5adb66a))
