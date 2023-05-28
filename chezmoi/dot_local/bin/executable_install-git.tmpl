@@ -1,0 +1,19 @@
+#!/bin/bash
+# {{ template "scripts-library" }}
+log_task "Installing git"
+
+GIT_SHARE_DIR="${HOME}/.local/share/git"
+GIT_SHARE_REPO="https://github.com/git/git.git"
+if [ ! -d "${GIT_SHARE_DIR}" ]; then
+    log_task "Cloning ${GIT_SHARE_REPO}"
+    c git clone "${GIT_SHARE_REPO}" "${GIT_SHARE_DIR}"
+else
+    log_task "Updating ${GIT_SHARE_DIR}"
+    c cd "${GIT_SHARE_DIR}"
+    c git pull
+fi
+c cd "${GIT_SHARE_DIR}"
+c make configure
+c ./configure --prefix="${HOME}/.local"
+c make
+c make install
