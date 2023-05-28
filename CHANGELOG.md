@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.17.8 (2023-05-28)
+### Fix
+* **apt:** Clean up and refactor APT package management scripts ([`e1bc4b4`](https://github.com/entelecheia/dotfiles/commit/e1bc4b4e5a487a89dede1f3704f664e92a5c10ea))
+
 ## v0.17.7 (2023-05-27)
 ### Fix
 * **chezmoi:** Add wget and unzip to APT prerequisites installation script ([`39bd288`](https://github.com/entelecheia/dotfiles/commit/39bd288c43cd06086e97d4f961bdb7f4a9d1008c))
