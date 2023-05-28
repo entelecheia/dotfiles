@@ -126,7 +126,6 @@ packages:
     scope: minimal
     allow_upgrade: true
   - name: git
-    apt: true
     brew: true
     scope: minimal
     allow_upgrade: true
