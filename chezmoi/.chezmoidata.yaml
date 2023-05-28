@@ -277,7 +277,7 @@ packages:
     scope: minimal
   - name: passage
     script: true
-    script_cmd: passage-init
+    script_cmd: install-passage
     scope: minimal
   - name: pinentry-curses
     apt: true

@@ -1,0 +1,18 @@
+#!/bin/bash
+# {{ template "scripts-library" }}
+log_task "Installing passage"
+
+# install passage if not installed
+PASSAGE_SHARE_DIR="{{ .passage.share_dir }}"
+PASSAGE_SHARE_REPO="{{ .passage.share_repo }}"
+if [ ! -d "${PASSAGE_SHARE_DIR}" ]; then
+    log_task "Cloning ${PASSAGE_SHARE_REPO}"
+    c git clone "${PASSAGE_SHARE_REPO}" "${PASSAGE_SHARE_DIR}"
+else
+    log_task "Updating ${PASSAGE_SHARE_DIR}"
+    c cd "${PASSAGE_SHARE_DIR}"
+    c git pull
+fi
+log_task "Installing passage"
+c cd "${PASSAGE_SHARE_DIR}"
+c make install PREFIX="${HOME}/.local" WITH_ZSHCOMP="yes"
