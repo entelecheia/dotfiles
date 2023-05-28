@@ -302,11 +302,11 @@ packages:
     pipx: true
     check_installed: command -v poe &>/dev/null
     scope: minimal
-    allow_upgrade: true
+    allow_upgrade: false
   - name: pre-commit
     pipx: true
     scope: optional
-    allow_upgrade: true
+    allow_upgrade: false
   - name: procps
     apt: true
     scope: minimal
