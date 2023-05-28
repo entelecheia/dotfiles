@@ -13,6 +13,5 @@ else
     c cd "${PASSAGE_SHARE_DIR}"
     c git pull
 fi
-log_task "Installing passage"
 c cd "${PASSAGE_SHARE_DIR}"
 c make install PREFIX="${HOME}/.local" WITH_ZSHCOMP="yes"
