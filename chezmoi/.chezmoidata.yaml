@@ -275,6 +275,10 @@ packages:
     apt: true
     brew: true
     scope: minimal
+  - name: passage
+    script: true
+    script_cmd: passage-init
+    scope: minimal
   - name: pinentry-curses
     apt: true
     scope: gui
