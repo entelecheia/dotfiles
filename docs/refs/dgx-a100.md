@@ -11,7 +11,7 @@ apt update
 apt upgrade
 
 # Install DGX system tools and configurations
-apt install -y dgx-a100-system-configurations dgx-a100-system-tools dgx-a100-system-tools-extra 
+apt install -y dgx-a100-system-configurations dgx-a100-system-tools dgx-a100-system-tools-extra
 
 # Disable the ondemand governor to set the governor to performance mode
 systemctl disable ondemand
@@ -31,7 +31,3 @@ systemctl enable nvidia-fabricmanager nvidia-persistenced nvidia-dcgm
 # Install Serial over LAN and NVIDIA System Management tool packages:
 apt install -y nvidia-ipmisol nvsm
 ```
-
-## References
-
-- [Installing NVIDIA DGX software stack in Bright Ubuntu 20.04 software images](https://kb.brightcomputing.com/knowledge-base/installing-nvidia-dgx-software-stack-in-bright-ubuntu-20-04-software-images/)

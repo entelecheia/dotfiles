@@ -14,5 +14,6 @@
 - [Set up your new machine in a blink of an eye](https://dev.to/vvidovic/set-up-your-new-machine-in-a-blink-of-an-eye-43j7)
 - [How I Use Restic to Back up My Home Folders to Backblaze B2](https://www.seanh.cc/2022/04/03/restic/#3-install-pass)
 - [Setting up Git LFS with Dropbox](https://github.com/OpeningDesign/LFS-template)
+- [Installing NVIDIA DGX software stack in Bright Ubuntu 20.04 software images](https://kb.brightcomputing.com/knowledge-base/installing-nvidia-dgx-software-stack-in-bright-ubuntu-20-04-software-images/)
 
 A large part of .chezmoitemplates and .chezmoiscripts files are initially inspired by [felipecrs/dotfiles](https://github.com/felipecrs/dotfiles).
