@@ -1,5 +1,10 @@
 <!--next-version-placeholder-->
 
+## v0.17.9 (2023-05-28)
+### Fix
+* **passage:** Update installation script name and functionality ([`ac1721e`](https://github.com/entelecheia/dotfiles/commit/ac1721e0264bb97161e2a25b243cc579e5adb66a))
+* **chezmoi:** Update .chezmoidata.yaml with passage package ([`026cd9e`](https://github.com/entelecheia/dotfiles/commit/026cd9e5a7fe2e1d3dfd3017d37e44e6ec5600ba))
+
 ## v0.17.8 (2023-05-28)
 ### Fix
 * **apt:** Clean up and refactor APT package management scripts ([`e1bc4b4`](https://github.com/entelecheia/dotfiles/commit/e1bc4b4e5a487a89dede1f3704f664e92a5c10ea))
