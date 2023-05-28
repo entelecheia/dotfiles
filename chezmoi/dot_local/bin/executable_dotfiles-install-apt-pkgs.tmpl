@@ -22,7 +22,6 @@ obsolete_packages=(
 {{- end }}
 )
 if [[ "${#obsolete_packages[@]}" -gt 0 ]]; then
-  log_info "Obsolte packages: ${obsolete_packages[*]}"
   for package in "${obsolete_packages[@]}"; do
     if is_apt_package_installed "${package}"; then
       log_task "Removing obsolete package '${package}'"
