@@ -1,5 +1,5 @@
 #!/bin/bash
-# {{- if and (eq .chezmoi.os "linux") (.system.is_sudoer) }}
+# {{- if and (eq .chezmoi.os "linux") (.system.apply_rootmoi) (.system.is_sudoer) }}
 # {{- template "scripts-library" }}
 # {{- template "install-apt-prerequisites" }}
 # {{- end }}
