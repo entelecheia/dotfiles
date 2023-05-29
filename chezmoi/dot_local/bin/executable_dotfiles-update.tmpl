@@ -12,12 +12,11 @@ else
 fi
 set -u
 
-ALLOWED_CZM_COMMANDS=(
-  init
+CZM_COMMANDS=(
   data
   diff
 )
-if is_item_in_array "${COMMAND}" "${ALLOWED_CZM_COMMANDS[@]}"; then
+if is_item_in_array "${COMMAND}" "${CZM_COMMANDS[@]}"; then
   chezmoi "${COMMAND}"
   exit 0
 elif [[ "${COMMAND}" == "--help" ]] || [[ "${COMMAND}" == "-h" ]]; then
@@ -98,8 +97,13 @@ fi
 # {{ end }}
 
 if chezmoi --version &>/dev/null; then
+  if [[ "${COMMAND}" == "init" ]]; then
+    log_task "Initializing chezmoi"
+    chezmoi init
+  else
+    chezmoi init --force
+  fi
   log_task "Applying changes on dotfiles with chezmoi"
-  chezmoi init --force
   # pass additional arguments to chezmoi apply except for --prerelease or -p flag
   chezmoi apply "${@:2}"
 fi
