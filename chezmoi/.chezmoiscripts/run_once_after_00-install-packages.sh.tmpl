@@ -6,7 +6,7 @@ source "${HOME}/.config/shrc/00-dotfiles-export"
 #  {{ .install_packages.user  }}
 # {{- end }}
 # .chezmoidata.yaml hash: {{ include ".chezmoidata.yaml" | sha256sum }}
-# {{- if and (eq .chezmoi.os "linux") .system.is_sudoer }}
+# {{- if and (eq .chezmoi.os "linux") (.system.apply_rootmoi) (.system.is_sudoer) }}
 # dotfiles-install-apt-pkgs hash: {{ include "dot_local/bin/executable_dotfiles-install-apt-pkgs.tmpl" | sha256sum }}
 dotfiles-install-apt-pkgs
 # {{- end }}
