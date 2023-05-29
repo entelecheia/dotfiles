@@ -2,7 +2,7 @@
 # {{- template "scripts-library" }}
 # {{- template "package-library" }}
 log_task "Installing packages by scripts"
-
+# TODO: install minimal packages in devcontainer
 # shellcheck source=/dev/null
 source "${HOME}/.config/shrc/00-dotfiles-export"
 # check if --update or -u flag is set
