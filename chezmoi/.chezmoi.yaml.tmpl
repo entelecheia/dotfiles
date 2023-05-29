@@ -17,24 +17,6 @@
 # {{-   $cpuThreads = (output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "(Get-CimInstance -ClassName 'Win32_Processor').NumberOfLogicalProcessors") | trim | atoi -}}
 # {{- end -}}
 
-# {{- $pkgs_minimal := "age apt-transport-https build-essential coreutils direnv file findutils fzf gh git-sizer gnupg go go-task jq locales locales-all lsb-release node nvm pip pipx procps python3-dev python3-pip python3-setuptools python3-testresources python3-venv setuptools sops stow tree tmux tzdata unzip vim yq zip zsh" -}}
-# {{- $pkgs_full := "bazel font-fira-code font-fira-code-nerd-font google-perftools openssh-server rust sdkman serviceman webi" -}}
-# {{- $pkgs_system := "containerd.io docker-ce docker-ce-cli docker-compose-plugin nvidia-container-toolkit snapd" -}}
-# {{- $pkgs_gui := "gpa gpg-suite pinentry-mac xclip seahorse" -}}
-# {{- $pkgs_user := "" -}}
-# {{- $pkgs_total := $pkgs_minimal -}}
-# {{- if eq .chezmoi.os "linux" -}}
-# {{-   if $wsl -}}
-# {{-     $pkgs_system = printf "%s wslu" $pkgs_system -}}
-# {{-   else }}
-# {{-     if eq .chezmoi.osRelease.versionCodename "bionic" }}
-# {{-       $pkgs_system = printf "%s linux-generic-hwe-18.04" $pkgs_system -}}
-# {{-     else if eq .chezmoi.osRelease.versionCodename "focal" }}
-# {{-       $pkgs_system = printf "%s linux-generic-hwe-20.04" $pkgs_system -}}
-# {{-     end }}
-# {{   end }}
-# {{ end }}
-
 # {{- $minimum := $devcontainer -}}
 # {{- if and (hasKey . "system") (hasKey .system "is_minimum") -}}
 # {{-   $minimum = .system.is_minimum -}}
@@ -777,15 +759,7 @@
 # {{-   writeToStdout "❎  GitHub repositories to clone not set\n" -}}
 # {{- end -}}
 
-# {{- if not $devcontainer -}}
-# {{-   $pkgs_total = printf "%s %s" $pkgs_total $pkgs_gui -}}
-# {{- end -}}
-# {{- if not $minimum -}}
-# {{-   $pkgs_total = printf "%s %s" $pkgs_total $pkgs_full -}}
-# {{- end -}}
-# {{- if $apply_rootmoi -}}
-# {{-   $pkgs_total = printf "%s %s" $pkgs_total $pkgs_system -}}
-# {{- end -}}
+# {{- $pkgs_user := "" -}}
 # {{- if $use_dotdrop -}}
 # {{-   $pkgs_user = printf "%s dotdrop" $pkgs_user -}}
 # {{- end -}}
@@ -816,7 +790,6 @@
 # {{- if $use_vault -}}
 # {{-   $pkgs_user = printf "%s vault" $pkgs_user -}}
 # {{- end -}}
-# {{- $pkgs_total = printf "%s %s" $pkgs_total $pkgs_user -}}
 
 # {{- if and $interactive ($minimum | not) -}}
 # {{-   $question := "❔ What are the additional packages to install (input as space separated list, ex: git curl)" -}}

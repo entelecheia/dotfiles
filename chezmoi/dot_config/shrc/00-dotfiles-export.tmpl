@@ -316,13 +316,13 @@ export DOTFILES_PKGS_USER
 
 # total packages to install
 DOTFILES_PKGS_TO_INSTALL=(${DOTFILES_PKGS_MINIMAL[@]})
-{{- if .system.is_devcontainer }}
+{{- if not .system.is_devcontainer }}
 DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_GUI[@]})
 {{- end }}
 {{- if not .system.is_minimum }}
 DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_FULL[@]})
 {{- end }}
-{{- if .system.apply_rootmoi }}
+{{- if and .system.apply_rootmoi (not .system.is_devcontainer) (not .system.is_minimum) }}
 DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_SYSTEM[@]})
 {{- end }}
 DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_USER[@]})
