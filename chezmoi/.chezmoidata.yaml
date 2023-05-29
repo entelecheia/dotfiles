@@ -57,7 +57,7 @@ packages:
   - name: copier
     brew: true
     pipx: true
-    scope: minimal
+    scope: full
     allow_upgrade: true
   - name: cz-conventional-gitmoji
     pipx: true
@@ -273,7 +273,7 @@ packages:
   - name: pass
     apt: true
     brew: true
-    scope: minimal
+    scope: system
   - name: passage
     script: true
     script_cmd: install-passage
@@ -286,22 +286,22 @@ packages:
     scope: gui
   - name: pip
     pip: true
-    scope: minimal
+    scope: optional
     allow_upgrade: true
   - name: pipx
     brew: true
     pip: true
-    scope: minimal
+    scope: optional
     allow_upgrade: true
   - name: poetry
     brew: true
     script: true
     script_cmd: curl -sSL https://install.python-poetry.org | python3 -
-    scope: minimal
+    scope: optional
   - name: poethepoet
     pipx: true
     check_installed: command -v poe &>/dev/null
-    scope: minimal
+    scope: optional
     allow_upgrade: false
   - name: pre-commit
     pipx: true
@@ -312,19 +312,19 @@ packages:
     scope: minimal
   - name: python3-dev
     apt: true
-    scope: minimal
+    scope: full
   - name: python3-pip
     apt: true
-    scope: minimal
+    scope: full
   - name: python3-setuptools
     apt: true
-    scope: minimal
+    scope: full
   - name: python3-testresources
     apt: true
-    scope: minimal
+    scope: full
   - name: python3-venv
     apt: true
-    scope: minimal
+    scope: full
   - name: restic
     brew: true
     scope: optional
@@ -332,13 +332,13 @@ packages:
     script: true
     script_cmd: "curl https://sh.rustup.rs -sSf | sh -s -- -y --profile=minimal"
     check_installed: "command -v rustup &> /dev/null"
-    scope: minimal
+    scope: full
   - name: sdkman
     script: true
     script_cmd: "curl -s 'https://get.sdkman.io' | bash"
     check_prereqs: "command -v unzip &> /dev/null"
     check_installed: "[[ -f ${HOME}/.sdkman/bin/sdkman-init.sh ]]"
-    scope: minimal
+    scope: full
   - name: seahorse
     apt: true
     scope: gui
@@ -349,7 +349,7 @@ packages:
     scope: optional
   - name: setuptools
     pip: true
-    scope: minimal
+    scope: optional
     allow_upgrade: true
   - name: snapd
     apt: true
@@ -395,7 +395,7 @@ packages:
     scope: gui
   - name: wheel
     pip: true
-    scpoe: minimal
+    scpoe: optional
   - name: wslu
     apt: true
   - name: zip
