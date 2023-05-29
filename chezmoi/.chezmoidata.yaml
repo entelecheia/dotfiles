@@ -45,6 +45,7 @@ packages:
     brew: true
     scope: optional
   - name: commitizen
+    brew: true
     pipx: true
     check_installed: command -v cz &>/dev/null
     scope: optional
@@ -304,6 +305,7 @@ packages:
     scope: optional
     allow_upgrade: false
   - name: pre-commit
+    brew: true
     pipx: true
     scope: optional
     allow_upgrade: false
