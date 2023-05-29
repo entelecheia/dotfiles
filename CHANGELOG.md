@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.18.1 (2023-05-29)
+### Fix
+* **chezmoi:** Remove template.tmpl file ([`33f9398`](https://github.com/entelecheia/dotfiles/commit/33f93985a31a46e48f72ff4ca5c1cba358242b07))
+
+### Documentation
+* Update bootstrap page ([`d204be8`](https://github.com/entelecheia/dotfiles/commit/d204be836f088a26bb2e4d308e81712b57cb5c5c))
+
 ## v0.18.0 (2023-05-28)
 ### Feature
 * **installer:** Add script to install git from source ([`932f0b3`](https://github.com/entelecheia/dotfiles/commit/932f0b31b04c90d20e9a2e1cd171a8c839013cba))
