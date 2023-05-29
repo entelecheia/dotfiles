@@ -1,5 +1,10 @@
 <!--next-version-placeholder-->
 
+## v0.18.2 (2023-05-29)
+### Fix
+* **chezmoi:** Remove unused package lists and update user packages ([`4d69244`](https://github.com/entelecheia/dotfiles/commit/4d69244f76315130a8a5b9c4896664c23d9c6980))
+* **system:** Update conditional statements in shell scripts ([`695a39b`](https://github.com/entelecheia/dotfiles/commit/695a39b6305e18a3c8b9f74facb1ab5916af7092))
+
 ## v0.18.1 (2023-05-29)
 ### Fix
 * **chezmoi:** Remove template.tmpl file ([`33f9398`](https://github.com/entelecheia/dotfiles/commit/33f93985a31a46e48f72ff4ca5c1cba358242b07))
