@@ -1,5 +1,15 @@
 <!--next-version-placeholder-->
 
+## v0.18.3 (2023-05-30)
+### Fix
+* **docs:** Fix typo in install-apt-pkgs script ([`7844dae`](https://github.com/entelecheia/dotfiles/commit/7844dae73abaf0cbee6b75a4d915c2e97c908751))
+* **chezmoi:** Add `brew` flag to `commitizen` and `pre-commit` packages ([`043da49`](https://github.com/entelecheia/dotfiles/commit/043da4904166c838d197c629a45134ae36cb719a))
+* **chezmoi:** Reorganize package scopes and add new packages ([`8ebca14`](https://github.com/entelecheia/dotfiles/commit/8ebca144563f947f43a7617feb9df967ed9fa9b5))
+
+### Documentation
+* Fix install-apt-pkgs ([`3e6bc64`](https://github.com/entelecheia/dotfiles/commit/3e6bc6432ed732bebfb04744173f25336b4603e1))
+* Add apt install scripts ([`96849d4`](https://github.com/entelecheia/dotfiles/commit/96849d45d83955b25fd319b81947222abed07494))
+
 ## v0.18.2 (2023-05-29)
 ### Fix
 * **chezmoi:** Remove unused package lists and update user packages ([`4d69244`](https://github.com/entelecheia/dotfiles/commit/4d69244f76315130a8a5b9c4896664c23d9c6980))
