@@ -2,20 +2,6 @@
 set -euo pipefail
 USER=${USSER:-$(whoami)}
 
-if [[ -n "${DOTFILES_DEBUG:-}" ]]; then
-  set -x
-fi
-
-function ensure_path_entry() {
-  local entries=("$@")
-
-  for entry in "${entries[@]}"; do
-    if [[ ":${PATH}:" != *":${entry}:"* ]]; then
-      export PATH="${entry}:${PATH}"
-    fi
-  done
-}
-
 function log_color() {
   local color_code="$1"
   shift
@@ -222,22 +208,18 @@ if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]] && is_item
   fi
 fi
 
-missing_packages=()
-
-if [[ ${#missing_packages[@]} -gt 0 ]] || [[ ${#upgrade_packages[@]} -gt 0 ]]; then
-  # This script also gets called when running rootmoi
-  if [ "$USER" = "root" ]; then
-    apt_command=(DEBIAN_FRONTEND=noninteractive apt-get)
-  else
-    apt_command=(sudo DEBIAN_FRONTEND=noninteractive apt-get)
-  fi
-
-  c "${apt_command[@]}" update --yes -qq -o=Dpkg::Use-Pty=0
-fi
-if [[ ${#missing_packages[@]} -gt 0 ]]; then
-  log_task "Installing missing packages with APT: ${missing_packages[*]}"
-  c "${apt_command[@]}" install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends "${missing_packages[@]}"
+# This script also gets called when running rootmoi
+if [ "$USER" = "root" ]; then
+  apt_command=(DEBIAN_FRONTEND=noninteractive apt-get)
 else
-  log_info "No missing packages to install with APT"
+  apt_command=(sudo DEBIAN_FRONTEND=noninteractive apt-get)
+fi
+
+if [[ ${#wanted_packages[@]} -gt 0 ]]; then
+  log_task "Installing packages with APT: ${wanted_packages[*]}"
+  c "${apt_command[@]}" update --yes -qq -o=Dpkg::Use-Pty=0
+  c "${apt_command[@]}" install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends "${wanted_packages[@]}"
+else
+  log_info "No packages to install with APT"
 fi
 log_green "✅  APT packages installed successfully. ✨ 🌟 ✨"
