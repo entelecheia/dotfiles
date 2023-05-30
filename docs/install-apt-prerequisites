@@ -72,8 +72,8 @@ else
   echo "${output}"
   exit 1
 fi
-c DEBIAN_FRONTEND=noninteractive apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends ca-certificates
-c DEBIAN_FRONTEND=noninteractive apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends curl wget gnupg \
+c apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends ca-certificates
+c apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends curl wget gnupg \
   sudo software-properties-common zsh locales locales-all jq gettext autoconf apt-transport-https zip bzip2 unzip
 
 # Add APT repositories for newer versions of Git.
@@ -83,7 +83,7 @@ c DEBIAN_FRONTEND=noninteractive apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --
 c rm -f etc/apt/sources.list.d/git-core-*.list*
 c add-apt-repository ppa:git-core/ppa --yes
 c apt-get update --yes
-c DEBIAN_FRONTEND=noninteractive apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends git
+c apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends git
 
 # Set up locales
 # check if locale is already set up by running locale | grep LC_ALL | grep en_US.UTF-8

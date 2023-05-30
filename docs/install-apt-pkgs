@@ -180,12 +180,10 @@ if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]] && is_item
   fi
 fi
 
-apt_command=(DEBIAN_FRONTEND=noninteractive apt-get)
-
-if [[ ${#wanted_packages[@]} -gt 0 ]]; then
+apt_command=(pif [[ ${#wanted_packages[@]} -gt 0 ]]; then
   log_task "Installing packages with APT: ${wanted_packages[*]}"
-  c "${apt_command[@]}" update --yes -qq -o=Dpkg::Use-Pty=0
-  c "${apt_command[@]}" install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends "${wanted_packages[@]}"
+  c apt-get update --yes -qq -o=Dpkg::Use-Pty=0
+  c apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends "${wanted_packages[@]}"
 else
   log_info "No packages to install with APT"
 fi
