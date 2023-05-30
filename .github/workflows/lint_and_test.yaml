@@ -11,7 +11,7 @@ on:
       - "scripts/**"
       - "chezmoi/**"
       - "rootmoi/**"
-      - "docs/install*"
+      - "docs/install"
       - ".github/workflows/lint_and_test.yaml"
 
 jobs:
