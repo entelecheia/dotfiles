@@ -1,6 +1,5 @@
 #!/bin/bash
 set -euo pipefail
-USER=${USSER:-$(whoami)}
 
 function log_color() {
   local color_code="$1"
@@ -60,33 +59,6 @@ function error() {
   exit 1
 }
 
-function sudo() {
-  local exec=false
-  if [[ "$1" == "exec" ]]; then
-    shift
-    exec=true
-  fi
-
-  # shellcheck disable=SC2312
-  if [[ "$(id -u)" -eq 0 ]]; then
-    if [[ "${exec}" == "true" ]]; then
-      exec "$@"
-    else
-      "$@"
-    fi
-  else
-    if ! command sudo --non-interactive true 2>/dev/null; then
-      log_manual_action "Root privileges are required, please enter your password below"
-      command sudo --validate
-    fi
-    if [[ "${exec}" == "true" ]]; then
-      exec sudo "$@"
-    else
-      command sudo "$@"
-    fi
-  fi
-}
-
 # Function to check if an item is in an array
 # Arguments: search_item array
 # Returns: 0 if the item is in the array, 1 otherwise
@@ -140,8 +112,8 @@ if [[ ! -f "${KEYRING_FILE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_pack
     c curl -fsSL "${KEYRING_URL}" | gpg --dearmor -o "${KEYRING_FILE}"
     c chmod go+r "${KEYRING_FILE}"
   else
-    c curl -fsSL "${KEYRING_URL}" | sudo gpg --dearmor -o "${KEYRING_FILE}"
-    c sudo chmod go+r "${KEYRING_FILE}"
+    c curl -fsSL "${KEYRING_URL}" | gpg --dearmor -o "${KEYRING_FILE}"
+    c chmod go+r "${KEYRING_FILE}"
   fi
 fi
 SOURCE_LIST_FILE="/etc/apt/sources.list.d/vscode.list"
@@ -151,7 +123,7 @@ if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]] && is_item
   if [ "$USER" = "root" ]; then
     c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
   else
-    c echo "$SOURCE_LIST_LINE" | sudo tee "$SOURCE_LIST_FILE"
+    c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
   fi
 fi
 PKG_NAME="gh"
@@ -163,8 +135,8 @@ if [[ ! -f "${KEYRING_FILE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_pack
     c curl -fsSL "${KEYRING_URL}" | gpg --dearmor -o "${KEYRING_FILE}"
     c chmod go+r "${KEYRING_FILE}"
   else
-    c curl -fsSL "${KEYRING_URL}" | sudo gpg --dearmor -o "${KEYRING_FILE}"
-    c sudo chmod go+r "${KEYRING_FILE}"
+    c curl -fsSL "${KEYRING_URL}" | gpg --dearmor -o "${KEYRING_FILE}"
+    c chmod go+r "${KEYRING_FILE}"
   fi
 fi
 SOURCE_LIST_FILE="/etc/apt/sources.list.d/github-cli.list"
@@ -174,7 +146,7 @@ if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]] && is_item
   if [ "$USER" = "root" ]; then
     c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
   else
-    c echo "$SOURCE_LIST_LINE" | sudo tee "$SOURCE_LIST_FILE"
+    c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
   fi
 fi
 PKG_NAME="git-lfs"
@@ -186,14 +158,14 @@ if [[ ! -f "${SOURCE_LIST_FILE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_
     if [ "$USER" = "root" ]; then
       c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${REPO_SCRIPT}" | bash -
     else
-      c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${REPO_SCRIPT}" | sudo bash -
+      c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${REPO_SCRIPT}" | bash -
     fi
   else
     log_task "Running repository script for '${PKG_NAME}'"
     if [ "$USER" = "root" ]; then
       c "${REPO_SCRIPT}"
     else
-      c sudo "${REPO_SCRIPT}"
+      c "${REPO_SCRIPT}"
     fi
   fi
 fi
@@ -204,16 +176,11 @@ if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]] && is_item
   if [ "$USER" = "root" ]; then
     c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
   else
-    c echo "$SOURCE_LIST_LINE" | sudo tee "$SOURCE_LIST_FILE"
+    c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
   fi
 fi
 
-# This script also gets called when running rootmoi
-if [ "$USER" = "root" ]; then
-  apt_command=(DEBIAN_FRONTEND=noninteractive apt-get)
-else
-  apt_command=(sudo DEBIAN_FRONTEND=noninteractive apt-get)
-fi
+apt_command=(DEBIAN_FRONTEND=noninteractive apt-get)
 
 if [[ ${#wanted_packages[@]} -gt 0 ]]; then
   log_task "Installing packages with APT: ${wanted_packages[*]}"
