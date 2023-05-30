@@ -108,46 +108,28 @@ KEYRING_FILE="/usr/share/keyrings/packages.microsoft.gpg"
 KEYRING_URL="https://packages.microsoft.com/keys/microsoft.asc"
 if [[ ! -f "${KEYRING_FILE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   log_task "Downloading packages.microsoft.gpg"
-  if [ "$USER" = "root" ]; then
-    c curl -fsSL "${KEYRING_URL}" | gpg --dearmor -o "${KEYRING_FILE}"
-    c chmod go+r "${KEYRING_FILE}"
-  else
-    c curl -fsSL "${KEYRING_URL}" | gpg --dearmor -o "${KEYRING_FILE}"
-    c chmod go+r "${KEYRING_FILE}"
-  fi
+  c curl -fsSL "${KEYRING_URL}" | gpg --dearmor -o "${KEYRING_FILE}"
+  c chmod go+r "${KEYRING_FILE}"
 fi
 SOURCE_LIST_FILE="/etc/apt/sources.list.d/vscode.list"
 SOURCE_LIST_LINE="deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
 if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   log_task "Adding vscode.list repository to APT"
-  if [ "$USER" = "root" ]; then
-    c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
-  else
-    c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
-  fi
+  c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
 fi
 PKG_NAME="gh"
 KEYRING_FILE="/usr/share/keyrings/githubcli-archive-keyring.gpg"
 KEYRING_URL="https://cli.github.com/packages/githubcli-archive-keyring.gpg"
 if [[ ! -f "${KEYRING_FILE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   log_task "Downloading githubcli-archive-keyring.gpg"
-  if [ "$USER" = "root" ]; then
-    c curl -fsSL "${KEYRING_URL}" | gpg --dearmor -o "${KEYRING_FILE}"
-    c chmod go+r "${KEYRING_FILE}"
-  else
-    c curl -fsSL "${KEYRING_URL}" | gpg --dearmor -o "${KEYRING_FILE}"
-    c chmod go+r "${KEYRING_FILE}"
-  fi
+  c curl -fsSL "${KEYRING_URL}" | gpg --dearmor -o "${KEYRING_FILE}"
+  c chmod go+r "${KEYRING_FILE}"
 fi
 SOURCE_LIST_FILE="/etc/apt/sources.list.d/github-cli.list"
 SOURCE_LIST_LINE="deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main"
 if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   log_task "Adding github-cli.list repository to APT"
-  if [ "$USER" = "root" ]; then
-    c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
-  else
-    c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
-  fi
+  c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
 fi
 PKG_NAME="git-lfs"
 REPO_SCRIPT="https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh"
@@ -155,29 +137,17 @@ SOURCE_LIST_FILE="/etc/apt/sources.list.d/github_git-lfs.list"
 if [[ ! -f "${SOURCE_LIST_FILE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   if [[ $REPO_SCRIPT == http* ]]; then
     log_task "Downloading and running repository script for '${PKG_NAME}'"
-    if [ "$USER" = "root" ]; then
-      c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${REPO_SCRIPT}" | bash -
-    else
-      c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${REPO_SCRIPT}" | bash -
-    fi
+    c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${REPO_SCRIPT}" | bash -
   else
     log_task "Running repository script for '${PKG_NAME}'"
-    if [ "$USER" = "root" ]; then
-      c "${REPO_SCRIPT}"
-    else
-      c "${REPO_SCRIPT}"
-    fi
+    c "${REPO_SCRIPT}"
   fi
 fi
 SOURCE_LIST_FILE="/etc/apt/sources.list.d/github_git-lfs.list"
 SOURCE_LIST_LINE=""
 if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
   log_task "Adding github_git-lfs.list repository to APT"
-  if [ "$USER" = "root" ]; then
-    c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
-  else
-    c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
-  fi
+  c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
 fi
 
 apt_command=(pif [[ ${#wanted_packages[@]} -gt 0 ]]; then
