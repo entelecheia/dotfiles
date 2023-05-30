@@ -36,6 +36,11 @@ tasks:
     cmds:
       - neofetch
 
+  code-tunnel:
+    desc: Create a tunnel to a remote VS Code instance
+    cmds:
+      - code tunnel --accept-server-license-terms
+
 {{- if eq .chezmoi.os "linux" }}
   restart-docker-daemon:
     desc: Restart the Docker daemon
