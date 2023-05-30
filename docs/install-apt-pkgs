@@ -150,7 +150,7 @@ if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]] && is_item
   c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
 fi
 
-apt_command=(pif [[ ${#wanted_packages[@]} -gt 0 ]]; then
+if [[ ${#wanted_packages[@]} -gt 0 ]]; then
   log_task "Installing packages with APT: ${wanted_packages[*]}"
   c apt-get update --yes -qq -o=Dpkg::Use-Pty=0
   c apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends "${wanted_packages[@]}"
