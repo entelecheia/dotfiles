@@ -939,9 +939,9 @@ data:
     project_dir: {{ $project_dir | quote }}
     reference_dir: {{ $reference_dir | quote }}
   github_repos:
-    # {{- if $github_clones -}}
-    # {{- range (split "," $github_clones) -}} #
+# {{- if $github_clones -}}
+# {{- range (split "," $github_clones) }}
     - name: {{ . }}
       url: https://github.com/{{.}}.git
 # {{- end -}}
-# {{- end -}}
+# {{- end }}
