@@ -14,7 +14,8 @@ else
   exit 1
 fi
 c sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends ca-certificates
-c sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends curl wget gnupg software-properties-common zsh locales locales-all jq wget unzip gettext autoconf
+c sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends curl wget gnupg \
+  software-properties-common zsh locales locales-all jq gettext autoconf apt-transport-https zip bzip2 unzip
 
 # Add APT repositories for newer versions of Git.
 # This is required for git to use signing keys with ed25519 algorithm.

@@ -313,7 +313,7 @@ export DOTFILES_PKGS_PIP
 export DOTFILES_PKGS_PIPX
 export DOTFILES_PKGS_UPGRADABLE
 export DOTFILES_PKGS_USER
-
+# TODO: install minimal packages in devcontainer
 # total packages to install
 DOTFILES_PKGS_TO_INSTALL=(${DOTFILES_PKGS_MINIMAL[@]})
 {{- if not .system.is_devcontainer }}

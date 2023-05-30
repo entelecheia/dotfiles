@@ -2,7 +2,9 @@
 # {{- template "scripts-library" }}
 # {{- template "package-library" }}
 log_task "Installing python packages"
-
+# TODO: devcontainer support, diable virtualenv for devcontainer
+# TODO: install minimal packages in devcontainer
+# https://stackoverflow.com/questions/53835198/integrating-python-poetry-with-docker
 # shellcheck source=/dev/null
 source "${HOME}/.config/shrc/00-dotfiles-export"
 export PYTHONWARNINGS="ignore"
