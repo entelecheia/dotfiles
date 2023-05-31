@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.18.4 (2023-05-31)
+### Fix
+* **chezmoi:** Fix lfs-folderstore download URL ([`77526ca`](https://github.com/entelecheia/dotfiles/commit/77526caf0bf337eef3f30bcedf266423d6d1d9f1))
+
 ## v0.18.3 (2023-05-30)
 ### Fix
 * **docs:** Fix typo in install-apt-pkgs script ([`7844dae`](https://github.com/entelecheia/dotfiles/commit/7844dae73abaf0cbee6b75a4d915c2e97c908751))
