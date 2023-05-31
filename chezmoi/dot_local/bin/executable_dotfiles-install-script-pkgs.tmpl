@@ -26,7 +26,7 @@ done
 log_info "Wanted packages: ${wanted_packages[*]}"
 
 {{- range .packages }}
-{{- if and (hasKey . "script_cmd") ( .script_cmd ) }}
+{{- if and (hasKey . "script") ( .script ) (hasKey . "script_cmd") ( .script_cmd ) }}
 # installing {{ .name }}
 PKG_NAME="{{ .name }}"
 if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
