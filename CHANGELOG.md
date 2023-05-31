@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.18.6 (2023-05-31)
+### Fix
+* **chezmoi:** Add pipx installation for poetry package ([`2579b46`](https://github.com/entelecheia/dotfiles/commit/2579b46de683ac40c10fb33e79933591457a1291))
+
 ## v0.18.5 (2023-05-31)
 ### Fix
 * **python-pkg-installer:** Simplify pip3 commands and remove redundant path specification ([`3cbdce5`](https://github.com/entelecheia/dotfiles/commit/3cbdce52016b8a287da2104646b8233909a8f578))
