@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.18.7 (2023-05-31)
+### Fix
+* **packages:** Disable poetry script installation, update installation script for package with script ([`75ea20d`](https://github.com/entelecheia/dotfiles/commit/75ea20d8ecee07551eaf547420431e39e9583fe5))
+
 ## v0.18.6 (2023-05-31)
 ### Fix
 * **chezmoi:** Add pipx installation for poetry package ([`2579b46`](https://github.com/entelecheia/dotfiles/commit/2579b46de683ac40c10fb33e79933591457a1291))
