@@ -40,13 +40,13 @@ if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
       if is_package_installed_by_package_managers "${PKG_NAME}"; then
         log_info "Package ${PKG_NAME} is installed by other means"
       else
-        c /usr/bin/pip3 install --user --upgrade "${PKG_NAME}" || true
+        c pip3 install --user --upgrade "${PKG_NAME}" || true
       fi
-    elif {{ if and (hasKey . "check_installed") ( .check_installed ) }}{{ .check_installed }}{{ else }}/usr/bin/pip3 show "${PKG_NAME}" &>/dev/null{{ end }}; then
+    elif {{ if and (hasKey . "check_installed") ( .check_installed ) }}{{ .check_installed }}{{ else }}pip3 show "${PKG_NAME}" &>/dev/null{{ end }}; then
       log_info "Package ${PKG_NAME} is already installed"
     else
       log_task "Installing ${PKG_NAME}"
-      c /usr/bin/pip3 install --user --upgrade "${PKG_NAME}"
+      c pip3 install --user --upgrade "${PKG_NAME}"
     fi
   else
     log_error "Prerequisites for ${PKG_NAME} not met"
@@ -86,7 +86,7 @@ if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
     fi
   else
     log_task "Installing ${PKG_NAME} with pip"
-    c /usr/bin/pip3 install --user --upgrade "${PKG_NAME}"{{ if and (hasKey . "pipx_extra") ( .pipx_extra ) }} {{ .pipx_extra }}{{ end }}
+    c pip3 install --user --upgrade "${PKG_NAME}"{{ if and (hasKey . "pipx_extra") ( .pipx_extra ) }} {{ .pipx_extra }}{{ end }}
   fi
 fi
 {{- end }}
