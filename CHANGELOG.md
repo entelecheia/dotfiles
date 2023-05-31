@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.18.5 (2023-05-31)
+### Fix
+* **python-pkg-installer:** Simplify pip3 commands and remove redundant path specification ([`3cbdce5`](https://github.com/entelecheia/dotfiles/commit/3cbdce52016b8a287da2104646b8233909a8f578))
+
+### Documentation
+* Add reference link for Python Poetry with Docker integration ([`6186584`](https://github.com/entelecheia/dotfiles/commit/6186584392eeacfe30b4d2bb9f6f727106c7b59e))
+
 ## v0.18.4 (2023-05-31)
 ### Fix
 * **chezmoi:** Fix lfs-folderstore download URL ([`77526ca`](https://github.com/entelecheia/dotfiles/commit/77526caf0bf337eef3f30bcedf266423d6d1d9f1))
