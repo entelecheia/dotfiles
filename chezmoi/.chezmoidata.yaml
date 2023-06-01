@@ -303,6 +303,8 @@ packages:
   - name: poethepoet
     pipx: true
     check_installed: command -v poe &>/dev/null
+    completion_file: ${HOME}/.local/share/zsh/site-functions/_poe
+    completion_cmd: poe _zsh_completion
     scope: optional
     allow_upgrade: false
   - name: pre-commit
