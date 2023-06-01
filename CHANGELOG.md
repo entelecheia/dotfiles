@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.18.8 (2023-06-01)
+### Fix
+* **packages:** Add completion file for poethepoet ([`b604ef3`](https://github.com/entelecheia/dotfiles/commit/b604ef39aa30c322f6ed3905c9b6e54f04a57528))
+* **python-pkgs:** Add completion file install option ([`22793e9`](https://github.com/entelecheia/dotfiles/commit/22793e9ca6744be32a7a29d8ddd752e150506e8a))
+* **package:** Upgrade dotfiles install script pkgs template ([`41eacfd`](https://github.com/entelecheia/dotfiles/commit/41eacfd9ef64a0ed5e559e6d20a9528b5e3ae0ca))
+
 ## v0.18.7 (2023-05-31)
 ### Fix
 * **packages:** Disable poetry script installation, update installation script for package with script ([`75ea20d`](https://github.com/entelecheia/dotfiles/commit/75ea20d8ecee07551eaf547420431e39e9583fe5))
