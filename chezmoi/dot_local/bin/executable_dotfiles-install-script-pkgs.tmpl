@@ -62,13 +62,20 @@ if is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
     # Install completion file
     completion_file="{{ .completion_file }}"
     completion_file_dir="$(dirname "${completion_file}")"
-    completion_url="{{ .completion_url }}"
+    completion_url="{{ if and (hasKey . "completion_url") ( .completion_url ) }}{{ .completion_url }}{{ end }}"
+    completion_cmd="{{ if and (hasKey . "completion_cmd") ( .completion_cmd ) }}{{ .completion_cmd }}{{ end }}"
     if [[ ! -f "${completion_file}" ]]; then
       log_task "Installing ${PKG_NAME} completion file"
       if [[ ! -d "${completion_file_dir}" ]]; then
         c mkdir -p "${completion_file_dir}"
       fi
-      c wget -O "${completion_file}" "${completion_url}"
+      if [[ -n "${completion_cmd}" ]]; then
+        c "${completion_cmd}" > "${completion_file}"
+      elif [[ -n "${completion_url}" ]]; then
+        c wget -O "${completion_file}" "${completion_url}"
+      else
+        log_error "No completion file or URL specified for ${PKG_NAME}"
+      fi
     fi
 {{- end }}
   else
