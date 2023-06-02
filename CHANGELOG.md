@@ -1,5 +1,10 @@
 <!--next-version-placeholder-->
 
+## v0.19.2 (2023-06-02)
+### Fix
+* **venv:** Improve mkvirtualenv function with new options and error handling ([`e6beae2`](https://github.com/entelecheia/dotfiles/commit/e6beae249746865144978118b945e9f7e103c8ab))
+* **python:** Set WORKON_HOME to be at .venvs or use env variable. ([`84852d2`](https://github.com/entelecheia/dotfiles/commit/84852d26503dc85c9a941ff5d4865445ea0e273e))
+
 ## v0.19.1 (2023-06-02)
 ### Fix
 * **go-task:** Update default BINDIR value to use home directory ([`5dd085b`](https://github.com/entelecheia/dotfiles/commit/5dd085b451ef70e94fd71d4f653152dccad4b31a))
