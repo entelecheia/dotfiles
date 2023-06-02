@@ -219,6 +219,7 @@
 # {{- if eq (env "DOTFILES_USE_PYTHON_TOOLS") "false" "False" "FALSE" "0" -}}
 # {{-   $use_python_tools = false -}}
 # {{- end -}}
+# {{- $python_workon_home := or (env "WORKON_HOME") (joinPath .chezmoi.homeDir ".venvs") -}}
 
 # {{- $use_ngrok := false -}}
 # {{- if eq (env "DOTFILES_USE_NGROK") "true" "True" "TRUE" "1" -}}
@@ -959,8 +960,9 @@ data:
     ssh_port: {{ $ngrok_ssh_port | quote }}
   install_packages:
     user: {{ $pkgs_user }}
-  python_tools:
-    enabled: {{ $use_python_tools }}
+  python:
+    tools_enabled: {{ $use_python_tools }}
+    workon_home: {{ $python_workon_home | quote }}
   lfs_folderstore:
     enabled: {{ $use_lfs_folderstore }}
     store_dir: {{ $lfs_folderstore_dir | quote }}
