@@ -208,3 +208,14 @@ alias mkvenv="mkvirtualenv"
 alias mkvirtualenv-system="mkvirtualenv --system-site-packages"
 alias mkvenvs="mkvirtualenv-system"
 alias rmvenv="rmvirtualenv"
+
+# {{- if .lfs_folderstore.enabled | not | not -}} # lfs-folderstore
+function git-config-lfs-folderstore() {
+  # refer: https://github.com/OpeningDesign/LFS-template
+  git config --add lfs.customtransfer.lfs-folder.path "${HOME}/.local/bin/lfs-folderstore"
+  git config --add lfs.customtransfer.lfs-folder.args "{{ .lfs_folderstore.store_dir }}"
+  git config --add lfs.standalonetransferagent lfs-folder
+  git config lfs.url "https://localhost"
+}
+alias lfs-folderstore-init="git-config-lfs-folderstore"
+# {{- end }}
