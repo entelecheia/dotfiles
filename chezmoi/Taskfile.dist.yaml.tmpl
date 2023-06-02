@@ -51,21 +51,6 @@ tasks:
     cmds:
       - poetry config virtualenvs.create true
 
-  mkvenv:
-    desc: "Create a virtualenv: mkvenv -- name"
-    cmds:
-      - mkvirtualenv {{"{{.CLI_ARGS}}"}}
-
-  workon:
-    desc: "Activate a virtualenv: workon -- name"
-    cmds:
-      - workon {{"{{.CLI_ARGS}}"}}
-
-  rmvenv:
-    desc: "Remove a virtualenv: rmvenv -- name"
-    cmds:
-      - rmvirtualenv {{"{{.CLI_ARGS}}"}}
-
 {{- if .lfs_folderstore.enabled | not | not }}
 
   lfs-folderstore-init:
