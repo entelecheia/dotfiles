@@ -66,6 +66,13 @@ tasks:
     cmds:
       - rmvirtualenv {{"{{.CLI_ARGS}}"}}
 
+{{- if .lfs_folderstore.enabled | not | not }}
+  lfs-folderstore-init:
+    desc: Initialize the LFS folderstore for the current Git repository
+    cmds:
+      - git-config-lfs-folderstore
+{{- end }}
+
 {{- if eq .chezmoi.os "linux" }}
   restart-docker-daemon:
     desc: Restart the Docker daemon
