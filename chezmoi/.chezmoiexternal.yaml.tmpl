@@ -38,12 +38,14 @@
   stripComponents: 1
   # exact: true
 
+# {{- if .lfs_folderstore.enabled | not | not -}} #
 ".local/bin/lfs-folderstore":
   type: file
   url: "https://github.com/sinbad/lfs-folderstore/releases/download/v{{ template "get-github-latest-version" list "sinbad/lfs-folderstore" $cache }}/lfs-folderstore-{{ .chezmoi.os }}-amd64-v{{ template "get-github-latest-version" list "sinbad/lfs-folderstore" $cache }}.zip"
   executable: true
   filter:
     command: funzip
+# {{- end -}}
 
 # {{- if .docker.repo | not | not -}} #
 ".local/share/dockerfiles":
