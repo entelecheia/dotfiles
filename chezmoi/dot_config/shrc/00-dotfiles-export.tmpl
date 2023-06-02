@@ -332,6 +332,10 @@ export DOTFILES_PKGS_TO_INSTALL
 # Python Virtual Environment
 export WORKON_HOME=$HOME/.venvs
 function workon {
+  if [ -z "$1" ]; then
+    echo "Usage: workon <virtualenv>"
+    return
+  fi
   if [ -d "$WORKON_HOME/$1" ]; then
     source "$WORKON_HOME/$1/bin/activate"
   else
@@ -339,6 +343,10 @@ function workon {
   fi
 }
 function mkvirtualenv {
+  if [ -z "$1" ]; then
+    echo "Usage: mkvirtualenv <virtualenv>"
+    return
+  fi
   if [ ! -d "$WORKON_HOME/$1" ]; then
     python3 -m venv "$WORKON_HOME/$1"
     source "$WORKON_HOME/$1/bin/activate"
