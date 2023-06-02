@@ -166,31 +166,52 @@ function workon {
   fi
 }
 function mkvirtualenv {
-  if [ -z "$1" ]; then
-    echo "Usage: mkvirtualenv <virtualenv> [--system-site-packages]"
-    return
-  fi
-
+  local usage="Usage: mkvirtualenv <virtualenv> [--system-site-packages|-s][--force|-f][--help|-h]"
   local use_system_site_packages=0
+  local venv_name=""
+  local force=0
 
   for arg in "$@"; do
     case $arg in
-      --system-site-packages)
+      --system-site-packages|-s)
         use_system_site_packages=1
+        ;;
+      --force|-f)
+        force=1
+        ;;
+      --help|-h)
+        echo "$usage"
+        return
+        ;;
+      *)
+        if [ -z "$venv_name" ]; then
+          venv_name=$arg
+        else
+          echo "Unknown argument: $arg"
+          echo "$usage"
+          return
+        fi
         ;;
     esac
   done
 
-  if [ ! -d "$WORKON_HOME/$1" ]; then
+  if [ -z "$venv_name" ]; then
+    echo "Virtualenv name not provided"
+    echo "$usage"
+    return
+  fi
+
+  if [ ! -d "$WORKON_HOME/$venv_name" ] || [ $force -eq 1 ]; then
     if [ $use_system_site_packages -eq 1 ]; then
-      python3 -m venv "$WORKON_HOME/$1" --system-site-packages
+      python3 -m venv "$WORKON_HOME/$venv_name" --system-site-packages
+      source "$WORKON_HOME/$venv_name/bin/activate"
     else
-      python3 -m venv "$WORKON_HOME/$1"
+      python3 -m venv "$WORKON_HOME/$venv_name"
+      source "$WORKON_HOME/$venv_name/bin/activate"
+      pip install --upgrade pip setuptools wheel
     fi
-    source "$WORKON_HOME/$1/bin/activate"
-    pip install --upgrade pip setuptools wheel
   else
-    echo "Already exists: $1"
+    echo "Already exists: $venv_name"
   fi
 }
 function rmvirtualenv {
