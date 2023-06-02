@@ -385,14 +385,6 @@ packages:
   - name: vim
     apt: true
     scope: minimal
-  - name: xclip
-    apt: true
-    scope: gui
-  - name: yq
-    brew: true
-    script: true
-    script_cmd: install-yq
-    scope: minimal
   - name: webi
     script: true
     script_cmd: curl https://webi.sh/webi | sh
@@ -403,6 +395,14 @@ packages:
     scpoe: optional
   - name: wslu
     apt: true
+  - name: xclip
+    apt: true
+    scope: gui
+  - name: yq
+    brew: true
+    script: true
+    script_cmd: install-yq
+    scope: minimal
   - name: zip
     apt: true
     scope: minimal
