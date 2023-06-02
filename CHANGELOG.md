@@ -1,5 +1,23 @@
 <!--next-version-placeholder-->
 
+## v0.19.0 (2023-06-02)
+### Feature
+* **go-task:** Add conditional LFS folderstore initialization task ([`354d31f`](https://github.com/entelecheia/dotfiles/commit/354d31f354c71172e8d92bf456d840a292faa10d))
+* **aliases:** Add git LFS folderstore configuration alias ([`55c0177`](https://github.com/entelecheia/dotfiles/commit/55c01776e90e802603968783dfb6ac9a7d22ef7b))
+* **chezmoi:** Add DOTFILES_USE_LFS_FOLDERSTORE to export template ([`dfa89a3`](https://github.com/entelecheia/dotfiles/commit/dfa89a3ed995c58c33cc9d789c1cce1f95f38078))
+* **config:** Update .chezmoi.yaml.tmpl with lfs-folderstore handling ([`3db24cf`](https://github.com/entelecheia/dotfiles/commit/3db24cf8da13f7e72511f35c9f08eb9750693b7d))
+* **aliases:** Add rmvirtualenv function ([`28fa87b`](https://github.com/entelecheia/dotfiles/commit/28fa87b1ba9b964df723cf97bfcf07ae5a3b0e01))
+* **go-task:** Add virtual environment management tasks ([`b4e42a5`](https://github.com/entelecheia/dotfiles/commit/b4e42a523b6f10249b5c16e4509dc05ffe233a9a))
+* **shell:** Add python virtual environment commands ([`601fb6f`](https://github.com/entelecheia/dotfiles/commit/601fb6fc0979cd2268aead8d69c9201b7fbded06))
+* **shrc:** Add Python virtual environment functions ([`cfee128`](https://github.com/entelecheia/dotfiles/commit/cfee1280956a4c4fc9364764a47063387381dffd))
+* **chezmoi:** Update Taskfile.dist.yaml.tmpl with poetry virtualenv config commands ([`90d9a0e`](https://github.com/entelecheia/dotfiles/commit/90d9a0eaf7dc7de51cf378c7364e89202331d281))
+
+### Fix
+* **go-task:** Fix LFS folderstore initialization ([`2f1e4b5`](https://github.com/entelecheia/dotfiles/commit/2f1e4b5682c8fa00d9d67ea169fe2a7dc515506c))
+* **go-task:** Upgrade LFS folderstore configuration. ([`32b73fa`](https://github.com/entelecheia/dotfiles/commit/32b73fab3da4b7c7c524dbc16e8aaebb24de3eaa))
+* **chezmoi:** Update .chezmoiexternal.yaml.tmpl for lfs-folderstore ([`ddda9bd`](https://github.com/entelecheia/dotfiles/commit/ddda9bdc8a632f597fb5632de4975e99a1b99a55))
+* **templates:** Add usage message to workon and mkvirtualenv functions ([`2952c10`](https://github.com/entelecheia/dotfiles/commit/2952c109f119d4bb483649f1b0aa3817b490eb96))
+
 ## v0.18.8 (2023-06-01)
 ### Fix
 * **packages:** Add completion file for poethepoet ([`b604ef3`](https://github.com/entelecheia/dotfiles/commit/b604ef39aa30c322f6ed3905c9b6e54f04a57528))
