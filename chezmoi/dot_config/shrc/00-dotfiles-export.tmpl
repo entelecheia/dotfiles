@@ -331,3 +331,19 @@ export DOTFILES_PKGS_TO_INSTALL
 
 # Python Virtual Environment
 export WORKON_HOME=$HOME/.venvs
+function workon {
+  if [ -d "$WORKON_HOME/$1" ]; then
+    source "$WORKON_HOME/$1/bin/activate"
+  else
+    echo "No such virtualenv: $1"
+  fi
+}
+function mkvirtualenv {
+  if [ ! -d "$WORKON_HOME/$1" ]; then
+    python3 -m venv "$WORKON_HOME/$1"
+    source "$WORKON_HOME/$1/bin/activate"
+    pip install --upgrade pip setuptools wheel
+  else
+    echo "Already exists: $1"
+  fi
+}
