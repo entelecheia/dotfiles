@@ -70,7 +70,10 @@ tasks:
   lfs-folderstore-init:
     desc: Initialize the LFS folderstore for the current Git repository
     cmds:
-      - git-config-lfs-folderstore
+      - git config --add lfs.customtransfer.lfs-folder.path "${HOME}/.local/bin/lfs-folderstore"
+      - git config --add lfs.customtransfer.lfs-folder.args "{{ .lfs_folderstore.store_dir }}"
+      - git config --add lfs.standalonetransferagent lfs-folder
+      - git config lfs.url "https://localhost"
 {{- end }}
 
 {{- if eq .chezmoi.os "linux" }}
