@@ -631,9 +631,9 @@
 # {{-   $use_lfs_folderstore = promptBool $question $use_lfs_folderstore -}}
 # {{- end -}}
 # {{- if $use_lfs_folderstore -}}
-# {{-   writeToStdout "✅  Using lfs-folderstore for git lfs\n" -}}
+# {{-   writeToStdout "✅  lfs-folderstore for git lfs enabled\n" -}}
 # {{- else -}}
-# {{-   writeToStdout "❎  Not using lfs-folderstore for git lfs\n" -}}
+# {{-   writeToStdout "❎  lfs-folderstore for git lfs disabled\n" -}}
 # {{- end -}}
 # {{- if and $interactive $use_lfs_folderstore -}}
 # {{-   $question := "❔ Where do you want to put your lfs-folderstore" -}}
