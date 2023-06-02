@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.19.1 (2023-06-02)
+### Fix
+* **go-task:** Update default BINDIR value to use home directory ([`5dd085b`](https://github.com/entelecheia/dotfiles/commit/5dd085b451ef70e94fd71d4f653152dccad4b31a))
+
 ## v0.19.0 (2023-06-02)
 ### Feature
 * **go-task:** Add conditional LFS folderstore initialization task ([`354d31f`](https://github.com/entelecheia/dotfiles/commit/354d31f354c71172e8d92bf456d840a292faa10d))
