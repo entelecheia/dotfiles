@@ -193,8 +193,18 @@ function mkvirtualenv {
     echo "Already exists: $1"
   fi
 }
+function rmvirtualenv {
+  if [ -z "$1" ]; then
+    echo "Usage: rmvirtualenv <virtualenv>"
+    return
+  fi
+  if [ -d "$WORKON_HOME/$1" ]; then
+    rm -rf "$WORKON_HOME/$1"
+  else
+    echo "No such virtualenv: $1"
+  fi
+}
 alias mkvenv="mkvirtualenv"
 alias mkvirtualenv-system="mkvirtualenv --system-site-packages"
 alias mkvenvs="mkvirtualenv-system"
-alias rmvirtualenv="rm -rf $WORKON_HOME/\$1"
 alias rmvenv="rmvirtualenv"
