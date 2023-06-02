@@ -41,6 +41,16 @@ tasks:
     cmds:
       - code tunnel --accept-server-license-terms
 
+  poetry-disable-virtualenvs:
+    desc: Disable virtualenvs in poetry
+    cmds:
+      - poetry config virtualenvs.create false
+
+  poetry-enable-virtualenvs:
+    desc: Enable virtualenvs in poetry
+    cmds:
+      - poetry config virtualenvs.create true
+
 {{- if eq .chezmoi.os "linux" }}
   restart-docker-daemon:
     desc: Restart the Docker daemon
