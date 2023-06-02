@@ -195,6 +195,18 @@
 # {{- $symlink_to_home := true -}}
 # {{- $winhome_symlink := joinPath .chezmoi.homeDir "winhome" -}}
 
+# {{- $use_lfs_folderstore := false -}}
+# {{- if eq (env "DOTFILES_USE_LFS_FOLDERSTORE") "true" "True" "TRUE" "1" -}}
+# {{-   $use_lfs_folderstore = true -}}
+# {{- end -}}
+# {{- if and (hasKey . "lfs_folderstore") (hasKey .lfs_folderstore "enabled") -}}
+# {{-   $use_lfs_folderstore = .lfs_folderstore.enabled -}}
+# {{- end -}}
+# {{- $lfs_folderstore_dir := joinPath .chezmoi.homeDir "workspace/lfs-folderstore" -}}
+# {{- if and (hasKey . "lfs_folderstore") (hasKey .lfs_folderstore "store_dir") -}}
+# {{-   $lfs_folderstore_dir = .lfs_folderstore.store_dir -}}
+# {{- end -}}
+
 # {{- $use_code := false -}}
 # {{- if eq (env "DOTFILES_USE_CODE") "true" "True" "TRUE" "1" -}}
 # {{-   $use_code = true -}}
@@ -310,6 +322,7 @@
 # {{- writeToStdout (printf "🦸  DOTFILES_APPLY_ROOTMOI: %t\n" $apply_rootmoi) -}}
 # {{- end -}}
 # {{- if $minimum | not -}}
+# {{- writeToStdout (printf "🗃️  DOTFILES_USE_LFS_FOLDERSTORE: %t\n" $use_lfs_folderstore) -}}
 # {{- writeToStdout (printf "📦  DOTFILES_USE_AUTORESTIC: %t\n" $use_autorestic) -}}
 # {{- writeToStdout (printf "🔖  DOTFILES_USE_DOTDROP: %t\n" $use_dotdrop) -}}
 # {{- writeToStdout (printf "🐍  DOTFILES_USE_PYTHON_TOOLS: %t\n" $use_python_tools) -}}
@@ -611,6 +624,27 @@
 # {{-   writeToStdout "✅  Colab workspace symlinked to workspace root\n" -}}
 # {{- else -}}
 # {{-   writeToStdout "❎  Colab workspace not symlinked\n" -}}
+# {{- end -}}
+
+# {{- if $interactive -}}
+# {{-   $question := "❔ Do you want to use lfs-folderstore for git lfs" -}}
+# {{-   $use_lfs_folderstore = promptBool $question $use_lfs_folderstore -}}
+# {{- end -}}
+# {{- if $use_lfs_folderstore -}}
+# {{-   writeToStdout "✅  Using lfs-folderstore for git lfs\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  Not using lfs-folderstore for git lfs\n" -}}
+# {{- end -}}
+# {{- if and $interactive $use_lfs_folderstore -}}
+# {{-   $question := "❔ Where do you want to put your lfs-folderstore" -}}
+# {{-   $answer := "" -}}
+# {{-   if $lfs_folderstore_dir -}}
+# {{-     $answer = promptString $question $lfs_folderstore_dir -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $lfs_folderstore_dir = $answer -}}
+# {{-   writeToStdout (printf "✅  lfs-folderstore location set as '%s'\n" $lfs_folderstore_dir) -}}
 # {{- end -}}
 
 # {{- if $interactive -}}
@@ -927,6 +961,9 @@ data:
     user: {{ $pkgs_user }}
   python_tools:
     enabled: {{ $use_python_tools }}
+  lfs_folderstore:
+    enabled: {{ $use_lfs_folderstore }}
+    store_dir: {{ $lfs_folderstore_dir | quote }}
   workspace:
     name: {{ $workspace_name | quote }}
     location: {{ $workspace_location | quote }}
