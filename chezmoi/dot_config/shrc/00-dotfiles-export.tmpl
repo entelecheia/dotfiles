@@ -143,6 +143,7 @@ USER_UID="$(id -u)"
 USER_GID="$(id -u)"
 export USER_UID
 export USER_GID
+export USERNAME="{{ .chezmoi.username }}"
 
 # shellcheck disable=SC1073,SC1054,SC1050,SC1072,SC1009
 {{ if (hasKey . "packages") }}
