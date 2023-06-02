@@ -45,6 +45,7 @@ export DOTFILES_UPGRADE_PACKAGES="{{ .system.upgrade_packages }}"
 export DOTFILES_APPLY_ROOTMOI="{{ .system.apply_rootmoi }}"
 export DOTFILES_SUDOER="{{ .system.is_sudoer }}"
 export DOTFILES_VERBOSE="{{ .system.verbose }}"
+export DOTFILES_USE_LFS_FOLDERSTORE="{{ .lfs_folderstore.enabled }}"
 export DOTFILES_USE_AUTORESTIC="{{ .autorestic.enabled }}"
 export DOTFILES_USE_DOTDROP="{{ .dotdrop.enabled }}"
 export DOTFILES_USE_PASS="{{ .pass.enabled }}"
@@ -143,6 +144,7 @@ USER_UID="$(id -u)"
 USER_GID="$(id -u)"
 export USER_UID
 export USER_GID
+export USERNAME="{{ .chezmoi.username }}"
 
 # shellcheck disable=SC1073,SC1054,SC1050,SC1072,SC1009
 {{ if (hasKey . "packages") }}
@@ -313,7 +315,7 @@ export DOTFILES_PKGS_PIP
 export DOTFILES_PKGS_PIPX
 export DOTFILES_PKGS_UPGRADABLE
 export DOTFILES_PKGS_USER
-# TODO: install minimal packages in devcontainer
+
 # total packages to install
 DOTFILES_PKGS_TO_INSTALL=(${DOTFILES_PKGS_MINIMAL[@]})
 {{- if not .system.is_devcontainer }}
@@ -327,3 +329,6 @@ DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_SYSTEM[@]})
 {{- end }}
 DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_USER[@]})
 export DOTFILES_PKGS_TO_INSTALL
+
+# Python Virtual Environment
+export WORKON_HOME="$HOME/.venvs"

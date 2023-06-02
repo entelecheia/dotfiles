@@ -41,7 +41,46 @@ tasks:
     cmds:
       - code tunnel --accept-server-license-terms
 
+  poetry-disable-virtualenvs:
+    desc: Disable virtualenvs in poetry
+    cmds:
+      - poetry config virtualenvs.create false
+
+  poetry-enable-virtualenvs:
+    desc: Enable virtualenvs in poetry
+    cmds:
+      - poetry config virtualenvs.create true
+
+  mkvenv:
+    desc: "Create a virtualenv: mkvenv -- name"
+    cmds:
+      - mkvirtualenv {{"{{.CLI_ARGS}}"}}
+
+  workon:
+    desc: "Activate a virtualenv: workon -- name"
+    cmds:
+      - workon {{"{{.CLI_ARGS}}"}}
+
+  rmvenv:
+    desc: "Remove a virtualenv: rmvenv -- name"
+    cmds:
+      - rmvirtualenv {{"{{.CLI_ARGS}}"}}
+
+{{- if .lfs_folderstore.enabled | not | not }}
+
+  lfs-folderstore-init:
+    desc: Initialize the LFS folderstore for the current Git repository
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - git config --add lfs.customtransfer.lfs-folder.path "${HOME}/.local/bin/lfs-folderstore"
+      - git config --add lfs.customtransfer.lfs-folder.args "{{ .lfs_folderstore.store_dir }}"
+      - git config --add lfs.standalonetransferagent lfs-folder
+      - git config lfs.url "https://localhost"
+
+{{- end }}
+
 {{- if eq .chezmoi.os "linux" }}
+
   restart-docker-daemon:
     desc: Restart the Docker daemon
     cmds:
@@ -61,4 +100,5 @@ tasks:
     desc: Print system information using inxi
     cmds:
       - inxi -F
+
 {{- end }}

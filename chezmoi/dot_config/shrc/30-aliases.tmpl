@@ -152,3 +152,70 @@ alias tla="task --list-all"
 alias gt="gtask"
 alias gtls="gtask --list"
 alias gtla="gtask --list-all"
+
+# Python Virtual Environment
+function workon {
+  if [ -z "$1" ]; then
+    echo "Usage: workon <virtualenv>"
+    return
+  fi
+  if [ -d "$WORKON_HOME/$1" ]; then
+    source "$WORKON_HOME/$1/bin/activate"
+  else
+    echo "No such virtualenv: $1"
+  fi
+}
+function mkvirtualenv {
+  if [ -z "$1" ]; then
+    echo "Usage: mkvirtualenv <virtualenv> [--system-site-packages]"
+    return
+  fi
+
+  local use_system_site_packages=0
+
+  for arg in "$@"; do
+    case $arg in
+      --system-site-packages)
+        use_system_site_packages=1
+        ;;
+    esac
+  done
+
+  if [ ! -d "$WORKON_HOME/$1" ]; then
+    if [ $use_system_site_packages -eq 1 ]; then
+      python3 -m venv "$WORKON_HOME/$1" --system-site-packages
+    else
+      python3 -m venv "$WORKON_HOME/$1"
+    fi
+    source "$WORKON_HOME/$1/bin/activate"
+    pip install --upgrade pip setuptools wheel
+  else
+    echo "Already exists: $1"
+  fi
+}
+function rmvirtualenv {
+  if [ -z "$1" ]; then
+    echo "Usage: rmvirtualenv <virtualenv>"
+    return
+  fi
+  if [ -d "$WORKON_HOME/$1" ]; then
+    rm -rf "$WORKON_HOME/$1"
+  else
+    echo "No such virtualenv: $1"
+  fi
+}
+alias mkvenv="mkvirtualenv"
+alias mkvirtualenv-system="mkvirtualenv --system-site-packages"
+alias mkvenvs="mkvirtualenv-system"
+alias rmvenv="rmvirtualenv"
+
+# {{- if .lfs_folderstore.enabled | not | not -}} # lfs-folderstore
+function git-config-lfs-folderstore() {
+  # refer: https://github.com/OpeningDesign/LFS-template
+  git config --add lfs.customtransfer.lfs-folder.path "${HOME}/.local/bin/lfs-folderstore"
+  git config --add lfs.customtransfer.lfs-folder.args "{{ .lfs_folderstore.store_dir }}"
+  git config --add lfs.standalonetransferagent lfs-folder
+  git config lfs.url "https://localhost"
+}
+alias lfs-folderstore-init="git-config-lfs-folderstore"
+# {{- end }}
