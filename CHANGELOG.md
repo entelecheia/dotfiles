@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.20.0 (2023-06-03)
+### Feature
+* **git-lfs:** Add Git LFS installation, tracking and migration tasks ([`127fa03`](https://github.com/entelecheia/dotfiles/commit/127fa038c17478544eb39bb0d2ec360bfea6cd73))
+
+### Fix
+* **chezmoi:** Update poetry installation method ([`eaeccd4`](https://github.com/entelecheia/dotfiles/commit/eaeccd451905bd6caad95b68acc1f4499af42bdf))
+
 ## v0.19.2 (2023-06-02)
 ### Fix
 * **venv:** Improve mkvirtualenv function with new options and error handling ([`e6beae2`](https://github.com/entelecheia/dotfiles/commit/e6beae249746865144978118b945e9f7e103c8ab))
