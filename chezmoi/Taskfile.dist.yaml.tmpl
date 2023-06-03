@@ -51,6 +51,53 @@ tasks:
     cmds:
       - poetry config virtualenvs.create true
 
+  git-lfs-install:
+    desc: Install Git LFS
+    cmds:
+      - git lfs install
+
+  git-lfs-track:
+    desc: Track files with Git LFS
+    cmds:
+      - git lfs track {{"{{.CLI_ARGS}}"}}
+
+  git-lfs-track-preset:
+    desc: Track files with Git LFS
+    cmds:
+      - git lfs track "*.parquet"
+      - git lfs track "*.pkl"
+      - git lfs track "*.pth"
+      - git lfs track "*.pt"
+      - git lfs track "*.tar"
+      - git lfs track "*.tar.gz"
+      - git lfs track "*.tgz"
+      - git lfs track "*.zip"
+      - git lfs track "*.zst"
+      - git lfs track "*.gz"
+      - git lfs track "*.ogg"
+      - git lfs track "*.mp3"
+      - git lfs track "*.mp4"
+      - git lfs track "*.wav"
+      - git lfs track "*.avi"
+      - git lfs track "*.mov"
+      - git lfs track "*.mkv"
+      - git lfs track "*.flac"
+      - git lfs track "*.xlsx"
+      - git lfs track "*.xls"
+      - git lfs track "*.csv"
+      - git lfs track "*.tsv"
+      - git lfs track "*.pdf"
+      - git lfs track "*.docx"
+      - git lfs track "*.doc"
+      - git lfs track "*.pptx"
+      - git lfs track "*.ppt"
+      - git lfs track "*.hwp"
+
+  git-lfs-migrate:
+    desc: Migrate files to Git LFS
+    cmds:
+      - git lfs migrate import --everything --include={{"{{.CLI_ARGS}}"}}
+
 {{- if .lfs_folderstore.enabled | not | not }}
 
   lfs-folderstore-init:
