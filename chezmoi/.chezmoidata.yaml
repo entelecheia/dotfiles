@@ -295,7 +295,7 @@ packages:
     scope: optional
     allow_upgrade: true
   - name: poetry
-    brew: true
+    brew: false
     script: false
     pipx: true
     script_cmd: curl -sSL https://install.python-poetry.org | python3 -
