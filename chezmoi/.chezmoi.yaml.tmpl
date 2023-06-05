@@ -132,11 +132,13 @@
 # {{- $gpg_key_id_file := joinPath $ssh_homedir ".gpg-id" -}}
 # {{- $gpg_key_id := env "GPG_KEY_ID" -}}
 # {{- $git_commit_gpgsign := false -}}
-# {{- if eq (env "GIT_COMMIT_GPGSIGN") "true" "True" "TRUE" "1" -}}
-# {{-   $git_commit_gpgsign = true -}}
-# {{- end -}}
 # {{- if and (hasKey . "gnupg") (hasKey .gnupg "gitsign") -}}
 # {{-   $git_commit_gpgsign = .gnupg.gitsign -}}
+# {{- end -}}
+# {{- if eq (env "GIT_COMMIT_GPGSIGN") "true" "True" "TRUE" "1" -}}
+# {{-   $git_commit_gpgsign = true -}}
+# {{- else if eq (env "GIT_COMMIT_GPGSIGN") "false" "False" "FALSE" "0" -}}
+# {{-   $git_commit_gpgsign = false -}}
 # {{- end -}}
 
 # {{- $use_dotdrop := true -}}
