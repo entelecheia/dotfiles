@@ -845,7 +845,7 @@
 # {{-   writeToStdout "❎  Additional packages to install not set\n" -}}
 # {{- end -}}
 
-# {{-   writeToStdout "\n💡 Tip: you can always make chezmoi ask this again by running `chezmoi init` without `--force`.\n" -}}
+# {{-   writeToStdout "\n💡 Tip: you can always config your dotfiles interactively by running `dotfiles-update|dotu init`.\n" -}}
 
 # {{- /* This retains the value passed with --source on chezmoi init, which is used in the ../install.sh script */ -}} #
 sourceDir: "{{ .chezmoi.workingTree }}"
