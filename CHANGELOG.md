@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.20.2 (2023-06-05)
+### Fix
+* **chezmoi:** Simplify interactive prompts for GPG signing of git commits ([`813b23e`](https://github.com/entelecheia/dotfiles/commit/813b23e5c3559b5e46698543e6a17639fc37e221))
+* **chezmoi:** Update init tip message ([`f530da4`](https://github.com/entelecheia/dotfiles/commit/f530da4d1fc37e445c869c5f2b45c5ed9d07267f))
+* **chezmoi:** Improve handling of git commit GPG sign configuration ([`c67845d`](https://github.com/entelecheia/dotfiles/commit/c67845dd9b8003f5ca22c2f2e444673e83f645d0))
+
 ## v0.20.1 (2023-06-05)
 ### Fix
 * **ssh-setup:** Update script to include GPG signing option ([`8469627`](https://github.com/entelecheia/dotfiles/commit/8469627b7481e48427a24289758397ed91f522cf))
