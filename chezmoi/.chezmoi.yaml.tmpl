@@ -29,10 +29,11 @@
 # {{- $auto_update := false -}}
 # {{- if and (hasKey . "system") (hasKey .system "auto_update") -}}
 # {{-   $auto_update = .system.auto_update -}}
-# {{- else -}}
-# {{-   if eq (env "DOTFILES_AUTO_UPDATE") "true" "True" "TRUE" "1" -}}
-# {{-     $auto_update = true -}}
-# {{-   end -}}
+# {{- end -}}
+# {{- if eq (env "DOTFILES_AUTO_UPDATE") "true" "True" "TRUE" "1" -}}
+# {{-   $auto_update = true -}}
+# {{- else if eq (env "DOTFILES_AUTO_UPDATE") "false" "False" "FALSE" "0" -}}
+# {{-   $auto_update = false -}}
 # {{- end -}}
 
 # {{- $upgrade_packages := false -}}
