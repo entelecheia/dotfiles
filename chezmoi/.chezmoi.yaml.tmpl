@@ -29,10 +29,11 @@
 # {{- $auto_update := false -}}
 # {{- if and (hasKey . "system") (hasKey .system "auto_update") -}}
 # {{-   $auto_update = .system.auto_update -}}
-# {{- else -}}
-# {{-   if eq (env "DOTFILES_AUTO_UPDATE") "true" "True" "TRUE" "1" -}}
-# {{-     $auto_update = true -}}
-# {{-   end -}}
+# {{- end -}}
+# {{- if eq (env "DOTFILES_AUTO_UPDATE") "true" "True" "TRUE" "1" -}}
+# {{-   $auto_update = true -}}
+# {{- else if eq (env "DOTFILES_AUTO_UPDATE") "false" "False" "FALSE" "0" -}}
+# {{-   $auto_update = false -}}
 # {{- end -}}
 
 # {{- $upgrade_packages := false -}}
@@ -132,11 +133,13 @@
 # {{- $gpg_key_id_file := joinPath $ssh_homedir ".gpg-id" -}}
 # {{- $gpg_key_id := env "GPG_KEY_ID" -}}
 # {{- $git_commit_gpgsign := false -}}
-# {{- if eq (env "GIT_COMMIT_GPGSIGN") "true" "True" "TRUE" "1" -}}
-# {{-   $git_commit_gpgsign = true -}}
-# {{- end -}}
 # {{- if and (hasKey . "gnupg") (hasKey .gnupg "gitsign") -}}
 # {{-   $git_commit_gpgsign = .gnupg.gitsign -}}
+# {{- end -}}
+# {{- if eq (env "GIT_COMMIT_GPGSIGN") "true" "True" "TRUE" "1" -}}
+# {{-   $git_commit_gpgsign = true -}}
+# {{- else if eq (env "GIT_COMMIT_GPGSIGN") "false" "False" "FALSE" "0" -}}
+# {{-   $git_commit_gpgsign = false -}}
 # {{- end -}}
 
 # {{- $use_dotdrop := true -}}
@@ -516,7 +519,7 @@
 # {{-   writeToStdout "❎  GitHub Token not set\n" -}}
 # {{- end -}}
 
-# {{- if and $interactive ($minimum | not) -}}
+# {{- if $interactive -}}
 # {{-   $question := "❔ What passphrase do you want to use for your GPG key" -}}
 # {{-   $answer := "" -}}
 # {{-   if $gpg_passphrase -}}
@@ -532,15 +535,15 @@
 # {{-   writeToStdout "❎  GPG passphrase not set\n" -}}
 # {{- end -}}
 
-# {{- if and $interactive ($minimum | not) -}}
+# {{- if $interactive -}}
 # {{-   $question := "❔ Do you want to use GPG(or SSH) to sign git commits globally" -}}
 # {{-   $git_commit_gpgsign = promptBool $question $git_commit_gpgsign -}}
 # {{- end -}}
-# {{-   if $git_commit_gpgsign -}}
-# {{-     writeToStdout "✅  Git commits will be signed by GPG(or SSH)\n" -}}
-# {{-   else -}}
-# {{-     writeToStdout "❎  Git commits will not be signed by GPG(or SSH)\n" -}}
-# {{-   end -}}
+# {{- if $git_commit_gpgsign -}}
+# {{-   writeToStdout "✅  Git commits will be signed by GPG(or SSH)\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  Git commits will not be signed by GPG(or SSH)\n" -}}
+# {{- end -}}
 
 # {{- if and $interactive $use_dotdrop -}}
 # {{-   $question := "❔ What is your dotdrop files repository URL (ex: https://github.com/entelecheia/dotdrop-files.git)" -}}
@@ -843,7 +846,7 @@
 # {{-   writeToStdout "❎  Additional packages to install not set\n" -}}
 # {{- end -}}
 
-# {{-   writeToStdout "\n💡 Tip: you can always make chezmoi ask this again by running `chezmoi init` without `--force`.\n" -}}
+# {{-   writeToStdout "\n💡 Tip: you can always config your dotfiles interactively by running `dotfiles-update|dotu init`.\n" -}}
 
 # {{- /* This retains the value passed with --source on chezmoi init, which is used in the ../install.sh script */ -}} #
 sourceDir: "{{ .chezmoi.workingTree }}"
