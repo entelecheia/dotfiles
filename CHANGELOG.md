@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.20.1 (2023-06-05)
+### Fix
+* **ssh-setup:** Update script to include GPG signing option ([`8469627`](https://github.com/entelecheia/dotfiles/commit/8469627b7481e48427a24289758397ed91f522cf))
+
 ## v0.20.0 (2023-06-03)
 ### Feature
 * **git-lfs:** Add Git LFS installation, tracking and migration tasks ([`127fa03`](https://github.com/entelecheia/dotfiles/commit/127fa038c17478544eb39bb0d2ec360bfea6cd73))
