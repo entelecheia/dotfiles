@@ -1,5 +1,7 @@
 #!/bin/bash
 # {{ template "scripts-library" }}
+# shellcheck source=/dev/null
+source "${HOME}/.config/shrc/00-dotfiles-export"
 
 # arguments
 COMMAND=${1:-"update"}
@@ -119,3 +121,7 @@ pass-pull
 printf "\n"
 log_green "✨ 🌟 ✨  Dotfiles updated to ${DOTFILES_VERSION} successfully. ✨ 🌟 ✨"
 log_yellow "👉  If you want to reload your shell, run:  exec zsh 👈"
+# shellcheck source=/dev/null
+# shellcheck source=/dev/null
+source "${HOME}/.config/shrc/00-dotfiles-export"
+source "${HOME}/.config/shrc/30-aliases"
