@@ -2,7 +2,7 @@
 # {{ template "scripts-library" }}
 
 SSH_HOME=${SSH_HOME:-"{{ .ssh.home }}"}
-GPGSIGN=${GPGSIGN:-"{{ .git.gpgsign }}"}
+GIT_COMMIT_GPGSIGN=${GIT_COMMIT_GPGSIGN:-"{{ .git.gpgsign }}"}
 
 if [ ! -e "${SSH_HOME}" ]; then
     log_task "Creating ${SSH_HOME}"
@@ -65,7 +65,7 @@ if [ -e "${SSH_PUB_KEY_FILE}" ]; then
     fi
     log_task "Adding SSH key to gitconfig for signing commits"
     c git config --global user.signingkey "${SSH_PUB_KEY_FILE}"
-    if [[ "${GPGSIGN}" == "true" ]]; then
+    if [[ "${GIT_COMMIT_GPGSIGN}" == "true" ]]; then
         log_task "Enabling GPG signing for git commits"
         c git config --global gpg.format ssh
         c git config --global commit.gpgsign true
