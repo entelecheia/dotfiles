@@ -51,6 +51,30 @@ tasks:
     cmds:
       - poetry config virtualenvs.create true
 
+  hyperfast-template:
+    desc: Create a new project using the hyperfast template
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - copier copy --UNSAFE gh:entelecheia/hyperfast-template .
+
+  hyfi-template:
+    desc: Create a new project using the hyfi template
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - copier copy --UNSAFE gh:entelecheia/hyfi-template .
+
+  hyperfast-python-template:
+    desc: Create a new Python project using the hyperfast template
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - copier copy --UNSAFE gh:entelecheia/hyperfast-python-template .
+
+  hyperfast-docker-template:
+    desc: Create a new Docker project using the hyperfast template
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - copier copy --UNSAFE gh:entelecheia/hyperfast-docker-template .
+
   git-lfs-install:
     desc: Install Git LFS
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
