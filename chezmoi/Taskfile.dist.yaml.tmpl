@@ -51,29 +51,41 @@ tasks:
     cmds:
       - poetry config virtualenvs.create true
 
-  hyperfast-template:
+  init-hyperfast-project:
     desc: Create a new project using the hyperfast template
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
       - copier copy --UNSAFE gh:entelecheia/hyperfast-template .
 
-  hyfi-template:
+  init-hyfi-project:
     desc: Create a new project using the hyfi template
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
       - copier copy --UNSAFE gh:entelecheia/hyfi-template .
 
-  hyperfast-python-template:
+  init-hyperfast-python-project:
     desc: Create a new Python project using the hyperfast template
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
       - copier copy --UNSAFE gh:entelecheia/hyperfast-python-template .
 
-  hyperfast-docker-template:
+  init-hyperfast-docker-project:
     desc: Create a new Docker project using the hyperfast template
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
       - copier copy --UNSAFE gh:entelecheia/hyperfast-docker-template .
+
+  reinit-project:
+    desc: Reinitialize a project using the template of the current project
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; copier copy "${args[@]}" --answers-file .copier-config.yaml --UNSAFE . .
+
+  reinit-hyfi-project:
+    desc: Reinitialize a project using the hyfi template
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; copier copy "${args[@]}" --data 'code_template_source=gh:entelecheia/hyfi-template' --answers-file .copier-config.yaml --UNSAFE gh:entelecheia/hyperfast-python-template .
 
   git-lfs-install:
     desc: Install Git LFS
