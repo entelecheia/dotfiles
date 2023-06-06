@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.20.3 (2023-06-06)
+### Fix
+* **ssh-setup:** Change GIT_COMMIT_GPGSIGN variable name for clarity ([`87a678d`](https://github.com/entelecheia/dotfiles/commit/87a678d15a0093b96dff95943df912fcc10d2ce6))
+
 ## v0.20.2 (2023-06-05)
 ### Fix
 * **chezmoi:** Simplify interactive prompts for GPG signing of git commits ([`813b23e`](https://github.com/entelecheia/dotfiles/commit/813b23e5c3559b5e46698543e6a17639fc37e221))
