@@ -1,5 +1,9 @@
 <!--next-version-placeholder-->
 
+## v0.20.4 (2023-06-06)
+### Fix
+* **go-task:** Update Taskfile.dist.yaml.tmpl with Git LFS commands ([`999cd29`](https://github.com/entelecheia/dotfiles/commit/999cd2955ba368f688e0b60973c1bb9a5b4ca851))
+
 ## v0.20.3 (2023-06-06)
 ### Fix
 * **ssh-setup:** Change GIT_COMMIT_GPGSIGN variable name for clarity ([`87a678d`](https://github.com/entelecheia/dotfiles/commit/87a678d15a0093b96dff95943df912fcc10d2ce6))
