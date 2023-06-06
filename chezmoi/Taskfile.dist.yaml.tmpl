@@ -85,7 +85,7 @@ tasks:
     desc: Reinitialize a project using the hyfi template
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
-      - bash -c 'args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; copier copy "${args[@]}" --data 'code_template_source=gh:entelecheia/hyfi-template' --answers-file .copier-config.yaml gh:entelecheia/hyperfast-python-template .'
+      - bash -c 'args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; copier copy "${args[@]}" --data 'code_template_source=gh:entelecheia/hyfi-template' --answers-file .copier-config.yaml --UNSAFE gh:entelecheia/hyperfast-python-template .'
 
   git-lfs-install:
     desc: Install Git LFS
