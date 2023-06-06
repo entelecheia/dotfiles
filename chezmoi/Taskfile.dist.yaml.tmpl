@@ -53,16 +53,19 @@ tasks:
 
   git-lfs-install:
     desc: Install Git LFS
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
       - git lfs install
 
   git-lfs-track:
     desc: Track files with Git LFS
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
       - git lfs track {{"{{.CLI_ARGS}}"}}
 
   git-lfs-track-preset:
     desc: Track files with Git LFS
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
       - git lfs track "*.parquet"
       - git lfs track "*.pkl"
@@ -95,6 +98,7 @@ tasks:
 
   git-lfs-migrate:
     desc: Migrate files to Git LFS
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
       - git lfs migrate import --everything --include={{"{{.CLI_ARGS}}"}}
 
