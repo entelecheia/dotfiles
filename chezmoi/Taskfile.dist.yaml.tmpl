@@ -16,6 +16,12 @@ tasks:
     cmds:
       - task --list
 
+  clone-global-taskfile:
+    desc: Clone the global Taskfile.dist.yaml to the current directory
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - cp $HOME/Taskfile.dist.yaml Taskfile.dist.yaml
+
   tmux-new:
     desc: Create a new tmux session
     cmds:
