@@ -18,14 +18,14 @@ tasks:
 
   clone-global-taskfile:
     desc: Clone the global Taskfile.dist.yaml to the current directory
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - cp $HOME/Taskfile.dist.yaml Taskfile.dist.yaml
 
   tmux-new:
     desc: Create a new tmux session
     cmds:
-      - tmux new -s {{"{{.CLI_ARGS}}"}}
+      - tmux new -s {{.CLI_ARGS}}
 
   tmux-ls:
     desc: List tmux sessions
@@ -35,7 +35,7 @@ tasks:
   tmux-attach:
     desc: Attach to a tmux session
     cmds:
-      - tmux attach -t {{"{{.CLI_ARGS}}"}}
+      - tmux attach -t {{.CLI_ARGS}}
 
   sysinfo:
     desc: Print system information
@@ -64,134 +64,134 @@ tasks:
 
   init-hyperfast-project:
     desc: Create a new project using the hyperfast template
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - copier copy --UNSAFE gh:entelecheia/hyperfast-template .
 
   init-hyfi-project:
     desc: Create a new project using the hyfi template
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - copier copy --UNSAFE gh:entelecheia/hyfi-template .
 
   init-hyperfast-python-project:
     desc: Create a new Python project using the hyperfast template
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - copier copy --UNSAFE gh:entelecheia/hyperfast-python-template .
 
   init-hyperfast-docker-project:
     desc: Create a new Docker project using the hyperfast template
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - copier copy --UNSAFE gh:entelecheia/hyperfast-docker-template .
 
   reinit-project:
     desc: Reinitialize a project using the template of the current project
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; copier copy "${args[@]}" --answers-file .copier-config.yaml --UNSAFE . .
 
   reinit-hyfi-project:
     desc: Reinitialize a project using the hyfi template
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; copier copy "${args[@]}" --data 'code_template_source=gh:entelecheia/hyfi-template' --answers-file .copier-config.yaml --UNSAFE gh:entelecheia/hyperfast-python-template .
 
   semantic-release-version:
     desc: Print the current version using semantic-release
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - semantic-release print-version --current
 
   semantic-release-next-version:
     desc: Print the next version using semantic-release
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - semantic-release print-version --next
 
   semantic-release-changelog:
     desc: Print the changelog using semantic-release
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - semantic-release changelog --released
 
   semantic-release-next-change:
     desc: Print the next change using semantic-release
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - semantic-release changelog --unreleased
 
   semantic-release-noop:
     desc: Run semantic-release in noop mode (dry run)
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - semantic-release --noop -v DEBUG
 
   semantic-prerelease-noop:
     desc: Run semantic-release in noop mode (dry run) for a prerelease
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - semantic-release --noop --prerelease -v DEBUG
 
   git-show-branches:
     desc: Show branches in the current Git repository
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - git show-branch --list
 
   git-show-tags:
     desc: Show tags in the current Git repository
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - git tag --list
 
   git-show-remotes:
     desc: Show remotes in the current Git repository
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - git remote --verbose
 
   git-show-refs:
     desc: Show refs in the current Git repository
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - git show-ref
 
   git-checkout-branch:
     desc: Checkout a branch in the current Git repository
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
-      - git checkout {{"{{.CLI_ARGS}}"}}
+      - git checkout {{.CLI_ARGS}}
 
   git-checkout-main:
     desc: Checkout the main branch in the current Git repository
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - git checkout main
 
   git-checkout-branch-upstream:
     desc: Checkout a branch in the current Git repository
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
-      - git checkout B {{"{{.CLI_ARGS}}"}}
-      - git push --set-upstream origin {{"{{.CLI_ARGS}}"}}
+      - git checkout B {{.CLI_ARGS}}
+      - git push --set-upstream origin {{.CLI_ARGS}}
 
   git-lfs-install:
     desc: Install Git LFS
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - git lfs install
 
   git-lfs-track:
     desc: Track files with Git LFS
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
-      - git lfs track {{"{{.CLI_ARGS}}"}}
+      - git lfs track {{.CLI_ARGS}}
 
   git-lfs-track-preset:
-    desc: Track files with Git LFS using a preset
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    desc: Track files with Git LFS
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - git lfs track "*.parquet"
       - git lfs track "*.pkl"
@@ -224,24 +224,18 @@ tasks:
 
   git-lfs-migrate:
     desc: Migrate files to Git LFS
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
-      - git lfs migrate import --everything --include={{"{{.CLI_ARGS}}"}}
-
-{{- if .lfs_folderstore.enabled | not | not }}
+      - git lfs migrate import --everything --include={{.CLI_ARGS}}
 
   lfs-folderstore-init:
     desc: Initialize the LFS folderstore for the current Git repository
-    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - git config --add lfs.customtransfer.lfs-folder.path "${HOME}/.local/bin/lfs-folderstore"
-      - git config --add lfs.customtransfer.lfs-folder.args "{{ .lfs_folderstore.store_dir }}"
+      - git config --add lfs.customtransfer.lfs-folder.args "/home/yj.lee/workspace/onedrive/lfs-folderstore"
       - git config --add lfs.standalonetransferagent lfs-folder
       - git config lfs.url "https://localhost"
-
-{{- end }}
-
-{{- if eq .chezmoi.os "linux" }}
 
   restart-docker-daemon:
     desc: Restart the Docker daemon
@@ -262,5 +256,3 @@ tasks:
     desc: Print system information using inxi
     cmds:
       - inxi -F
-
-{{- end }}
