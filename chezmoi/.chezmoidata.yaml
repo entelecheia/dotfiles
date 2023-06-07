@@ -334,6 +334,7 @@ packages:
     scope: full
   - name: python-semantic-release
     pipx: true
+    check_installed: command -v semantic-release &>/dev/null
     scope: optional
   - name: restic
     brew: true
