@@ -86,11 +86,23 @@ tasks:
     cmds:
       - copier copy --UNSAFE gh:entelecheia/hyperfast-docker-template .
 
-  reinit-project:
-    desc: Reinitialize a project using the template of the current project
+  reinit-hyperfast-python-project:
+    desc: Reinitialize a project using the hyperfast python template
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
-      - args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; copier copy "${args[@]}" --answers-file .copier-config.yaml --UNSAFE . .
+      - args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; copier copy "${args[@]}" --answers-file .copier-config.yaml --UNSAFE gh:entelecheia/hyperfast-python-template .
+
+  reinit-hyperfast-docker-project:
+    desc: Reinitialize a project using the hyperfast docker template
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; copier copy "${args[@]}" --answers-file .copier-config.yaml --UNSAFE gh:entelecheia/hyperfast-docker-template .
+
+  reinit-hyperfast-project:
+    desc: Reinitialize a project using the hyperfast template
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; copier copy "${args[@]}" --answers-file .copier-config.yaml --UNSAFE gh:entelecheia/hyperfast-template .
 
   reinit-hyfi-project:
     desc: Reinitialize a project using the hyfi template
