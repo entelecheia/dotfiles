@@ -51,6 +51,11 @@ tasks:
     cmds:
       - poetry config virtualenvs.create true
 
+  python-keyring-disable:
+    desc: Disable keyring in Python
+    cmds:
+      - export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
+
   init-hyperfast-project:
     desc: Create a new project using the hyperfast template
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
@@ -86,6 +91,85 @@ tasks:
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
       - args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; copier copy "${args[@]}" --data 'code_template_source=gh:entelecheia/hyfi-template' --answers-file .copier-config.yaml --UNSAFE gh:entelecheia/hyperfast-python-template .
+
+  semantic-release-version:
+    desc: Print the current version using semantic-release
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - semantic-release print-version --current
+
+  semantic-release-next-version:
+    desc: Print the next version using semantic-release
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - semantic-release print-version --next
+
+  semantic-release-changelog:
+    desc: Print the changelog using semantic-release
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - semantic-release changelog --released
+
+  semantic-release-next-change:
+    desc: Print the next change using semantic-release
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - semantic-release changelog --unreleased
+
+  semantic-release-noop:
+    desc: Run semantic-release in noop mode (dry run)
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - semantic-release --noop -v DEBUG
+
+  semantic-prerelease-noop:
+    desc: Run semantic-release in noop mode (dry run) for a prerelease
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - semantic-release --noop --prerelease -v DEBUG
+
+  git-show-branches:
+    desc: Show branches in the current Git repository
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - git show-branch --list
+
+  git-show-tags:
+    desc: Show tags in the current Git repository
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - git tag --list
+
+  git-show-remotes:
+    desc: Show remotes in the current Git repository
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - git remote --verbose
+
+  git-show-refs:
+    desc: Show refs in the current Git repository
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - git show-ref
+
+  git-checkout-branch:
+    desc: Checkout a branch in the current Git repository
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - git checkout {{"{{.CLI_ARGS}}"}}
+
+  git-checkout-main:
+    desc: Checkout the main branch in the current Git repository
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - git checkout main
+
+  git-checkout-branch-upstream:
+    desc: Checkout a branch in the current Git repository
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - git checkout B {{"{{.CLI_ARGS}}"}}
+      - git push --set-upstream origin {{"{{.CLI_ARGS}}"}}
 
   git-lfs-install:
     desc: Install Git LFS
