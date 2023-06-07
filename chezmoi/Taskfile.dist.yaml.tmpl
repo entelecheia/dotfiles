@@ -202,6 +202,24 @@ tasks:
     cmds:
       - git config --unset core.hooksPath
 
+  git-lfs-skip-smudge:
+    desc: Set global Git LFS smudge filter to skip (for faster checkout or for CI)
+    cmds:
+      - git config --global filter.lfs.smudge "git-lfs smudge --skip -- %f"
+      - git config --global filter.lfs.process "git-lfs filter-process --skip"
+
+  git-lfs-smudge:
+    desc: Set global Git LFS smudge filter to default (enable smudging)
+    cmds:
+      - git config --global filter.lfs.smudge "git-lfs smudge -- %f"
+      - git config --global filter.lfs.process "git-lfs filter-process"
+
+  git-clone-skip-smudge:
+    desc: Clone a Git repository with LFS smudge filter set to skip
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - GIT_LFS_SKIP_SMUDGE=1 git clone {{"{{.CLI_ARGS}}"}}
+
   git-lfs-install:
     desc: Install Git LFS
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
