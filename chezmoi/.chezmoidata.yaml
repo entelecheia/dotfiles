@@ -191,6 +191,7 @@ packages:
     current_version: $(task --version | awk '{print $3}')
     latest_version: $(curl -s https://api.github.com/repos/go-task/task/releases/latest | grep 'tag_name' | cut -d'"' -f4)
     # TODO: the current official completion file is not working correctly. if it gets fixed, uncomment the following lines
+    # TODO: and remove the _task file from the chezmoi/dot_oh-my-zsh/completions directory in this repo
     # completion_file: ${HOME}/.oh-my-zsh/completions/_task
     # completion_url: https://raw.githubusercontent.com/go-task/task/main/completion/zsh/_task
     scope: minimal
