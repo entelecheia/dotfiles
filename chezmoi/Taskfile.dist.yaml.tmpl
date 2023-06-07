@@ -174,7 +174,7 @@ tasks:
     desc: Checkout a branch in the current Git repository
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
-      - git checkout B {{"{{.CLI_ARGS}}"}}
+      - git checkout -B {{"{{.CLI_ARGS}}"}}
       - git push --set-upstream origin {{"{{.CLI_ARGS}}"}}
 
   git-lfs-install:
