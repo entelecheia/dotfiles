@@ -86,11 +86,23 @@ tasks:
     cmds:
       - copier copy --UNSAFE gh:entelecheia/hyperfast-docker-template .
 
-  reinit-project:
-    desc: Reinitialize a project using the template of the current project
+  reinit-hyperfast-python-project:
+    desc: Reinitialize a project using the hyperfast python template
     dir: '{{.USER_WORKING_DIR}}'
     cmds:
-      - args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; copier copy "${args[@]}" --answers-file .copier-config.yaml --UNSAFE . .
+      - args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; copier copy "${args[@]}" --answers-file .copier-config.yaml --UNSAFE gh:entelecheia/hyperfast-python-template .
+
+  reinit-hyperfast-docker-project:
+    desc: Reinitialize a project using the hyperfast docker template
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; copier copy "${args[@]}" --answers-file .copier-config.yaml --UNSAFE gh:entelecheia/hyperfast-docker-template .
+
+  reinit-hyperfast-project:
+    desc: Reinitialize a project using the hyperfast template
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; copier copy "${args[@]}" --answers-file .copier-config.yaml --UNSAFE gh:entelecheia/hyperfast-template .
 
   reinit-hyfi-project:
     desc: Reinitialize a project using the hyfi template
@@ -174,8 +186,48 @@ tasks:
     desc: Checkout a branch in the current Git repository
     dir: '{{.USER_WORKING_DIR}}'
     cmds:
-      - git checkout B {{.CLI_ARGS}}
+      - git checkout -B {{.CLI_ARGS}}
       - git push --set-upstream origin {{.CLI_ARGS}}
+
+  git-sync-fork-main:
+    desc: Sync a fork with the main branch of the upstream repository
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - git fetch upstream
+      - git checkout main
+      - git merge upstream/main
+      - git push
+
+  # ref: https://adamj.eu/tech/2023/02/13/git-skip-hooks/
+  git-disable-hook:
+    desc: Disable a Git hook (Skip “unskippable” hooks, e.g. lfs hooks)
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - git config core.hooksPath /dev/null
+
+  git-enable-hook:
+    desc: Enable a Git hook (unset core.hooksPath)
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - git config --unset core.hooksPath
+
+  git-lfs-skip-smudge:
+    desc: Set global Git LFS smudge filter to skip (for faster checkout or for CI)
+    cmds:
+      - git config --global filter.lfs.smudge "git-lfs smudge --skip -- %f"
+      - git config --global filter.lfs.process "git-lfs filter-process --skip"
+
+  git-lfs-smudge:
+    desc: Set global Git LFS smudge filter to default (enable smudging)
+    cmds:
+      - git config --global filter.lfs.smudge "git-lfs smudge -- %f"
+      - git config --global filter.lfs.process "git-lfs filter-process"
+
+  git-clone-skip-smudge:
+    desc: Clone a Git repository with LFS smudge filter set to skip
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - GIT_LFS_SKIP_SMUDGE=1 git clone {{.CLI_ARGS}}
 
   git-lfs-install:
     desc: Install Git LFS
@@ -190,7 +242,7 @@ tasks:
       - git lfs track {{.CLI_ARGS}}
 
   git-lfs-track-preset:
-    desc: Track files with Git LFS
+    desc: Track files with Git LFS using a preset
     dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - git lfs track "*.parquet"
