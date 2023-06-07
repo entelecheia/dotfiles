@@ -1,5 +1,23 @@
 <!--next-version-placeholder-->
 
+## v0.21.0 (2023-06-07)
+
+### Feature
+
+* **taskfile:** Add clone-global-taskfile task to template ([`7ee2b6b`](https://github.com/entelecheia/dotfiles/commit/7ee2b6bf5a6b58528af5adc85006fbe2a07385e9))
+* **packages:** Add python-semantic-release pipx package ([`2a72605`](https://github.com/entelecheia/dotfiles/commit/2a726059f973391ba50a29005cac17b5047b0502))
+* **go-task:** Add semantic-release commands and update git commands ([`c4fee44`](https://github.com/entelecheia/dotfiles/commit/c4fee4484300385dfe269f99c6d8e346d16f0ccf))
+* **poetry:** Add virtualenvs configuration ([`6ff06db`](https://github.com/entelecheia/dotfiles/commit/6ff06dbb574c57dc904943dbe9a333a8935a96c1))
+
+### Fix
+
+* **g-task:** Add reinit commands for hyperfast templates ([`147454f`](https://github.com/entelecheia/dotfiles/commit/147454fd3b7b386daed36a4a54f320818a4610b9))
+* **go-task:** Fix creating new branch in Taskfile.dist.yaml.tmpl ([`48aa9b6`](https://github.com/entelecheia/dotfiles/commit/48aa9b60fcc4aba2e2df3e09b84b71bf33173762))
+* **packages:** Add check to python-semantic-release installation status ([`dcdc670`](https://github.com/entelecheia/dotfiles/commit/dcdc6702316fc29d71efa245e02f43abf0b03684))
+* **zsh:** Add completions for task command ([`34ff293`](https://github.com/entelecheia/dotfiles/commit/34ff2931fb2313c3a972ad73275452af03630de4))
+* **chezmoi:** Comment out task completion configuration ([`233acd0`](https://github.com/entelecheia/dotfiles/commit/233acd039ef267f1732a86522638c8c46ce451a2))
+* **zsh:** Updated completion paths for task and poe. ([`97fd370`](https://github.com/entelecheia/dotfiles/commit/97fd3700b351ff1c52d8814b92dfa8afa2e371ea))
+
 ## v0.20.4 (2023-06-06)
 ### Fix
 * **go-task:** Update Taskfile.dist.yaml.tmpl with Git LFS commands ([`999cd29`](https://github.com/entelecheia/dotfiles/commit/999cd2955ba368f688e0b60973c1bb9a5b4ca851))
