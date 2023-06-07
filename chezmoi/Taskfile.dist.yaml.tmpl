@@ -189,6 +189,15 @@ tasks:
       - git checkout -B {{"{{.CLI_ARGS}}"}}
       - git push --set-upstream origin {{"{{.CLI_ARGS}}"}}
 
+  git-sync-fork-main:
+    desc: Sync a fork with the main branch of the upstream repository
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - git fetch upstream
+      - git checkout main
+      - git merge upstream/main
+      - git push
+
   # ref: https://adamj.eu/tech/2023/02/13/git-skip-hooks/
   git-disable-hook:
     desc: Disable a Git hook (Skip “unskippable” hooks, e.g. lfs hooks)
