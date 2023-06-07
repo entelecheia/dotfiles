@@ -332,6 +332,9 @@ packages:
   - name: python3-venv
     apt: true
     scope: full
+  - name: python-semantic-release
+    pipx: true
+    scope: optional
   - name: restic
     brew: true
     scope: optional
