@@ -189,6 +189,19 @@ tasks:
       - git checkout -B {{"{{.CLI_ARGS}}"}}
       - git push --set-upstream origin {{"{{.CLI_ARGS}}"}}
 
+  # ref: https://adamj.eu/tech/2023/02/13/git-skip-hooks/
+  git-disable-hook:
+    desc: Disable a Git hook (Skip “unskippable” hooks, e.g. lfs hooks)
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - git config core.hooksPath /dev/null
+
+  git-enable-hook:
+    desc: Enable a Git hook (unset core.hooksPath)
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - git config --unset core.hooksPath
+
   git-lfs-install:
     desc: Install Git LFS
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
