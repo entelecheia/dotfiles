@@ -190,7 +190,7 @@ packages:
     check_installed: command -v task &>/dev/null
     current_version: $(task --version | awk '{print $3}')
     latest_version: $(curl -s https://api.github.com/repos/go-task/task/releases/latest | grep 'tag_name' | cut -d'"' -f4)
-    completion_file: ${HOME}/.local/share/zsh/site-functions/_task
+    completion_file: ${HOME}/.oh-my-zsh/completions/_task
     completion_url: https://raw.githubusercontent.com/go-task/task/main/completion/zsh/_task
     scope: minimal
     allow_upgrade: true
@@ -303,7 +303,7 @@ packages:
   - name: poethepoet
     pipx: true
     check_installed: command -v poe &>/dev/null
-    completion_file: ${HOME}/.local/share/zsh/site-functions/_poe
+    completion_file: ${HOME}/.oh-my-zsh/completions/_poe
     completion_cmd: poe _zsh_completion
     scope: optional
     allow_upgrade: false
