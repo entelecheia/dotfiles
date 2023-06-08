@@ -391,6 +391,9 @@ packages:
   - name: vim
     apt: true
     scope: minimal
+  - name: wakatime
+    pipx: true
+    scope: optional
   - name: webi
     script: true
     script_cmd: curl https://webi.sh/webi | sh
