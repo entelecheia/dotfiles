@@ -1,5 +1,13 @@
 <!--next-version-placeholder-->
 
+## v0.22.1 (2023-06-08)
+
+### Fix
+
+* **chezmoi:** Switch pre-commit package installation from brew to pipx ([`dc01ec4`](https://github.com/entelecheia/dotfiles/commit/dc01ec455ef6674740315004d45f92c668afab87))
+* **chezmoi:** Add wakatime to optional packages ([`703a5c2`](https://github.com/entelecheia/dotfiles/commit/703a5c20b74e0a39a4629deec47524f4297b0e64))
+* **packages:** Add optional WakaTime package using pipx ([`89ad195`](https://github.com/entelecheia/dotfiles/commit/89ad1952fc6a84a0a6d07378dfb9767c4a132ddb))
+
 ## v0.22.0 (2023-06-08)
 
 ### Feature
