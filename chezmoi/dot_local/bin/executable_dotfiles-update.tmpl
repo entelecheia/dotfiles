@@ -48,8 +48,10 @@ if chezmoi --version &>/dev/null; then
   CHEZMOI_VERSIOIN="$(chezmoi --version | awk '{print $3}' | sed 's/,//')"
   LATEST_CHEZMOI_VERSION="$(curl -s https://api.github.com/repos/twpayne/chezmoi/releases/latest | jq -r '.tag_name')"
   if [ "$CHEZMOI_VERSIOIN" != "$LATEST_CHEZMOI_VERSION" ]; then
-    log_task "Updating chezmoi to the latest version..."
+    log_task "Updating chezmoi to the latest version (${LATEST_CHEZMOI_VERSION})"
     chezmoi upgrade
+  else
+    log_info "chezmoi is up to date. (${CHEZMOI_VERSIOIN})"
   fi
 
   CHEZMOI_REPO="{{ .chezmoi.workingTree }}"
