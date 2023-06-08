@@ -282,6 +282,20 @@
 # {{-   $use_vault = true -}}
 # {{- end -}}
 
+# {{- $use_wakatime := false -}}
+# {{- if and (hasKey . "wakatime") (hasKey .wakatime "enabled") -}}
+# {{-   $use_wakatime = .wakatime.enabled -}}
+# {{- end -}}
+# {{- if eq (env "DOTFILES_USE_WAKATIME") "false" "False" "FALSE" "0" -}}
+# {{-   $use_wakatime = false -}}
+# {{- else if eq (env "DOTFILES_USE_WAKATIME") "true" "True" "TRUE" "1" -}}
+# {{-   $use_wakatime = true -}}
+# {{- end -}}
+# {{- $wakatime_api_key := or (env "WAKATIME_API_KEY") "" -}}
+# {{- if and (hasKey . "wakatime") (hasKey .wakatime "api_key") -}}
+# {{-   $wakatime_api_key = .wakatime.api_key -}}
+# {{- end -}}
+
 # {{- $use_autorestic := false -}}
 # {{- if eq (env "DOTFILES_USE_AUTORESTIC") "true" "True" "TRUE" "1" -}}
 # {{-   $use_autorestic = true -}}
@@ -683,6 +697,27 @@
 # {{-   writeToStdout "❎  python tools disabled\n" -}}
 # {{- end -}}
 
+# {{- if $interactive -}}
+# {{-   $question := "❔ Do you want to use wakatime" -}}
+# {{-   $use_wakatime = promptBool $question $use_wakatime -}}
+# {{- end -}}
+# {{- if and $use_wakatime $interactive -}}
+# {{-   $question := "❔ What is your wakatime api key" -}}
+# {{-   $answer := "" -}}
+# {{-   if $wakatime_api_key -}}
+# {{-     $answer = promptString $question $wakatime_api_key -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $wakatime_api_key = $answer -}}
+# {{- end -}}
+# {{- if $use_wakatime -}}
+# {{-   writeToStdout "✅  wakatime enabled\n" -}}
+# {{-   writeToStdout (printf "✅  wakatime api key set as '%s'\n" $wakatime_api_key) -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  wakatime disabled\n" -}}
+# {{- end -}}
+
 # {{- if $use_ngrok -}}
 # {{-   writeToStdout "✅  ngrok enabled\n" -}}
 # {{- else -}}
@@ -969,6 +1004,9 @@ data:
   lfs_folderstore:
     enabled: {{ $use_lfs_folderstore }}
     store_dir: {{ $lfs_folderstore_dir | quote }}
+  wakatime:
+    enabled: {{ $use_wakatime }}
+    api_key: {{ $wakatime_api_key | quote }}
   workspace:
     name: {{ $workspace_name | quote }}
     location: {{ $workspace_location | quote }}

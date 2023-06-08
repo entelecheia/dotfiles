@@ -41,8 +41,19 @@ if command -v gh >/dev/null; then
   fi
 fi
 
+
 DOTFILES_VERSION="{{ .DOTFILES_VERSION }}"
 if chezmoi --version &>/dev/null; then
+  # v2.34.0, need to remove the comma
+  CHEZMOI_VERSIOIN="$(chezmoi --version | awk '{print $3}' | sed 's/,//')"
+  LATEST_CHEZMOI_VERSION="$(curl -s https://api.github.com/repos/twpayne/chezmoi/releases/latest | jq -r '.tag_name')"
+  if [ "$CHEZMOI_VERSIOIN" != "$LATEST_CHEZMOI_VERSION" ]; then
+    log_task "Updating chezmoi to the latest version (${LATEST_CHEZMOI_VERSION})"
+    chezmoi upgrade
+  else
+    log_info "chezmoi is up to date. (${CHEZMOI_VERSIOIN})"
+  fi
+
   CHEZMOI_REPO="{{ .chezmoi.workingTree }}"
   # Get the remote URL of the local repository
   REPO_URL=$(git --git-dir="$CHEZMOI_REPO/.git" --work-tree="$CHEZMOI_REPO" remote get-url origin)

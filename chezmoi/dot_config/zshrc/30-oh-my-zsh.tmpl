@@ -74,6 +74,7 @@ plugins=(
   zsh-autosuggestions
   dotenv
   colorize
+  {{ if .wakatime.enabled | not | not }}zsh-wakatime{{ end }}
 )
 
 # https://github.com/zsh-users/zsh-completions/issues/603
