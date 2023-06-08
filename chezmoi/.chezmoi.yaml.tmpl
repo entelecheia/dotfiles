@@ -863,6 +863,9 @@
 # {{- if $use_vault -}}
 # {{-   $pkgs_user = printf "%s vault" $pkgs_user -}}
 # {{- end -}}
+# {{- if $use_wakatime -}}
+# {{-   $pkgs_user = printf "%s wakatime" $pkgs_user -}}
+# {{- end -}}
 
 # {{- if and $interactive ($minimum | not) -}}
 # {{-   $question := "❔ What are the additional packages to install (input as space separated list, ex: git curl)" -}}
