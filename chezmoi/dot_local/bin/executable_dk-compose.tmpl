@@ -201,24 +201,6 @@ fi
 export VERSION
 
 DOCKERFILES_SHARE_DIR="{{- .docker.share_dir }}"
-if [[ -n "$TAG" ]]; then
-  # {base_name}-{TAG}.{ext}
-  if [[ -z "$COMPOSE_FILENAME" ]]; then
-    COMPOSE_FILENAME="docker-compose-${TAG}.yaml"
-  fi
-  if [[ -z "$SHELL_ENV_FILENAME" ]]; then
-    SHELL_ENV_FILENAME="docker.${TAG}.env"
-  fi
-else
-  # {base_name}.{ext}
-  if [[ -z "$COMPOSE_FILENAME" ]]; then
-    COMPOSE_FILENAME="docker-compose.yaml"
-  fi
-  if [[ -z "$SHELL_ENV_FILENAME" ]]; then
-    SHELL_ENV_FILENAME="docker.env"
-  fi
-fi
-
 # check PATHs
 if [[ -z "$PROJECT_DIR" ]]; then
   PROJECT_DIR="${WORKSPACE_PROJECT_DIR}/${DOCKER_NAME}"
@@ -237,9 +219,28 @@ if [[ -z "$DOCKERFILES_DIR" ]]; then
   # DOCKERFILES_DIR="${DOCKERFILES_SHARE_DIR}/src/${DOCKER_NAME}/.docker"
   DOCKERFILES_DIR="${PROJECT_DIR}/.docker"
 fi
-COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
+
+
+if [[ -n "$COMPOSE_FILENAME" ]]; then
+  COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
+else
+  if [[ -n "$TAG" ]]; then
+    # {base_name}-{TAG}.{ext}
+    COMPOSE_FILENAME="docker-compose-${TAG}.yaml"
+    COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
+    if [[ ! -f "$COMPOSE_FILE" ]]; then
+      COMPOSE_FILENAME="docker-compose.${TAG}.yaml"
+      COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
+    fi
+  else
+    # {base_name}.{ext}
+    COMPOSE_FILENAME="docker-compose.yaml"
+    COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
+  fi
+fi
 if [[ ! -f "$COMPOSE_FILE" ]]; then
-  COMPOSE_FILE="${DOCKERFILES_DIR}/docker-compose.yaml"
+  COMPOSE_FILENAME="docker-compose.yaml"
+  COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
 fi
 if [[ ! -f "$COMPOSE_FILE" ]]; then
   log_error "Dockerfile ${COMPOSE_FILE} does not exist"
@@ -271,6 +272,13 @@ fi
 
 # shell env file
 if [ -z "$SHELL_ENV_FILE" ]; then
+  if [[ -n "$TAG" ]]; then
+    # {base_name}-{TAG}.{ext}
+    SHELL_ENV_FILENAME="docker.${TAG}.env"
+  else
+    # {base_name}.{ext}
+    SHELL_ENV_FILENAME="docker.env"
+  fi
   SHELL_ENV_FILE="${DOCKERFILES_DIR}/${SHELL_ENV_FILENAME}"
 fi
 if [[ -f "$SHELL_ENV_FILE" ]]; then
