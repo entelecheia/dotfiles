@@ -38,6 +38,14 @@
   stripComponents: 1
   # exact: true
 
+# {{- if .wakatime.enabled | not | not -}} #
+".oh-my-zsh/custom/plugins/zsh-wakatime":
+  type: archive
+  url: "https://github.com/wbingli/zsh-wakatime/archive/{{ template "get-github-head-revision" list "wbingli/zsh-wakatime" $cache }}.tar.gz"
+  stripComponents: 1
+  exact: true
+# {{- end -}}
+
 # {{- if .lfs_folderstore.enabled | not | not -}} #
 ".local/bin/lfs-folderstore":
   type: file
