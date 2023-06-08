@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.21.1 (2023-06-08)
+
+### Fix
+
+* **dk-compose:** Simplify file naming and checking for docker-compose and shell env files ([`36fbde6`](https://github.com/entelecheia/dotfiles/commit/36fbde69cb4cfdca1f43eca81f1b0ae435dac53b))
+
 ## v0.21.0 (2023-06-07)
 
 ### Feature
