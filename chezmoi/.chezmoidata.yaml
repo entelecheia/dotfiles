@@ -310,7 +310,7 @@ packages:
     scope: optional
     allow_upgrade: false
   - name: pre-commit
-    brew: true
+    brew: false
     pipx: true
     scope: optional
     allow_upgrade: false
