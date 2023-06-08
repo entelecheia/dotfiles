@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dotfiles"
-version = "0.21.1"
+version = "0.22.0"
 description = "Easily manage and synchronize your dotfiles across multiple environments with the Dotfiles project, streamlining your development setup and CI/CD pipeline."
 authors = ["Young Joon Lee <entelecheia@hotmail.com>"]
 license = "MIT"

@@ -1,5 +1,16 @@
 <!--next-version-placeholder-->
 
+## v0.22.0 (2023-06-08)
+
+### Feature
+
+* **zshrc:** Add support for wakatime plugin if enabled ([`b368ec8`](https://github.com/entelecheia/dotfiles/commit/b368ec8f777003cd2212ffdbbb9294ec2ee0c624))
+* **chezmoi:** Add zsh-wakatime plugin archive URL to .chezmoiexternal.yaml.tmpl file. ([`3088b48`](https://github.com/entelecheia/dotfiles/commit/3088b482742aeb9177aa229e510bd50b757fb82e))
+* **config:** Add wakatime integration with API key ([`d8331f7`](https://github.com/entelecheia/dotfiles/commit/d8331f72eddefc2c4e0abbf99d44a21190ac6af6))
+* **dotfiles:** Upgrade chezmoi to the latest version ([`df67ecb`](https://github.com/entelecheia/dotfiles/commit/df67ecb0ca8a080e7c565bc982292315b9b3f589))
+* **chezmoi:** Update wakatime integration prompt and configuration in .chezmoi.yaml config ([`c5697f5`](https://github.com/entelecheia/dotfiles/commit/c5697f5d64251f5879af459827a72a2837241789))
+* **config:** Add wakatime api key modification template ([`8bcf0a9`](https://github.com/entelecheia/dotfiles/commit/8bcf0a9b81c1891b24e2d59e646b5481696fa869))
+
 ## v0.21.1 (2023-06-08)
 
 ### Fix
