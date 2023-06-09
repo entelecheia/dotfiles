@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.23.0 (2023-06-09)
+
+### Feature
+
+* **go-task:** Add OpenAI tasks for model listing, chatting, completion and image generation. ([`fbf8e77`](https://github.com/entelecheia/dotfiles/commit/fbf8e770063e1d7102b8a3ded09db719adecf2fb))
+* **config:** Add OpenAI to dotfiles config ([`eb5a287`](https://github.com/entelecheia/dotfiles/commit/eb5a287fb719c03ddcca70a4cfca21525673c518))
+
 ## v0.22.1 (2023-06-08)
 
 ### Fix
