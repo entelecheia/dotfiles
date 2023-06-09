@@ -280,6 +280,30 @@ tasks:
     cmds:
       - git lfs migrate import --everything --include={{"{{.CLI_ARGS}}"}}
 
+{{- if .openai.enabled | not | not }}
+
+  openai-list-models:
+    desc: List OpenAI models
+    cmds:
+      - openai api models.list
+
+  openai-chat:
+    desc: Chat with an OpenAI model
+    cmds:
+      - openai api chat_completions.create -m gpt-3.5-turbo -g user {{"{{.CLI_ARGS}}"}}
+
+  openai-completion:
+    desc: Get a completion from an OpenAI model
+    cmds:
+      - openai api completions.create -m text-davinci-003 -p {{"{{.CLI_ARGS}}"}}
+
+  openai-generate-image:
+    desc: Generate an image with an OpenAI model
+    cmds:
+      - openai api image.create -p {{"{{.CLI_ARGS}}"}}
+
+{{- end }}
+
 {{- if .lfs_folderstore.enabled | not | not }}
 
   lfs-folderstore-init:
