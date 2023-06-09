@@ -52,11 +52,11 @@ tasks:
     cmds:
       - code tunnel --accept-server-license-terms
 
-  vscode-symlink-extentions:
-    desc: Symlink the VS Code extensions in the config directory to the current project
+  vscode-copy-extentions-config:
+    desc: Copy the VS Code extensions in the config directory to the current project
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
-      - mkdir -p .vscode && ln -s ~/.config/vscode/extensions.json .vscode/extensions.json
+      - mkdir -p .vscode && cp ~/.config/vscode/extensions.json .vscode/extensions.json
     status:
       - test -d .vscode
       - test -f .vscode/extensions.json
