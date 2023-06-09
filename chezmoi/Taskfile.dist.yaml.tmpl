@@ -1,5 +1,10 @@
 version: "3"
 
+includes:
+  user:
+    taskfile: .Taskfile.yml
+    optional: true
+
 tasks:
   default:
     deps:
@@ -42,10 +47,21 @@ tasks:
     cmds:
       - neofetch
 
-  code-tunnel:
+  vscode-tunnel:
     desc: Create a tunnel to a remote VS Code instance
     cmds:
       - code tunnel --accept-server-license-terms
+
+  vscode-symlink-extentions:
+    desc: Symlink the VS Code extensions in the config directory to the current project
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - mkdir -p .vscode && ln -s ~/.config/vscode/extensions.json .vscode/extensions.json
+    status:
+      - test -d .vscode
+      - test -f .vscode/extensions.json
+    preconditions:
+      - test -f ~/.config/vscode/extensions.json
 
   poetry-disable-virtualenvs:
     desc: Disable virtualenvs in poetry
