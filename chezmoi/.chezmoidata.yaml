@@ -371,6 +371,9 @@ packages:
   - name: sops
     brew: true
     scope: minimal
+  - name: sourcery
+    pipx: true
+    scope: optional
   - name: stow
     apt: true
     brew: true
