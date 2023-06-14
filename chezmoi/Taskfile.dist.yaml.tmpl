@@ -27,6 +27,16 @@ tasks:
     cmds:
       - cp $HOME/Taskfile.dist.yaml Taskfile.dist.yaml
 
+  grep-process:
+    desc: Grep for a process
+    cmds:
+      - ps aux | grep {{"{{.CLI_ARGS}}"}}
+
+  grep-process-and-kill:
+    desc: Grep for a process and kill it
+    cmds:
+      - ps aux | grep {{"{{.CLI_ARGS}}"}} | awk {{"'{print $2}'"}} | xargs kill -9
+
   tmux-new:
     desc: Create a new tmux session
     cmds:
