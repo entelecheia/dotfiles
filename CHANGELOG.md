@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.23.1 (2023-06-15)
+
+### Fix
+
+* **zshrc:** Enable bash completions ([`2b6af01`](https://github.com/entelecheia/dotfiles/commit/2b6af01cc0ef44e6e52b33068681cdc28d8b46ce))
+
 ## v0.23.0 (2023-06-09)
 
 ### Feature
