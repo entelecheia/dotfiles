@@ -8,3 +8,5 @@ if [[ -d "${HOME}/.local/share/zsh/site-functions" ]]; then
   fpath+="${HOME}/.local/share/zsh/site-functions"
 fi
 compinit
+# Enable bash completions
+autoload -Uz bashcompinit && bashcompinit
