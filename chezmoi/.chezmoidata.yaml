@@ -210,6 +210,9 @@ packages:
     source_list_file: helm-stable-debian.list
     source_list_line: "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main"
     scope: optional
+  - name: hyfi
+    pipx: true
+    scope: optional
   - name: inxi
     apt: true
     brew: true
