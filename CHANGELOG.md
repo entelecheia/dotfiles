@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.24.0 (2023-06-17)
+
+### Feature
+
+* **packages:** Add hyfi to optional packages ([`9be6017`](https://github.com/entelecheia/dotfiles/commit/9be60173d6013127f337bcbacaaac213e070cf9b))
+
 ## v0.23.1 (2023-06-15)
 
 ### Fix
