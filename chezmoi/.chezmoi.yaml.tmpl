@@ -295,6 +295,7 @@
 # {{- if and (hasKey . "wakatime") (hasKey .wakatime "api_key") -}}
 # {{-   $wakatime_api_key = .wakatime.api_key -}}
 # {{- end -}}
+# {{- $wakatime_zsh_project_detection := or (env "ZSH_WAKATIME_PROJECT_DETECTION") "true" -}}
 
 # {{- $use_openai := false -}}
 # {{- if and (hasKey . "openai") (hasKey .openai "enabled") -}}
@@ -1051,6 +1052,7 @@ data:
   wakatime:
     enabled: {{ $use_wakatime }}
     api_key: {{ $wakatime_api_key | quote }}
+    zsh_project_detection: {{ $wakatime_zsh_project_detection }}
   workspace:
     name: {{ $workspace_name | quote }}
     location: {{ $workspace_location | quote }}
