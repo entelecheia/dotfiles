@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.24.1 (2023-06-17)
+
+### Fix
+
+* **configuration:** Add zsh_wakatime_project_detection export ([`77a02e1`](https://github.com/entelecheia/dotfiles/commit/77a02e1046e8da3533c0b6b4fce9067f0a59231f))
+
 ## v0.24.0 (2023-06-17)
 
 ### Feature
