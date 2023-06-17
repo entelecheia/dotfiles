@@ -72,6 +72,7 @@ export WORKSPACE_REFERENCE_DIR="{{ .workspace.reference_dir }}"
 export GIT_COMMIT_GPGSIGN="{{ .git.gpgsign }}"
 export WAKATIME_API_KEY="{{ .wakatime.api_key }}"
 export OPENAI_API_KEY="{{ .openai.api_key }}"
+export ZSH_WAKATIME_PROJECT_DETECTION="{{ .wakatime.zsh_project_detection }}"
 
 GITHUB_TOKEN=${GITHUB_TOKEN:-"{{ .github.token }}"}
 GH_TOKEN="${GITHUB_TOKEN}"
