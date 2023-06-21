@@ -213,6 +213,7 @@ packages:
   - name: hyfi
     pipx: true
     scope: optional
+    allow_upgrade: true
   - name: inxi
     apt: true
     brew: true
