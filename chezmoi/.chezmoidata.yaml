@@ -49,7 +49,7 @@ packages:
     check_installed: command -v codecovcli &>/dev/null
     scope: optional
   - name: commitizen
-    brew: true
+    brew: false
     pipx: true
     check_installed: command -v cz &>/dev/null
     scope: optional
@@ -60,7 +60,7 @@ packages:
     brew: true
     scope: minimal
   - name: copier
-    brew: true
+    brew: false
     pipx: true
     scope: full
     allow_upgrade: true
@@ -95,7 +95,7 @@ packages:
     source_list_line: "deb [signed-by=/usr/share/keyrings/doppler-archive-keyring.gpg] https://packages.doppler.com/public/cli/deb/debian any-version main"
     scope: optional
   - name: dotdrop
-    brew: true
+    brew: false
     pipx: true
     scope: optional
     allow_upgrade: true
