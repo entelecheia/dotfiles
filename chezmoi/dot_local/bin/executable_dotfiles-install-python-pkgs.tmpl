@@ -57,7 +57,7 @@ fi
 
 wanted_packages=()
 for package in "${DOTFILES_PKGS_PIPX[@]}"; do
-  if is_item_in_array "${package}" "${DOTFILES_PKGS_PIPX[@]}"; then
+  if is_item_in_array "${package}" "${DOTFILES_PKGS_PIPX[@]}" && is_item_in_array "${package}" "${DOTFILES_PKGS_TO_INSTALL[@]}" ; then
     wanted_packages+=("${package}")
   fi
 done
