@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.25.2 (2023-06-23)
+
+### Fix
+
+* **pacakge:** Simplify user package list construction ([`60f66e3`](https://github.com/entelecheia/dotfiles/commit/60f66e3cf9ebe20ae7dc739c14dec87bb63c5ec9))
+* **package:** Update package installation scripts for Linux and macOS ([`3ddc816`](https://github.com/entelecheia/dotfiles/commit/3ddc816257be653a8dc1cc4ba70afb71268013e2))
+
 ## v0.25.1 (2023-06-23)
 
 ### Fix
