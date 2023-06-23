@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.25.1 (2023-06-23)
+
+### Fix
+
+* **packages:** Update chezmoi dependencies to use pipx for commitizen, copier and dotdrop, and disable brew for these packages ([`a04f806`](https://github.com/entelecheia/dotfiles/commit/a04f806cc7ef7cdf6ecb2893c2aaf13a9ac0e50c))
+
 ## v0.25.0 (2023-06-23)
 
 ### Feature
