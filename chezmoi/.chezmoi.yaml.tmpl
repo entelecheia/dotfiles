@@ -291,9 +291,9 @@
 # {{- else if eq (env "DOTFILES_USE_CODECOV") "true" "True" "TRUE" "1" -}}
 # {{-   $use_codecov = true -}}
 # {{- end -}}
-# {{- $wakatime_api_token := or (env "CODECOV_TOKEN") "" -}}
+# {{- $codecov_api_token := or (env "CODECOV_TOKEN") "" -}}
 # {{- if and (hasKey . "codecov") (hasKey .codecov "api_token") -}}
-# {{-   $wakatime_api_token = .codecov.api_token -}}
+# {{-   $codecov_api_token = .codecov.api_token -}}
 # {{- end -}}
 
 # {{- $use_wakatime := false -}}
