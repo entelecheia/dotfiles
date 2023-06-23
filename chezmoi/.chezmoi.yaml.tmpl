@@ -282,6 +282,20 @@
 # {{-   $use_vault = true -}}
 # {{- end -}}
 
+# {{- $use_codecov := false -}}
+# {{- if and (hasKey . "codecov") (hasKey .codecov "enabled") -}}
+# {{-   $use_codecov = .codecov.enabled -}}
+# {{- end -}}
+# {{- if eq (env "DOTFILES_USE_CODECOV") "false" "False" "FALSE" "0" -}}
+# {{-   $use_codecov = false -}}
+# {{- else if eq (env "DOTFILES_USE_CODECOV") "true" "True" "TRUE" "1" -}}
+# {{-   $use_codecov = true -}}
+# {{- end -}}
+# {{- $codecov_api_token := or (env "CODECOV_TOKEN") "" -}}
+# {{- if and (hasKey . "codecov") (hasKey .codecov "api_token") -}}
+# {{-   $codecov_api_token = .codecov.api_token -}}
+# {{- end -}}
+
 # {{- $use_wakatime := false -}}
 # {{- if and (hasKey . "wakatime") (hasKey .wakatime "enabled") -}}
 # {{-   $use_wakatime = .wakatime.enabled -}}
@@ -681,6 +695,27 @@
 # {{- end -}}
 
 # {{- if $interactive -}}
+# {{-   $question := "❔ Do you want to use Codecov" -}}
+# {{-   $use_codecov = promptBool $question $use_codecov -}}
+# {{- end -}}
+# {{- if and $use_codecov $interactive -}}
+# {{-   $question := "❔ What is your Codecov api token" -}}
+# {{-   $answer := "" -}}
+# {{-   if $codecov_api_token -}}
+# {{-     $answer = promptString $question $codecov_api_token -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $codecov_api_token = $answer -}}
+# {{- end -}}
+# {{- if $use_codecov -}}
+# {{-   writeToStdout "✅  Codecov enabled\n" -}}
+# {{-   writeToStdout "✅  Codecov API token set as '***'\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  Codecov disabled\n" -}}
+# {{- end -}}
+
+# {{- if $interactive -}}
 # {{-   $question := "❔ Do you want to use WakaTime" -}}
 # {{-   $use_wakatime = promptBool $question $use_wakatime -}}
 # {{- end -}}
@@ -899,6 +934,12 @@
 # {{- if $use_vault -}}
 # {{-   $pkgs_user = printf "%s vault" $pkgs_user -}}
 # {{- end -}}
+# {{- if $use_python_tools -}}
+# {{-   $pkgs_user = printf "%s commitizen copier cz-conventional-gitmoji hyfi mypy nox poetry poethepoet pre-commit python-semantic-release sourcery" $pkgs_user -}}
+# {{- end -}}
+# {{- if $use_codecov -}}
+# {{-   $pkgs_user = printf "%s codecov-cli" $pkgs_user -}}
+# {{- end -}}
 # {{- if $use_wakatime -}}
 # {{-   $pkgs_user = printf "%s wakatime" $pkgs_user -}}
 # {{- end -}}
@@ -1053,6 +1094,9 @@ data:
     enabled: {{ $use_wakatime }}
     api_key: {{ $wakatime_api_key | quote }}
     zsh_project_detection: {{ $wakatime_zsh_project_detection }}
+  codecov:
+    enabled: {{ $use_codecov }}
+    api_token: {{ $codecov_api_token | quote }}
   workspace:
     name: {{ $workspace_name | quote }}
     location: {{ $workspace_location | quote }}

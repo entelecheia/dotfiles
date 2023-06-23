@@ -44,6 +44,10 @@ packages:
   - name: code-cli
     brew: true
     scope: optional
+  - name: codecov-cli
+    pipx: true
+    check_installed: command -v codecovcli &>/dev/null
+    scope: optional
   - name: commitizen
     brew: true
     pipx: true
@@ -213,6 +217,7 @@ packages:
   - name: hyfi
     pipx: true
     scope: optional
+    allow_upgrade: true
   - name: inxi
     apt: true
     brew: true
