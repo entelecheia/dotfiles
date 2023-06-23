@@ -1,5 +1,19 @@
 <!--next-version-placeholder-->
 
+## v0.25.0 (2023-06-23)
+
+### Feature
+
+* **export:** Add CODECOV_TOKEN to export script ([`cebfcb9`](https://github.com/entelecheia/dotfiles/commit/cebfcb9effe8e2441146aaac481b4ff7e65fba79))
+* **chezmoi:** Add support for Codecov integration ([`e393b2f`](https://github.com/entelecheia/dotfiles/commit/e393b2f91847339983b35778bf6542e85c1d50ac))
+* **packaging:** Add codecov-cli to optional packages ([`3463d4b`](https://github.com/entelecheia/dotfiles/commit/3463d4bba5c0baca7ae1131e59ef5bfb3aba90fd))
+
+### Fix
+
+* **chezmoi:** Update package install script.tmpl to include specific package types ([`ca98a92`](https://github.com/entelecheia/dotfiles/commit/ca98a92f07ea34c80dc98d170df32535ade26d06))
+* **chezmoi:** Update install package scripts with package names for apt and brew(cask) ([`bf3598d`](https://github.com/entelecheia/dotfiles/commit/bf3598dd1e2b436cd0393f5105b743b84243d09b))
+* **pipx:** Add condition to include packages to install list ([`771ea3e`](https://github.com/entelecheia/dotfiles/commit/771ea3e78aaabc012f7c6fa372df431514487bca))
+
 ## v0.24.1 (2023-06-17)
 
 ### Fix
