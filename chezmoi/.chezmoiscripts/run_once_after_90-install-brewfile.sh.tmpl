@@ -3,6 +3,9 @@
 # shellcheck source=/dev/null
 source "${HOME}/.config/shrc/00-dotfiles-export"
 # log_task "Installing Homebrew from bundle"
+# {{- if stat (joinPath .chezmoi.homeDir ".config/brew/brewfile") -}}
+# brewfile hash: {{ include (joinPath .chezmoi.homeDir ".config/brew/brewfile") | sha256sum }}
 # brew-install-bundle hash: {{ include "dot_local/bin/executable_brew-install-bundle.tmpl" | sha256sum }}
+# {{- end }}
 brew-install-bundle
 # {{- end }}
