@@ -2,9 +2,7 @@
 # shellcheck source=/dev/null
 source "${HOME}/.config/shrc/00-dotfiles-export"
 # user package list
-# {{- if (hasKey . "install_packages") -}}
-#  {{ .install_packages.user  }}
-# {{- end }}
+# {{- $user_pkgs := list "" }}{{- if (hasKey . "install_packages") -}}{{ $user_pkgs = splitList " " .install_packages.user }}{{ end }}
 # {{ range .packages }}{{ if and (hasKey . "script") ( .script ) }}{{- .name }} {{ end }}{{ end -}}
 # {{ range .packages }}{{ if and (hasKey . "webi") ( .webi ) }}{{- .name }} {{ end }}{{ end -}}
 # {{ range .packages }}{{ if and (hasKey . "go") ( .go ) }}{{- .name }} {{ end }}{{ end -}}
