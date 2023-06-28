@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.25.3 (2023-06-28)
+
+### Fix
+
+* **task:** Update copier command ([`3c4071f`](https://github.com/entelecheia/dotfiles/commit/3c4071fcaf7004e9742f383f02b3a4f5fc381a51))
+
 ## v0.25.2 (2023-06-23)
 
 ### Fix
