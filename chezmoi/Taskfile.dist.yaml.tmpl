@@ -98,7 +98,7 @@ tasks:
     desc: Create a new project using the hyfi template
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
-      - copier copy --UNSAFE gh:entelecheia/hyfi-template .
+      - copier copy --UNSAFE --data 'code_template_source=gh:entelecheia/hyfi-template' gh:entelecheia/hyperfast-python-template .
 
   init-hyperfast-python-project:
     desc: Create a new Python project using the hyperfast template
