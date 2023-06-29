@@ -37,6 +37,26 @@ tasks:
     cmds:
       - ps aux | grep {{"{{.CLI_ARGS}}"}} | awk {{"'{print $2}'"}} | xargs kill -9
 
+  install-node-lts:
+    desc: Install the latest LTS version of Node.js
+    cmds:
+      - export NVM_DIR="${HOME}/.nvm"; [ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"; nvm install --lts
+
+  nvm-ls:
+    desc: List installed Node.js versions
+    cmds:
+      - export NVM_DIR="${HOME}/.nvm"; [ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"; nvm ls
+
+  set-default-node:
+    desc: Set the default Node.js version
+    cmds:
+      - export NVM_DIR="${HOME}/.nvm"; [ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"; nvm alias default node
+
+  install-github-copilot-cli:
+    desc: Install the GitHub Copilot CLI
+    cmds:
+      - npm install -g @githubnext/github-copilot-cli
+
   tmux-new:
     desc: Create a new tmux session
     cmds:
