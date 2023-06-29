@@ -1,5 +1,13 @@
 <!--next-version-placeholder-->
 
+## v0.26.0 (2023-06-29)
+
+### Feature
+
+* **task:** Add GitHub Copilot CLI aliases ([`f2cddc6`](https://github.com/entelecheia/dotfiles/commit/f2cddc668f640ce9450efe3c45e078981fde1d77))
+* **dot_config/shrc:** Add GitHub Copilot alias ([`2d5ae66`](https://github.com/entelecheia/dotfiles/commit/2d5ae666c6f1a454a9975d8ce9afc3e3c874797c))
+* **Taskfile:** Add node and GitHub Copilot commands ([`54501a2`](https://github.com/entelecheia/dotfiles/commit/54501a2de4b75e04bfaaa58d20c5b367ed9b5f7a))
+
 ## v0.25.3 (2023-06-28)
 
 ### Fix
