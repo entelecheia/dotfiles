@@ -55,3 +55,7 @@ fi
 if command -v fig >/dev/null 2>&1 && [ -d "${HOME}/.fig/bin" ]; then
   export PATH="${HOME}/.fig/bin:${PATH}"
 fi
+
+if command -v github-copilot-cli >/dev/null 2>&1; then
+  eval "$(github-copilot-cli alias -- "$0")"
+fi
