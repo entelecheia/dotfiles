@@ -242,3 +242,8 @@ alias lfs-folderstore-init="git-config-lfs-folderstore"
 # {{- end }}
 alias cdvenvs="cd ${WORKON_HOME}"
 alias cdv="cdvenvs"
+
+# aliases for github-copilot-cli
+if command -v github-copilot-cli >/dev/null 2>&1; then
+  eval "$(github-copilot-cli alias -- "$0")"
+fi
