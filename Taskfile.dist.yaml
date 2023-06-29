@@ -328,3 +328,8 @@ tasks:
     desc: Install the GitHub Copilot CLI
     cmds:
       - npm install -g @githubnext/github-copilot-cli
+
+  add-github-copilot-cli-aliases:
+    desc: Add aliases for the GitHub Copilot CLI
+    cmds:
+      - eval "$(github-copilot-cli alias -- "$0")"
