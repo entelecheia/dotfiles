@@ -382,6 +382,15 @@ packages:
   - name: sourcery
     pipx: true
     scope: optional
+  - name: sourcegraph
+    script: true
+    script_cmd: curl -L https://sourcegraph.com/.api/src-cli/src_linux_amd64 -o ${HOME}/.local/bin/src && chmod +x ${HOME}/.local/bin/src
+    check_installed: command -v src &>/dev/null
+    scope: optional
+  - name: sourcegraph/src-cli/src-cli
+    brew: true
+    check_installed: command -v src &>/dev/null
+    scope: optional
   - name: stow
     apt: true
     brew: true

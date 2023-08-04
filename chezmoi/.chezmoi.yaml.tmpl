@@ -296,6 +296,24 @@
 # {{-   $codecov_api_token = .codecov.api_token -}}
 # {{- end -}}
 
+# {{- $use_sourcegraph := false -}}
+# {{- if and (hasKey . "sourcegraph") (hasKey .sourcegraph "enabled") -}}
+# {{-   $use_sourcegraph = .sourcegraph.enabled -}}
+# {{- end -}}
+# {{- if eq (env "DOTFILES_USE_SOURCEGRAPH") "false" "False" "FALSE" "0" -}}
+# {{-   $use_sourcegraph = false -}}
+# {{- else if eq (env "DOTFILES_USE_SOURCEGRAPH") "true" "True" "TRUE" "1" -}}
+# {{-   $use_sourcegraph = true -}}
+# {{- end -}}
+# {{- $sourcegraph_access_token := or (env "SRC_ACCESS_TOKEN") "" -}}
+# {{- if and (hasKey . "sourcegraph") (hasKey .sourcegraph "access_token") -}}
+# {{-   $sourcegraph_access_token = .sourcegraph.access_token -}}
+# {{- end -}}
+# {{- $sourcegraph_endpoint := or (env "SRC_ENDPOINT") "" -}}
+# {{- if and (hasKey . "sourcegraph") (hasKey .sourcegraph "endpoint") -}}
+# {{-   $sourcegraph_endpoint = .sourcegraph.endpoint -}}
+# {{- end -}}
+
 # {{- $use_wakatime := false -}}
 # {{- if and (hasKey . "wakatime") (hasKey .wakatime "enabled") -}}
 # {{-   $use_wakatime = .wakatime.enabled -}}
@@ -374,9 +392,6 @@
 # {{- writeToStdout (printf "🔖  DOTFILES_USE_DOTDROP: %t\n" $use_dotdrop) -}}
 # {{- writeToStdout (printf "🐍  DOTFILES_USE_PYTHON_TOOLS: %t\n" $use_python_tools) -}}
 # {{- writeToStdout (printf "🔑  DOTFILES_USE_PASSAGE: %t\n" $use_passage) -}}
-# {{- writeToStdout (printf "🔏  DOTFILES_USE_DOPPLER: %t\n" $use_doppler) -}}
-# {{- writeToStdout (printf "🚀  DOTFILES_USE_MICROK8S: %t\n" $use_microk8s) -}}
-# {{- writeToStdout (printf "🚇  DOTFILES_USE_NGROK: %t\n" $use_ngrok) -}}
 # {{- end -}}
 # {{- writeToStdout (printf "🔬  DOTFILES_VERBOSE: %t\n" ($verbose | not | not)) -}}
 # {{- writeToStdout "---\n" -}}
@@ -716,6 +731,38 @@
 # {{- end -}}
 
 # {{- if $interactive -}}
+# {{-   $question := "❔ Do you want to use Sourcegraph" -}}
+# {{-   $use_sourcegraph = promptBool $question $use_sourcegraph -}}
+# {{- end -}}
+# {{- if and $use_sourcegraph $interactive -}}
+# {{-   $question := "❔ What is your Sourcegraph access token" -}}
+# {{-   $answer := "" -}}
+# {{-   if $sourcegraph_access_token -}}
+# {{-     $answer = promptString $question $sourcegraph_access_token -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $sourcegraph_access_token = $answer -}}
+# {{- end -}}
+# {{- if $use_sourcegraph -}}
+# {{-   writeToStdout "✅  Sourcegraph enabled\n" -}}
+# {{-   writeToStdout "✅  Sourcegraph access token set as '***'\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  Sourcegraph disabled\n" -}}
+# {{- end -}}
+# {{- if and $use_sourcegraph $interactive -}}
+# {{-   $question := "❔ What is your Sourcegraph endpoint" -}}
+# {{-   $answer := "" -}}
+# {{-   if $sourcegraph_endpoint -}}
+# {{-     $answer = promptString $question $sourcegraph_endpoint -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $sourcegraph_endpoint = $answer -}}
+# {{-   writeToStdout (printf "✅  Sourcegraph endpoint set as '%s'\n" $sourcegraph_endpoint) -}}
+# {{- end -}}
+
+# {{- if $interactive -}}
 # {{-   $question := "❔ Do you want to use WakaTime" -}}
 # {{-   $use_wakatime = promptBool $question $use_wakatime -}}
 # {{- end -}}
@@ -940,6 +987,9 @@
 # {{- if $use_codecov -}}
 # {{-   $pkgs_user = printf "%s codecov-cli" $pkgs_user -}}
 # {{- end -}}
+# {{- if $use_sourcegraph -}}
+# {{-   $pkgs_user = printf "%s sourcegraph sourcegraph/src-cli/src-cli" $pkgs_user -}}
+# {{- end -}}
 # {{- if $use_wakatime -}}
 # {{-   $pkgs_user = printf "%s wakatime" $pkgs_user -}}
 # {{- end -}}
@@ -1097,6 +1147,10 @@ data:
   codecov:
     enabled: {{ $use_codecov }}
     api_token: {{ $codecov_api_token | quote }}
+  sourcegraph:
+    enabled: {{ $use_sourcegraph }}
+    access_token: {{ $sourcegraph_access_token | quote }}
+    endpoint: {{ $sourcegraph_endpoint | quote }}
   workspace:
     name: {{ $workspace_name | quote }}
     location: {{ $workspace_location | quote }}

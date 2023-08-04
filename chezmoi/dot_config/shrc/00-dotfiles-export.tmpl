@@ -74,6 +74,11 @@ export CODECOV_TOKEN="{{ .codecov.api_token }}"
 export WAKATIME_API_KEY="{{ .wakatime.api_key }}"
 export OPENAI_API_KEY="{{ .openai.api_key }}"
 export ZSH_WAKATIME_PROJECT_DETECTION="{{ .wakatime.zsh_project_detection }}"
+export DOTFILES_USE_SOURCEGRAPH="{{ .sourcegraph.enabled }}"
+export SRC_ACCESS_TOKEN="{{ .sourcegraph.access_token }}"
+{{- if .sourcegraph.endpoint }}
+export SRC_ENDPOINT="{{ .sourcegraph.endpoint }}"
+{{- end }}
 
 GITHUB_TOKEN=${GITHUB_TOKEN:-"{{ .github.token }}"}
 GH_TOKEN="${GITHUB_TOKEN}"
