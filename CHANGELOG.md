@@ -1,5 +1,14 @@
 <!--next-version-placeholder-->
 
+## v0.27.0 (2023-08-04)
+
+### Feature
+
+* **dotfiles-install-script:** Add TODOs for OS-specific package installation ([`e192552`](https://github.com/entelecheia/dotfiles/commit/e192552e54af0a63a9053d2815eab3cd57c21471))
+* **chezmoi:** Add sourcegraph package and installation options ([`2dd198e`](https://github.com/entelecheia/dotfiles/commit/2dd198e8ddf398db56eb33f3f0517a186daa9048))
+* **chezmoi:** Add support for Sourcegraph configuration ([`b50fc61`](https://github.com/entelecheia/dotfiles/commit/b50fc6149c92a4115496e1d1a3059d73ba02aca2))
+* **shrc:** Add Sourcegraph integration configuration ([`d99d796`](https://github.com/entelecheia/dotfiles/commit/d99d796b30198e2f1f3ee7ea77e4e3027391f772))
+
 ## v0.26.0 (2023-06-29)
 
 ### Feature
