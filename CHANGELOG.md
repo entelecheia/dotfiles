@@ -1,5 +1,15 @@
 <!--next-version-placeholder-->
 
+## v0.27.1 (2023-08-06)
+
+### Fix
+
+* **dot_zshrc:** Skip backup and temp files while loading shell and zsh config files ([`b51713e`](https://github.com/entelecheia/dotfiles/commit/b51713ee6bb89b18c4fa713a50f63b83725265f0))
+* **chezmoi/dot_profile:** Ignore .bak and .tmp files ([`8fa4c7c`](https://github.com/entelecheia/dotfiles/commit/8fa4c7ccee28cb0ed755343d1b44ba0dec28c746))
+* **dot_zshrc:** Change DOTFILES_VERBOSE checking from numeric to boolean ([`9a6ce94`](https://github.com/entelecheia/dotfiles/commit/9a6ce9443797e00e0e0cfa01ef16d0d009487022))
+* **chezmoi/dot_profile:** Change comparison operation for DOTFILES_VERBOSE ([`0b5151d`](https://github.com/entelecheia/dotfiles/commit/0b5151db97934f30206d4c9d31f6e34d11bbc35a))
+* **chezmoi:** Simplify verbose mode handling ([`793a27c`](https://github.com/entelecheia/dotfiles/commit/793a27ccde96f352daef843428c2af77b6c1b9f5))
+
 ## v0.27.0 (2023-08-04)
 
 ### Feature
