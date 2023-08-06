@@ -4,7 +4,7 @@ export DOTFILES_VERBOSE="{{ .system.verbose }}"
 # load all shell config files
 if [ -d "${HOME}/.config/shrc" ]; then
     for file in "${HOME}/.config/shrc"/*; do
-        if [ "${DOTFILES_VERBOSE}" -gt 1 ]; then
+        if [ "${DOTFILES_VERBOSE}" = "true" ]; then
             echo "* Loading shell config file: ${file}"
         fi
         # shellcheck source=/dev/null
@@ -15,7 +15,7 @@ fi
 # load all zsh config files
 if [ -d "${HOME}/.config/zshrc" ]; then
     for file in "${HOME}/.config/zshrc"/*; do
-        if [ "${DOTFILES_VERBOSE}" -gt 1 ]; then
+        if [ "${DOTFILES_VERBOSE}" = "true" ]; then
             echo "* Loading zsh config file: ${file}"
         fi
         # shellcheck source=/dev/null
