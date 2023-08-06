@@ -4,8 +4,8 @@ export DOTFILES_VERBOSE="{{ .system.verbose }}"
 # load all shell config files
 if [ -d "${HOME}/.config/shrc" ]; then
     for file in "${HOME}/.config/shrc"/*; do
-        if [ "${DOTFILES_VERBOSE}" -gt 1 ]; then
-           echo "* Loading shell config file: ${file}"
+        if [ "${DOTFILES_VERBOSE}" = "true" ]; then
+            echo "* Loading shell config file: ${file}"
         fi
         # shellcheck source=/dev/null
         . "$file"
