@@ -427,7 +427,7 @@
 
 # {{- if $interactive -}}
 # {{-   $question := "❔ Do you want to enable verbose mode" -}}
-# {{-   $verbose = promptString $question $verbose -}}
+# {{-   $verbose = promptBool $question $verbose -}}
 # {{- end -}}
 # {{- if $verbose -}}
 # {{-   writeToStdout "✅  Verbose mode enabled\n" -}}
