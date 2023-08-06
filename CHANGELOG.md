@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.27.2 (2023-08-06)
+
+### Fix
+
+* **chezmoi:** Change promptString to promptBool for verbose mode ([`0f615cc`](https://github.com/entelecheia/dotfiles/commit/0f615cc456277007448a63108ac2766611e42c03))
+
 ## v0.27.1 (2023-08-06)
 
 ### Fix
