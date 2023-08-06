@@ -45,14 +45,13 @@
 # {{-   end -}}
 # {{- end -}}
 
-# {{- $verbose := "1" -}}
+# {{- $verbose := false -}}
 # {{- if and (hasKey . "system") (hasKey .system "verbose") -}}
-# {{-   $verbose = .system.verbose | toString -}}
+# {{-   $verbose = .system.verbose | not | not -}}
 # {{- else -}}
-# {{-   $verbose = or (env "DOTFILES_VERBOSE") "False" -}}
-# {{- end -}}
-# {{- if eq $verbose "f" "F" "false" "False" "FALSE" "0" -}}
-# {{-   $verbose = "0" -}}
+# {{-   if eq (env "DOTFILES_VERBOSE") "true" "True" "TRUE" "1" -}}
+# {{-     $verbose = true -}}
+# {{-   end -}}
 # {{- end -}}
 
 # {{- $apply_rootmoi := true -}}
@@ -427,17 +426,13 @@
 # {{- end -}}
 
 # {{- if $interactive -}}
-# {{-   $question := "❔ Do you want to enable verbose mode (0/1/f/F/t/T)" -}}
+# {{-   $question := "❔ Do you want to enable verbose mode" -}}
 # {{-   $verbose = promptString $question $verbose -}}
 # {{- end -}}
-# {{- if eq $verbose "f" "F" "false" "False" "FALSE" "0" -}}
-# {{-   $verbose = "0" -}}
-# {{-   writeToStdout "❎  Verbose mode disabled\n" -}}
-# {{- else if eq $verbose "t" "T" "true" "True" "TRUE" "1" -}}
-# {{-   $verbose = "1" -}}
+# {{- if $verbose -}}
 # {{-   writeToStdout "✅  Verbose mode enabled\n" -}}
 # {{- else -}}
-# {{-   writeToStdout "✅  Verbose mode enabled\n" -}}
+# {{-   writeToStdout "❎  Verbose mode disabled\n" -}}
 # {{- end -}}
 
 # {{- if eq .chezmoi.os "darwin" -}}
