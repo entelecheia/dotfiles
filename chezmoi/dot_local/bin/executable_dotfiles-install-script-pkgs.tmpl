@@ -25,7 +25,7 @@ for package in "${DOTFILES_PKGS_SCRIPT[@]}"; do
 done
 log_info "Wanted packages: ${wanted_packages[*]}"
 
-# TODO: need to check OS and install packages accordingly
+# TODO: #58 need to check OS and install packages accordingly
 # TODO: separate script_cmd into OS-specific scripts
 {{- range .packages }}
 {{- if and (hasKey . "script") ( .script ) (hasKey . "script_cmd") ( .script_cmd ) }}
