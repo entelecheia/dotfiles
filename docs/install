@@ -79,6 +79,7 @@ DOTFILES_REPO="${DOTFILES_REPO_HOST}/${DOTFILES_USER}/dotfiles"
 DOTFILES_BRANCH=${DOTFILES_BRANCH:-"main"}
 DOTFILES_DIR="${HOME}/.dotfiles"
 
+# TODO: #63 check OS and install dependencies, jq is also required
 if ! command -v git >/dev/null 2>&1; then
   log_task "Installing git"
   sudo apt update --yes -qq -o=Dpkg::Use-Pty=0
