@@ -672,6 +672,7 @@
 # {{-   writeToStdout (printf "✅  Worksapce root symlinked to '%s'\n" $workspace_home) -}}
 # {{- $project_dir := joinPath $workspace_home "projects" -}}
 # {{- $reference_dir := joinPath $workspace_home "references" -}}
+# {{- $containers_dir := joinPath $workspace_home "containers" -}}
 
 # {{- if and $interactive ($minimum | not) -}}
 # {{-   $question := "❔ Do you want to symlink workspace to colab default google drive directory to maintain persistence across sessions" -}}
@@ -1157,6 +1158,7 @@ data:
     colab_drive: "/content/drive/MyDrive"
     project_dir: {{ $project_dir | quote }}
     reference_dir: {{ $reference_dir | quote }}
+    container_dir: {{ $containers_dir | quote }}
   github_repos:
 # {{- if $github_clones -}}
 # {{- range (split "," $github_clones) }}
