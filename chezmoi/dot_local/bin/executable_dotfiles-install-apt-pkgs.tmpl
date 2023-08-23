@@ -105,12 +105,24 @@ SOURCE_LIST_LINE="{{ .source_list_line }}"
 {{-   else }}
 SOURCE_LIST_LINE=""
 {{-   end }}
-if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
-  log_task "Adding {{ .source_list_file }} repository to APT"
-  if [ "$USER" = "root" ]; then
-    c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
+{{-   if and (hasKey . "source_list_script") (.source_list_script) }}
+SOURCE_LIST_SCRIPT="{{ .source_list_script }}"
+{{-   else }}
+SOURCE_LIST_SCRIPT=""
+{{-   end }}
+if [[ ! -f "${SOURCE_LIST_FILE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
+  if [[ -n "${SOURCE_LIST_SCRIPT}" ]]; then
+    log_task "Running {{ .source_list_file }} repository script"
+    c "${SOURCE_LIST_SCRIPT}"
+  elif [[ -n "${SOURCE_LIST_LINE}" ]]; then
+    log_task "Adding {{ .source_list_file }} repository to APT"
+    if [ "$USER" = "root" ]; then
+      c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
+    else
+      c echo "$SOURCE_LIST_LINE" | sudo tee "$SOURCE_LIST_FILE"
+    fi
   else
-    c echo "$SOURCE_LIST_LINE" | sudo tee "$SOURCE_LIST_FILE"
+    log_error "No source list line or script provided for {{ .source_list_file }}"
   fi
 fi
 {{-   end }}
