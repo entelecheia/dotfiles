@@ -37,8 +37,8 @@ alias cdtsl="code tunnel service log"
 alias mkctl="microk8s kubectl"
 
 alias cw="chown-workspace"
-alias cdc="cd {{ .chezmoi.workingTree }}"
-alias cdd="cdc"
+alias cdczm="cd {{ .chezmoi.workingTree }}"
+alias cddot="cdczm"
 alias cddd="cd {{ .dotdrop.config_dir }}"
 alias cddk="cd {{ .docker.share_dir }}"
 
@@ -93,6 +93,11 @@ cdr() {
   local repo="${1:-}"
 
   cd "${WORKSPACE_REFERENCE_DIR}/${repo}"
+}
+cdc() {
+  local repo="${1:-}"
+
+  cd "${WORKSPACE_CONTAINER_DIR}/${repo}"
 }
 
 alias cdw="cd {{ .workspace.home }}"
