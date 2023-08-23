@@ -267,7 +267,9 @@ packages:
     keyring_file: nvidia-container-toolkit-keyring.gpg
     keyring_url: https://nvidia.github.io/libnvidia-container/gpgkey
     source_list_file: nvidia-container-toolkit.list
-    source_list_line: "deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://nvidia.github.io/libnvidia-container/stable/$(. /etc/os-release;echo $ID$VERSION_ID'/$(ARCH)') /"
+    # ISSUE: use ubuntu18.04 in the .list files for all later Ubuntu versions.
+    # ref: https://github.com/NVIDIA/nvidia-container-toolkit/issues/94
+    source_list_line: "deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://nvidia.github.io/libnvidia-container/stable/$(. /etc/os-release;echo $ID'18.04/$(ARCH)') /"
     scope: system
   - name: nvm
     script: true
