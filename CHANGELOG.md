@@ -1,5 +1,17 @@
 <!--next-version-placeholder-->
 
+## v0.28.0 (2023-08-24)
+
+### Feature
+
+* **chezmoi/dot_config:** Add workspace container directory export ([`c5f08fc`](https://github.com/entelecheia/dotfiles/commit/c5f08fccbf3202ab5d3cb342b262847ae86ed11d))
+* **chezmoi:** Add container directory path configuration ([`3bd87c6`](https://github.com/entelecheia/dotfiles/commit/3bd87c65308b84f1ca3dddc7dbe1395b20edb924))
+
+### Fix
+
+* **chezmoi:** Use ubuntu18.04 for all later Ubuntu versions in nvidia-container-toolkit ([`2714f46`](https://github.com/entelecheia/dotfiles/commit/2714f4631b58498f1402fff64f4ab713b5f0397f))
+* **executable_dotfiles-install-apt-pkgs:** Add ability to run script to add APT repositories ([`c1d3ed2`](https://github.com/entelecheia/dotfiles/commit/c1d3ed288c666a6d30af98545e582ef33239d60a))
+
 ## v0.27.2 (2023-08-06)
 
 ### Fix
