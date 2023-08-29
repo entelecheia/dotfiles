@@ -62,194 +62,193 @@ set +u
 COMMAND="$1"
 shift
 if [[ "$COMMAND" != "build" ]] && [[ "$COMMAND" != "run" ]] && [[ "$COMMAND" != "up" ]] && [[ "$COMMAND" != "down" ]] && [[ "$COMMAND" != "config" ]]; then
-  echo "Invalid command: $COMMAND" >&2
-  echo "Usage: $0 $USAGE" >&2
-  exit 1
+    echo "Invalid command: $COMMAND" >&2
+    echo "Usage: $0 $USAGE" >&2
+    exit 1
 fi
 # check second argument starts with a dash
 # if it does, it's an option and DOCKER_PROJECT_NAME can be the last argument
 # if not, it's the DOCKER_PROJECT_NAME
 if [[ "$1" != -* ]]; then
-  # if no arguments, print usage
-  if [[ $# -eq 0 ]]; then
-    echo "Usage: $0 $USAGE" >&2
-    exit 1
-  fi
-  DOCKER_PROJECT_NAME="$1"
-  shift
+    # if no arguments, print usage
+    if [[ $# -eq 0 ]]; then
+        echo "Usage: $0 $USAGE" >&2
+        exit 1
+    fi
+    DOCKER_PROJECT_NAME="$1"
+    shift
 fi
 # parse options
 while [[ $# -gt 0 ]]; do
-  case "$1" in
-  -t | --tag)
-    TAG="$2"
+    case "$1" in
+    -t | --tag)
+        TAG="$2"
+        shift
+        ;;
+    --tag=*)
+        TAG="${1#*=}"
+        ;;
+    --from-project)
+        FROM_PROJECT="true"
+        ;;
+    --project-directory)
+        PROJECT_DIR="$2"
+        shift
+        ;;
+    --project-directory=*)
+        PROJECT_DIR="${1#*=}"
+        ;;
+    --dockerfiles-directory)
+        DOCKERFILES_DIR="$2"
+        shift
+        ;;
+    --dockerfiles-directory=*)
+        DOCKERFILES_DIR="${1#*=}"
+        ;;
+    -c | --compose-file)
+        COMPOSE_FILENAME="$2"
+        shift
+        ;;
+    --compose-file=*)
+        COMPOSE_FILENAME="${1#*=}"
+        ;;
+    -e | --env-file)
+        ENV_FILE="$2"
+        shift
+        ;;
+    --env-file=*)
+        ENV_FILE="${1#*=}"
+        ;;
+    --shell-env-file)
+        SHELL_ENV_FILE="$2"
+        shift
+        ;;
+    --shell-env-file=*)
+        SHELL_ENV_FILE="${1#*=}"
+        ;;
+    --global-env-file)
+        GLOBAL_ENV_FILE="$2"
+        shift
+        ;;
+    --global-env-file=*)
+        GLOBAL_ENV_FILE="${1#*=}"
+        ;;
+    -v | --version)
+        VERSION="$2"
+        shift
+        ;;
+    --version=*)
+        VERSION="${1#*=}"
+        ;;
+    -l | --latest)
+        LATEST="true"
+        ;;
+    --push)
+        PUSH="true"
+        ;;
+    -n | --name)
+        CONTAINER_NAME="$2"
+        shift
+        ;;
+    --name=*)
+        CONTAINER_NAME="${1#*=}"
+        ;;
+    --network)
+        CONTAINER_NETWORK_NAME="$2"
+        shift
+        ;;
+    --network=*)
+        CONTAINER_NETWORK_NAME="${1#*=}"
+        ;;
+    -u | --username)
+        USERNAME="$2"
+        shift
+        ;;
+    --username=*)
+        USERNAME="${1#*=}"
+        ;;
+    -h | --help)
+        echo "Usage: $0 $USAGE" >&2
+        exit 0
+        ;;
+    -h*)
+        echo "Usage: $0 $USAGE" >&2
+        exit 0
+        ;;
+    *)
+        # if no option matches, it's the DOCKER_PROJECT_NAME
+        if [[ -z "$DOCKER_PROJECT_NAME" ]]; then
+            DOCKER_PROJECT_NAME="$1"
+        else
+            ADDITIONAL_ARGS="$ADDITIONAL_ARGS $1"
+        fi
+        ;;
+    esac
     shift
-    ;;
-  --tag=*)
-    TAG="${1#*=}"
-    ;;
-  --from-project)
-    FROM_PROJECT="true"
-    ;;
-  --project-directory)
-    PROJECT_DIR="$2"
-    shift
-    ;;
-  --project-directory=*)
-    PROJECT_DIR="${1#*=}"
-    ;;
-  --dockerfiles-directory)
-    DOCKERFILES_DIR="$2"
-    shift
-    ;;
-  --dockerfiles-directory=*)
-    DOCKERFILES_DIR="${1#*=}"
-    ;;
-  -c | --compose-file)
-    COMPOSE_FILENAME="$2"
-    shift
-    ;;
-  --compose-file=*)
-    COMPOSE_FILENAME="${1#*=}"
-    ;;
-  -e | --env-file)
-    ENV_FILE="$2"
-    shift
-    ;;
-  --env-file=*)
-    ENV_FILE="${1#*=}"
-    ;;
-  --shell-env-file)
-    SHELL_ENV_FILE="$2"
-    shift
-    ;;
-  --shell-env-file=*)
-    SHELL_ENV_FILE="${1#*=}"
-    ;;
-  --global-env-file)
-    GLOBAL_ENV_FILE="$2"
-    shift
-    ;;
-  --global-env-file=*)
-    GLOBAL_ENV_FILE="${1#*=}"
-    ;;
-  -v | --version)
-    VERSION="$2"
-    shift
-    ;;
-  --version=*)
-    VERSION="${1#*=}"
-    ;;
-  -l | --latest)
-    LATEST="true"
-    ;;
-  --push)
-    PUSH="true"
-    ;;
-  -n | --name)
-    CONTAINER_NAME="$2"
-    shift
-    ;;
-  --name=*)
-    CONTAINER_NAME="${1#*=}"
-    ;;
-  --network)
-    CONTAINER_NETWORK_NAME="$2"
-    shift
-    ;;
-  --network=*)
-    CONTAINER_NETWORK_NAME="${1#*=}"
-    ;;
-  -u | --username)
-    USERNAME="$2"
-    shift
-    ;;
-  --username=*)
-    USERNAME="${1#*=}"
-    ;;
-  -h | --help)
-    echo "Usage: $0 $USAGE" >&2
-    exit 0
-    ;;
-  -h*)
-    echo "Usage: $0 $USAGE" >&2
-    exit 0
-    ;;
-  *)
-    # if no option matches, it's the DOCKER_PROJECT_NAME
-    if [[ -z "$DOCKER_PROJECT_NAME" ]]; then
-      DOCKER_PROJECT_NAME="$1"
-    else
-      ADDITIONAL_ARGS="$ADDITIONAL_ARGS $1"
-    fi
-    ;;
-  esac
-  shift
 done
 # check if remaining arguments exist
 if [[ -n "$ADDITIONAL_ARGS" ]]; then
-  echo "Additional arguments: $ADDITIONAL_ARGS" >&2
+    echo "Additional arguments: $ADDITIONAL_ARGS" >&2
 fi
 set -u
 
 # check version format
 if [[ "$LATEST" == "true" ]] && [[ -z "$VERSION" ]]; then
-  VERSION="latest"
+    VERSION="latest"
 elif [[ "$VERSION" == "pre*" ]] || [[ "$VERSION" == "night*" ]]; then
-  VERSION="nightly"
+    VERSION="nightly"
 fi
 export VERSION
 
 DOCKERFILES_SHARE_DIR="{{- .docker.share_dir }}"
 # check PATHs
 if [[ -z "$PROJECT_DIR" ]]; then
-  PROJECT_DIR="${WORKSPACE_PROJECT_DIR}/${DOCKER_PROJECT_NAME}"
+    PROJECT_DIR="${WORKSPACE_PROJECT_DIR}/${DOCKER_PROJECT_NAME}"
 fi
 # if project directory does not exist or FROM_PROJECT is false, use dockerfile repo path
 if [[ ! -d "$PROJECT_DIR" ]] || [[ "$FROM_PROJECT" != "false" ]]; then
-  PROJECT_DIR="${DOCKERFILES_SHARE_DIR}/src/${DOCKER_PROJECT_NAME}"
+    PROJECT_DIR="${DOCKERFILES_SHARE_DIR}/src/${DOCKER_PROJECT_NAME}"
 fi
 # if it still does not exist, exit
 if [[ ! -d "$PROJECT_DIR" ]]; then
-  log_error "Project directory ${PROJECT_DIR} does not exist"
-  exit 1
+    log_error "Project directory ${PROJECT_DIR} does not exist"
+    exit 1
 fi
 
 if [[ -z "$DOCKERFILES_DIR" ]]; then
-  # DOCKERFILES_DIR="${DOCKERFILES_SHARE_DIR}/src/${DOCKER_PROJECT_NAME}/.docker"
-  DOCKERFILES_DIR="${PROJECT_DIR}/.docker"
+    # DOCKERFILES_DIR="${DOCKERFILES_SHARE_DIR}/src/${DOCKER_PROJECT_NAME}/.docker"
+    DOCKERFILES_DIR="${PROJECT_DIR}/.docker"
 fi
-
 
 if [[ -n "$COMPOSE_FILENAME" ]]; then
-  COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
-else
-  if [[ -n "$TAG" ]]; then
-    # {base_name}-{TAG}.{ext}
-    COMPOSE_FILENAME="docker-compose-${TAG}.yaml"
     COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
-    if [[ ! -f "$COMPOSE_FILE" ]]; then
-      COMPOSE_FILENAME="docker-compose.${TAG}.yaml"
-      COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
+else
+    if [[ -n "$TAG" ]]; then
+        # {base_name}-{TAG}.{ext}
+        COMPOSE_FILENAME="docker-compose-${TAG}.yaml"
+        COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
+        if [[ ! -f "$COMPOSE_FILE" ]]; then
+            COMPOSE_FILENAME="docker-compose.${TAG}.yaml"
+            COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
+        fi
+    else
+        # {base_name}.{ext}
+        COMPOSE_FILENAME="docker-compose.yaml"
+        COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
     fi
-  else
-    # {base_name}.{ext}
+fi
+if [[ ! -f "$COMPOSE_FILE" ]]; then
     COMPOSE_FILENAME="docker-compose.yaml"
     COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
-  fi
 fi
 if [[ ! -f "$COMPOSE_FILE" ]]; then
-  COMPOSE_FILENAME="docker-compose.yaml"
-  COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
-fi
-if [[ ! -f "$COMPOSE_FILE" ]]; then
-  log_error "Dockerfile ${COMPOSE_FILE} does not exist"
-  exit 1
+    log_error "Dockerfile ${COMPOSE_FILE} does not exist"
+    exit 1
 fi
 
 # export DOCKERFILES_DIR
 if [[ -n "$CONTAINER_NAME" ]]; then
-  export CONTAINER_NAME
+    export CONTAINER_NAME
 fi
 # export user id and group id
 export USERNAME
@@ -260,71 +259,71 @@ export USER_GID
 
 # global env file
 if [ -z "$GLOBAL_ENV_FILE" ]; then
-  GLOBAL_ENV_FILE="${DOCKERFILES_SHARE_DIR}/src/global.env"
+    GLOBAL_ENV_FILE="${DOCKERFILES_SHARE_DIR}/src/global.env"
 fi
 if [[ -f "$GLOBAL_ENV_FILE" ]]; then
-  log_task "Exporting global environment variables from ${GLOBAL_ENV_FILE}"
-  set -a # export all variables (set -o allexport)
-  # shellcheck disable=SC1090
-  c source "$GLOBAL_ENV_FILE"
-  set +a
+    log_task "Exporting global environment variables from ${GLOBAL_ENV_FILE}"
+    set -a # export all variables (set -o allexport)
+    # shellcheck disable=SC1090
+    c source "$GLOBAL_ENV_FILE"
+    set +a
 fi
 
 # shell env file
 if [ -z "$SHELL_ENV_FILE" ]; then
-  if [[ -n "$TAG" ]]; then
-    # {base_name}-{TAG}.{ext}
-    SHELL_ENV_FILENAME="docker.${TAG}.env"
-  else
-    # {base_name}.{ext}
-    SHELL_ENV_FILENAME="docker.env"
-  fi
-  SHELL_ENV_FILE="${DOCKERFILES_DIR}/${SHELL_ENV_FILENAME}"
+    if [[ -n "$TAG" ]]; then
+        # {base_name}-{TAG}.{ext}
+        SHELL_ENV_FILENAME="docker.${TAG}.env"
+    else
+        # {base_name}.{ext}
+        SHELL_ENV_FILENAME="docker.env"
+    fi
+    SHELL_ENV_FILE="${DOCKERFILES_DIR}/${SHELL_ENV_FILENAME}"
 fi
 if [[ ! -f "$SHELL_ENV_FILE" ]]; then
-  SHELL_ENV_FILENAME="docker.env"
-  SHELL_ENV_FILE="${DOCKERFILES_DIR}/${SHELL_ENV_FILENAME}"
+    SHELL_ENV_FILENAME="docker.env"
+    SHELL_ENV_FILE="${DOCKERFILES_DIR}/${SHELL_ENV_FILENAME}"
 fi
 if [[ -f "$SHELL_ENV_FILE" ]]; then
-  log_task "Exporting shell environment variables from ${SHELL_ENV_FILE}"
-  set -a
-  # shellcheck disable=SC1090
-  c source "$SHELL_ENV_FILE"
-  set +a
+    log_task "Exporting shell environment variables from ${SHELL_ENV_FILE}"
+    set -a
+    # shellcheck disable=SC1090
+    c source "$SHELL_ENV_FILE"
+    set +a
 fi
 
 # project env file
 ENV_ARGS=""
 if [[ -f "$ENV_FILE" ]]; then
-  ENV_ARGS="--env-file ${ENV_FILE}"
-  log_task "Loading environment variables for the services from ${ENV_FILE}"
+    ENV_ARGS="--env-file ${ENV_FILE}"
+    log_task "Loading environment variables for the services from ${ENV_FILE}"
 fi
 
 # if network does not exist, create it
 if [[ -n "$CONTAINER_NETWORK_NAME" ]]; then
-  # shellcheck disable=SC2143
-  if [[ -z "$(docker network ls | grep "${CONTAINER_NETWORK_NAME}")" ]]; then
-    log_task "Creating network ${CONTAINER_NETWORK_NAME}"
-    docker network create "${CONTAINER_NETWORK_NAME}"
-  else
-    log_info "Network ${CONTAINER_NETWORK_NAME} already exists."
-  fi
+    # shellcheck disable=SC2143
+    if [[ -z "$(docker network ls | grep "${CONTAINER_NETWORK_NAME}")" ]]; then
+        log_task "Creating network ${CONTAINER_NETWORK_NAME}"
+        docker network create "${CONTAINER_NETWORK_NAME}"
+    else
+        log_info "Network ${CONTAINER_NETWORK_NAME} already exists."
+    fi
 else
-  log_info "CONTAINER_NETWORK_NAME not set, skipping creation of docker network."
+    log_info "CONTAINER_NETWORK_NAME not set, skipping creation of docker network."
 fi
 
 if docker-compose version &>/dev/null; then
-  log_task "docker compose ${COMMAND} for [${DOCKER_PROJECT_NAME}] with tag [${TAG}] and version [${VERSION}] from [${PROJECT_DIR}]"
+    log_task "docker compose ${COMMAND} for [${DOCKER_PROJECT_NAME}] with tag [${TAG}] and version [${VERSION}] from [${PROJECT_DIR}]"
 
-  # change to the directory of the build context
-  c cd "${PROJECT_DIR}" || exit 1
-  CMD="docker-compose --project-directory ${PROJECT_DIR} -f ${COMPOSE_FILE} ${ENV_ARGS} ${COMMAND} ${ADDITIONAL_ARGS}"
-  c eval "$CMD" || exit 1
-
-  if [[ "$PUSH" == "true" ]]; then
-    log_task "Pushing ${DOCKER_PROJECT_NAME}"
-    CMD="docker-compose --project-directory ${PROJECT_DIR} -f ${COMPOSE_FILE} ${ENV_ARGS} push"
+    # change to the directory of the build context
+    c cd "${PROJECT_DIR}" || exit 1
+    CMD="docker-compose --project-directory ${PROJECT_DIR} -f ${COMPOSE_FILE} ${ENV_ARGS} ${COMMAND} ${ADDITIONAL_ARGS}"
     c eval "$CMD" || exit 1
-  fi
+
+    if [[ "$PUSH" == "true" ]]; then
+        log_task "Pushing ${DOCKER_PROJECT_NAME}"
+        CMD="docker-compose --project-directory ${PROJECT_DIR} -f ${COMPOSE_FILE} ${ENV_ARGS} push"
+        c eval "$CMD" || exit 1
+    fi
 
 fi
