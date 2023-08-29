@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.29.0 (2023-08-29)
+
+### Feature
+
+* **dk-compose:** Add registry and image name options ([`9c721bd`](https://github.com/entelecheia/dotfiles/commit/9c721bde20c7935de42acb7c9660e872f28eb734))
+
 ## v0.28.0 (2023-08-24)
 
 ### Feature
