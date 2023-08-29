@@ -14,7 +14,8 @@ COMMAND                The operation to be performed. Must be one of: build, run
 DOCKER_PROJECT_NAME            The name of the Docker service.
 
 Options:
--t, --tag TAG                  Specify a tag for the Docker image.
+-t, --tag IMAGE_TAG            Specify a tag for the Docker image.
+--variant IMAGE_VARIANT        Specify a variant for the Docker image.
 --from-project                 Use the project directory to build the Docker image.
 --project-directory DIR        Specify the project directory. Default is the Docker name inside the workspace project directory.
 --dockerfiles-directory DIR    Specify the directory containing Docker files. Default is the .docker directory inside the project directory.
@@ -22,7 +23,8 @@ Options:
 -e, --env-file FILE            Specify the environment file for Docker Compose.
 --shell-env-file FILE          Specify the shell environment file. Default is docker.env inside the Docker files directory.
 --global-env-file FILE         Specify the global environment file.
--v, --version VERSION          Specify the version of the Docker image.
+--secret-env-file FILE         Specify the secret environment file.
+-v, --version IMAGE_VERSION    Specify the version of the Docker image.
 -l, --latest                   Use the latest version of the Docker image.
 --push                         Push the Docker image after building it.
 -n, --name CONTAINER_NAME      Specify the name of the Docker container.
@@ -39,7 +41,7 @@ dk-compose build my-service --tag v1.0 --from-project --project-directory ./my-p
 # declare arguments
 COMMAND=""
 DOCKER_PROJECT_NAME=""
-TAG=""
+IMAGE_VARIANT="base"
 PROJECT_DIR=""
 DOCKERFILES_DIR=""
 COMPOSE_FILENAME=""
@@ -47,7 +49,8 @@ ENV_FILE=""
 SHELL_ENV_FILE=""
 SHELL_ENV_FILENAME=""
 GLOBAL_ENV_FILE=""
-VERSION=""
+SECRET_ENV_FILE=""
+IMAGE_VERSION=""
 LATEST="false"
 PUSH="false"
 FROM_PROJECT="false"
@@ -81,12 +84,12 @@ fi
 # parse options
 while [[ $# -gt 0 ]]; do
     case "$1" in
-    -t | --tag)
-        TAG="$2"
+    --variant)
+        IMAGE_VARIANT="$2"
         shift
         ;;
-    --tag=*)
-        TAG="${1#*=}"
+    --variant=*)
+        IMAGE_VARIANT="${1#*=}"
         ;;
     --from-project)
         FROM_PROJECT="true"
@@ -133,12 +136,19 @@ while [[ $# -gt 0 ]]; do
     --global-env-file=*)
         GLOBAL_ENV_FILE="${1#*=}"
         ;;
+    --secret-env-file)
+        SECRET_ENV_FILE="$2"
+        shift
+        ;;
+    --secret-env-file=*)
+        SECRET_ENV_FILE="${1#*=}"
+        ;;
     -v | --version)
-        VERSION="$2"
+        IMAGE_VERSION="$2"
         shift
         ;;
     --version=*)
-        VERSION="${1#*=}"
+        IMAGE_VERSION="${1#*=}"
         ;;
     -l | --latest)
         LATEST="true"
@@ -193,12 +203,12 @@ fi
 set -u
 
 # check version format
-if [[ "$LATEST" == "true" ]] && [[ -z "$VERSION" ]]; then
-    VERSION="latest"
-elif [[ "$VERSION" == "pre*" ]] || [[ "$VERSION" == "night*" ]]; then
-    VERSION="nightly"
+if [[ "$LATEST" == "true" ]] && [[ -z "$IMAGE_VERSION" ]]; then
+    IMAGE_VERSION="latest"
+elif [[ "$IMAGE_VERSION" == "pre*" ]] || [[ "$IMAGE_VERSION" == "night*" ]]; then
+    IMAGE_VERSION="nightly"
 fi
-export VERSION
+export IMAGE_VERSION
 
 DOCKERFILES_SHARE_DIR="{{- .docker.share_dir }}"
 # check PATHs
@@ -223,12 +233,12 @@ fi
 if [[ -n "$COMPOSE_FILENAME" ]]; then
     COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
 else
-    if [[ -n "$TAG" ]]; then
-        # {base_name}-{TAG}.{ext}
-        COMPOSE_FILENAME="docker-compose-${TAG}.yaml"
+    if [[ -n "$IMAGE_VARIANT" ]]; then
+        # {base_name}-{IMAGE_VARIANT}.{ext}
+        COMPOSE_FILENAME="docker-compose-${IMAGE_VARIANT}.yaml"
         COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
         if [[ ! -f "$COMPOSE_FILE" ]]; then
-            COMPOSE_FILENAME="docker-compose.${TAG}.yaml"
+            COMPOSE_FILENAME="docker-compose.${IMAGE_VARIANT}.yaml"
             COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
         fi
     else
@@ -271,9 +281,9 @@ fi
 
 # shell env file
 if [ -z "$SHELL_ENV_FILE" ]; then
-    if [[ -n "$TAG" ]]; then
-        # {base_name}-{TAG}.{ext}
-        SHELL_ENV_FILENAME="docker.${TAG}.env"
+    if [[ -n "$IMAGE_VARIANT" ]]; then
+        # {base_name}-{IMAGE_VARIANT}.{ext}
+        SHELL_ENV_FILENAME="docker.${IMAGE_VARIANT}.env"
     else
         # {base_name}.{ext}
         SHELL_ENV_FILENAME="docker.env"
@@ -289,6 +299,18 @@ if [[ -f "$SHELL_ENV_FILE" ]]; then
     set -a
     # shellcheck disable=SC1090
     c source "$SHELL_ENV_FILE"
+    set +a
+fi
+
+# secret env file
+if [ -z "$SECRET_ENV_FILE" ]; then
+    SECRET_ENV_FILE="${PROJECT_DIR}/.env.secret"
+fi
+if [[ -f "$SECRET_ENV_FILE" ]]; then
+    log_task "Exporting secret environment variables from ${SECRET_ENV_FILE}"
+    set -a
+    # shellcheck disable=SC1090
+    c source "$SECRET_ENV_FILE"
     set +a
 fi
 
@@ -313,7 +335,7 @@ else
 fi
 
 if docker-compose version &>/dev/null; then
-    log_task "docker compose ${COMMAND} for [${DOCKER_PROJECT_NAME}] with tag [${TAG}] and version [${VERSION}] from [${PROJECT_DIR}]"
+    log_task "docker compose ${COMMAND} for [${DOCKER_PROJECT_NAME}] with variant [${IMAGE_VARIANT}] and version [${IMAGE_VERSION}] from [${PROJECT_DIR}]"
 
     # change to the directory of the build context
     c cd "${PROJECT_DIR}" || exit 1
