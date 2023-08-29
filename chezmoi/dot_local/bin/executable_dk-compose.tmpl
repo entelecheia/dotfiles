@@ -14,28 +14,29 @@ COMMAND                The operation to be performed. Must be one of: build, run
 DOCKER_PROJECT_NAME            The name of the Docker service.
 
 Options:
--t, --tag IMAGE_TAG            Specify a tag for the Docker image.
---variant IMAGE_VARIANT        Specify a variant for the Docker image.
---from-project                 Use the project directory to build the Docker image.
---project-directory DIR        Specify the project directory. Default is the Docker name inside the workspace project directory.
---dockerfiles-directory DIR    Specify the directory containing Docker files. Default is the .docker directory inside the project directory.
--c, --compose-file FILE        Specify the Docker Compose file. Default is docker-compose.yaml inside the Docker files directory.
--e, --env-file FILE            Specify the environment file for Docker Compose.
---shell-env-file FILE          Specify the shell environment file. Default is docker.env inside the Docker files directory.
---global-env-file FILE         Specify the global environment file.
---secret-env-file FILE         Specify the secret environment file.
--v, --version IMAGE_VERSION    Specify the version of the Docker image.
--l, --latest                   Use the latest version of the Docker image.
---push                         Push the Docker image after building it.
--n, --name CONTAINER_NAME      Specify the name of the Docker container.
---network NETWORK_NAME         Specify the Docker network.
--u, --username USERNAME        Specify the username. Default is the current user.
--h, --help                     Display this help message.
+-t, --tag IMAGE_TAG             Specify a tag for the Docker image.
+--variant IMAGE_VARIANT         Specify a variant for the Docker image.
+--from-project                  Use the project directory to build the Docker image.
+--project-directory DIR         Specify the project directory. Default is the Docker name inside the workspace project directory.
+--dockerfiles-directory DIR     Specify the directory containing Docker files. Default is the .docker directory inside the project directory.
+-c, --compose-file FILE         Specify the Docker Compose file. Default is docker-compose.yaml inside the Docker files directory.
+-e, --env-file FILE             Specify the environment file for Docker Compose.
+--shell-env-file FILE           Specify the shell environment file. Default is docker.env inside the Docker files directory.
+--global-env-file FILE          Specify the global environment file.
+--secret-env-file FILE          Specify the secret environment file.
+-v, --version IMAGE_VERSION     Specify the version of the Docker image.
+-l, --latest                    Use the latest version of the Docker image.
+--push                          Push the Docker image after building it.
+--registry CONTAINER_REGISTRY   Specify the Docker registry.
+-n, --name IMAGE_NAME           Specify the name of the Docker image.
+--network NETWORK_NAME          Specify the Docker network.
+-u, --username USERNAME         Specify the username. Default is the current user.
+-h, --help                      Display this help message.
 
 Additional arguments can be provided after the Docker name, and they will be passed directly to the Docker Compose command.
 
 Example:
-dk-compose build my-service --tag v1.0 --from-project --project-directory ./my-project --compose-file ./my-docker/docker-compose.yaml
+dk-compose build my-service --variant app --version latest --from-project --project-directory ./my-project --compose-file ./my-docker/docker-compose.yaml
 "
 
 # declare arguments
@@ -54,8 +55,9 @@ IMAGE_VERSION=""
 LATEST="false"
 PUSH="false"
 FROM_PROJECT="false"
-CONTAINER_NAME=""
+IMAGE_NAME=""
 CONTAINER_NETWORK_NAME=""
+CONTAINER_REGISTRY=""
 USERNAME="{{ .chezmoi.username }}"
 ADDITIONAL_ARGS=""
 
@@ -157,11 +159,18 @@ while [[ $# -gt 0 ]]; do
         PUSH="true"
         ;;
     -n | --name)
-        CONTAINER_NAME="$2"
+        IMAGE_NAME="$2"
         shift
         ;;
     --name=*)
-        CONTAINER_NAME="${1#*=}"
+        IMAGE_NAME="${1#*=}"
+        ;;
+    --registry)
+        CONTAINER_REGISTRY="$2"
+        shift
+        ;;
+    --registry=*)
+        CONTAINER_REGISTRY="${1#*=}"
         ;;
     --network)
         CONTAINER_NETWORK_NAME="$2"
@@ -257,8 +266,11 @@ if [[ ! -f "$COMPOSE_FILE" ]]; then
 fi
 
 # export DOCKERFILES_DIR
-if [[ -n "$CONTAINER_NAME" ]]; then
-    export CONTAINER_NAME
+if [[ -n "$IMAGE_NAME" ]]; then
+    export IMAGE_NAME
+fi
+if [[ -n "$CONTAINER_REGISTRY" ]]; then
+    export CONTAINER_REGISTRY
 fi
 # export user id and group id
 export USERNAME
