@@ -7,11 +7,11 @@ true || source ../../.chezmoitemplates/scripts-library
 
 # arguments usage
 USAGE="
-dk-compose COMMAND DOCKER_NAME [OPTIONS]
+dk-compose COMMAND DOCKER_PROJECT_NAME [OPTIONS]
 
 Arguments:
 COMMAND                The operation to be performed. Must be one of: build, run, up, down, config.
-DOCKER_NAME            The name of the Docker service.
+DOCKER_PROJECT_NAME            The name of the Docker service.
 
 Options:
 -t, --tag TAG                  Specify a tag for the Docker image.
@@ -38,7 +38,7 @@ dk-compose build my-service --tag v1.0 --from-project --project-directory ./my-p
 
 # declare arguments
 COMMAND=""
-DOCKER_NAME=""
+DOCKER_PROJECT_NAME=""
 TAG=""
 PROJECT_DIR=""
 DOCKERFILES_DIR=""
@@ -52,7 +52,7 @@ LATEST="false"
 PUSH="false"
 FROM_PROJECT="false"
 CONTAINER_NAME=""
-DOCKER_NETWORK_NAME=""
+CONTAINER_NETWORK_NAME=""
 USERNAME="{{ .chezmoi.username }}"
 ADDITIONAL_ARGS=""
 
@@ -67,15 +67,15 @@ if [[ "$COMMAND" != "build" ]] && [[ "$COMMAND" != "run" ]] && [[ "$COMMAND" != 
   exit 1
 fi
 # check second argument starts with a dash
-# if it does, it's an option and DOCKER_NAME can be the last argument
-# if not, it's the DOCKER_NAME
+# if it does, it's an option and DOCKER_PROJECT_NAME can be the last argument
+# if not, it's the DOCKER_PROJECT_NAME
 if [[ "$1" != -* ]]; then
   # if no arguments, print usage
   if [[ $# -eq 0 ]]; then
     echo "Usage: $0 $USAGE" >&2
     exit 1
   fi
-  DOCKER_NAME="$1"
+  DOCKER_PROJECT_NAME="$1"
   shift
 fi
 # parse options
@@ -154,11 +154,11 @@ while [[ $# -gt 0 ]]; do
     CONTAINER_NAME="${1#*=}"
     ;;
   --network)
-    DOCKER_NETWORK_NAME="$2"
+    CONTAINER_NETWORK_NAME="$2"
     shift
     ;;
   --network=*)
-    DOCKER_NETWORK_NAME="${1#*=}"
+    CONTAINER_NETWORK_NAME="${1#*=}"
     ;;
   -u | --username)
     USERNAME="$2"
@@ -176,9 +176,9 @@ while [[ $# -gt 0 ]]; do
     exit 0
     ;;
   *)
-    # if no option matches, it's the DOCKER_NAME
-    if [[ -z "$DOCKER_NAME" ]]; then
-      DOCKER_NAME="$1"
+    # if no option matches, it's the DOCKER_PROJECT_NAME
+    if [[ -z "$DOCKER_PROJECT_NAME" ]]; then
+      DOCKER_PROJECT_NAME="$1"
     else
       ADDITIONAL_ARGS="$ADDITIONAL_ARGS $1"
     fi
@@ -203,11 +203,11 @@ export VERSION
 DOCKERFILES_SHARE_DIR="{{- .docker.share_dir }}"
 # check PATHs
 if [[ -z "$PROJECT_DIR" ]]; then
-  PROJECT_DIR="${WORKSPACE_PROJECT_DIR}/${DOCKER_NAME}"
+  PROJECT_DIR="${WORKSPACE_PROJECT_DIR}/${DOCKER_PROJECT_NAME}"
 fi
 # if project directory does not exist or FROM_PROJECT is false, use dockerfile repo path
 if [[ ! -d "$PROJECT_DIR" ]] || [[ "$FROM_PROJECT" != "false" ]]; then
-  PROJECT_DIR="${DOCKERFILES_SHARE_DIR}/src/${DOCKER_NAME}"
+  PROJECT_DIR="${DOCKERFILES_SHARE_DIR}/src/${DOCKER_PROJECT_NAME}"
 fi
 # if it still does not exist, exit
 if [[ ! -d "$PROJECT_DIR" ]]; then
@@ -216,7 +216,7 @@ if [[ ! -d "$PROJECT_DIR" ]]; then
 fi
 
 if [[ -z "$DOCKERFILES_DIR" ]]; then
-  # DOCKERFILES_DIR="${DOCKERFILES_SHARE_DIR}/src/${DOCKER_NAME}/.docker"
+  # DOCKERFILES_DIR="${DOCKERFILES_SHARE_DIR}/src/${DOCKER_PROJECT_NAME}/.docker"
   DOCKERFILES_DIR="${PROJECT_DIR}/.docker"
 fi
 
@@ -301,20 +301,20 @@ if [[ -f "$ENV_FILE" ]]; then
 fi
 
 # if network does not exist, create it
-if [[ -n "$DOCKER_NETWORK_NAME" ]]; then
+if [[ -n "$CONTAINER_NETWORK_NAME" ]]; then
   # shellcheck disable=SC2143
-  if [[ -z "$(docker network ls | grep "${DOCKER_NETWORK_NAME}")" ]]; then
-    log_task "Creating network ${DOCKER_NETWORK_NAME}"
-    docker network create "${DOCKER_NETWORK_NAME}"
+  if [[ -z "$(docker network ls | grep "${CONTAINER_NETWORK_NAME}")" ]]; then
+    log_task "Creating network ${CONTAINER_NETWORK_NAME}"
+    docker network create "${CONTAINER_NETWORK_NAME}"
   else
-    log_info "Network ${DOCKER_NETWORK_NAME} already exists."
+    log_info "Network ${CONTAINER_NETWORK_NAME} already exists."
   fi
 else
-  log_info "DOCKER_NETWORK_NAME not set, skipping creation of docker network."
+  log_info "CONTAINER_NETWORK_NAME not set, skipping creation of docker network."
 fi
 
 if docker-compose version &>/dev/null; then
-  log_task "docker compose ${COMMAND} for [${DOCKER_NAME}] with tag [${TAG}] and version [${VERSION}] from [${PROJECT_DIR}]"
+  log_task "docker compose ${COMMAND} for [${DOCKER_PROJECT_NAME}] with tag [${TAG}] and version [${VERSION}] from [${PROJECT_DIR}]"
 
   # change to the directory of the build context
   c cd "${PROJECT_DIR}" || exit 1
@@ -322,7 +322,7 @@ if docker-compose version &>/dev/null; then
   c eval "$CMD" || exit 1
 
   if [[ "$PUSH" == "true" ]]; then
-    log_task "Pushing ${DOCKER_NAME}"
+    log_task "Pushing ${DOCKER_PROJECT_NAME}"
     CMD="docker-compose --project-directory ${PROJECT_DIR} -f ${COMPOSE_FILE} ${ENV_ARGS} push"
     c eval "$CMD" || exit 1
   fi
