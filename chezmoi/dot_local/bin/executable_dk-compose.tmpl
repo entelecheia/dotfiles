@@ -7,39 +7,42 @@ true || source ../../.chezmoitemplates/scripts-library
 
 # arguments usage
 USAGE="
-dk-compose COMMAND DOCKER_NAME [OPTIONS]
+dk-compose COMMAND DOCKER_PROJECT_NAME [OPTIONS]
 
 Arguments:
 COMMAND                The operation to be performed. Must be one of: build, run, up, down, config.
-DOCKER_NAME            The name of the Docker service.
+DOCKER_PROJECT_NAME            The name of the Docker service.
 
 Options:
--t, --tag TAG                  Specify a tag for the Docker image.
---from-project                 Use the project directory to build the Docker image.
---project-directory DIR        Specify the project directory. Default is the Docker name inside the workspace project directory.
---dockerfiles-directory DIR    Specify the directory containing Docker files. Default is the .docker directory inside the project directory.
--c, --compose-file FILE        Specify the Docker Compose file. Default is docker-compose.yaml inside the Docker files directory.
--e, --env-file FILE            Specify the environment file for Docker Compose.
---shell-env-file FILE          Specify the shell environment file. Default is docker.env inside the Docker files directory.
---global-env-file FILE         Specify the global environment file.
--v, --version VERSION          Specify the version of the Docker image.
--l, --latest                   Use the latest version of the Docker image.
---push                         Push the Docker image after building it.
--n, --name CONTAINER_NAME      Specify the name of the Docker container.
---network NETWORK_NAME         Specify the Docker network.
--u, --username USERNAME        Specify the username. Default is the current user.
--h, --help                     Display this help message.
+-t, --tag IMAGE_TAG             Specify a tag for the Docker image.
+--variant IMAGE_VARIANT         Specify a variant for the Docker image.
+--from-project                  Use the project directory to build the Docker image.
+--project-directory DIR         Specify the project directory. Default is the Docker name inside the workspace project directory.
+--dockerfiles-directory DIR     Specify the directory containing Docker files. Default is the .docker directory inside the project directory.
+-c, --compose-file FILE         Specify the Docker Compose file. Default is docker-compose.yaml inside the Docker files directory.
+-e, --env-file FILE             Specify the environment file for Docker Compose.
+--shell-env-file FILE           Specify the shell environment file. Default is docker.env inside the Docker files directory.
+--global-env-file FILE          Specify the global environment file.
+--secret-env-file FILE          Specify the secret environment file.
+-v, --version IMAGE_VERSION     Specify the version of the Docker image.
+-l, --latest                    Use the latest version of the Docker image.
+--push                          Push the Docker image after building it.
+--registry CONTAINER_REGISTRY   Specify the Docker registry.
+-n, --name IMAGE_NAME           Specify the name of the Docker image.
+--network NETWORK_NAME          Specify the Docker network.
+-u, --username USERNAME         Specify the username. Default is the current user.
+-h, --help                      Display this help message.
 
 Additional arguments can be provided after the Docker name, and they will be passed directly to the Docker Compose command.
 
 Example:
-dk-compose build my-service --tag v1.0 --from-project --project-directory ./my-project --compose-file ./my-docker/docker-compose.yaml
+dk-compose build my-service --variant app --version latest --from-project --project-directory ./my-project --compose-file ./my-docker/docker-compose.yaml
 "
 
 # declare arguments
 COMMAND=""
-DOCKER_NAME=""
-TAG=""
+DOCKER_PROJECT_NAME=""
+IMAGE_VARIANT="base"
 PROJECT_DIR=""
 DOCKERFILES_DIR=""
 COMPOSE_FILENAME=""
@@ -47,12 +50,14 @@ ENV_FILE=""
 SHELL_ENV_FILE=""
 SHELL_ENV_FILENAME=""
 GLOBAL_ENV_FILE=""
-VERSION=""
+SECRET_ENV_FILE=""
+IMAGE_VERSION=""
 LATEST="false"
 PUSH="false"
 FROM_PROJECT="false"
-CONTAINER_NAME=""
-DOCKER_NETWORK_NAME=""
+IMAGE_NAME=""
+CONTAINER_NETWORK_NAME=""
+CONTAINER_REGISTRY=""
 USERNAME="{{ .chezmoi.username }}"
 ADDITIONAL_ARGS=""
 
@@ -62,194 +67,210 @@ set +u
 COMMAND="$1"
 shift
 if [[ "$COMMAND" != "build" ]] && [[ "$COMMAND" != "run" ]] && [[ "$COMMAND" != "up" ]] && [[ "$COMMAND" != "down" ]] && [[ "$COMMAND" != "config" ]]; then
-  echo "Invalid command: $COMMAND" >&2
-  echo "Usage: $0 $USAGE" >&2
-  exit 1
-fi
-# check second argument starts with a dash
-# if it does, it's an option and DOCKER_NAME can be the last argument
-# if not, it's the DOCKER_NAME
-if [[ "$1" != -* ]]; then
-  # if no arguments, print usage
-  if [[ $# -eq 0 ]]; then
+    echo "Invalid command: $COMMAND" >&2
     echo "Usage: $0 $USAGE" >&2
     exit 1
-  fi
-  DOCKER_NAME="$1"
-  shift
+fi
+# check second argument starts with a dash
+# if it does, it's an option and DOCKER_PROJECT_NAME can be the last argument
+# if not, it's the DOCKER_PROJECT_NAME
+if [[ "$1" != -* ]]; then
+    # if no arguments, print usage
+    if [[ $# -eq 0 ]]; then
+        echo "Usage: $0 $USAGE" >&2
+        exit 1
+    fi
+    DOCKER_PROJECT_NAME="$1"
+    shift
 fi
 # parse options
 while [[ $# -gt 0 ]]; do
-  case "$1" in
-  -t | --tag)
-    TAG="$2"
+    case "$1" in
+    --variant)
+        IMAGE_VARIANT="$2"
+        shift
+        ;;
+    --variant=*)
+        IMAGE_VARIANT="${1#*=}"
+        ;;
+    --from-project)
+        FROM_PROJECT="true"
+        ;;
+    --project-directory)
+        PROJECT_DIR="$2"
+        shift
+        ;;
+    --project-directory=*)
+        PROJECT_DIR="${1#*=}"
+        ;;
+    --dockerfiles-directory)
+        DOCKERFILES_DIR="$2"
+        shift
+        ;;
+    --dockerfiles-directory=*)
+        DOCKERFILES_DIR="${1#*=}"
+        ;;
+    -c | --compose-file)
+        COMPOSE_FILENAME="$2"
+        shift
+        ;;
+    --compose-file=*)
+        COMPOSE_FILENAME="${1#*=}"
+        ;;
+    -e | --env-file)
+        ENV_FILE="$2"
+        shift
+        ;;
+    --env-file=*)
+        ENV_FILE="${1#*=}"
+        ;;
+    --shell-env-file)
+        SHELL_ENV_FILE="$2"
+        shift
+        ;;
+    --shell-env-file=*)
+        SHELL_ENV_FILE="${1#*=}"
+        ;;
+    --global-env-file)
+        GLOBAL_ENV_FILE="$2"
+        shift
+        ;;
+    --global-env-file=*)
+        GLOBAL_ENV_FILE="${1#*=}"
+        ;;
+    --secret-env-file)
+        SECRET_ENV_FILE="$2"
+        shift
+        ;;
+    --secret-env-file=*)
+        SECRET_ENV_FILE="${1#*=}"
+        ;;
+    -v | --version)
+        IMAGE_VERSION="$2"
+        shift
+        ;;
+    --version=*)
+        IMAGE_VERSION="${1#*=}"
+        ;;
+    -l | --latest)
+        LATEST="true"
+        ;;
+    --push)
+        PUSH="true"
+        ;;
+    -n | --name)
+        IMAGE_NAME="$2"
+        shift
+        ;;
+    --name=*)
+        IMAGE_NAME="${1#*=}"
+        ;;
+    --registry)
+        CONTAINER_REGISTRY="$2"
+        shift
+        ;;
+    --registry=*)
+        CONTAINER_REGISTRY="${1#*=}"
+        ;;
+    --network)
+        CONTAINER_NETWORK_NAME="$2"
+        shift
+        ;;
+    --network=*)
+        CONTAINER_NETWORK_NAME="${1#*=}"
+        ;;
+    -u | --username)
+        USERNAME="$2"
+        shift
+        ;;
+    --username=*)
+        USERNAME="${1#*=}"
+        ;;
+    -h | --help)
+        echo "Usage: $0 $USAGE" >&2
+        exit 0
+        ;;
+    -h*)
+        echo "Usage: $0 $USAGE" >&2
+        exit 0
+        ;;
+    *)
+        # if no option matches, it's the DOCKER_PROJECT_NAME
+        if [[ -z "$DOCKER_PROJECT_NAME" ]]; then
+            DOCKER_PROJECT_NAME="$1"
+        else
+            ADDITIONAL_ARGS="$ADDITIONAL_ARGS $1"
+        fi
+        ;;
+    esac
     shift
-    ;;
-  --tag=*)
-    TAG="${1#*=}"
-    ;;
-  --from-project)
-    FROM_PROJECT="true"
-    ;;
-  --project-directory)
-    PROJECT_DIR="$2"
-    shift
-    ;;
-  --project-directory=*)
-    PROJECT_DIR="${1#*=}"
-    ;;
-  --dockerfiles-directory)
-    DOCKERFILES_DIR="$2"
-    shift
-    ;;
-  --dockerfiles-directory=*)
-    DOCKERFILES_DIR="${1#*=}"
-    ;;
-  -c | --compose-file)
-    COMPOSE_FILENAME="$2"
-    shift
-    ;;
-  --compose-file=*)
-    COMPOSE_FILENAME="${1#*=}"
-    ;;
-  -e | --env-file)
-    ENV_FILE="$2"
-    shift
-    ;;
-  --env-file=*)
-    ENV_FILE="${1#*=}"
-    ;;
-  --shell-env-file)
-    SHELL_ENV_FILE="$2"
-    shift
-    ;;
-  --shell-env-file=*)
-    SHELL_ENV_FILE="${1#*=}"
-    ;;
-  --global-env-file)
-    GLOBAL_ENV_FILE="$2"
-    shift
-    ;;
-  --global-env-file=*)
-    GLOBAL_ENV_FILE="${1#*=}"
-    ;;
-  -v | --version)
-    VERSION="$2"
-    shift
-    ;;
-  --version=*)
-    VERSION="${1#*=}"
-    ;;
-  -l | --latest)
-    LATEST="true"
-    ;;
-  --push)
-    PUSH="true"
-    ;;
-  -n | --name)
-    CONTAINER_NAME="$2"
-    shift
-    ;;
-  --name=*)
-    CONTAINER_NAME="${1#*=}"
-    ;;
-  --network)
-    DOCKER_NETWORK_NAME="$2"
-    shift
-    ;;
-  --network=*)
-    DOCKER_NETWORK_NAME="${1#*=}"
-    ;;
-  -u | --username)
-    USERNAME="$2"
-    shift
-    ;;
-  --username=*)
-    USERNAME="${1#*=}"
-    ;;
-  -h | --help)
-    echo "Usage: $0 $USAGE" >&2
-    exit 0
-    ;;
-  -h*)
-    echo "Usage: $0 $USAGE" >&2
-    exit 0
-    ;;
-  *)
-    # if no option matches, it's the DOCKER_NAME
-    if [[ -z "$DOCKER_NAME" ]]; then
-      DOCKER_NAME="$1"
-    else
-      ADDITIONAL_ARGS="$ADDITIONAL_ARGS $1"
-    fi
-    ;;
-  esac
-  shift
 done
 # check if remaining arguments exist
 if [[ -n "$ADDITIONAL_ARGS" ]]; then
-  echo "Additional arguments: $ADDITIONAL_ARGS" >&2
+    echo "Additional arguments: $ADDITIONAL_ARGS" >&2
 fi
 set -u
 
 # check version format
-if [[ "$LATEST" == "true" ]] && [[ -z "$VERSION" ]]; then
-  VERSION="latest"
-elif [[ "$VERSION" == "pre*" ]] || [[ "$VERSION" == "night*" ]]; then
-  VERSION="nightly"
+if [[ "$LATEST" == "true" ]] && [[ -z "$IMAGE_VERSION" ]]; then
+    IMAGE_VERSION="latest"
+elif [[ "$IMAGE_VERSION" == "pre*" ]] || [[ "$IMAGE_VERSION" == "night*" ]]; then
+    IMAGE_VERSION="nightly"
 fi
-export VERSION
+export IMAGE_VERSION
 
 DOCKERFILES_SHARE_DIR="{{- .docker.share_dir }}"
 # check PATHs
 if [[ -z "$PROJECT_DIR" ]]; then
-  PROJECT_DIR="${WORKSPACE_PROJECT_DIR}/${DOCKER_NAME}"
+    PROJECT_DIR="${WORKSPACE_PROJECT_DIR}/${DOCKER_PROJECT_NAME}"
 fi
 # if project directory does not exist or FROM_PROJECT is false, use dockerfile repo path
 if [[ ! -d "$PROJECT_DIR" ]] || [[ "$FROM_PROJECT" != "false" ]]; then
-  PROJECT_DIR="${DOCKERFILES_SHARE_DIR}/src/${DOCKER_NAME}"
+    PROJECT_DIR="${DOCKERFILES_SHARE_DIR}/src/${DOCKER_PROJECT_NAME}"
 fi
 # if it still does not exist, exit
 if [[ ! -d "$PROJECT_DIR" ]]; then
-  log_error "Project directory ${PROJECT_DIR} does not exist"
-  exit 1
+    log_error "Project directory ${PROJECT_DIR} does not exist"
+    exit 1
 fi
 
 if [[ -z "$DOCKERFILES_DIR" ]]; then
-  # DOCKERFILES_DIR="${DOCKERFILES_SHARE_DIR}/src/${DOCKER_NAME}/.docker"
-  DOCKERFILES_DIR="${PROJECT_DIR}/.docker"
+    # DOCKERFILES_DIR="${DOCKERFILES_SHARE_DIR}/src/${DOCKER_PROJECT_NAME}/.docker"
+    DOCKERFILES_DIR="${PROJECT_DIR}/.docker"
 fi
-
 
 if [[ -n "$COMPOSE_FILENAME" ]]; then
-  COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
-else
-  if [[ -n "$TAG" ]]; then
-    # {base_name}-{TAG}.{ext}
-    COMPOSE_FILENAME="docker-compose-${TAG}.yaml"
     COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
-    if [[ ! -f "$COMPOSE_FILE" ]]; then
-      COMPOSE_FILENAME="docker-compose.${TAG}.yaml"
-      COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
+else
+    if [[ -n "$IMAGE_VARIANT" ]]; then
+        # {base_name}-{IMAGE_VARIANT}.{ext}
+        COMPOSE_FILENAME="docker-compose-${IMAGE_VARIANT}.yaml"
+        COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
+        if [[ ! -f "$COMPOSE_FILE" ]]; then
+            COMPOSE_FILENAME="docker-compose.${IMAGE_VARIANT}.yaml"
+            COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
+        fi
+    else
+        # {base_name}.{ext}
+        COMPOSE_FILENAME="docker-compose.yaml"
+        COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
     fi
-  else
-    # {base_name}.{ext}
+fi
+if [[ ! -f "$COMPOSE_FILE" ]]; then
     COMPOSE_FILENAME="docker-compose.yaml"
     COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
-  fi
 fi
 if [[ ! -f "$COMPOSE_FILE" ]]; then
-  COMPOSE_FILENAME="docker-compose.yaml"
-  COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
-fi
-if [[ ! -f "$COMPOSE_FILE" ]]; then
-  log_error "Dockerfile ${COMPOSE_FILE} does not exist"
-  exit 1
+    log_error "Dockerfile ${COMPOSE_FILE} does not exist"
+    exit 1
 fi
 
 # export DOCKERFILES_DIR
-if [[ -n "$CONTAINER_NAME" ]]; then
-  export CONTAINER_NAME
+if [[ -n "$IMAGE_NAME" ]]; then
+    export IMAGE_NAME
+fi
+if [[ -n "$CONTAINER_REGISTRY" ]]; then
+    export CONTAINER_REGISTRY
 fi
 # export user id and group id
 export USERNAME
@@ -260,71 +281,83 @@ export USER_GID
 
 # global env file
 if [ -z "$GLOBAL_ENV_FILE" ]; then
-  GLOBAL_ENV_FILE="${DOCKERFILES_SHARE_DIR}/src/global.env"
+    GLOBAL_ENV_FILE="${DOCKERFILES_SHARE_DIR}/src/global.env"
 fi
 if [[ -f "$GLOBAL_ENV_FILE" ]]; then
-  log_task "Exporting global environment variables from ${GLOBAL_ENV_FILE}"
-  set -a # export all variables (set -o allexport)
-  # shellcheck disable=SC1090
-  c source "$GLOBAL_ENV_FILE"
-  set +a
+    log_task "Exporting global environment variables from ${GLOBAL_ENV_FILE}"
+    set -a # export all variables (set -o allexport)
+    # shellcheck disable=SC1090
+    c source "$GLOBAL_ENV_FILE"
+    set +a
 fi
 
 # shell env file
 if [ -z "$SHELL_ENV_FILE" ]; then
-  if [[ -n "$TAG" ]]; then
-    # {base_name}-{TAG}.{ext}
-    SHELL_ENV_FILENAME="docker.${TAG}.env"
-  else
-    # {base_name}.{ext}
-    SHELL_ENV_FILENAME="docker.env"
-  fi
-  SHELL_ENV_FILE="${DOCKERFILES_DIR}/${SHELL_ENV_FILENAME}"
+    if [[ -n "$IMAGE_VARIANT" ]]; then
+        # {base_name}-{IMAGE_VARIANT}.{ext}
+        SHELL_ENV_FILENAME="docker.${IMAGE_VARIANT}.env"
+    else
+        # {base_name}.{ext}
+        SHELL_ENV_FILENAME="docker.env"
+    fi
+    SHELL_ENV_FILE="${DOCKERFILES_DIR}/${SHELL_ENV_FILENAME}"
 fi
 if [[ ! -f "$SHELL_ENV_FILE" ]]; then
-  SHELL_ENV_FILENAME="docker.env"
-  SHELL_ENV_FILE="${DOCKERFILES_DIR}/${SHELL_ENV_FILENAME}"
+    SHELL_ENV_FILENAME="docker.env"
+    SHELL_ENV_FILE="${DOCKERFILES_DIR}/${SHELL_ENV_FILENAME}"
 fi
 if [[ -f "$SHELL_ENV_FILE" ]]; then
-  log_task "Exporting shell environment variables from ${SHELL_ENV_FILE}"
-  set -a
-  # shellcheck disable=SC1090
-  c source "$SHELL_ENV_FILE"
-  set +a
+    log_task "Exporting shell environment variables from ${SHELL_ENV_FILE}"
+    set -a
+    # shellcheck disable=SC1090
+    c source "$SHELL_ENV_FILE"
+    set +a
+fi
+
+# secret env file
+if [ -z "$SECRET_ENV_FILE" ]; then
+    SECRET_ENV_FILE="${PROJECT_DIR}/.env.secret"
+fi
+if [[ -f "$SECRET_ENV_FILE" ]]; then
+    log_task "Exporting secret environment variables from ${SECRET_ENV_FILE}"
+    set -a
+    # shellcheck disable=SC1090
+    c source "$SECRET_ENV_FILE"
+    set +a
 fi
 
 # project env file
 ENV_ARGS=""
 if [[ -f "$ENV_FILE" ]]; then
-  ENV_ARGS="--env-file ${ENV_FILE}"
-  log_task "Loading environment variables for the services from ${ENV_FILE}"
+    ENV_ARGS="--env-file ${ENV_FILE}"
+    log_task "Loading environment variables for the services from ${ENV_FILE}"
 fi
 
 # if network does not exist, create it
-if [[ -n "$DOCKER_NETWORK_NAME" ]]; then
-  # shellcheck disable=SC2143
-  if [[ -z "$(docker network ls | grep "${DOCKER_NETWORK_NAME}")" ]]; then
-    log_task "Creating network ${DOCKER_NETWORK_NAME}"
-    docker network create "${DOCKER_NETWORK_NAME}"
-  else
-    log_info "Network ${DOCKER_NETWORK_NAME} already exists."
-  fi
+if [[ -n "$CONTAINER_NETWORK_NAME" ]]; then
+    # shellcheck disable=SC2143
+    if [[ -z "$(docker network ls | grep "${CONTAINER_NETWORK_NAME}")" ]]; then
+        log_task "Creating network ${CONTAINER_NETWORK_NAME}"
+        docker network create "${CONTAINER_NETWORK_NAME}"
+    else
+        log_info "Network ${CONTAINER_NETWORK_NAME} already exists."
+    fi
 else
-  log_info "DOCKER_NETWORK_NAME not set, skipping creation of docker network."
+    log_info "CONTAINER_NETWORK_NAME not set, skipping creation of docker network."
 fi
 
 if docker-compose version &>/dev/null; then
-  log_task "docker compose ${COMMAND} for [${DOCKER_NAME}] with tag [${TAG}] and version [${VERSION}] from [${PROJECT_DIR}]"
+    log_task "docker compose ${COMMAND} for [${DOCKER_PROJECT_NAME}] with variant [${IMAGE_VARIANT}] and version [${IMAGE_VERSION}] from [${PROJECT_DIR}]"
 
-  # change to the directory of the build context
-  c cd "${PROJECT_DIR}" || exit 1
-  CMD="docker-compose --project-directory ${PROJECT_DIR} -f ${COMPOSE_FILE} ${ENV_ARGS} ${COMMAND} ${ADDITIONAL_ARGS}"
-  c eval "$CMD" || exit 1
-
-  if [[ "$PUSH" == "true" ]]; then
-    log_task "Pushing ${DOCKER_NAME}"
-    CMD="docker-compose --project-directory ${PROJECT_DIR} -f ${COMPOSE_FILE} ${ENV_ARGS} push"
+    # change to the directory of the build context
+    c cd "${PROJECT_DIR}" || exit 1
+    CMD="docker-compose --project-directory ${PROJECT_DIR} -f ${COMPOSE_FILE} ${ENV_ARGS} ${COMMAND} ${ADDITIONAL_ARGS}"
     c eval "$CMD" || exit 1
-  fi
+
+    if [[ "$PUSH" == "true" ]]; then
+        log_task "Pushing ${DOCKER_PROJECT_NAME}"
+        CMD="docker-compose --project-directory ${PROJECT_DIR} -f ${COMPOSE_FILE} ${ENV_ARGS} push"
+        c eval "$CMD" || exit 1
+    fi
 
 fi
