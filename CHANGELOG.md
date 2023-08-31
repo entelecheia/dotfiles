@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.30.0 (2023-08-31)
+
+### Feature
+
+* **chezmoi:** Add global_env_filename, secret_env_filename and container_registry to docker, add model_dir and dataset_dir configurations ([`ea0d1c9`](https://github.com/entelecheia/dotfiles/commit/ea0d1c9447c1c8981eab0462b86164734505b877))
+
 ## v0.29.0 (2023-08-29)
 
 ### Feature
