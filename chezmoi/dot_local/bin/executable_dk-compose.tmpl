@@ -49,7 +49,7 @@ COMPOSE_FILENAME=""
 ENV_FILE=""
 SHELL_ENV_FILE=""
 SHELL_ENV_FILENAME=""
-GLOBAL_ENV_FILE=""
+DOCKER_GLOBAL_ENV_FILE=${DOCKER_GLOBAL_ENV_FILE:-""}
 SECRET_ENV_FILE=""
 IMAGE_VERSION=""
 LATEST="false"
@@ -57,8 +57,8 @@ PUSH="false"
 FROM_PROJECT="false"
 IMAGE_NAME=""
 CONTAINER_NETWORK_NAME=""
-CONTAINER_REGISTRY=""
-USERNAME="{{ .chezmoi.username }}"
+CONTAINER_REGISTRY=${CONTAINER_REGISTRY:-"{{ .docker.container_registry }}"}
+USERNAME=${USERNAME:-"{{ .chezmoi.username }}"}
 ADDITIONAL_ARGS=""
 
 set +u
@@ -132,11 +132,11 @@ while [[ $# -gt 0 ]]; do
         SHELL_ENV_FILE="${1#*=}"
         ;;
     --global-env-file)
-        GLOBAL_ENV_FILE="$2"
+        DOCKER_GLOBAL_ENV_FILE="$2"
         shift
         ;;
     --global-env-file=*)
-        GLOBAL_ENV_FILE="${1#*=}"
+        DOCKER_GLOBAL_ENV_FILE="${1#*=}"
         ;;
     --secret-env-file)
         SECRET_ENV_FILE="$2"
@@ -219,7 +219,7 @@ elif [[ "$IMAGE_VERSION" == "pre*" ]] || [[ "$IMAGE_VERSION" == "night*" ]]; the
 fi
 export IMAGE_VERSION
 
-DOCKERFILES_SHARE_DIR="{{- .docker.share_dir }}"
+DOCKERFILES_SHARE_DIR=${DOCKERFILES_SHARE_DIR:-"{{ .docker.share_dir }}"}
 # check PATHs
 if [[ -z "$PROJECT_DIR" ]]; then
     PROJECT_DIR="${WORKSPACE_PROJECT_DIR}/${DOCKER_PROJECT_NAME}"
@@ -280,14 +280,14 @@ export USER_UID
 export USER_GID
 
 # global env file
-if [ -z "$GLOBAL_ENV_FILE" ]; then
-    GLOBAL_ENV_FILE="${DOCKERFILES_SHARE_DIR}/src/global.env"
+if [ -z "$DOCKER_GLOBAL_ENV_FILE" ]; then
+    DOCKER_GLOBAL_ENV_FILE="${DOCKERFILES_SHARE_DIR}/{{ .docker.global_env_filename }}"
 fi
-if [[ -f "$GLOBAL_ENV_FILE" ]]; then
-    log_task "Exporting global environment variables from ${GLOBAL_ENV_FILE}"
+if [[ -f "$DOCKER_GLOBAL_ENV_FILE" ]]; then
+    log_task "Exporting global environment variables from ${DOCKER_GLOBAL_ENV_FILE}"
     set -a # export all variables (set -o allexport)
     # shellcheck disable=SC1090
-    c source "$GLOBAL_ENV_FILE"
+    c source "$DOCKER_GLOBAL_ENV_FILE"
     set +a
 fi
 
@@ -316,7 +316,8 @@ fi
 
 # secret env file
 if [ -z "$SECRET_ENV_FILE" ]; then
-    SECRET_ENV_FILE="${PROJECT_DIR}/.env.secret"
+    DOCKER_SECRET_ENV_FILENAME=${DOCKER_SECRET_ENV_FILENAME:-"{{ .docker.secret_env_filename }}"}
+    SECRET_ENV_FILE="${PROJECT_DIR}/${DOCKER_SECRET_ENV_FILENAME}"
 fi
 if [[ -f "$SECRET_ENV_FILE" ]]; then
     log_task "Exporting secret environment variables from ${SECRET_ENV_FILE}"
