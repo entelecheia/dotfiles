@@ -21,7 +21,7 @@ cryptography = "^41.0.3"
 certifi = "^2023.7.22"
 
 [tool.poe]
-include = [".tasks.toml", ".tasks-extra.toml"]
+include = [".tasks.toml"]
 
 [tool.black]
 exclude = ['_version.py', 'node_modules', '_build', 'docs', 'tests', 'venv', '.copier-template', '.refs']
