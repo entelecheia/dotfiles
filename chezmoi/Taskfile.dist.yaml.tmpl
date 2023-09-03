@@ -358,13 +358,19 @@ tasks:
 {{- if .lfs_folderstore.enabled | not | not }}
 
   lfs-folderstore-init:
-    desc: Initialize the LFS folderstore for the current Git repository
+    desc: Initialize the LFS folderstore for the current Git repository. If you are cloning a repository with LFS folderstore, you should run this task after cloning. You also need to run this task after running the lfs-folderstore-reset task.
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
       - git config --add lfs.customtransfer.lfs-folder.path "${HOME}/.local/bin/lfs-folderstore"
       - git config --add lfs.customtransfer.lfs-folder.args "{{ .lfs_folderstore.store_dir }}"
       - git config --add lfs.standalonetransferagent lfs-folder
       - git config lfs.url "https://localhost"
+
+  lfs-folderstore-reset:
+    desc: After cloning a repository with LFS folderstore, reset the LFS folderstore. This will sort out the LFS files in your checkout and copy the content from the now-configured shared folder.
+    dir: {{"'{{.USER_WORKING_DIR}}'"}}
+    cmds:
+      - git reset --hard main
 
 {{- end }}
 
