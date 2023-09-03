@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.31.0 (2023-09-03)
+
+### Feature
+
+* **.envrc:** Add bash script for setting project environment variables and virtual environment setup ([`7ff700e`](https://github.com/entelecheia/dotfiles/commit/7ff700e894391217fc885f8e641230de10fa4799))
+* **chezmoi:** Add lfs-folderstore-reset task ([`623bf65`](https://github.com/entelecheia/dotfiles/commit/623bf652a462fd24295e5ad13eab72cc64d614a2))
+
 ## v0.30.0 (2023-08-31)
 
 ### Feature
