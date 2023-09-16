@@ -55,3 +55,9 @@ fi
 if command -v fig >/dev/null 2>&1 && [ -d "${HOME}/.fig/bin" ]; then
   export PATH="${HOME}/.fig/bin:${PATH}"
 fi
+
+# RubyGems Environment
+if command -v gem >/dev/null 2>&1; then
+  export GEM_HOME="${HOME}/.gem"
+  export PATH="${GEM_HOME}/bin:${PATH}"
+fi
