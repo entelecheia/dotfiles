@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.32.0 (2023-09-16)
+
+### Feature
+
+* **shrc:** Add automatic rbenv loading ([`9262e9a`](https://github.com/entelecheia/dotfiles/commit/9262e9a3cfc2adea181b92689f54a111aa2c2f57))
+
 ## v0.31.0 (2023-09-03)
 
 ### Feature
