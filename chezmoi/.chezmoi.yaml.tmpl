@@ -271,6 +271,7 @@
 # {{-   $cloudflared_tunnel_hostname = .cloudflared.tunnel_hostname -}}
 # {{- end -}}
 # {{- $cloudflared_config_file := or (env "CLOUDFLARED_CONFIG") (joinPath .chezmoi.homeDir ".cloudflared/config.yml") -}}
+# {{- $cloudflared_config_template := (joinPath .chezmoi.homeDir ".cloudflared/config.tmp") -}}
 # {{- $cloudflared_credentials_file := "" -}}
 
 # {{- $use_pass := true -}}
@@ -1263,6 +1264,7 @@ data:
   cloudflared:
     enabled: {{ $use_cloudflared }}
     config_file: {{ $cloudflared_config_file | quote }}
+    config_template: {{ $cloudflared_config_template | quote }}
     tunnel_hostname: {{ $cloudflared_tunnel_hostname | quote }}
     tunnel_name: {{ $cloudflared_tunnel_name | quote }}
     tunnel_uuid: {{ $cloudflared_tunnel_uuid | quote }}
