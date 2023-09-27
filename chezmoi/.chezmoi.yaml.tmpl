@@ -255,6 +255,9 @@
 # {{- if eq (env "DOTFILES_USE_CLOUDFLARED") "true" "True" "TRUE" "1" -}}
 # {{-   $use_cloudflared = true -}}
 # {{- end -}}
+# {{- if and (hasKey . "cloudflared") (hasKey .cloudflared "enabled") -}}
+# {{-   $use_cloudflared = .cloudflared.enabled -}}
+# {{- end -}}
 # {{- $cloudflared_tunnel_uuid := or (env "CLOUDFLARED_TUNNEL_UUID") "" -}}
 # {{- if and (hasKey . "cloudflared") (hasKey .cloudflared "tunnel_uuid") -}}
 # {{-   $cloudflared_tunnel_uuid = .cloudflared.tunnel_uuid -}}
