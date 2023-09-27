@@ -231,7 +231,7 @@
 
 # {{- $use_rbenv := false -}}
 # {{- if eq (env "DOTFILES_USE_RBENV") "true" "True" "TRUE" "1" -}}
-# {{-   $use_rbenv = true
+# {{-   $use_rbenv = true -}}
 # {{- end -}}
 # {{- if and (hasKey . "ruby") (hasKey .code "rbenv_enabled") -}}
 # {{-   $use_rbenv = .ruby.rbenv_enabled -}}
