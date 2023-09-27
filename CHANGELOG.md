@@ -1,5 +1,16 @@
 <!--next-version-placeholder-->
 
+## v0.33.0 (2023-09-27)
+
+### Feature
+
+* **dependencies:** Add rbenv installation script ([`d995392`](https://github.com/entelecheia/dotfiles/commit/d995392359308f2f33387c0ec65e18ac5ed11576))
+
+### Fix
+
+* **config:** Add rbenv PATH configuration ([`9b52830`](https://github.com/entelecheia/dotfiles/commit/9b52830c3c3202bba59f1ad4c11dc0cc22375fe4))
+* **chezmoi:** Fix rbenv configuration in .chezmoi.yaml.tmpl ([`c930c06`](https://github.com/entelecheia/dotfiles/commit/c930c06186ed3896216014d4d437944528d34100))
+
 ## v0.32.0 (2023-09-16)
 
 ### Feature
