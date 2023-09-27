@@ -229,6 +229,11 @@
 # {{- end -}}
 # {{- $python_workon_home := or (env "WORKON_HOME") (joinPath .chezmoi.homeDir ".venvs") -}}
 
+# {{- $use_rbenv := false -}}
+# {{- if eq (env "DOTFILES_USE_RBENV") "true" "True" "TRUE" "1" -}}
+# {{-   $use_rbenv = true
+# {{- end -}}
+
 # {{- $use_ngrok := false -}}
 # {{- if eq (env "DOTFILES_USE_NGROK") "true" "True" "TRUE" "1" -}}
 # {{-   $use_ngrok = true -}}
@@ -954,6 +959,16 @@
 # {{-   writeToStdout "❎  MicroK8s disabled\n" -}}
 # {{- end -}}
 
+# {{- if $interactive -}}
+# {{-   $question := "❔ Do you want to use rbenv" -}}
+# {{-   $use_rbenv = promptBool $question $use_rbenv -}}
+# {{- end -}}
+# {{- if $use_rbenv -}}
+# {{-   writeToStdout "✅  rbenv enabled\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  rbenv disabled\n" -}}
+# {{- end -}}
+
 # {{- if and $interactive ($minimum | not) -}}
 # {{-   $question := "❔ What are your GitHub repositories to clone (input as comma separated list, ex: entelecheia/devcon,entelecheia/ekorpkit)" -}}
 # {{-   $answer := "" -}}
@@ -1003,6 +1018,9 @@
 # {{- end -}}
 # {{- if $use_python_tools -}}
 # {{-   $pkgs_user = printf "%s commitizen copier mypy nox poetry poethepoet pre-commit python-semantic-release sourcery" $pkgs_user -}}
+# {{- end -}}
+# {{- if $use_rbenv -}}
+# {{-   $pkgs_user = printf "%s rbenv" $pkgs_user -}}
 # {{- end -}}
 # {{- if $use_codecov -}}
 # {{-   $pkgs_user = printf "%s codecov-cli" $pkgs_user -}}
@@ -1157,6 +1175,8 @@ data:
   python:
     tools_enabled: {{ $use_python_tools }}
     workon_home: {{ $python_workon_home | quote }}
+  ruby:
+    rbenv_enabled: {{ $use_rbenv }}
   lfs_folderstore:
     enabled: {{ $use_lfs_folderstore }}
     store_dir: {{ $lfs_folderstore_dir | quote }}
