@@ -956,12 +956,6 @@
 # {{-   writeToStdout "❎  python tools disabled\n" -}}
 # {{- end -}}
 
-# {{- if $use_microk8s -}}
-# {{-   writeToStdout "✅  MicroK8s enabled\n" -}}
-# {{- else -}}
-# {{-   writeToStdout "❎  MicroK8s disabled\n" -}}
-# {{- end -}}
-
 # {{- if $interactive -}}
 # {{-   $question := "❔ Do you want to use rbenv" -}}
 # {{-   $use_rbenv = promptBool $question $use_rbenv -}}
@@ -970,6 +964,12 @@
 # {{-   writeToStdout "✅  rbenv enabled\n" -}}
 # {{- else -}}
 # {{-   writeToStdout "❎  rbenv disabled\n" -}}
+# {{- end -}}
+
+# {{- if $use_microk8s -}}
+# {{-   writeToStdout "✅  MicroK8s enabled\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  MicroK8s disabled\n" -}}
 # {{- end -}}
 
 # {{- if and $interactive ($minimum | not) -}}
