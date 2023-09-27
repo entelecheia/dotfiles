@@ -251,6 +251,29 @@
 # {{- end -}}
 # {{- $ngrok_config_file := or (env "NGROK_CONFIG") (joinPath .chezmoi.homeDir ".config/ngrok/ngrok.yml") -}}
 
+# {{- $use_cloudflared := false -}}
+# {{- if eq (env "DOTFILES_USE_CLOUDFLARED") "true" "True" "TRUE" "1" -}}
+# {{-   $use_cloudflared = true -}}
+# {{- end -}}
+# {{- if and (hasKey . "cloudflared") (hasKey .cloudflared "enabled") -}}
+# {{-   $use_cloudflared = .cloudflared.enabled -}}
+# {{- end -}}
+# {{- $cloudflared_tunnel_uuid := or (env "CLOUDFLARED_TUNNEL_UUID") "" -}}
+# {{- if and (hasKey . "cloudflared") (hasKey .cloudflared "tunnel_uuid") -}}
+# {{-   $cloudflared_tunnel_uuid = .cloudflared.tunnel_uuid -}}
+# {{- end -}}
+# {{- $cloudflared_tunnel_name := or (env "CLOUDFLARED_TUNNEL_NAME") "" -}}
+# {{- if and (hasKey . "cloudflared") (hasKey .cloudflared "tunnel_name") -}}
+# {{-   $cloudflared_tunnel_name = .cloudflared.tunnel_name -}}
+# {{- end -}}
+# {{- $cloudflared_tunnel_hostname := or (env "CLOUDFLARED_TUNNEL_HOSTNAME") "" -}}
+# {{- if and (hasKey . "cloudflared") (hasKey .cloudflared "tunnel_hostname") -}}
+# {{-   $cloudflared_tunnel_hostname = .cloudflared.tunnel_hostname -}}
+# {{- end -}}
+# {{- $cloudflared_config_file := or (env "CLOUDFLARED_CONFIG") (joinPath .chezmoi.homeDir ".cloudflared/config.yml") -}}
+# {{- $cloudflared_config_template := (joinPath .chezmoi.homeDir ".cloudflared/config.tmp") -}}
+# {{- $cloudflared_credentials_file := "" -}}
+
 # {{- $use_pass := true -}}
 # {{- if eq (env "DOTFILES_USE_PASS") "false" "False" "FALSE" "0" -}}
 # {{-   $use_pass = false -}}
@@ -832,6 +855,68 @@
 # {{-   writeToStdout "❎  OpenAI API disabled\n" -}}
 # {{- end -}}
 
+# {{- if $interactive -}}
+# {{-   $question := "❔ Do you want to use cloudflared" -}}
+# {{-   $use_cloudflared = promptBool $question $use_cloudflared -}}
+# {{- end -}}
+# {{- if $use_cloudflared -}}
+# {{-   writeToStdout "✅  cloudflared enabled\n" -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  cloudflared disabled\n" -}}
+# {{- end -}}
+# {{- if $use_cloudflared -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ What is your cloudflared tunnel name" -}}
+# {{-   $answer := "" -}}
+# {{-   if $cloudflared_tunnel_name -}}
+# {{-     $answer = promptString $question $cloudflared_tunnel_name -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $cloudflared_tunnel_name = $answer -}}
+# {{- end -}}
+# {{- if $cloudflared_tunnel_name -}}
+# {{-   writeToStdout (printf "✅  cloudflared tunnel name set as '%s'\n" $cloudflared_tunnel_name) -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  cloudflared tunnel name not set\n" -}}
+# {{- end -}}
+
+# {{- if $interactive -}}
+# {{-   $question := "❔ What is your cloudflared tunnel uuid" -}}
+# {{-   $answer := "" -}}
+# {{-   if $cloudflared_tunnel_uuid -}}
+# {{-     $answer = promptString $question $cloudflared_tunnel_uuid -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $cloudflared_tunnel_uuid = $answer -}}
+# {{- end -}}
+# {{- if $cloudflared_tunnel_uuid -}}
+# {{-   writeToStdout (printf "✅  cloudflared tunnel uuid set as '%s'\n" $cloudflared_tunnel_uuid) -}}
+# {{-   $cloudflared_credentials_file = joinPath .chezmoi.homeDir (printf ".cloudflared/%s.json" $cloudflared_tunnel_uuid) -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  cloudflared tunnel uuid not set\n" -}}
+# {{- end -}}
+
+# {{- if $interactive -}}
+# {{-   $question := "❔ What is your cloudflared tunnel hostname" -}}
+# {{-   $answer := "" -}}
+# {{-   if $cloudflared_tunnel_hostname -}}
+# {{-     $answer = promptString $question $cloudflared_tunnel_hostname -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $cloudflared_tunnel_hostname = $answer -}}
+# {{- end -}}
+# {{- if $cloudflared_tunnel_hostname -}}
+# {{-   writeToStdout (printf "✅  cloudflared tunnel hostname set as '%s'\n" $cloudflared_tunnel_hostname) -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  cloudflared tunnel hostname not set\n" -}}
+# {{- end -}}
+
+# {{- end -}}
+
+
 # {{- if $use_ngrok -}}
 # {{-   writeToStdout "✅  ngrok enabled\n" -}}
 # {{- else -}}
@@ -997,6 +1082,9 @@
 # {{- end -}}
 # {{- if $use_ngrok -}}
 # {{-   $pkgs_user = printf "%s ngrok" $pkgs_user -}}
+# {{- end -}}
+# {{- if $use_cloudflared -}}
+# {{-   $pkgs_user = printf "%s cloudflared" $pkgs_user -}}
 # {{- end -}}
 # {{- if $use_pass -}}
 # {{-   $pkgs_user = printf "%s pass" $pkgs_user -}}
@@ -1173,6 +1261,14 @@ data:
     authtoken: {{ $ngrok_authtoken | quote }}
     config_file: {{ $ngrok_config_file | quote }}
     ssh_port: {{ $ngrok_ssh_port | quote }}
+  cloudflared:
+    enabled: {{ $use_cloudflared }}
+    config_file: {{ $cloudflared_config_file | quote }}
+    config_template: {{ $cloudflared_config_template | quote }}
+    tunnel_hostname: {{ $cloudflared_tunnel_hostname | quote }}
+    tunnel_name: {{ $cloudflared_tunnel_name | quote }}
+    tunnel_uuid: {{ $cloudflared_tunnel_uuid | quote }}
+    credentials_file: {{ $cloudflared_credentials_file | quote }}
   install_packages:
     user: {{ $pkgs_user }}
   python:
