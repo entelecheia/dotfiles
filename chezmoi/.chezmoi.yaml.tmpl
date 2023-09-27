@@ -268,6 +268,7 @@
 # {{-   $cloudflared_tunnel_hostname = .cloudflared.tunnel_hostname -}}
 # {{- end -}}
 # {{- $cloudflared_config_file := or (env "CLOUDFLARED_CONFIG") (joinPath .chezmoi.homeDir ".cloudflared/config.yml") -}}
+# {{- $cloudflared_credentials_file := "" -}}
 
 # {{- $use_pass := true -}}
 # {{- if eq (env "DOTFILES_USE_PASS") "false" "False" "FALSE" "0" -}}
