@@ -1,0 +1,41 @@
+#!/bin/bash
+
+shopt -s nocaseglob
+
+OUT_FILE=${1:-${HOME}/.local/bin/cloudflared}
+
+# Type
+NATIVE_OS=$(uname | tr '[:upper:]' '[:lower:]')
+if [[ $NATIVE_OS == *"linux"* ]]; then
+    OS=linux
+elif [[ $NATIVE_OS == *"darwin"* ]]; then
+    OS=darwin
+else
+    echo "Could not determine OS automatically, please check the release page manually: https://github.com/cloudflare/cloudflared/releases"
+    exit 1
+fi
+echo $OS
+
+NATIVE_ARCH=$(uname -m | tr '[:upper:]' '[:lower:]')
+if [[ $NATIVE_ARCH == *"x86_64"* ]]; then
+    ARCH=amd64
+elif [[ $NATIVE_ARCH == *"arm64"* || $NATIVE_ARCH == *"aarch64"* ]]; then
+    ARCH=arm64
+elif [[ $NATIVE_ARCH == *"x86"* ]]; then
+    ARCH=386
+elif [[ $NATIVE_ARCH == *"armv7"* ]]; then
+    ARCH=arm
+else
+    echo "Could not determine Architecure automatically, please check the release page manually: https://github.com/cloudflare/cloudflared/releases"
+    exit 1
+fi
+echo $ARCH
+
+if [[ $OS == "linux" ]]; then
+    wget wget -q https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-${OS}-${ARCH} -O "${OUT_FILE}"
+    chmod +x "${OUT_FILE}"
+
+    echo "Successfully installed cloudflared to ${OUT_FILE}"
+elif [[ $OS == "darwin" ]]; then
+    brew install cloudflare/cloudflare/cloudflared
+fi
