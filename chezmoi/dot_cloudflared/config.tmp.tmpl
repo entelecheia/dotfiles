@@ -1,0 +1,14 @@
+# cloudflared tunnel login
+# cloudflared tunnel create <tunnel_name>
+# cloudflared tunnel route dns add <tunnel_name> <your_domain>
+# cloudflared tunnel run <tunnel_name>
+#
+tunnel: {{ .cloudflared.tunnel_uuid }}
+credentials-file: {{ .cloudflared.credentials_file }}
+warp-routing:
+  enabled: true
+
+ingress:
+  - hostname: {{ .cloudflared.tunnel_hostname }}
+    service: http://localhost:8888
+  - service: http_status:404
