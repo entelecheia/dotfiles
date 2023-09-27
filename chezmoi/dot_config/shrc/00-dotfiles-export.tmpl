@@ -73,6 +73,12 @@ export WORKSPACE_CONTAINER_DIR="{{ .workspace.container_dir }}"
 export WORKSPACE_MODEL_DIR="{{ .workspace.model_dir }}"
 export WORKSPACE_DATASET_DIR="{{ .workspace.dataset_dir }}"
 
+export DOTFILES_USE_CLOUDFLARED="{{ .cloudflared.enabled }}"
+export CLOUDFLARED_CONFIG="{{ .cloudflared.config_file }}"
+export CLOUDFLARED_TUNNEL_UUID="{{ .cloudflared.tunnel_uuid }}"
+export CLOUDFLARED_TUNNEL_NAME="{{ .cloudflared.tunnel_name }}"
+export CLOUDFLARED_TUNNEL_HOSTNAME="{{ .cloudflared.tunnel_hostname }}"
+
 export DOCKER_USERNAME="{{ .docker.username }}"
 export CONTAINER_REGISTRY="{{ .docker.container_registry }}"
 export DOCKERFILES_SHARE_DIR="{{ .docker.share_dir }}"
