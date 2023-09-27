@@ -405,4 +405,16 @@ tasks:
     cmds:
       - cloudflared tunnel login
 
+  cloudflared-tunnel-create:
+    desc: Create a new Cloudflare Tunnel
+    cmds:
+      - cloudflared tunnel create $CLOUDFLARED_TUNNEL_NAME
+    env:
+      CLOUDFLARED_TUNNEL_NAME: {{ .cloudflared.tunnel_name }}
+
+  cloudflared-tunnel-list:
+    desc: List Cloudflare Tunnels
+    cmds:
+      - cloudflared tunnel list
+
 {{- end }}
