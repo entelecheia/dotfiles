@@ -420,6 +420,6 @@ tasks:
   cloudflared-init-config:
     desc: Initialize the Cloudflare Tunnel configuration from the template ({{.cloudflared.config_template }})
     cmds:
-      - cp {{ .cloudflared.config_template }} {{ .cloudflared.config_file }}}
+      - cp {{ .cloudflared.config_template }} {{ .cloudflared.config_file }}
 
 {{- end }}
