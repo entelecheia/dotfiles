@@ -39,3 +39,6 @@ if [[ $OS == "linux" ]]; then
 elif [[ $OS == "darwin" ]]; then
     brew install cloudflare/cloudflare/cloudflared
 fi
+
+echo "After installing cloudflared, you will need to login to your Cloudflare account by running the following command: cloudflared tunnel login"
+echo "For more details, please visit: https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/install-and-setup/tunnel-guide/local/"
