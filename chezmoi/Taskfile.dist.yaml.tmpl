@@ -397,3 +397,12 @@ tasks:
       - inxi -F
 
 {{- end }}
+
+{{- if .cloudflared.enabled | not | not }}
+
+  cloudflared-tunnel-login:
+    desc: Authenticate with your Cloudflare account
+    cmds:
+      - cloudflared tunnel login
+
+{{- end }}
