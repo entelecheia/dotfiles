@@ -1,5 +1,27 @@
 <!--next-version-placeholder-->
 
+## v0.34.0 (2023-09-27)
+
+### Feature
+
+* **chezmoi/Taskfile:** Add tasks for Cloudflare Tunnel ([`e1b0d09`](https://github.com/entelecheia/dotfiles/commit/e1b0d097e883218b44467d4a3038f12f105fc219))
+* **chezmoi:** Add cloudflared-init-config task ([`8457b72`](https://github.com/entelecheia/dotfiles/commit/8457b7247f724f0b2b3c3b8df0150892339f7c59))
+* **chezmoi:** Add config template for cloudflared ([`132a06c`](https://github.com/entelecheia/dotfiles/commit/132a06c395c6521a2c95d7eee2ca3b8c1327728b))
+* **chezmoi:** Add cloudflared tunnel create and list tasks ([`7ffa3e1`](https://github.com/entelecheia/dotfiles/commit/7ffa3e18ea249de73cbec4d30a7d235cda48978e))
+* **chezmoi:** Add cloudflared enabled option ([`fc2b390`](https://github.com/entelecheia/dotfiles/commit/fc2b390829de77ad8052159c36ccc7420d70246a))
+* **chezmoi:** Add cloudflared-tunnel-login task ([`22742a3`](https://github.com/entelecheia/dotfiles/commit/22742a350074a3ba757fed8298f67573e3830907))
+* **chezmoi:** Add cloudflared credentials file variable ([`ca734e3`](https://github.com/entelecheia/dotfiles/commit/ca734e31c3489b37567a5b2f8fb0f13cbb8ba61f))
+* **cloudflared:** Add new tunnel config template ([`eeeb3d6`](https://github.com/entelecheia/dotfiles/commit/eeeb3d67c7a37b4e689ed2c320c7539e9b596f68))
+* **dot_config:** Add cloudflared variables to config template ([`23dd985`](https://github.com/entelecheia/dotfiles/commit/23dd985ed7c38fd4a64aedca477921c88c8a9701))
+* **chezmoi:** Add cloudflared package with optional scope ([`109bfea`](https://github.com/entelecheia/dotfiles/commit/109bfea8d45a5fa5d379eb808f061b58dafe2971))
+* **chezmoi:** Add cloudflared configuration and prompts ([`83d68f4`](https://github.com/entelecheia/dotfiles/commit/83d68f4bab12f16d04ec8af88d3e46d9e7ddca40))
+* **cloudflared-setup:** Add post-installation instructions ([`645a7af`](https://github.com/entelecheia/dotfiles/commit/645a7af53929993783f89bec48ef4cbde5f2a66f))
+* **install-cloudflared:** Add script for installing cloudflared ([`b7a3186`](https://github.com/entelecheia/dotfiles/commit/b7a31861168f8981c9588283451b639be3d773a6))
+
+### Fix
+
+* **chezmoi:** Correct configuration file ([`789fe10`](https://github.com/entelecheia/dotfiles/commit/789fe10151c1a704056acad016cd7f2715e67729))
+
 ## v0.33.0 (2023-09-27)
 
 ### Feature
