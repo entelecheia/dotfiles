@@ -422,4 +422,24 @@ tasks:
     cmds:
       - cp {{ .cloudflared.config_template }} {{ .cloudflared.config_file }}
 
+  cloudflared-create-dns-record:
+    desc: Create a DNS record for the Cloudflare Tunnel
+    cmds:
+      - cloudflared tunnel route dns $CLOUDFLARED_TUNNEL_NAME $CLOUDFLARED_TUNNEL_HOSTNAME
+    env:
+      CLOUDFLARED_TUNNEL_NAME: {{ .cloudflared.tunnel_name }}
+      CLOUDFLARED_TUNNEL_HOSTNAME: {{ .cloudflared.tunnel_hostname }}
+
+  cloudflared-tunnel-run:
+    desc: Run the Cloudflare Tunnel
+    cmds:
+    - cloudflared tunnel run $CLOUDFLARED_TUNNEL_NAME
+    env:
+      CLOUDFLARED_TUNNEL_NAME: {{ .cloudflared.tunnel_name }}
+
+  cloudflared-service-install:
+    desc: Install the Cloudflare Tunnel as a systemd service (cloudflared should be installed at the system level.)
+    cmds:
+      - cloudflared --config {{ .cloudflared.config_file }} service install
+
 {{- end }}
