@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.34.1 (2023-09-28)
+
+### Fix
+
+* **chezmoi:** Run cloudflared service install with sudo ([`bfa9206`](https://github.com/entelecheia/dotfiles/commit/bfa92065e51fb98b5d33a2c0b8f8166767676b0e))
+* **executable_install-cloudflared.tmpl:** Add condition to install cloudflared in different directory for root users ([`dff8968`](https://github.com/entelecheia/dotfiles/commit/dff8968b5e5dc7d802498a14aea4ed74dc6e8ce5))
+
 ## v0.34.0 (2023-09-27)
 
 ### Feature
