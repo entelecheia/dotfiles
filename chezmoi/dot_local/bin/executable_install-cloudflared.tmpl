@@ -2,7 +2,12 @@
 
 shopt -s nocaseglob
 
-OUT_FILE=${1:-${HOME}/.local/bin/cloudflared}
+# if sudo or root, install to /usr/local/bin instead of ~/.local/bin
+if [[ $EUID -eq 0 ]]; then
+    OUT_FILE="/usr/local/bin/cloudflared"
+else
+    OUT_FILE="${HOME}/.local/bin/cloudflared"
+fi
 
 # Type
 NATIVE_OS=$(uname | tr '[:upper:]' '[:lower:]')
