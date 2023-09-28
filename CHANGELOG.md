@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.34.2 (2023-09-28)
+
+### Fix
+
+* **cloudflared-install-script:** Consider both EUID and UID for root detection ([`ecfac4a`](https://github.com/entelecheia/dotfiles/commit/ecfac4afe2268378d664ba343e9b8b6bd3ea1b26))
+
 ## v0.34.1 (2023-09-28)
 
 ### Fix
