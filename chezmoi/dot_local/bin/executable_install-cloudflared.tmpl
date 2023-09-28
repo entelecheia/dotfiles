@@ -3,7 +3,7 @@
 shopt -s nocaseglob
 
 # if sudo or root, install to /usr/local/bin instead of ~/.local/bin
-if [[ $EUID -eq 0 ]]; then
+if [[ $EUID -eq 0 ]] || [[ $UID -eq 0 ]]; then
     OUT_FILE="/usr/local/bin/cloudflared"
 else
     OUT_FILE="${HOME}/.local/bin/cloudflared"
