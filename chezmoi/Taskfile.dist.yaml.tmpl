@@ -440,6 +440,6 @@ tasks:
   cloudflared-service-install:
     desc: Install the Cloudflare Tunnel as a systemd service (cloudflared should be installed at the system level.)
     cmds:
-      - cloudflared --config {{ .cloudflared.config_file }} service install
+      - sudo cloudflared --config {{ .cloudflared.config_file }} service install
 
 {{- end }}
