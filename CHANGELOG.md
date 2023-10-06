@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.35.0 (2023-10-06)
+
+### Feature
+
+* **ssh:** Add SSH public key to global exports ([`5d037e1`](https://github.com/entelecheia/dotfiles/commit/5d037e159b5246c085cbfdddd19ecc5fe169d111))
+
 ## v0.34.2 (2023-09-28)
 
 ### Fix
