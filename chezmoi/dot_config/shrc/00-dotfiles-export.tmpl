@@ -148,6 +148,14 @@ GPG_TTY=$(tty)
 export GPG_TTY
 # {{ end }}
 
+# SSH key
+SSH_PUB_KEY_FILE="{{ .ssh.identity_file }}.pub"
+if [ -f "${SSH_PUB_KEY_FILE}" ]; then
+    SSH_PUB_KEY=$(cat "${SSH_PUB_KEY_FILE}")
+    export SSH_PUB_KEY
+    export SSH_PUB_KEY_FILE
+fi
+
 # age key
 AGE_KEY_FILE="{{ .age.identity_file }}"
 if [ -e "${AGE_KEY_FILE}" ]; then
