@@ -855,11 +855,67 @@
 # {{-   writeToStdout "❎  OpenAI API disabled\n" -}}
 # {{- end -}}
 
+# {{- if $interactive -}}
+# {{-   $question := "❔ Do you want to use cloudflared" -}}
+# {{-   $use_cloudflared = promptBool $question $use_cloudflared -}}
+# {{- end -}}
 # {{- if $use_cloudflared -}}
 # {{-   writeToStdout "✅  cloudflared enabled\n" -}}
 # {{- else -}}
 # {{-   writeToStdout "❎  cloudflared disabled\n" -}}
 # {{- end -}}
+# {{- if $use_cloudflared -}}
+# {{- if $interactive -}}
+# {{-   $question := "❔ What is your cloudflared tunnel name" -}}
+# {{-   $answer := "" -}}
+# {{-   if $cloudflared_tunnel_name -}}
+# {{-     $answer = promptString $question $cloudflared_tunnel_name -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $cloudflared_tunnel_name = $answer -}}
+# {{- end -}}
+# {{- if $cloudflared_tunnel_name -}}
+# {{-   writeToStdout (printf "✅  cloudflared tunnel name set as '%s'\n" $cloudflared_tunnel_name) -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  cloudflared tunnel name not set\n" -}}
+# {{- end -}}
+
+# {{- if $interactive -}}
+# {{-   $question := "❔ What is your cloudflared tunnel uuid" -}}
+# {{-   $answer := "" -}}
+# {{-   if $cloudflared_tunnel_uuid -}}
+# {{-     $answer = promptString $question $cloudflared_tunnel_uuid -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $cloudflared_tunnel_uuid = $answer -}}
+# {{- end -}}
+# {{- if $cloudflared_tunnel_uuid -}}
+# {{-   writeToStdout (printf "✅  cloudflared tunnel uuid set as '%s'\n" $cloudflared_tunnel_uuid) -}}
+# {{-   $cloudflared_credentials_file = joinPath .chezmoi.homeDir (printf ".cloudflared/%s.json" $cloudflared_tunnel_uuid) -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  cloudflared tunnel uuid not set\n" -}}
+# {{- end -}}
+
+# {{- if $interactive -}}
+# {{-   $question := "❔ What is your cloudflared tunnel hostname" -}}
+# {{-   $answer := "" -}}
+# {{-   if $cloudflared_tunnel_hostname -}}
+# {{-     $answer = promptString $question $cloudflared_tunnel_hostname -}}
+# {{-   else -}}
+# {{-     $answer = promptString $question -}}
+# {{-   end -}}
+# {{-   $cloudflared_tunnel_hostname = $answer -}}
+# {{- end -}}
+# {{- if $cloudflared_tunnel_hostname -}}
+# {{-   writeToStdout (printf "✅  cloudflared tunnel hostname set as '%s'\n" $cloudflared_tunnel_hostname) -}}
+# {{- else -}}
+# {{-   writeToStdout "❎  cloudflared tunnel hostname not set\n" -}}
+# {{- end -}}
+
+# {{- end -}}
+
 
 # {{- if $use_ngrok -}}
 # {{-   writeToStdout "✅  ngrok enabled\n" -}}
