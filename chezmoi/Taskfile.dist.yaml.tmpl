@@ -117,49 +117,65 @@ tasks:
     desc: Create a new project using the hyperfast template
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
-      - copier copy --trustgh:entelecheia/hyperfast-template .
+      - copier copy --trust gh:entelecheia/hyperfast-template .
 
   init-hyfi-project:
     desc: Create a new project using the hyfi template
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
-      - copier copy --trust--data 'code_template_source=gh:entelecheia/hyfi-template' gh:entelecheia/hyperfast-python-template .
+      - copier copy --trust --data 'code_template_source=gh:entelecheia/hyfi-template' \
+          --data 'email={{ .email }}' \
+          --data 'author={{ .name }}' \
+          --data 'github_username={{ .github.username }}' \
+          gh:entelecheia/hyperfast-python-template .
 
   init-hyperfast-python-project:
     desc: Create a new Python project using the hyperfast template
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
-      - copier copy --trustgh:entelecheia/hyperfast-python-template .
+      - copier copy --trust \
+          --data 'email={{ .email }}' \
+          --data 'author={{ .name }}' \
+          --data 'github_username={{ .github.username }}' \
+          gh:entelecheia/hyperfast-python-template .
 
   init-hyperfast-docker-project:
     desc: Create a new Docker project using the hyperfast template
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
-      - copier copy --trustgh:entelecheia/hyperfast-docker-template .
+      - copier copy --trust \
+          --data 'email={{ .email }}' \
+          --data 'author={{ .name }}' \
+          --data 'github_username={{ .github.username }}' \
+          gh:entelecheia/hyperfast-docker-template .
 
   reinit-hyperfast-python-project:
     desc: Reinitialize a project using the hyperfast python template
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
-      - args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; copier copy "${args[@]}" --answers-file .copier-config.yaml --trustgh:entelecheia/hyperfast-python-template .
+      - args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; \
+          copier copy "${args[@]}" --answers-file .copier-config.yaml --trust gh:entelecheia/hyperfast-python-template .
 
   reinit-hyperfast-docker-project:
     desc: Reinitialize a project using the hyperfast docker template
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
-      - args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; copier copy "${args[@]}" --answers-file .copier-config.yaml --trustgh:entelecheia/hyperfast-docker-template .
+      - args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; \
+          copier copy "${args[@]}" --answers-file .copier-config.yaml --trust gh:entelecheia/hyperfast-docker-template .
 
   reinit-hyperfast-project:
     desc: Reinitialize a project using the hyperfast template
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
-      - args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; copier copy "${args[@]}" --answers-file .copier-config.yaml --trustgh:entelecheia/hyperfast-template .
+      - args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; \
+          copier copy "${args[@]}" --answers-file .copier-config.yaml --trust gh:entelecheia/hyperfast-template .
 
   reinit-hyfi-project:
     desc: Reinitialize a project using the hyfi template
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
-      - args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; copier copy "${args[@]}" --data 'code_template_source=gh:entelecheia/hyfi-template' --answers-file .copier-config.yaml --trustgh:entelecheia/hyperfast-python-template .
+      - args=(); while IFS= read -r file; do args+=("--skip" "$file"); done < .copierignore; \
+          copier copy "${args[@]}" --data 'code_template_source=gh:entelecheia/hyfi-template' --answers-file .copier-config.yaml --trust gh:entelecheia/hyperfast-python-template .
 
   semantic-release-version:
     desc: Print the current version using semantic-release
