@@ -117,36 +117,41 @@ tasks:
     desc: Create a new project using the hyperfast template
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
-      - copier copy --trust gh:entelecheia/hyperfast-template .
+      - copier copy --trust
+          --data 'email={{ .email }}'
+          --data 'author={{ .name }}'
+          --data 'github_username={{ .github.username }}'
+          gh:entelecheia/hyperfast-template .
 
   init-hyfi-project:
     desc: Create a new project using the hyfi template
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
-      - copier copy --trust --data 'code_template_source=gh:entelecheia/hyfi-template' \
-          --data 'email={{ .email }}' \
-          --data 'author={{ .name }}' \
-          --data 'github_username={{ .github.username }}' \
+      - copier copy --trust
+          --data 'code_template_source=gh:entelecheia/hyfi-template'
+          --data 'email={{ .email }}'
+          --data 'author={{ .name }}'
+          --data 'github_username={{ .github.username }}'
           gh:entelecheia/hyperfast-python-template .
 
   init-hyperfast-python-project:
     desc: Create a new Python project using the hyperfast template
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
-      - copier copy --trust \
-          --data 'email={{ .email }}' \
-          --data 'author={{ .name }}' \
-          --data 'github_username={{ .github.username }}' \
+      - copier copy --trust
+          --data 'email={{ .email }}'
+          --data 'author={{ .name }}'
+          --data 'github_username={{ .github.username }}'
           gh:entelecheia/hyperfast-python-template .
 
   init-hyperfast-docker-project:
     desc: Create a new Docker project using the hyperfast template
     dir: {{"'{{.USER_WORKING_DIR}}'"}}
     cmds:
-      - copier copy --trust \
-          --data 'email={{ .email }}' \
-          --data 'author={{ .name }}' \
-          --data 'github_username={{ .github.username }}' \
+      - copier copy --trust
+          --data 'email={{ .email }}'
+          --data 'author={{ .name }}'
+          --data 'github_username={{ .github.username }}'
           gh:entelecheia/hyperfast-docker-template .
 
   reinit-hyperfast-python-project:
