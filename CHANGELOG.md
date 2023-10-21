@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.35.1 (2023-10-21)
+
+### Fix
+
+* **templates:** Update copier commands and add additional user data ([`fe1621e`](https://github.com/entelecheia/dotfiles/commit/fe1621e06db201b7bb1aaa0281f2444164e92d1c))
+* **chezmoi/Taskfile:** Replace --UNSAFE flag with --trust in copier copy commands ([`0682077`](https://github.com/entelecheia/dotfiles/commit/0682077e8a89b774e5bf66edc24c8137fd19a110))
+
 ## v0.35.0 (2023-10-06)
 
 ### Feature
