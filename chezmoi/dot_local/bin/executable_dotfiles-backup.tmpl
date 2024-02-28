@@ -1,6 +1,29 @@
 #!/bin/bash
 # {{ template "scripts-library" }}
 
+DOTDROP_CONFIGDIR="{{- .dotdrop.config_dir }}"
+SYSTEM_HOSTNAME="{{ .system.hostname }}"
+DOTDROP_BACKUP_DIR="${DOTDROP_CONFIGDIR}/backups/${SYSTEM_HOSTNAME}"
+if [[ ! -d "$DOTDROP_BACKUP_DIR" ]]; then
+  log_task "Create dotdrop backup directory"
+  c mkdir -p "$DOTDROP_BACKUP_DIR"
+fi
+
+# backup ssh keys
+SSH_HOME=${SSH_HOME:-"{{ .ssh.home }}"}
+SSH_BACKUP_DIR="${DOTDROP_BACKUP_DIR}/ssh"
+if [[ -d "$SSH_HOME" ]]; then
+  log_task "Backup ssh keys"
+  c cp -r "$SSH_HOME" "$SSH_BACKUP_DIR"
+fi
+
+GH_HOST_CONFIG_DIR="${HOME}/.config/gh"
+GH_HOST_CONFIG_BACKUP_DIR="${DOTDROP_BACKUP_DIR}/gh"
+if [[ -d "$GH_HOST_CONFIG_DIR" ]]; then
+  log_task "Backup gh host config"
+  c cp -r "$GH_HOST_CONFIG_DIR" "$GH_HOST_CONFIG_BACKUP_DIR"
+fi
+
 CONFIG_FILE="{{ .autorestic.config_file }}"
 LOCATION="{{ .autorestic.location }}"
 
