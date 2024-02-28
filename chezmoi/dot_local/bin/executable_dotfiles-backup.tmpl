@@ -15,7 +15,7 @@ SSH_BACKUP_DIR="${DOTDROP_BACKUP_DIR}/ssh/"
 if [[ -d "$SSH_HOME" ]]; then
   log_task "Backup ssh keys"
   c mkdir -p "$SSH_BACKUP_DIR"
-  c cp -f "$SSH_HOME/"* "$SSH_BACKUP_DIR"
+  c cp -rf "$SSH_HOME/"* "$SSH_BACKUP_DIR"
 fi
 
 # backup github host config
@@ -24,7 +24,7 @@ GH_HOST_CONFIG_BACKUP_DIR="${DOTDROP_BACKUP_DIR}/gh/"
 if [[ -d "$GH_HOST_CONFIG_DIR" ]]; then
   log_task "Backup gh host config"
   c mkdir -p "$GH_HOST_CONFIG_BACKUP_DIR"
-  c cp -f "$GH_HOST_CONFIG_DIR"* "$GH_HOST_CONFIG_BACKUP_DIR"
+  c cp -rf "$GH_HOST_CONFIG_DIR"* "$GH_HOST_CONFIG_BACKUP_DIR"
 fi
 
 # backup chezmoi config
@@ -33,7 +33,7 @@ CHEZMOI_CONFIG_BACKUP_DIR="${DOTDROP_BACKUP_DIR}/chezmoi/"
 if [[ -d "$CHEZMOI_CONFIG_DIR" ]]; then
   log_task "Backup chezmoi config"
   c mkdir -p "$CHEZMOI_CONFIG_BACKUP_DIR"
-  c cp -f "$CHEZMOI_CONFIG_DIR"* "$CHEZMOI_CONFIG_BACKUP_DIR"
+  c cp -rf "$CHEZMOI_CONFIG_DIR"* "$CHEZMOI_CONFIG_BACKUP_DIR"
 fi
 
 CONFIG_FILE="{{ .autorestic.config_file }}"
