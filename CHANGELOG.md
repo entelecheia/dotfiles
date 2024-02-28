@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.37.2 (2024-02-28)
+
+### Fix
+
+* **backup:** Ensure all files in directories are copied ([`9107965`](https://github.com/entelecheia/dotfiles/commit/910796597b84a647efd4bca74d4ddbf962cbae57))
+* **backup-script:** Ensure directory paths end with slash ([`65d1802`](https://github.com/entelecheia/dotfiles/commit/65d18023979f631019c38fa6299b286bfedebb42))
+
 ## v0.37.1 (2024-02-28)
 
 ### Fix
