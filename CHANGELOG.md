@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.36.0 (2024-02-28)
+
+### Feature
+
+* **dotfiles-backup:** Add backup functionality for ssh keys and gh host config ([`0d54368`](https://github.com/entelecheia/dotfiles/commit/0d5436827aedde3770676b331fc50c9b41a4a8f6))
+* **github-auth:** Add GH_TOKEN configuration and validation ([`293ac79`](https://github.com/entelecheia/dotfiles/commit/293ac79d9689c55d05a10de893387306781bb7a4))
+
 ## v0.35.1 (2023-10-21)
 
 ### Fix
