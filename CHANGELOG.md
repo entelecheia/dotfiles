@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.37.0 (2024-02-28)
+
+### Feature
+
+* **dotfiles-backup:** Add backup for github host and chezmoi configs ([`f754911`](https://github.com/entelecheia/dotfiles/commit/f754911c3491e89fbbb629ecba2987f40fed8586))
+
 ## v0.36.0 (2024-02-28)
 
 ### Feature
