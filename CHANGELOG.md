@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.37.1 (2024-02-28)
+
+### Fix
+
+* **executable_dotfiles-backup:** Update copy commands for backup directories ([`2239fbc`](https://github.com/entelecheia/dotfiles/commit/2239fbcd4c9f624577c9b1f4434eea887d935137))
+
 ## v0.37.0 (2024-02-28)
 
 ### Feature
