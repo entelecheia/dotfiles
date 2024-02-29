@@ -1,4 +1,4 @@
-DOTFILES_VERSION: 0.37.1
+DOTFILES_VERSION: 0.37.2
 packages:
   - name: 1password-cli
     apt: true
@@ -170,7 +170,7 @@ packages:
     script: true
     script_cmd: install-go
     current_version: "$(go version | awk '{print $3}')"
-    latest_version: "$(curl -s 'https://go.dev/VERSION?m=text')"
+    latest_version: "$(curl -s 'https://go.dev/VERSION?m=text' | head -n 1)"
     scope: minimal
     allow_upgrade: true
   - name: go-age
@@ -190,7 +190,7 @@ packages:
     check_installed: command -v sops &>/dev/null
     current_version: "sops --version | awk '{print $NF}'"
     latest_version: $(curl -s https://api.github.com/repos/mozilla/sops/releases/latest | grep 'tag_name' | cut -d'"' -f4)
-    scope: minimal
+    scope: optional
   - name: go-task
     brew: true
     script: true
