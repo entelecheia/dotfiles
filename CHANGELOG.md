@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.37.3 (2024-02-29)
+
+### Fix
+
+* **chezmoi:** Update version retrieval in .chezmoidata.yaml and executable_install-go.tmpl ([`9bd3f86`](https://github.com/entelecheia/dotfiles/commit/9bd3f86e113e159f337c9e04552ec2de16b516e2))
+
 ## v0.37.2 (2024-02-28)
 
 ### Fix
