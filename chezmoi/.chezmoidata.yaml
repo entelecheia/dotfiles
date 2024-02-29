@@ -190,7 +190,7 @@ packages:
     check_installed: command -v sops &>/dev/null
     current_version: "sops --version | awk '{print $NF}'"
     latest_version: $(curl -s https://api.github.com/repos/mozilla/sops/releases/latest | grep 'tag_name' | cut -d'"' -f4)
-    scope: minimal
+    scope: optional
   - name: go-task
     brew: true
     script: true
