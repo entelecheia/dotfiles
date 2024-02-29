@@ -170,7 +170,7 @@ packages:
     script: true
     script_cmd: install-go
     current_version: "$(go version | awk '{print $3}')"
-    latest_version: "$(curl -s 'https://go.dev/VERSION?m=text')"
+    latest_version: "$(curl -s 'https://go.dev/VERSION?m=text' | head -n 1)"
     scope: minimal
     allow_upgrade: true
   - name: go-age
