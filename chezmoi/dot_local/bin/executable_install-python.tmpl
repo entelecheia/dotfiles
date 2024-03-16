@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# Function to install Python dependencies
+install_dependencies() {
+    sudo apt update
+    sudo apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev \
+        libssl-dev libreadline-dev libffi-dev wget
+}
+
+# Function to download and install Python
+install_python() {
+    local python_version=$1
+    local python_url="https://www.python.org/ftp/python/${python_version}/Python-${python_version}.tgz"
+
+    wget "$python_url"
+    tar -xf "Python-${python_version}.tgz"
+    cd "Python-${python_version}" || exit
+
+    ./configure --enable-optimizations
+    make -j "$(nproc)"
+    sudo make altinstall
+
+    cd ..
+    rm -rf "Python-${python_version}" "Python-${python_version}.tgz"
+}
+
+# Function to update alternatives for Python
+update_alternatives() {
+    local python_version=$1
+    local python_priority=$2
+
+    sudo update-alternatives --install /usr/bin/python python "/usr/local/bin/python${python_version%.*}" "$python_priority"
+    sudo update-alternatives --install /usr/bin/pip pip "/usr/local/bin/pip${python_version%.*}" "$python_priority"
+}
+
+# Main script
+if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run as root or with sudo."
+    exit 1
+fi
+
+read -rp "Enter the Python version to install (e.g., 3.9.7): " python_version
+read -rp "Enter the priority for the Python version (e.g., 1): " python_priority
+
+echo "Installing Python dependencies..."
+install_dependencies
+
+echo "Installing Python $python_version..."
+install_python "$python_version"
+
+echo "Updating alternatives for Python..."
+update_alternatives "$python_version" "$python_priority"
+
+echo "Python $python_version installation completed."
