@@ -1,5 +1,15 @@
 <!--next-version-placeholder-->
 
+## v0.38.0 (2024-03-16)
+
+### Feature
+
+* **shell-scripts:** Add script to create user with password and data directory ([`924b17d`](https://github.com/entelecheia/dotfiles/commit/924b17db0b7b8a9c1a4dd8950433a9c5d0626eba))
+* **chezmoi:** Add script to install Python and manage Python versions. ([`1b47995`](https://github.com/entelecheia/dotfiles/commit/1b4799528c55b863c4945c7d25a645ee1510552e))
+* **configuration:** Add Python version to dotfiles ([`b0d97ca`](https://github.com/entelecheia/dotfiles/commit/b0d97caf7c4924ff501f9a5e8dc4bbe2e0f50282))
+* **chezmoi:** Add Deadsnakes PPA Python versions ([`0a1294d`](https://github.com/entelecheia/dotfiles/commit/0a1294d72f8bdf5c1543f26105cd6ac04421af4a))
+* **prerequisites:** Add python installation command ([`00c1128`](https://github.com/entelecheia/dotfiles/commit/00c1128f2dbc2578754ba60bde8634d27c538fbe))
+
 ## v0.37.3 (2024-02-29)
 
 ### Fix
