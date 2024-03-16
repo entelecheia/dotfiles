@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# Function to create user and set password
+create_user() {
+    local username=$1
+    local password=$2
+
+    sudo useradd -m -s /bin/bash "$username"
+    echo "$username:$password" | sudo chpasswd
+}
+
+# Function to add user to groups
+add_user_to_groups() {
+    local username=$1
+    shift
+    local groups=("$@")
+
+    for group in "${groups[@]}"; do
+        sudo usermod -aG "$group" "$username"
+    done
+}
+
+# Function to create data directory and symlink
+create_data_directory() {
+    local username=$1
+    local data_root=$2
+
+    local data_directory="$data_root/$username"
+    sudo mkdir -p "$data_directory"
+    sudo chown "$username:$username" "$data_directory"
+
+    local home_directory="/home/$username"
+    ln -s "$data_directory" "$home_directory/data"
+}
+
+# Main script
+if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run as root or with sudo."
+    exit 1
+fi
+
+read -rp "Enter the username: " username
+read -s -rp "Enter the password: " password
+echo
+read -rp "Enter the groups (separated by space): " -a groups
+read -rp "Enter the root directory for data (e.g., /raid/data): " data_root
+
+echo "Creating user $username..."
+create_user "$username" "$password"
+
+echo "Adding user $username to groups: ${groups[*]}"
+add_user_to_groups "$username" "${groups[@]}"
+
+echo "Creating data directory and symlink for user $username..."
+create_data_directory "$username" "$data_root"
+
+echo "User $username created successfully."

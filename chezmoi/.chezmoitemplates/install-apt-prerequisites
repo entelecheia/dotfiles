@@ -13,8 +13,8 @@ else
   echo "${output}"
   exit 1
 fi
-c sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends ca-certificates
-c sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends curl wget gnupg \
+c sudo apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends ca-certificates
+c sudo apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends curl wget gnupg \
   software-properties-common zsh locales locales-all jq gettext autoconf apt-transport-https zip bzip2 unzip
 
 # Add APT repositories for newer versions of Git.
@@ -24,7 +24,11 @@ c sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes -qq -o=Dpkg::Use-Pty
 c sudo rm -f etc/apt/sources.list.d/git-core-*.list*
 c sudo add-apt-repository ppa:git-core/ppa --yes
 c sudo apt-get update --yes
-c sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends git
+c sudo apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends git
+
+# Add the Deadsnakes PPA for older or newer Python versions.
+c sudo add-apt-repository ppa:deadsnakes/ppa --yes
+c sudo apt-get update --yes
 
 # Set up locales
 # check if locale is already set up by running locale | grep LC_ALL | grep en_US.UTF-8

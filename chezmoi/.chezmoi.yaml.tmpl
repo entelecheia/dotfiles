@@ -223,6 +223,11 @@
 # {{-   $use_code = .code.enabled -}}
 # {{- end -}}
 
+# {{- $python_version := or (env "DOTFILES_PYTHON_VERSION") "3.10" -}}
+# {{- if and (hasKey . "python") (hasKey .python "version") .python.version -}}
+# {{-   $python_version = .python.version -}}
+# {{- end -}}
+
 # {{- $use_python_tools := true -}}
 # {{- if eq (env "DOTFILES_USE_PYTHON_TOOLS") "false" "False" "FALSE" "0" -}}
 # {{-   $use_python_tools = false -}}
@@ -979,6 +984,18 @@
 # {{-   writeToStdout "❎  visual studio code disabled\n" -}}
 # {{- end -}}
 
+# {{- if $interactive -}}
+# {{-     $question := "❔ What version of Python do you want to use" -}}
+# {{-     $answer := "" -}}
+# {{-     if $python_version -}}
+# {{-       $answer = promptString $question $python_version -}}
+# {{-     else -}}
+# {{-       $answer = promptString $question -}}
+# {{-     end -}}
+# {{-     $python_version = $answer -}}
+# {{- end -}}
+# {{- writeToStdout (printf "✅  Python version set as '%s'\n" $python_version) -}}
+
 # {{- if $use_python_tools -}}
 # {{-   writeToStdout "✅  python tools enabled\n" -}}
 # {{- else -}}
@@ -1216,6 +1233,7 @@ data:
   install_packages:
     user: {{ $pkgs_user }}
   python:
+    version: {{ $python_version | quote }}
     tools_enabled: {{ $use_python_tools }}
     workon_home: {{ $python_workon_home | quote }}
   ruby:
