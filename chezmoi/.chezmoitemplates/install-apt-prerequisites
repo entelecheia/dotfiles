@@ -26,6 +26,10 @@ c sudo add-apt-repository ppa:git-core/ppa --yes
 c sudo apt-get update --yes
 c sudo apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends git
 
+# Add the Deadsnakes PPA for older or newer Python versions.
+c sudo add-apt-repository ppa:deadsnakes/ppa --yes
+c sudo apt-get update --yes
+
 # Set up locales
 # check if locale is already set up by running locale | grep LC_ALL | grep en_US.UTF-8
 if ! locale | grep LC_ALL | grep -q en_US.UTF-8; then
