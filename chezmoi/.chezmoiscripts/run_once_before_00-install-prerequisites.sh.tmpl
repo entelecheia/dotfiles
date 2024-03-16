@@ -2,4 +2,5 @@
 # {{- if and (eq .chezmoi.os "linux") (.system.apply_rootmoi) (.system.is_sudoer) }}
 # {{- template "scripts-library" }}
 # {{- template "install-apt-prerequisites" }}
+c sudo apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends "python{{ .python.version }}"
 # {{- end }}
