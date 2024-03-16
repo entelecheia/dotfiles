@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.38.1 (2024-03-16)
+
+### Fix
+
+* **chezmoi:** Update interactive prompts to include condition on minimum value ([`949e71f`](https://github.com/entelecheia/dotfiles/commit/949e71f561f17695c316be1875bb0bde2bb1ff9e))
+
 ## v0.38.0 (2024-03-16)
 
 ### Feature
