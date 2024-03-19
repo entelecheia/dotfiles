@@ -362,7 +362,7 @@ DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_GUI[@]})
 {{- if not .system.is_minimum }}
 DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_FULL[@]})
 {{- end }}
-{{- if and .system.apply_rootmoi (not .system.is_devcontainer) (not .system.is_minimum) }}
+{{- if .system.apply_rootmoi }}
 DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_SYSTEM[@]})
 {{- end }}
 DOTFILES_PKGS_TO_INSTALL+=(${DOTFILES_PKGS_USER[@]})

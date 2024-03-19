@@ -1,0 +1,22 @@
+name: lint & test for WSL
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        variant: [wsl]
+        os: [ubuntu-20.04]
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Run tests
+        run: |
+          scripts/test_for_ci.sh --variant "${{ matrix.variant }}" --os "${{ matrix.os }}"
