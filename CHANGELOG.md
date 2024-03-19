@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.38.2 (2024-03-19)
+
+### Fix
+
+* **shrc:** Streamline DOTFILES_PKGS_TO_INSTALL logic ([`a97f3ae`](https://github.com/entelecheia/dotfiles/commit/a97f3aeb22b52909c04a30d6e8f4ede23781cc9b))
+
 ## v0.38.1 (2024-03-16)
 
 ### Fix
