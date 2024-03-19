@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.38.3 (2024-03-19)
+
+### Fix
+
+* **chezmoi:** Add sha256sum for dotfiles-export and dotfiles-install-apt-pkgs ([`dd0631b`](https://github.com/entelecheia/dotfiles/commit/dd0631b1db0712f513b0cb78f538a8556c4204db))
+
 ## v0.38.2 (2024-03-19)
 
 ### Fix
