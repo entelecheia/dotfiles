@@ -6,6 +6,7 @@ source "${HOME}/.config/shrc/00-dotfiles-export"
 # {{- if and (eq .chezmoi.os "linux") (.system.apply_rootmoi) (.system.is_sudoer) }}
 # {{ range .packages }}{{ if and (hasKey . "apt") ( .apt ) ( has .name $user_pkgs ) }}{{- .name }} {{ end }}{{ end }}
 # {{ range .packages }}{{ if and (hasKey . "apt") ( .apt ) }}{{- .name }} {{ end }}{{ end }}
+# 00-dotfiles-export hash: {{ include "dot_config/shrc/00-dotfiles-export.tmpl" | sha256sum }}
 # dotfiles-install-apt-pkgs hash: {{ include "dot_local/bin/executable_dotfiles-install-apt-pkgs.tmpl" | sha256sum }}
 dotfiles-install-apt-pkgs
 # {{- end }}
