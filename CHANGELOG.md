@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.38.4 (2024-03-20)
+
+### Fix
+
+* **templates:** Update environment variable default values ([`0cf1245`](https://github.com/entelecheia/dotfiles/commit/0cf124560065d83d7328b0486331ca2930250995))
+
 ## v0.38.3 (2024-03-19)
 
 ### Fix
