@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.38.5 (2024-03-20)
+
+### Fix
+
+* **chezmoi:** Add conditional check for setting empty values ([`a727cd1`](https://github.com/entelecheia/dotfiles/commit/a727cd1d7b2e07d9661f020adc794ab03f27dd12))
+
 ## v0.38.4 (2024-03-20)
 
 ### Fix
