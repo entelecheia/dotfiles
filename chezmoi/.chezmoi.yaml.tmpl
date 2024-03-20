@@ -91,12 +91,12 @@
 # {{-   $name = .name -}}
 # {{- end -}}
 
-# {{- $github_username := env "GITHUB_USERNAME" -}}
+# {{- $github_username := or (env "GITHUB_USERNAME") "" -}}
 # {{- if and (hasKey . "github") (hasKey .github "username") .github.username -}}
 # {{-   $github_username = .github.username -}}
 # {{- end -}}
 
-# {{- $docker_username := env "DOCKER_USERNAME" -}}
+# {{- $docker_username := or (env "DOCKER_USERNAME") "" -}}
 # {{- if and (hasKey . "docker") (hasKey .docker "username") .docker.username -}}
 # {{-   $docker_username = .docker.username -}}
 # {{- end -}}
@@ -116,12 +116,12 @@
 # {{-   $ssh_algorithm = .ssh.algorithm -}}
 # {{- end -}}
 
-# {{- $github_token := env "GITHUB_TOKEN" -}}
+# {{- $github_token := or (env "GITHUB_TOKEN") "" -}}
 # {{- if and (hasKey . "github") (hasKey .github "token") .github.token -}}
 # {{-   $github_token = .github.token -}}
 # {{- end -}}
 
-# {{- $gpg_passphrase := env "GPG_PASSPHRASE" -}}
+# {{- $gpg_passphrase := or (env "GPG_PASSPHRASE") "" -}}
 # {{- if and (hasKey . "gnupg") (hasKey .gnupg "passphrase") -}}
 # {{-   $gpg_passphrase = .gnupg.passphrase -}}
 # {{- end -}}
