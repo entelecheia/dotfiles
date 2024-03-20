@@ -120,10 +120,16 @@
 # {{- if and (hasKey . "github") (hasKey .github "token") .github.token -}}
 # {{-   $github_token = .github.token -}}
 # {{- end -}}
+# {{- if eq $github_token "NULL" "null" -}}
+# {{-   $github_token = "" -}}
+# {{- end -}}
 
 # {{- $gpg_passphrase := or (env "GPG_PASSPHRASE") "" -}}
 # {{- if and (hasKey . "gnupg") (hasKey .gnupg "passphrase") -}}
 # {{-   $gpg_passphrase = .gnupg.passphrase -}}
+# {{- end -}}
+# {{- if eq $gpg_passphrase "NULL" "null" -}}
+# {{-   $gpg_passphrase = "" -}}
 # {{- end -}}
 
 # {{- $age_recipients:= or (env "AGE_RECIPIENTS") "" -}}
