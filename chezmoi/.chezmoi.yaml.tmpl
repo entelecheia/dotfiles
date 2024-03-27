@@ -691,18 +691,6 @@
 # {{-   writeToStdout "❎  Docker container registry not set\n" -}}
 # {{- end -}}
 
-# {{- if and $interactive ($minimum | not) -}}
-# {{-   $question := "❔ What is your dockerfiles repository URL (ex: https://github.com/entelecheia/dockerfiles.git)" -}}
-# {{-   $answer := "" -}}
-# {{-   if $dockerfiles_repo -}}
-# {{-     $answer = promptString $question $dockerfiles_repo -}}
-# {{-   else -}}
-# {{-     $answer = promptString $question -}}
-# {{-   end -}}
-# {{-   $dockerfiles_repo = $answer -}}
-# {{- end -}}
-# {{- writeToStdout (printf "✅  dockerfiles repo set as '%s'\n" $dockerfiles_repo) -}}
-
 # {{- if $workspace_existing -}}
 # {{- if $wsl -}}
 # {{-   if eq $winhome_existing $winhome -}}
