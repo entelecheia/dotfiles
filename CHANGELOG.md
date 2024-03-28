@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.38.7 (2024-03-28)
+
+### Fix
+
+* **configuration:** Remove unnecessary commented-out code and prompts for various services. ([`ed66e3d`](https://github.com/entelecheia/dotfiles/commit/ed66e3d475b54db3fd49de54af30fa39cc460c96))
+
 ## v0.38.6 (2024-03-27)
 
 ### Fix
