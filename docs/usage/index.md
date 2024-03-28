@@ -85,7 +85,6 @@ Once the initialization process is complete, you can start using your newly conf
 
 ## Repositories and repository templates for setting up your own dotfiles
 
-- [dockerfiles](https://github.com/entelecheia/dockerfiles)
 - [dotdrop-files](https://github.com/entelecheia/dotdrop-files)
 - [password-store](https://github.com/entelecheia/password-store)
 - [passage-store](https://github.com/entelecheia/passage-store)
