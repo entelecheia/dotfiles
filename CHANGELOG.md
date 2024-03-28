@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.38.6 (2024-03-27)
+
+### Fix
+
+* **chezmoi:** Remove prompt for docker repo URL ([`9c60450`](https://github.com/entelecheia/dotfiles/commit/9c60450c368f34f5c4d8373d8ddf565d1b8c2290))
+
 ## v0.38.5 (2024-03-20)
 
 ### Fix
