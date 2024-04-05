@@ -4,6 +4,12 @@
 # shellcheck source=/dev/null
 source "${HOME}/.config/shrc/00-dotfiles-export"
 
+# check if passage is installed, otherwise exit
+if ! command -v passage &>/dev/null; then
+    log_error "passage command not found. Please install passage before running this script."
+    exit 0
+fi
+
 log_task "Initializing passage"
 
 # Environment variables
@@ -47,8 +53,8 @@ if ! git -C "${PASSAGE_DIR}" remote get-url origin >/dev/null 2>&1; then
 fi
 
 if ! gh auth status &>/dev/null; then
-  log_info "GitHub is not authenticated, skipping fetching and checking out main branch"
-  exit 0
+    log_info "GitHub is not authenticated, skipping fetching and checking out main branch"
+    exit 0
 fi
 
 # fetch and checkout the main branch
