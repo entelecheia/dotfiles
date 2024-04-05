@@ -18,6 +18,7 @@ Options:
 --variant IMAGE_VARIANT         Specify a variant for the Docker image.
 --from-project                  Use the project directory to build the Docker image.
 --project-directory DIR         Specify the project directory. Default is the Docker name inside the workspace project directory.
+--project-id PROJECT_ID         Specify the project id to differentiate between multiple containers.
 --dockerfiles-directory DIR     Specify the directory containing Docker files. Default is the .docker directory inside the project directory.
 -c, --compose-file FILE         Specify the Docker Compose file. Default is docker-compose.yaml inside the Docker files directory.
 -e, --env-file FILE             Specify the environment file for Docker Compose.
@@ -29,6 +30,7 @@ Options:
 --push                          Push the Docker image after building it.
 --registry CONTAINER_REGISTRY   Specify the Docker registry.
 -n, --name IMAGE_NAME           Specify the name of the Docker image.
+d--service SERVICE_NAME          Specify the name of the Docker service.
 --network NETWORK_NAME          Specify the Docker network.
 -u, --username USERNAME         Specify the username. Default is the current user.
 -h, --help                      Display this help message.
@@ -40,10 +42,11 @@ dk-compose build my-service --variant app --version latest --from-project --proj
 "
 
 # declare arguments
-COMMAND=""
-DOCKER_PROJECT_NAME=""
-IMAGE_VARIANT="base"
-PROJECT_DIR=""
+COMMAND=${COMMAND:-"build"}
+DOCKER_PROJECT_NAME=${DOCKER_PROJECT_NAME:-""}
+DOCKER_PROJECT_ID=${DOCKER_PROJECT_ID:-"default"}
+IMAGE_VARIANT=${IMAGE_VARIANT:-"base"}
+PROJECT_DIR="."
 DOCKERFILES_DIR=""
 COMPOSE_FILENAME=""
 ENV_FILE=""
@@ -54,8 +57,9 @@ SECRET_ENV_FILE=""
 IMAGE_VERSION=""
 LATEST="false"
 PUSH="false"
-FROM_PROJECT="false"
+FROM_PROJECT="true"
 IMAGE_NAME=""
+SERVICE_NAME="workspace"
 CONTAINER_NETWORK_NAME=""
 CONTAINER_REGISTRY=${CONTAINER_REGISTRY:-"{{ .docker.container_registry }}"}
 USERNAME=${USERNAME:-"{{ .chezmoi.username }}"}
@@ -102,6 +106,13 @@ while [[ $# -gt 0 ]]; do
         ;;
     --project-directory=*)
         PROJECT_DIR="${1#*=}"
+        ;;
+    --project-id)
+        DOCKER_PROJECT_ID="$2"
+        shift
+        ;;
+    --project-id=*)
+        DOCKER_PROJECT_ID="${1#*=}"
         ;;
     --dockerfiles-directory)
         DOCKERFILES_DIR="$2"
@@ -164,6 +175,13 @@ while [[ $# -gt 0 ]]; do
         ;;
     --name=*)
         IMAGE_NAME="${1#*=}"
+        ;;
+    --service)
+        SERVICE_NAME="$2"
+        shift
+        ;;
+    --service=*)
+        SERVICE_NAME="${1#*=}"
         ;;
     --registry)
         CONTAINER_REGISTRY="$2"
@@ -244,12 +262,8 @@ if [[ -n "$COMPOSE_FILENAME" ]]; then
 else
     if [[ -n "$IMAGE_VARIANT" ]]; then
         # {base_name}-{IMAGE_VARIANT}.{ext}
-        COMPOSE_FILENAME="docker-compose-${IMAGE_VARIANT}.yaml"
+        COMPOSE_FILENAME="docker-compose.${IMAGE_VARIANT}.yaml"
         COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
-        if [[ ! -f "$COMPOSE_FILE" ]]; then
-            COMPOSE_FILENAME="docker-compose.${IMAGE_VARIANT}.yaml"
-            COMPOSE_FILE="${DOCKERFILES_DIR}/${COMPOSE_FILENAME}"
-        fi
     else
         # {base_name}.{ext}
         COMPOSE_FILENAME="docker-compose.yaml"
@@ -273,7 +287,6 @@ if [[ -n "$CONTAINER_REGISTRY" ]]; then
     export CONTAINER_REGISTRY
 fi
 # export user id and group id
-export USERNAME
 USER_UID="$(id -u)"
 USER_GID="$(id -g)"
 export USER_UID
@@ -333,6 +346,39 @@ if [[ -f "$ENV_FILE" ]]; then
     ENV_ARGS="--env-file ${ENV_FILE}"
     log_task "Loading environment variables for the services from ${ENV_FILE}"
 fi
+# shellcheck disable=SC1091
+DOCKER_VERSION_FILE="${DOCKERFILES_DIR}/docker.version"
+if [[ -f "$DOCKER_VERSION_FILE" ]]; then
+    log_task "Loading Docker version from ${DOCKER_VERSION_FILE}"
+    set -a
+    # shellcheck disable=SC1090
+    c source "$DOCKER_VERSION_FILE"
+    set +a
+fi
+PROJECT_ID_ENV_FILE="${DOCKERFILES_DIR}/.ids/${DOCKER_PROJECT_ID}.env"
+if [ -e "${PROJECT_ID_ENV_FILE}" ]; then
+    echo "Loading project ID specific environment variables from ${PROJECT_ID_ENV_FILE}"
+    set -x # print commands and thier arguments
+    # shellcheck disable=SC1091,SC1090
+    c source "${PROJECT_ID_ENV_FILE}"
+    set +x # disable printing of environment variables
+fi
+COMMON_ENV_FILE="${DOCKERFILES_DIR}/docker.common.env"
+if [ -e "${COMMON_ENV_FILE}" ]; then
+    echo "Loading common environment variables from ${COMMON_ENV_FILE}"
+    set -x # print commands and thier arguments
+    # shellcheck disable=SC1091
+    c source "${COMMON_ENV_FILE}"
+    set +x # disable printing of environment variables
+fi
+VARIANT_ENV_FILE="${DOCKERFILES_DIR}/docker.${IMAGE_VARIANT}.env"
+if [ -e "${VARIANT_ENV_FILE}" ]; then
+    echo "Loading environment variables from ${VARIANT_ENV_FILE}"
+    set -x # print commands and thier arguments
+    # shellcheck disable=SC1091,SC1090
+    c source "${VARIANT_ENV_FILE}"
+    set +x # disable printing of environment variables
+fi
 
 # if network does not exist, create it
 if [[ -n "$CONTAINER_NETWORK_NAME" ]]; then
@@ -347,12 +393,34 @@ else
     log_info "CONTAINER_NETWORK_NAME not set, skipping creation of docker network."
 fi
 
+# prepare local workspace to be mounted
+echo "Preparing local workspace directories"
+[ ! -d "${HOST_WORKSPACE_ROOT}" ] && mkdir -p "${HOST_WORKSPACE_ROOT}"
+[ ! -d "${HOST_SCRIPTS_DIR}" ] && cp -r "${DOCKERFILES_DIR}/scripts" "${HOST_SCRIPTS_DIR}"
+[ ! -d "${HOST_SSH_DIR}" ] && mkdir -p "${HOST_SSH_DIR}"
+[ ! -d "${HOST_CACHE_DIR}" ] && mkdir -p "${HOST_CACHE_DIR}"
+[ ! -d "${HOST_HF_HOME}" ] && mkdir -p "${HOST_HF_HOME}"
+[ ! -d "${HOST_GH_CONFIG_DIR}" ] && mkdir -p "${HOST_GH_CONFIG_DIR}"
+[ ! -d "${HOST_PASSAGE_DIR}" ] && mkdir -p "${HOST_PASSAGE_DIR}"
+
+if docker --version &>/dev/null; then
+    if [ "${COMMAND}" == "push" ]; then
+        CMD="docker push ${CONTAINER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
+    elif [ "${COMMAND}" == "login" ]; then
+        echo "GITHUB_CR_PAT: $GITHUB_CR_PAT"
+        CMD="docker login ghcr.io -u $GITHUB_USERNAME"
+    fi
+fi
 if docker-compose version &>/dev/null; then
     log_task "docker compose ${COMMAND} for [${DOCKER_PROJECT_NAME}] with variant [${IMAGE_VARIANT}] and version [${IMAGE_VERSION}] from [${PROJECT_DIR}]"
 
     # change to the directory of the build context
     c cd "${PROJECT_DIR}" || exit 1
-    CMD="docker-compose --project-directory ${PROJECT_DIR} -f ${COMPOSE_FILE} ${ENV_ARGS} ${COMMAND} ${ADDITIONAL_ARGS}"
+    if [ "${COMMAND}" == "run" ]; then
+        CMD="docker-compose --project-directory ${PROJECT_DIR} -f ${COMPOSE_FILE} ${ENV_ARGS} ${COMMAND} ${SERVICE_NAME} ${ADDITIONAL_ARGS}"
+    else
+        CMD="docker-compose --project-directory ${PROJECT_DIR} -f ${COMPOSE_FILE} ${ENV_ARGS} ${COMMAND} ${ADDITIONAL_ARGS}"
+    fi
     c eval "$CMD" || exit 1
 
     if [[ "$PUSH" == "true" ]]; then
