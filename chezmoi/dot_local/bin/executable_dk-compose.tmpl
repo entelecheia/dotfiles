@@ -316,6 +316,45 @@ if [[ -f "$DOCKER_GLOBAL_ENV_FILE" ]]; then
     set +a
 fi
 
+# project env file
+ENV_ARGS=""
+if [[ -f "$ENV_FILE" ]]; then
+    ENV_ARGS="--env-file ${ENV_FILE}"
+    log_task "Loading environment variables for the services from ${ENV_FILE}"
+fi
+# shellcheck disable=SC1091
+DOCKER_VERSION_FILE="${DOCKERFILES_DIR}/docker.version"
+if [[ -f "$DOCKER_VERSION_FILE" ]]; then
+    log_task "Loading Docker version from ${DOCKER_VERSION_FILE}"
+    set -a
+    # shellcheck disable=SC1090
+    c source "$DOCKER_VERSION_FILE"
+    set +a
+fi
+PROJECT_ID_ENV_FILE="${DOCKERFILES_DIR}/.ids/${DOCKER_PROJECT_ID}.env"
+if [ -e "${PROJECT_ID_ENV_FILE}" ]; then
+    echo "Loading project ID specific environment variables from ${PROJECT_ID_ENV_FILE}"
+    set -a
+    # shellcheck disable=SC1091,SC1090
+    c source "${PROJECT_ID_ENV_FILE}"
+    set +a
+fi
+COMMON_ENV_FILE="${DOCKERFILES_DIR}/docker.common.env"
+if [ -e "${COMMON_ENV_FILE}" ]; then
+    echo "Loading common environment variables from ${COMMON_ENV_FILE}"
+    set -a
+    # shellcheck disable=SC1091
+    c source "${COMMON_ENV_FILE}"
+    set +a
+fi
+# VARIANT_ENV_FILE="${DOCKERFILES_DIR}/docker.${IMAGE_VARIANT}.env"
+# if [ -e "${VARIANT_ENV_FILE}" ]; then
+#     echo "Loading environment variables from ${VARIANT_ENV_FILE}"
+#     set -a
+#     # shellcheck disable=SC1091,SC1090
+#     c source "${VARIANT_ENV_FILE}"
+#     set +a
+# fi
 # shell env file
 if [ -z "$SHELL_ENV_FILE" ]; then
     if [[ -n "$IMAGE_VARIANT" ]]; then
@@ -352,45 +391,6 @@ if [[ -f "$SECRET_ENV_FILE" ]]; then
     set +a
 fi
 
-# project env file
-ENV_ARGS=""
-if [[ -f "$ENV_FILE" ]]; then
-    ENV_ARGS="--env-file ${ENV_FILE}"
-    log_task "Loading environment variables for the services from ${ENV_FILE}"
-fi
-# shellcheck disable=SC1091
-DOCKER_VERSION_FILE="${DOCKERFILES_DIR}/docker.version"
-if [[ -f "$DOCKER_VERSION_FILE" ]]; then
-    log_task "Loading Docker version from ${DOCKER_VERSION_FILE}"
-    set -a
-    # shellcheck disable=SC1090
-    c source "$DOCKER_VERSION_FILE"
-    set +a
-fi
-PROJECT_ID_ENV_FILE="${DOCKERFILES_DIR}/.ids/${DOCKER_PROJECT_ID}.env"
-if [ -e "${PROJECT_ID_ENV_FILE}" ]; then
-    echo "Loading project ID specific environment variables from ${PROJECT_ID_ENV_FILE}"
-    set -x # print commands and thier arguments
-    # shellcheck disable=SC1091,SC1090
-    c source "${PROJECT_ID_ENV_FILE}"
-    set +x # disable printing of environment variables
-fi
-COMMON_ENV_FILE="${DOCKERFILES_DIR}/docker.common.env"
-if [ -e "${COMMON_ENV_FILE}" ]; then
-    echo "Loading common environment variables from ${COMMON_ENV_FILE}"
-    set -x # print commands and thier arguments
-    # shellcheck disable=SC1091
-    c source "${COMMON_ENV_FILE}"
-    set +x # disable printing of environment variables
-fi
-VARIANT_ENV_FILE="${DOCKERFILES_DIR}/docker.${IMAGE_VARIANT}.env"
-if [ -e "${VARIANT_ENV_FILE}" ]; then
-    echo "Loading environment variables from ${VARIANT_ENV_FILE}"
-    set -x # print commands and thier arguments
-    # shellcheck disable=SC1091,SC1090
-    c source "${VARIANT_ENV_FILE}"
-    set +x # disable printing of environment variables
-fi
 
 # if network does not exist, create it
 if [[ -n "$CONTAINER_NETWORK_NAME" ]]; then
