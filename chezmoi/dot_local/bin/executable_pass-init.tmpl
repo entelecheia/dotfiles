@@ -4,6 +4,12 @@
 # shellcheck source=/dev/null
 source "${HOME}/.config/shrc/00-dotfiles-export"
 
+# check if pass is installed, otherwise exit
+if ! command -v pass &>/dev/null; then
+    log_error "pass command not found. Please install pass before running this script."
+    exit 0
+fi
+
 log_task "Initializing pass"
 
 # Environment variables
