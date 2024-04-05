@@ -46,7 +46,7 @@ COMMAND=""
 DOCKER_PROJECT_NAME=${DOCKER_PROJECT_NAME:-""}
 DOCKER_PROJECT_ID=${DOCKER_PROJECT_ID:-"default"}
 IMAGE_VARIANT=${IMAGE_VARIANT:-"base"}
-PROJECT_DIR="."
+PROJECT_DIR=""
 DOCKERFILES_DIR=""
 COMPOSE_FILENAME=""
 ENV_FILE=""
@@ -250,8 +250,12 @@ fi
 if [[ ! -d "$PROJECT_DIR" ]]; then
     PROJECT_DIR="${WORKSPACE_CONTAINER_DIR}/${DOCKER_PROJECT_NAME}"
 fi
+# if project directory does not exist, try current directory
+if [[ ! -d "$PROJECT_DIR" ]]; then
+    PROJECT_DIR="./${DOCKER_PROJECT_NAME}"
+fi
 # if project directory does not exist or FROM_PROJECT is false, use dockerfile repo path
-if [[ ! -d "$PROJECT_DIR" ]] || [[ "$FROM_PROJECT" != "false" ]]; then
+if [[ ! -d "$PROJECT_DIR" ]] || [[ "$FROM_PROJECT" == "false" ]]; then
     PROJECT_DIR="${DOCKERFILES_SHARE_DIR}/src/${DOCKER_PROJECT_NAME}"
 fi
 # if it still does not exist, exit
