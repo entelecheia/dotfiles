@@ -6,6 +6,17 @@ log_task "Initializing ZSH"
 
 zsh_path="/bin/zsh"
 
+# if zsh is not installed, install it
+if ! command -v zsh &>/dev/null; then
+  # {{ if .system.is_sudoer }}
+  log_task "Installing ZSH"
+  c sudo apt-get install -y zsh
+# {{ else }}
+  log_error "ZSH is not installed and the user is not a sudoer. Unable to install ZSH and change the default shell."
+  exit 0
+# {{ end }}
+fi
+
 if ! getent passwd '{{ .chezmoi.username }}' | cut -d : -f 7- | grep -q "^${zsh_path}$"; then
   log_task "Configuring ZSH as default shell"
 
