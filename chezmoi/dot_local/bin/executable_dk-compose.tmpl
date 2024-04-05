@@ -30,7 +30,7 @@ Options:
 --push                          Push the Docker image after building it.
 --registry CONTAINER_REGISTRY   Specify the Docker registry.
 -n, --name IMAGE_NAME           Specify the name of the Docker image.
-d--service SERVICE_NAME          Specify the name of the Docker service.
+--service SERVICE_NAME          Specify the name of the Docker service.
 --network NETWORK_NAME          Specify the Docker network.
 -u, --username USERNAME         Specify the username. Default is the current user.
 -h, --help                      Display this help message.
@@ -42,7 +42,7 @@ dk-compose build my-service --variant app --version latest --from-project --proj
 "
 
 # declare arguments
-COMMAND=${COMMAND:-"build"}
+COMMAND=""
 DOCKER_PROJECT_NAME=${DOCKER_PROJECT_NAME:-""}
 DOCKER_PROJECT_ID=${DOCKER_PROJECT_ID:-"default"}
 IMAGE_VARIANT=${IMAGE_VARIANT:-"base"}
@@ -70,7 +70,11 @@ set +u
 # first argument is the command
 COMMAND="$1"
 shift
-if [[ "$COMMAND" != "build" ]] && [[ "$COMMAND" != "run" ]] && [[ "$COMMAND" != "up" ]] && [[ "$COMMAND" != "down" ]] && [[ "$COMMAND" != "config" ]]; then
+if [[ "$COMMAND" == "" ]] || [[ "$COMMAND" == "-h" ]] || [[ "$COMMAND" == "--help" ]]; then
+    echo "Usage: $0 $USAGE" >&2
+    exit 1
+fi
+if [[ "$COMMAND" != "build" ]] && [[ "$COMMAND" != "run" ]] && [[ "$COMMAND" != "up" ]] && [[ "$COMMAND" != "down" ]] && [[ "$COMMAND" != "config" ]] && [[ "$COMMAND" != "push" ]]; then
     echo "Invalid command: $COMMAND" >&2
     echo "Usage: $0 $USAGE" >&2
     exit 1
@@ -241,6 +245,10 @@ DOCKERFILES_SHARE_DIR=${DOCKERFILES_SHARE_DIR:-"{{ .docker.share_dir }}"}
 # check PATHs
 if [[ -z "$PROJECT_DIR" ]]; then
     PROJECT_DIR="${WORKSPACE_PROJECT_DIR}/${DOCKER_PROJECT_NAME}"
+fi
+# if project directory does not exist, try WORKSPACE_CONTAINER_DIR
+if [[ ! -d "$PROJECT_DIR" ]]; then
+    PROJECT_DIR="${WORKSPACE_CONTAINER_DIR}/${DOCKER_PROJECT_NAME}"
 fi
 # if project directory does not exist or FROM_PROJECT is false, use dockerfile repo path
 if [[ ! -d "$PROJECT_DIR" ]] || [[ "$FROM_PROJECT" != "false" ]]; then
