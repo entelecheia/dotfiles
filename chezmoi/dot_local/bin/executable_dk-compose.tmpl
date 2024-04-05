@@ -82,12 +82,12 @@ fi
 # check second argument starts with a dash
 # if it does, it's an option and DOCKER_PROJECT_NAME can be the last argument
 # if not, it's the DOCKER_PROJECT_NAME
-if [[ "$1" != -* ]]; then
+if [[ "$1" != -* ]] && [[ $# -gt 0 ]]; then
     # if no arguments, print usage
-    if [[ $# -eq 0 ]]; then
-        echo "Usage: $0 $USAGE" >&2
-        exit 1
-    fi
+    # if [[ $# -eq 0 ]]; then
+    #     echo "Usage: $0 $USAGE" >&2
+    #     exit 1
+    # fi
     DOCKER_PROJECT_NAME="$1"
     shift
 fi
@@ -244,7 +244,11 @@ export IMAGE_VERSION
 DOCKERFILES_SHARE_DIR=${DOCKERFILES_SHARE_DIR:-"{{ .docker.share_dir }}"}
 # check PATHs
 if [[ -z "$PROJECT_DIR" ]]; then
-    PROJECT_DIR="${WORKSPACE_PROJECT_DIR}/${DOCKER_PROJECT_NAME}"
+    if [[ -z "$DOCKER_PROJECT_NAME" ]]; then
+        PROJECT_DIR="."
+    else
+        PROJECT_DIR="${WORKSPACE_PROJECT_DIR}/${DOCKER_PROJECT_NAME}"
+    fi
 fi
 # if project directory does not exist, try WORKSPACE_CONTAINER_DIR
 if [[ ! -d "$PROJECT_DIR" ]]; then
