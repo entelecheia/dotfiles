@@ -72,7 +72,8 @@ fi
 
 {{ if not .system.is_wsl -}}
 # Allow connections from any host
-export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0
+# export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0
+export DISPLAY=$(ip route list default | awk '{print $3}'):0
 # Allow connections from Docker containers
 export LIBGL_ALWAYS_INDIRECT=1
 {{- end }}
