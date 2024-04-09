@@ -1,5 +1,18 @@
 <!--next-version-placeholder-->
 
+## v0.39.0 (2024-04-05)
+
+### Feature
+
+* **docker-compose:** Add support for specifying the Docker name ([`7c39299`](https://github.com/entelecheia/dotfiles/commit/7c392992fabeadbec826ad785b51bfdd5fb7aa2e))
+* **chezmoi:** Add installation check for ZSH ([`ac185ea`](https://github.com/entelecheia/dotfiles/commit/ac185ea5dac18e582396cf1fb91e0ed5787f130d))
+* **script:** Add check for pass/passage installation before initialization ([`d0f2a22`](https://github.com/entelecheia/dotfiles/commit/d0f2a22d2768cd8568bc071aa244863304001b59))
+* **chezmoi:** Add support for Docker container connections and allow any host connections from .Xprofile ([`9c76a53`](https://github.com/entelecheia/dotfiles/commit/9c76a53d93ee66276b7e8eb87f04e6ab81ed9ee8))
+
+### Documentation
+
+* **installation:** Add detailed guide for installing and initializing Dotfiles project ([`e709f29`](https://github.com/entelecheia/dotfiles/commit/e709f29c85bcb0f72835771a104ebb2db61ac5e2))
+
 ## v0.38.7 (2024-03-28)
 
 ### Fix
