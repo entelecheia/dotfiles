@@ -598,6 +598,9 @@
 # {{-   end -}}
 # {{-   $github_token = $answer -}}
 # {{- end -}}
+# {{- if eq $github_token "NULL" "null" -}}
+# {{-   $github_token = "" -}}
+# {{- end -}}
 # {{- if $github_token -}}
 # {{-   writeToStdout "✅  GitHub Token set as '***'\n" -}}
 # {{- else -}}
