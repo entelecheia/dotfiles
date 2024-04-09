@@ -70,9 +70,11 @@ if command -v fig >/dev/null 2>&1 && [ -d "${HOME}/.fig/bin" ]; then
   export PATH="${HOME}/.fig/bin:${PATH}"
 fi
 
-{{ if not .system.is_wsl -}}
+{{ if .system.is_wsl -}}
 # Allow connections from any host
-export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0
+# export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0
+# export DISPLAY=$(ip route list default | awk '{print $3}'):0
+export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
 # Allow connections from Docker containers
 export LIBGL_ALWAYS_INDIRECT=1
 {{- end }}

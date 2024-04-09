@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.39.1 (2024-04-09)
+
+### Fix
+
+* **chezmoi:** Fix issue with null values in secrets tokens. ([`35febc0`](https://github.com/entelecheia/dotfiles/commit/35febc02ae4a38db7e0c6d0a11ff91d3b79ef13e))
+* Check if GITHUB_TOKEN is set to NULL ([`867f598`](https://github.com/entelecheia/dotfiles/commit/867f5989d033f3aca5a12fbdcacbb12d80b04699))
+
 ## v0.39.0 (2024-04-05)
 
 ### Feature
