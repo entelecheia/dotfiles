@@ -314,6 +314,9 @@
 # {{- if and (hasKey . "doppler") (hasKey .doppler "token") -}}
 # {{-   $doppler_token = .doppler.token -}}
 # {{- end -}}
+# {{- if eq $doppler_token "NULL" "null" -}}
+# {{-   $doppler_token = "" -}}
+# {{- end -}}
 
 # {{- $use_1password := false -}}
 # {{- if eq (env "DOTFILES_USE_1PASSWORD") "true" "True" "TRUE" "1" -}}
@@ -323,6 +326,9 @@
 # {{- $op_vault := or (env "OP_VAULT") "dev" -}}
 # {{- $op_connect_host := or (env "OP_CONNECT_HOST") "" -}}
 # {{- $op_connect_token := or (env "OP_CONNECT_TOKEN") "" -}}
+# {{- if eq $op_connect_token "NULL" "null" -}}
+# {{-   $op_connect_token = "" -}}
+# {{- end -}}
 
 # {{- $use_vault := false -}}
 # {{- if eq (env "DOTFILES_USE_VAULT") "true" "True" "TRUE" "1" -}}
@@ -342,6 +348,9 @@
 # {{- if and (hasKey . "codecov") (hasKey .codecov "api_token") -}}
 # {{-   $codecov_api_token = .codecov.api_token -}}
 # {{- end -}}
+# {{- if eq $codecov_api_token "NULL" "null" -}}
+# {{-   $codecov_api_token = "" -}}
+# {{- end -}}
 
 # {{- $use_sourcegraph := false -}}
 # {{- if and (hasKey . "sourcegraph") (hasKey .sourcegraph "enabled") -}}
@@ -355,6 +364,9 @@
 # {{- $sourcegraph_access_token := or (env "SRC_ACCESS_TOKEN") "" -}}
 # {{- if and (hasKey . "sourcegraph") (hasKey .sourcegraph "access_token") -}}
 # {{-   $sourcegraph_access_token = .sourcegraph.access_token -}}
+# {{- end -}}
+# {{- if eq $sourcegraph_access_token "NULL" "null" -}}
+# {{-   $sourcegraph_access_token = "" -}}
 # {{- end -}}
 # {{- $sourcegraph_endpoint := or (env "SRC_ENDPOINT") "" -}}
 # {{- if and (hasKey . "sourcegraph") (hasKey .sourcegraph "endpoint") -}}
@@ -616,6 +628,9 @@
 # {{-     $answer = promptString $question -}}
 # {{-   end -}}
 # {{-   $gpg_passphrase = $answer -}}
+# {{- end -}}
+# {{- if eq $gpg_passphrase "NULL" "null" -}}
+# {{-   $gpg_passphrase = "" -}}
 # {{- end -}}
 # {{- if $gpg_passphrase -}}
 # {{-   writeToStdout "✅  GPG passphrase set as '***'\n" -}}
