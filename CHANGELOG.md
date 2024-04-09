@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.39.2 (2024-04-09)
+
+### Fix
+
+* **export:** Update display setting for improved compatibility ([`daaf4af`](https://github.com/entelecheia/dotfiles/commit/daaf4af10c08917306242732c5b0bd278c7bc119))
+* **chezmoi:** Update export logic for DISPLAY ([`83a220b`](https://github.com/entelecheia/dotfiles/commit/83a220b92d65adc0298ceef0621533242877a531))
+
 ## v0.39.1 (2024-04-09)
 
 ### Fix
