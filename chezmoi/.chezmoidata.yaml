@@ -203,7 +203,7 @@ packages:
     scope: gui
   - name: gpg-suite
     brewcask: true
-    scope: gui
+    scope: optional
   - name: helm
     apt: true
     brew: true
