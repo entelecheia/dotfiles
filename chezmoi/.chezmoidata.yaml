@@ -1,4 +1,4 @@
-DOTFILES_VERSION: 0.39.2
+DOTFILES_VERSION: 0.39.3
 packages:
   - name: 1password-cli
     apt: true
@@ -203,7 +203,7 @@ packages:
     scope: gui
   - name: gpg-suite
     brewcask: true
-    scope: gui
+    scope: optional
   - name: helm
     apt: true
     brew: true
