@@ -21,20 +21,20 @@ for package in "${DOTFILES_PKGS_BREW[@]}"; do
 done
 log_info "Wanted packages: ${wanted_packages[*]}"
 
-readonly wanted_tabs=(
-  homebrew/cask-fonts
-)
+# readonly wanted_tabs=(
+#   homebrew/cask-fonts
+# )
 
-# get tab list into BREW_TABS variable
-BREW_TABS=$(brew tap)
+# # get tab list into BREW_TABS variable
+# BREW_TABS=$(brew tap)
 
-# install tabs that are not installed
-for tab in "${wanted_tabs[@]}"; do
-  if ! echo "${BREW_TABS}" | grep -q "^${tab}$"; then
-    log_task "Installing brew tab: ${tab}"
-    c brew tap "${tab}"
-  fi
-done
+# # install tabs that are not installed
+# for tab in "${wanted_tabs[@]}"; do
+#   if ! echo "${BREW_TABS}" | grep -q "^${tab}$"; then
+#     log_task "Installing brew tab: ${tab}"
+#     c brew tap "${tab}"
+#   fi
+# done
 
 # install packages that are not installed
 missing_packages=()
