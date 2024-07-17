@@ -1,4 +1,4 @@
-DOTFILES_VERSION: 0.39.1
+DOTFILES_VERSION: 0.39.2
 packages:
   - name: 1password-cli
     apt: true
@@ -114,11 +114,9 @@ packages:
     scope: minimal
   - name: font-fira-code
     brewcask: true
-    brewtab: homebrew/cask-fonts
     scope: minimal
   - name: font-fira-code-nerd-font
     brewcask: true
-    brewtab: homebrew/cask-fonts
     scope: minimal
   - name: fzf
     apt: true
