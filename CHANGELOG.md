@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.39.3 (2024-07-17)
+
+### Fix
+
+* **install:** Out unused brew taps section ([`4dec85c`](https://github.com/entelecheia/dotfiles/commit/4dec85caf252d773e01f03ec3687dc04388703cc))
+* **packages:** Redundant brewtab entries fonts ([`b64a0ea`](https://github.com/entelecheia/dotfiles/commit/b64a0eab8f4dbb35b3bd7fb7417ecddb88cff0c3))
+
 ## v0.39.2 (2024-04-09)
 
 ### Fix
