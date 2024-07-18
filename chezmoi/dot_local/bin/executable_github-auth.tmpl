@@ -15,22 +15,23 @@ usage() {
   exit 1
 }
 
-while (( "$#" )); do
+while (("$#")); do
   case "$1" in
-    --interactive|-i)
-      INTERACTIVE=true
-      shift
-      ;;
-    --reset|-r)
-      RESET=true
-      shift
-      ;;
-    --help|-h)
-      usage
-      ;;
-    *)
-      echo "Error: Invalid argument"
-      usage
+  --interactive | -i)
+    INTERACTIVE=true
+    shift
+    ;;
+  --reset | -r)
+    RESET=true
+    shift
+    ;;
+  --help | -h)
+    usage
+    ;;
+  *)
+    echo "Error: Invalid argument"
+    usage
+    ;;
   esac
 done
 
@@ -47,6 +48,10 @@ if [[ -z "${GITHUB_USERNAME}" ]]; then
   log_info "GITHUB_USERNAME environment variable is not set. Skipping GitHub authentication."
   exit 0
 fi
+if [[ -z "${GITHUB_TOKEN}" ]] || [[ "${GITHUB_TOKEN}" == "null" ]] || [[ "${GITHUB_TOKEN}" == "NULL" ]]; then
+  unset GITHUB_TOKEN
+  unset GH_TOKEN
+fi
 if ! command -v gh >/dev/null; then
   log_info "gh is not installed. Skipping GitHub authentication."
   exit 0
@@ -54,8 +59,8 @@ fi
 
 if [[ "${RESET}" == "true" ]]; then
   log_info "Resetting GitHub authentication"
-  export GITHUB_TOKEN=""
-  export GH_TOKEN=""
+  unset GITHUB_TOKEN
+  unset GH_TOKEN
 fi
 
 c gh config set -h github.com git_protocol https
@@ -72,9 +77,9 @@ if [[ "${INTERACTIVE}" == "true" ]]; then
   export GH_TOKEN="${GITHUB_TOKEN}"
 else
   if [[ -n "${GITHUB_TOKEN}" ]]; then
-      log_info "Logging in to GitHub"
-      GITHUB_TOKEN="{{ .github.token }}"
-      echo "${GITHUB_TOKEN}" | gh auth login --with-token || true
+    log_info "Logging in to GitHub"
+    GITHUB_TOKEN="{{ .github.token }}"
+    echo "${GITHUB_TOKEN}" | gh auth login --with-token || true
   else
     log_manual_action "GITHUB_TOKEN environment variable is not set. Run this again with the --interactive flag to login to GitHub."
   fi

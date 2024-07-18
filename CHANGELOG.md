@@ -1,5 +1,11 @@
 <!--next-version-placeholder-->
 
+## v0.39.4 (2024-07-17)
+
+### Fix
+
+* **chezmoidata:** Change gpg-suite from to optional ([`def18fb`](https://github.com/entelecheia/dotfiles/commit/def18fb836ec0cfed8a0605f21aeef27d2aebb0a))
+
 ## v0.39.3 (2024-07-17)
 
 ### Fix
