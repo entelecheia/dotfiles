@@ -1,4 +1,4 @@
-DOTFILES_VERSION: 0.39.5
+DOTFILES_VERSION: 0.40.0
 packages:
   - name: 1password-cli
     apt: true
