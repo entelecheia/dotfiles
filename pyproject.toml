@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dotfiles"
-version = "0.39.4"
+version = "0.39.5"
 description = "Easily manage and synchronize your dotfiles across multiple environments with the Dotfiles project, streamlining your development setup and CI/CD pipeline."
 authors = ["Young Joon Lee <entelecheia@hotmail.com>"]
 license = "MIT"
@@ -16,10 +16,7 @@ python = ">=3.8.1,<3.13"
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-python-semantic-release = "^7.33.1"
-cryptography = "^42.0.4"
-certifi = "^2024.7.4"
-urllib3 = "^2.2.2"
+python-semantic-release = ">=9.0.0"
 
 [tool.poe]
 include = [".tasks.toml"]
@@ -43,16 +40,43 @@ extend-exclude = '''
 
 [tool.isort]
 profile = "black"
-skip = ['_version.py', 'node_modules', '_build', 'docs', 'tests', 'venv', '.copier-template', '.refs']
+skip = [
+  '_version.py',
+  'node_modules',
+  '_build',
+  'docs',
+  'tests',
+  'venv',
+  '.copier-template',
+  '.refs',
+]
 
 [tool.flake8]
 ignore = ['F401', 'E501', 'W503']
-exclude = ["node_modules", "_build", "docs", "tests", "venv", ".copier-template", ".refs"]
+exclude = [
+  "node_modules",
+  "_build",
+  "docs",
+  "tests",
+  "venv",
+  ".copier-template",
+  ".refs",
+]
 per-file-ignores = ['__init__.py:F401', '_version.py:W292']
 
 [tool.mypy]
 namespace_packages = true
-exclude = ["node_modules", "build", "_build", "dist", "docs", "tests", "venv", ".copier-template", ".refs"]
+exclude = [
+  "node_modules",
+  "build",
+  "_build",
+  "dist",
+  "docs",
+  "tests",
+  "venv",
+  ".copier-template",
+  ".refs",
+]
 # 3rd party import
 ignore_missing_imports = true
 # dynamic typing
@@ -93,7 +117,7 @@ branch = "main"
 version_toml = "pyproject.toml:tool.poetry.version"
 version_pattern = "chezmoi/.chezmoidata.yaml:DOTFILES_VERSION: {version}"
 version_source = "tag"
-commit_version_number = true # required for version_source = "tag"
+commit_version_number = true                                                             # required for version_source = "tag"
 commit_subject = "chore(release): :rocket: {version} [skip ci]"
 prerelease_tag = "rc"
 major_on_zero = true
@@ -102,5 +126,5 @@ changelog_file = "CHANGELOG.md"
 upload_to_repository = false
 upload_to_release = false
 dist_path = "dist"
-hvcs = "github" # hosting version control system, gitlab is also supported
+hvcs = "github"                                                                          # hosting version control system, gitlab is also supported
 build_command = "mkdir -p dist && echo 'No build command configured' > dist/release.txt"

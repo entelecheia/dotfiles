@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.39.5 (2024-07-18)
+
+### Fix
+
+* **workflow:** Remove branch definition from semantic-release publish command ([`18655db`](https://github.com/entelecheia/dotfiles/commit/18655dbfa0cb09a61191f54191b0fdaa9c7dfe56))
+* **auth:** Improve argument parsing and token handling in GitHub authentication script ([`e8fe1a8`](https://github.com/entelecheia/dotfiles/commit/e8fe1a8eaa91570a8d7320af7893f5d7236b4bd2))
+
 ## v0.39.4 (2024-07-17)
 
 ### Fix
