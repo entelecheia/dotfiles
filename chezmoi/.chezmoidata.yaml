@@ -416,6 +416,14 @@ packages:
     apt: true
     brew: true
     scope: minimal
+  - name: uv
+    script: true
+    script_cmd: "curl -LsSf https://astral.sh/uv/install.sh | sh"
+    check_installed: "command -v uv &> /dev/null"
+    current_version: "uv --version | cut -d' ' -f2"
+    latest_version: $(curl -s https://api.github.com/repos/astral-sh/uv/releases/latest | grep 'tag_name' | cut -d'"' -f4)
+    scope: optional
+    allow_upgrade: true
   - name: vim
     apt: true
     scope: minimal
