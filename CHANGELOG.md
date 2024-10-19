@@ -1,5 +1,17 @@
 <!--next-version-placeholder-->
 
+## v0.40.0 (2024-10-19)
+
+### Feature
+
+* **chezmoi:** Add uv installation support with script and version check ([`ce7df96`](https://github.com/entelecheia/dotfiles/commit/ce7df962c56fff7ce4f290ee0d0239a1feef8579))
+
+### Fix
+
+* **workflow:** Allow manual trigger for semantic-release job ([`e348f87`](https://github.com/entelecheia/dotfiles/commit/e348f876d13dde78b1661c20ae23df6b0ab9e4b0))
+* **chezmoi:** Update user packages to include 'uv' in the template ([`7417d5c`](https://github.com/entelecheia/dotfiles/commit/7417d5cf5eaf332c8682a395914b63312a2595a6))
+* **workflow:** Change trigger branch for deploy-docs workflow from main to docs ([`5950057`](https://github.com/entelecheia/dotfiles/commit/5950057065ad1976dba426e0656ac04f5a490436))
+
 ## v0.39.5 (2024-07-18)
 
 ### Fix
