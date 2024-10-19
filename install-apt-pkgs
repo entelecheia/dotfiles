@@ -1,0 +1,160 @@
+#!/bin/bash
+set -euo pipefail
+
+function log_color() {
+  local color_code="$1"
+  shift
+
+  printf "\033[${color_code}m%s\033[0m\n" "$*" >&2
+}
+
+function log_red() {
+  log_color "0;31" "$@"
+}
+
+function log_blue() {
+  log_color "0;34" "$@"
+}
+
+function log_green() {
+  log_color "1;32" "$@"
+}
+
+function log_yellow() {
+  log_color "1;33" "$@"
+}
+
+function log_task() {
+  log_blue "⏳" "$@"
+}
+
+function log_manual_action() {
+  log_red "🧑‍🔧" "$@"
+}
+
+function log_c() {
+  log_yellow "👉" "$@"
+}
+
+function c() {
+  log_c "$@"
+  "$@"
+}
+
+function c_exec() {
+  log_c "$@"
+  exec "$@"
+}
+
+function log_error() {
+  log_red "🔴" "$@"
+}
+
+function log_info() {
+  log_green "💡" "$@"
+}
+
+function error() {
+  log_error "$@"
+  exit 1
+}
+
+# Function to check if an item is in an array
+# Arguments: search_item array
+# Returns: 0 if the item is in the array, 1 otherwise
+function is_item_in_array() {
+  local search_item="$1"
+  shift
+  local array=("$@")
+
+  for item in "${array[@]}"; do
+    if [ "$item" == "$search_item" ]; then
+      return 0
+    fi
+  done
+
+  return 1
+}
+
+function is_package_installed() {
+  local package="$1"
+
+  command -v "${package}" >/dev/null 2>&1
+}
+
+function is_apt_package_installed() {
+  local package="$1"
+
+  if [[ "${DOTFILES_OS}" == "linux" ]] && command -v apt &>/dev/null; then
+    apt list --quiet --quiet --installed "${package}" 2>/dev/null | grep --quiet .
+  else
+    return 1
+  fi
+}
+
+log_task "Installing APT packages"
+
+export DEBIAN_FRONTEND=noninteractive
+
+wanted_packages=(
+  code
+  gh
+  git-lfs
+)
+log_info "Wanted packages: ${wanted_packages[*]}"
+
+PKG_NAME="code"
+KEYRING_FILE="/usr/share/keyrings/packages.microsoft.gpg"
+KEYRING_URL="https://packages.microsoft.com/keys/microsoft.asc"
+if [[ ! -f "${KEYRING_FILE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
+  log_task "Downloading packages.microsoft.gpg"
+  c curl -fsSL "${KEYRING_URL}" | gpg --dearmor -o "${KEYRING_FILE}"
+  c chmod go+r "${KEYRING_FILE}"
+fi
+SOURCE_LIST_FILE="/etc/apt/sources.list.d/vscode.list"
+SOURCE_LIST_LINE="deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
+if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
+  log_task "Adding vscode.list repository to APT"
+  c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
+fi
+PKG_NAME="gh"
+KEYRING_FILE="/usr/share/keyrings/githubcli-archive-keyring.gpg"
+KEYRING_URL="https://cli.github.com/packages/githubcli-archive-keyring.gpg"
+if [[ ! -f "${KEYRING_FILE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
+  log_task "Downloading githubcli-archive-keyring.gpg"
+  c curl -fsSL "${KEYRING_URL}" | gpg --dearmor -o "${KEYRING_FILE}"
+  c chmod go+r "${KEYRING_FILE}"
+fi
+SOURCE_LIST_FILE="/etc/apt/sources.list.d/github-cli.list"
+SOURCE_LIST_LINE="deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main"
+if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
+  log_task "Adding github-cli.list repository to APT"
+  c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
+fi
+PKG_NAME="git-lfs"
+REPO_SCRIPT="https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh"
+SOURCE_LIST_FILE="/etc/apt/sources.list.d/github_git-lfs.list"
+if [[ ! -f "${SOURCE_LIST_FILE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
+  if [[ $REPO_SCRIPT == http* ]]; then
+    log_task "Downloading and running repository script for '${PKG_NAME}'"
+    c curl -sLf --retry 3 --tlsv1.2 --proto "=https" "${REPO_SCRIPT}" | bash -
+  else
+    log_task "Running repository script for '${PKG_NAME}'"
+    c "${REPO_SCRIPT}"
+  fi
+fi
+SOURCE_LIST_FILE="/etc/apt/sources.list.d/github_git-lfs.list"
+SOURCE_LIST_LINE=""
+if [[ ! -f "${SOURCE_LIST_FILE}" ]] && [[ -n "${SOURCE_LIST_LINE}" ]] && is_item_in_array "${PKG_NAME}" "${wanted_packages[@]}"; then
+  log_task "Adding github_git-lfs.list repository to APT"
+  c echo "$SOURCE_LIST_LINE" | tee "$SOURCE_LIST_FILE"
+fi
+
+if [[ ${#wanted_packages[@]} -gt 0 ]]; then
+  log_task "Installing packages with APT: ${wanted_packages[*]}"
+  c apt-get update --yes -qq -o=Dpkg::Use-Pty=0
+  c apt-get install --yes -qq -o=Dpkg::Use-Pty=0 --no-install-recommends "${wanted_packages[@]}"
+else
+  log_info "No packages to install with APT"
+fi
+log_green "✅  APT packages installed successfully. ✨ 🌟 ✨"
