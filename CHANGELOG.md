@@ -1,5 +1,18 @@
 <!--next-version-placeholder-->
 
+## v0.41.0 (2024-10-20)
+
+### Chores
+
+* chore(release): remove unused upload step from workflow ([`221457b`](https://github.com/entelecheia/dotfiles/commit/221457b20ffcc882978460e3cc77ac97b72856fa))
+
+* chore(workflow): simplify release pipeline configuration ([`63157ed`](https://github.com/entelecheia/dotfiles/commit/63157ed1a1c3845ebdac615d512861d2f7212053))
+
+### Features
+
+* feat(dependencies): upgrade python-semantic-release to 9.0.0 ([`981a54f`](https://github.com/entelecheia/dotfiles/commit/981a54fe7b73260a142735c5c5304fe585d750ec))
+
+
 ## v0.40.0 (2024-10-19)
 
 ### Feature
