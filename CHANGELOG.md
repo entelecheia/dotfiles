@@ -1,5 +1,16 @@
 <!--next-version-placeholder-->
 
+## v0.41.1 (2024-10-20)
+
+### Bug Fixes
+
+* fix(build): improve version update command in build process ([`791f5fe`](https://github.com/entelecheia/dotfiles/commit/791f5feff64725630dad514db4f1e2eb6ca02ea9))
+
+### Chores
+
+* chore(chezmoi): update DOTFILES_VERSION to 0.41.0 ([`cff96c1`](https://github.com/entelecheia/dotfiles/commit/cff96c16d9ccbeba6970afd635143f3ba0c7efcb))
+
+
 ## v0.41.0 (2024-10-20)
 
 ### Chores
