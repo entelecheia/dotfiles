@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.41.4 (2024-10-20)
+
+### Bug Fixes
+
+* fix(semantic_release): clean up commented configuration settings ([`921af6e`](https://github.com/entelecheia/dotfiles/commit/921af6ee391bbe0221e504f580acf852b0073029))
+
+
 ## v0.41.3 (2024-10-20)
 
 ### Bug Fixes
