@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.41.2 (2024-10-20)
+
+### Bug Fixes
+
+* fix(release): enable commit in release workflow ([`3f3c74c`](https://github.com/entelecheia/dotfiles/commit/3f3c74c09dc1af5ff006bcf00e18e5398a065e07))
+
+
 ## v0.41.1 (2024-10-20)
 
 ### Bug Fixes
