@@ -1,5 +1,12 @@
 <!--next-version-placeholder-->
 
+## v0.41.3 (2024-10-20)
+
+### Bug Fixes
+
+* fix(pyproject): update version source for chezmoi data file ([`fb84d74`](https://github.com/entelecheia/dotfiles/commit/fb84d7400ebdf8bd7deb48e6966adb1b85ccc229))
+
+
 ## v0.41.2 (2024-10-20)
 
 ### Bug Fixes
