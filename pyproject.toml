@@ -112,23 +112,6 @@ exclude_lines = ['if __name__ == "__main__":']
 name = "cz_conventional_commits"
 tag_format = "v$version"
 
-# [tool.semantic_release]
-# branch = "main"
-# version_toml = "pyproject.toml:tool.poetry.version"
-# version_pattern = "chezmoi/.chezmoidata.yaml:DOTFILES_VERSION: {version}"
-# version_source = "tag"
-# commit_version_number = true                                                             # required for version_source = "tag"
-# commit_subject = "chore(release): :rocket: {version} [skip ci]"
-# prerelease_tag = "rc"
-# major_on_zero = true
-# tag_commit = true
-# changelog_file = "CHANGELOG.md"
-# upload_to_repository = false
-# upload_to_release = false
-# dist_path = "dist"
-# hvcs = "github"                                                                          # hosting version control system, gitlab is also supported
-# build_command = "mkdir -p dist && echo 'No build command configured' > dist/release.txt"
-
 [tool.semantic_release]
 # General settings
 tag_format = "v{version}"
