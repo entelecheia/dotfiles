@@ -1,5 +1,62 @@
 <!--next-version-placeholder-->
 
+## v0.41.4 (2024-10-20)
+
+### Bug Fixes
+
+* fix(semantic_release): clean up commented configuration settings ([`921af6e`](https://github.com/entelecheia/dotfiles/commit/921af6ee391bbe0221e504f580acf852b0073029))
+
+
+## v0.41.3 (2024-10-20)
+
+### Bug Fixes
+
+* fix(pyproject): update version source for chezmoi data file ([`fb84d74`](https://github.com/entelecheia/dotfiles/commit/fb84d7400ebdf8bd7deb48e6966adb1b85ccc229))
+
+
+## v0.41.2 (2024-10-20)
+
+### Bug Fixes
+
+* fix(release): enable commit in release workflow ([`3f3c74c`](https://github.com/entelecheia/dotfiles/commit/3f3c74c09dc1af5ff006bcf00e18e5398a065e07))
+
+
+## v0.41.1 (2024-10-20)
+
+### Bug Fixes
+
+* fix(build): improve version update command in build process ([`791f5fe`](https://github.com/entelecheia/dotfiles/commit/791f5feff64725630dad514db4f1e2eb6ca02ea9))
+
+### Chores
+
+* chore(chezmoi): update DOTFILES_VERSION to 0.41.0 ([`cff96c1`](https://github.com/entelecheia/dotfiles/commit/cff96c16d9ccbeba6970afd635143f3ba0c7efcb))
+
+
+## v0.41.0 (2024-10-20)
+
+### Chores
+
+* chore(release): remove unused upload step from workflow ([`221457b`](https://github.com/entelecheia/dotfiles/commit/221457b20ffcc882978460e3cc77ac97b72856fa))
+
+* chore(workflow): simplify release pipeline configuration ([`63157ed`](https://github.com/entelecheia/dotfiles/commit/63157ed1a1c3845ebdac615d512861d2f7212053))
+
+### Features
+
+* feat(dependencies): upgrade python-semantic-release to 9.0.0 ([`981a54f`](https://github.com/entelecheia/dotfiles/commit/981a54fe7b73260a142735c5c5304fe585d750ec))
+
+
+## v0.40.0 (2024-10-19)
+
+### Feature
+
+* **chezmoi:** Add uv installation support with script and version check ([`ce7df96`](https://github.com/entelecheia/dotfiles/commit/ce7df962c56fff7ce4f290ee0d0239a1feef8579))
+
+### Fix
+
+* **workflow:** Allow manual trigger for semantic-release job ([`e348f87`](https://github.com/entelecheia/dotfiles/commit/e348f876d13dde78b1661c20ae23df6b0ab9e4b0))
+* **chezmoi:** Update user packages to include 'uv' in the template ([`7417d5c`](https://github.com/entelecheia/dotfiles/commit/7417d5cf5eaf332c8682a395914b63312a2595a6))
+* **workflow:** Change trigger branch for deploy-docs workflow from main to docs ([`5950057`](https://github.com/entelecheia/dotfiles/commit/5950057065ad1976dba426e0656ac04f5a490436))
+
 ## v0.39.5 (2024-07-18)
 
 ### Fix
