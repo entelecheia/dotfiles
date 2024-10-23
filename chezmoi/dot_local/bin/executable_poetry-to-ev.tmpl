@@ -60,24 +60,25 @@ check_requirements() {
 # Function to extract metadata from pyproject.toml
 extract_metadata() {
     local content="$1"
-    local -n metadata=$2
 
     # Extract basic metadata
-    metadata[name]=$(echo "$content" | grep '^name = ' | cut -d '"' -f 2)
-    metadata[version]=$(echo "$content" | grep '^version = ' | cut -d '"' -f 2)
-    metadata[description]=$(echo "$content" | grep '^description = ' | cut -d '"' -f 2)
-    metadata[homepage]=$(echo "$content" | grep '^homepage = ' | cut -d '"' -f 2)
-    metadata[repository]=$(echo "$content" | grep '^repository = ' | cut -d '"' -f 2)
-    metadata[license]=$(echo "$content" | grep '^license = ' | cut -d '"' -f 2)
+    local name version description homepage repository license author_name author_email python_version
+
+    name=$(echo "$content" | grep '^name = ' | cut -d '"' -f 2)
+    version=$(echo "$content" | grep '^version = ' | cut -d '"' -f 2)
+    description=$(echo "$content" | grep '^description = ' | cut -d '"' -f 2)
+    homepage=$(echo "$content" | grep '^homepage = ' | cut -d '"' -f 2)
+    repository=$(echo "$content" | grep '^repository = ' | cut -d '"' -f 2)
+    license=$(echo "$content" | grep '^license = ' | cut -d '"' -f 2)
 
     # Extract author information
     local authors_line
     authors_line=$(echo "$content" | grep '^authors = ')
-    metadata[author_name]=$(echo "$authors_line" | sed 's/.*\["\(.*\) <.*/\1/')
-    metadata[author_email]=$(echo "$authors_line" | sed 's/.*<\(.*\)>.*/\1/')
+    author_name=$(echo "$authors_line" | sed 's/.*\["\(.*\) <.*/\1/')
+    author_email=$(echo "$authors_line" | sed 's/.*<\(.*\)>.*/\1/')
 
     # Extract Python version
-    metadata[python_version]=$(echo "$content" | grep '^python = ' | awk '{
+    python_version=$(echo "$content" | grep '^python = ' | awk '{
         output = $3
         gsub(/^"/, "", output)
         gsub(/"$/, "", output)
@@ -91,12 +92,23 @@ extract_metadata() {
     }')
 
     # Validate required fields
-    local required_fields=("name" "version" "description" "author_name" "author_email" "python_version")
-    for field in "${required_fields[@]}"; do
-        if [ -z "${metadata[$field]:-}" ]; then
-            error "Required field '$field' not found in pyproject.toml"
-        fi
-    done
+    [ -z "$name" ] && error "Required field 'name' not found in pyproject.toml"
+    [ -z "$version" ] && error "Required field 'version' not found in pyproject.toml"
+    [ -z "$description" ] && error "Required field 'description' not found in pyproject.toml"
+    [ -z "$author_name" ] && error "Required field 'author_name' not found in pyproject.toml"
+    [ -z "$author_email" ] && error "Required field 'author_email' not found in pyproject.toml"
+    [ -z "$python_version" ] && error "Required field 'python_version' not found in pyproject.toml"
+
+    # Export variables
+    echo "$name"
+    echo "$version"
+    echo "$description"
+    echo "${homepage:-}"
+    echo "${repository:-}"
+    echo "${license:-MIT}"
+    echo "$author_name"
+    echo "$author_email"
+    echo "$python_version"
 }
 
 # Function to clean up dependency lines
@@ -184,8 +196,8 @@ fi
 
 # Read content and extract metadata
 content=$(cat "$input_file")
-declare -A metadata
-extract_metadata "$content" metadata
+# Read the metadata into an array
+readarray -t metadata < <(extract_metadata "$content")
 
 # Extract dependencies
 dependencies=$(extract_dependencies "$content" "\[tool.poetry.dependencies\]" "\[tool\.poetry\.group\.dev")
@@ -198,16 +210,16 @@ fi
 
 cat <<EOF >"$output_file"
 [project]
-name = "${metadata[name]}"
-version = "${metadata[version]}"
-description = "${metadata[description]}"
-requires-python = "${metadata[python_version]}"
+name = "${metadata[0]}"
+version = "${metadata[1]}"
+description = "${metadata[2]}"
+requires-python = "${metadata[8]}"
 readme = "README.md"
-license = {text = "${metadata[license]:-MIT}"}
-authors = [{name = "${metadata[author_name]}", email = "${metadata[author_email]}"}]
+license = {text = "${metadata[5]}"}
+authors = [{name = "${metadata[6]}", email = "${metadata[7]}"}]
 urls = {
-    homepage = "${metadata[homepage]:-}",
-    repository = "${metadata[repository]:-}"
+    homepage = "${metadata[3]}",
+    repository = "${metadata[4]}"
 }
 dependencies = [
 $dependencies
