@@ -1,5 +1,34 @@
 <!--next-version-placeholder-->
 
+## v0.42.1 (2024-11-06)
+
+### Bug Fixes
+
+* fix: update commit message format for python-semantic-release ([`0c0f6ba`](https://github.com/entelecheia/dotfiles/commit/0c0f6babf952f2f362dcf997af0584eac074b087))
+
+### Build System
+
+* build(deps): bump python-semantic-release/python-semantic-release
+
+Bumps [python-semantic-release/python-semantic-release](https://github.com/python-semantic-release/python-semantic-release) from 9.12.0 to 9.12.1.
+- [Release notes](https://github.com/python-semantic-release/python-semantic-release/releases)
+- [Changelog](https://github.com/python-semantic-release/python-semantic-release/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/python-semantic-release/python-semantic-release/compare/v9.12.0...v9.12.1)
+
+---
+updated-dependencies:
+- dependency-name: python-semantic-release/python-semantic-release
+  dependency-type: direct:production
+  update-type: version-update:semver-patch
+...
+
+Signed-off-by: dependabot[bot] <support@github.com> ([`22dd5c0`](https://github.com/entelecheia/dotfiles/commit/22dd5c0c9caddc117b76166f7ee489c782e2a809))
+
+### Unknown
+
+* Merge pull request #163 from entelecheia/dependabot/github_actions/python-semantic-release/python-semantic-release-9.12.1 ([`ab6733e`](https://github.com/entelecheia/dotfiles/commit/ab6733eecbefedde7445e3dcf293f9e0ce0a3ef0))
+
+
 ## v0.42.0 (2024-10-23)
 
 ### Chores
