@@ -1,5 +1,32 @@
 <!--next-version-placeholder-->
 
+## v0.42.0 (2024-10-23)
+
+### Chores
+
+* chore(gitignore): add .venv to ignore list ([`6e2230c`](https://github.com/entelecheia/dotfiles/commit/6e2230c04bcf07f91619c04f00f7168c02a4b4a2))
+
+### Features
+
+* feat: Add executable script to convert Poetry pyproject.toml to UV format ([`f537fd7`](https://github.com/entelecheia/dotfiles/commit/f537fd7586a46c2913c41e1251e9f379c31e5318))
+
+### Refactoring
+
+* refactor: Remove executable_poetry-to-ev.tmpl script ([`f27d78c`](https://github.com/entelecheia/dotfiles/commit/f27d78c3ece4f7a3e50c9254059b06f7393db52c))
+
+* refactor(docs): remove .readthedocs.yaml configuration file ([`eea84cd`](https://github.com/entelecheia/dotfiles/commit/eea84cdfb53f85dec584e5a1f93780ed767e6e92))
+
+* refactor(pyproject): migrate from poetry to uv PEP 517 project metadata ([`294e054`](https://github.com/entelecheia/dotfiles/commit/294e0545925e49e226ab8bfe22c61b30963f0142))
+
+* refactor(env): change virtual environment path to local .venv ([`e16cdab`](https://github.com/entelecheia/dotfiles/commit/e16cdabb487de3c21d573b87221f37a8ac8e0e09))
+
+* refactor: Refactor extract_metadata function to improve readability and maintainability ([`f4d1af8`](https://github.com/entelecheia/dotfiles/commit/f4d1af8e48e57c29a69c64bf7aca0ccaee57332a))
+
+### Unknown
+
+* Merge pull request #161 from entelecheia/entelecheia/issue160 ([`fa8c9bc`](https://github.com/entelecheia/dotfiles/commit/fa8c9bc4ab2694a74234a6e591c761a0c45f2744))
+
+
 ## v0.41.4 (2024-10-20)
 
 ### Bug Fixes
