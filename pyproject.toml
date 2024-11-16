@@ -5,11 +5,12 @@ description = "Easily manage and synchronize your dotfiles across multiple envir
 readme = "README.md"
 license = "MIT"
 authors = [{ name = "Young Joon Lee", email = "entelecheia@hotmail.com" }]
-homepage = "https://dotfiles.entelecheia.ai"
-repository = "https://github.com/entelecheia/dotfiles"
 requires-python = ">=3.9,<3.13"
-package-mode = false
 dependencies = []
+
+[project.urls]
+Homepage = "https://dotfiles.entelecheia.ai"
+Repository = "https://github.com/entelecheia/dotfiles"
 
 [tool.uv]
 dev-dependencies = ["python-semantic-release>=9.12.0"]
