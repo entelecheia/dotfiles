@@ -15,7 +15,7 @@ jobs:
         os: [ubuntu-20.04]
     steps:
       - name: Checkout source
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Run tests
         run: |
