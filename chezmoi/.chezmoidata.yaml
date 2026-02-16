@@ -437,7 +437,7 @@ packages:
     scope: gui
   - name: wheel
     pip: true
-    scpoe: optional
+    scope: optional
   - name: wslu
     apt: true
   - name: xclip

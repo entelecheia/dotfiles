@@ -46,7 +46,7 @@ main-checkout: ## checkout the main branch
 ##@ Utilities
 
 large-files: ## show the 20 largest files in the repo
-	@find . -printf '%s %p\n'| sort -nr | head -20
+	@find . -type f -exec ls -l {} \; | awk '{print $$5 " " $$9}' | sort -nr | head -20
 
 disk-usage: ## show the disk usage of the repo
 	@du -h -d 2 .
