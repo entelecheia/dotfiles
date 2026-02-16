@@ -28,3 +28,4 @@ coverage.xml
 htmlcov/
 pytest-coverage.*
 
+.claude/
