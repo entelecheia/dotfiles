@@ -29,3 +29,6 @@ htmlcov/
 pytest-coverage.*
 
 .claude/
+
+.omc/
+.omx/
