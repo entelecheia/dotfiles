@@ -1,5 +1,7 @@
 # Dotfiles
 
+> **Archived.** This is the v1 dotfiles. Its successor is [STAIxBWLB/dotfiles](https://github.com/STAIxBWLB/dotfiles) (formerly `entelecheia/dotfiles-v2`).
+
 [![version-image]][release-url]
 [![release-date-image]][release-url]
 [![test-image]][test-url]
